@@ -35,7 +35,7 @@
 	// import ViewXmlEditor from '@/components/ViewXmlEditor.vue'
 	// import Monaco from 'monaco-editor-forvue'
 	// import FunctionsTool from '@/functions/Tool.js'
-	// import test from '@/test/testData.js'
+	import test from '@/test/testData.js'
 
 	export default {
 		name: 'tool-page',
@@ -51,53 +51,53 @@
 				xmlDom: undefined,
 				xmlObj: undefined
 			}
-		}
-		// watch: {
-		//   aTab: function (nVal) {
-		//     if (nVal === 4 && this.monacoEditor) {
-		//       this.$nextTick(() => { this.monacoEditor.layout() })
-		//     }
-		//   },
-		//   xmlDom: function (nVal) {
-		//     if (nVal) {
-		//       this.xmlObj = {c: this.objParserUpdate(this.xmlDom2Obj(nVal), this.objParser), t: 'start'}
-		//     } else {
-		//       this.xmlObj = undefined
-		//     }
-		//   },
-		//   xmlString: function (nVal, oVal) {
-		//     if (nVal !== oVal && this.monacoEditor) {
-		//       this.monacoEditor.setValue(nVal)
-		//     }
-		//   }
-		// },
-		// mounted: function () {
-		//   this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(test.testOptionObj).xmlDom, true)
-		//   this.xmlOrgString = test.testXML
-		//   this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
-		//   this.$nextTick(() => {
-		//     this.xmlString = this.obj2xmlString(this.xmlObj)
-		//     this.xmlDom = this.xmlString2xmlDom(this.xmlString).xmlDom
-		//   })
+		},
+		watch: {
+			aTab: function (nVal) {
+				if (nVal === 4 && this.monacoEditor) {
+					this.$nextTick(() => { this.monacoEditor.layout() })
+				}
+			},
+			xmlDom: function (nVal) {
+				if (nVal) {
+					this.xmlObj = {c: this.objParserUpdate(this.xmlDom2Obj(nVal), this.objParser), t: 'start'}
+				} else {
+					this.xmlObj = undefined
+				}
+			},
+			xmlString: function (nVal, oVal) {
+				if (nVal !== oVal && this.monacoEditor) {
+					this.monacoEditor.setValue(nVal)
+				}
+			}
+		},
+		mounted: function () {
+		// 	this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(test.testOptionObj).xmlDom, true)
+			this.xmlOrgString = test.testXML
+		// 	this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
+		// 	this.$nextTick(() => {
+		// 		this.xmlString = this.obj2xmlString(this.xmlObj)
+		// 		this.xmlDom = this.xmlString2xmlDom(this.xmlString).xmlDom
+		// 	})
 		// },
 		// methods: {
-		//   obj2xmlString: FunctionsTool.obj2xmlString,
-		//   xmlString2xmlDom: FunctionsTool.xmlString2xmlDom,
-		//   xmlDomCheck: FunctionsTool.xmlDomCheck,
-		//   xmlDom2Obj: FunctionsTool.xmlDom2Obj,
-		//   objParserUpdate: FunctionsTool.objParserUpdate,
-		//   monacoOnMounted: function (editor) {
-		//     this.monacoEditor = editor;
-		//   },
-		//   monacoOnCodeChange: function () {
-		//     // console.log(this.monacoEditor.getValue());
-		//   }
+		// 	obj2xmlString: FunctionsTool.obj2xmlString,
+		// 	xmlString2xmlDom: FunctionsTool.xmlString2xmlDom,
+		// 	xmlDomCheck: FunctionsTool.xmlDomCheck,
+		// 	xmlDom2Obj: FunctionsTool.xmlDom2Obj,
+		// 	objParserUpdate: FunctionsTool.objParserUpdate,
+		// 	monacoOnMounted: function (editor) {
+		// 		this.monacoEditor = editor;
+		// 	},
+		// 	monacoOnCodeChange: function () {
+		// 		// console.log(this.monacoEditor.getValue());
+		// 	}
 		// },
 		// components: {
-		//   ViewObj,
-		//   ViewXmlEditor,
-		//   Monaco
-		// }
+		// 	ViewObj,
+		// 	ViewXmlEditor,
+		// 	Monaco
+		}
 	}
 </script>
 
