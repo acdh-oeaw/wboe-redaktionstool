@@ -9,16 +9,16 @@
 				Vorschau
 			</b-tab>
 			<b-tab title="Objekt">
-				<!-- <div class="viewobj">
+				<div class="viewobj">
 					<ViewObj :xmlObj="xmlObj" v-if="xmlObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
-				</div> -->
+				</div>
 			</b-tab>
 			<b-tab title="XML">
-				<!-- <div class="viewxmleditor">
+				<div class="viewxmleditor">
 					<ViewXmlEditor :xmlObj="xmlObj" v-if="xmlObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
-				</div> -->
+				</div>
 			</b-tab>
 			<b-tab title="XML (Profi)">
 				<!-- <div class="viewxmlstring" v-if="xmlString">
@@ -31,11 +31,11 @@
 </template>
 
 <script>
-	// import ViewObj from '@/components/ViewObj.vue'
-	// import ViewXmlEditor from '@/components/ViewXmlEditor.vue'
+	import ViewObj from './ToolPage/ViewObj'
+	import ViewXmlEditor from './ToolPage/ViewXmlEditor'
 	// import Monaco from 'monaco-editor-forvue'
-	// import FunctionsTool from '@/functions/Tool.js'
-	import test from '@/test/testData.js'
+	import FunctionsTool from './ToolPage/functions.js'
+	import test from './ToolPage/testData.js'
 
 	export default {
 		name: 'tool-page',
@@ -47,16 +47,16 @@
 				xmlString: undefined,
 				xmlStringError: undefined,
 				monacoOptions: { wrappingIndent: 'indent', autoIndent: true, showFoldingControls: 'always', minimap: {enabled: true, showSlider: 'always'} },
-				monacoEditor: undefined,
+				// monacoEditor: undefined,
 				xmlDom: undefined,
 				xmlObj: undefined
 			}
 		},
 		watch: {
 			aTab: function (nVal) {
-				if (nVal === 4 && this.monacoEditor) {
-					this.$nextTick(() => { this.monacoEditor.layout() })
-				}
+				// if (nVal === 4 && this.monacoEditor) {
+				// 	this.$nextTick(() => { this.monacoEditor.layout() })
+				// }
 			},
 			xmlDom: function (nVal) {
 				if (nVal) {
@@ -66,36 +66,36 @@
 				}
 			},
 			xmlString: function (nVal, oVal) {
-				if (nVal !== oVal && this.monacoEditor) {
-					this.monacoEditor.setValue(nVal)
-				}
+				// if (nVal !== oVal && this.monacoEditor) {
+				// 	this.monacoEditor.setValue(nVal)
+				// }
 			}
 		},
 		mounted: function () {
-		// 	this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(test.testOptionObj).xmlDom, true)
+			this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(test.testOptionObj).xmlDom, true)
 			this.xmlOrgString = test.testXML
-		// 	this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
-		// 	this.$nextTick(() => {
-		// 		this.xmlString = this.obj2xmlString(this.xmlObj)
-		// 		this.xmlDom = this.xmlString2xmlDom(this.xmlString).xmlDom
-		// 	})
-		// },
-		// methods: {
-		// 	obj2xmlString: FunctionsTool.obj2xmlString,
-		// 	xmlString2xmlDom: FunctionsTool.xmlString2xmlDom,
-		// 	xmlDomCheck: FunctionsTool.xmlDomCheck,
-		// 	xmlDom2Obj: FunctionsTool.xmlDom2Obj,
-		// 	objParserUpdate: FunctionsTool.objParserUpdate,
+			this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
+			this.$nextTick(() => {
+				this.xmlString = this.obj2xmlString(this.xmlObj)
+				this.xmlDom = this.xmlString2xmlDom(this.xmlString).xmlDom
+			})
+		},
+		methods: {
+			obj2xmlString: FunctionsTool.obj2xmlString,
+			xmlString2xmlDom: FunctionsTool.xmlString2xmlDom,
+			xmlDomCheck: FunctionsTool.xmlDomCheck,
+			xmlDom2Obj: FunctionsTool.xmlDom2Obj,
+			objParserUpdate: FunctionsTool.objParserUpdate,
 		// 	monacoOnMounted: function (editor) {
 		// 		this.monacoEditor = editor;
 		// 	},
 		// 	monacoOnCodeChange: function () {
 		// 		// console.log(this.monacoEditor.getValue());
 		// 	}
-		// },
-		// components: {
-		// 	ViewObj,
-		// 	ViewXmlEditor,
+		},
+		components: {
+			ViewObj,
+			ViewXmlEditor,
 		// 	Monaco
 		}
 	}
@@ -105,7 +105,8 @@
 	.tabc {
 		border: 1px solid #eee;
 		border-top: none;
-		height: 72vh;
+		min-height: 72vh;
+		margin-bottom: 50px;
 	}
 	.viewxmleditor {
 		padding: 20px;

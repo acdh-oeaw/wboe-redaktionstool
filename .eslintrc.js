@@ -22,7 +22,10 @@ module.exports = {
 		'generator-star-spacing': 0,
 		// allow tabs
 		'no-tabs': 0,
-		'indent': ['error', 'tab'],
+		'indent': 0,
+		'operator-linebreak': ['error', 'before'],
+		'no-undef-init': 0,
+		'comma-dangle': 0,
 		// allow debugger during development
 		'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
 	}

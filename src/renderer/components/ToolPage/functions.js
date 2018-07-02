@@ -1,11 +1,9 @@
-/*eslint no-console: ["error", { allow: ["log", "warn", "error"] }] */
-
 export default {
 	objParserUpdate: function (srcObj, objParser) {
 		var pObj = srcObj
 		var parserContent = getFirstTagObjByName('objPaserContent', objParser).c
 		// console.log(JSON.parse(JSON.stringify(parserContent)))
-		function parse(obj, parser) {
+		function parse (obj, parser) {
 			var pPos = 0
 			obj.forEach(function (v) {
 				if (parser) {
@@ -112,14 +110,14 @@ export default {
 	xmlDomCheck: function (xmlDom, error = false) {
 		var txt = ''
 		var x = xmlDom.childNodes
-		for (var i = 0; i < x.length ;i++) {
+		for (var i = 0; i < x.length; i++) {
 			var y = x[i]
 			if (y.nodeType === y.TEXT_NODE) {
 				if (error) {
 					txt += y.nodeValue + '\n'
 				}
 			} else {
-				if (y.childNodes[0] != undefined) {
+				if (y.childNodes[0] !== undefined) {
 					txt += this.xmlDomCheck(y, error || y.nodeName === 'parsererror')
 				}
 			}
@@ -127,7 +125,7 @@ export default {
 		return txt
 	},
 	xmlDom2Obj: function (xmlDom, parser = false) {
-		function xml2Obj(xml) {
+		function xml2Obj (xml) {
 			var obj = []
 			var val = undefined
 			if (xml.childNodes.length > 0) {
@@ -140,7 +138,7 @@ export default {
 						var aObj = {}
 						aObj.n = v.nodeName
 						if (v.attributes.length > 0) {
-							for(var i = 0; i < v.attributes.length; i++) {
+							for (var i = 0; i < v.attributes.length; i++) {
 								var a = v.attributes[i]
 								if (a.nodeName.substring(0, 9) === 'objParser') {
 									if (parser) {
@@ -173,7 +171,7 @@ export default {
 						}
 						obj.push(aObj)
 					} else if (v.nodeType === v.TEXT_NODE) {
-						if (typeof v.nodeValue === "string") {
+						if (typeof v.nodeValue === 'string') {
 							var nVal = v.nodeValue.trim()
 							if (nVal.length > 0) {
 								if (val === undefined && obj.length === 0) {
@@ -193,7 +191,7 @@ export default {
 	}
 }
 
-function getFirstTagObjByName(name, array) {
+function getFirstTagObjByName (name, array) {
 	var out = undefined
 	array.some(function (val) {
 		if (val.n === name) {
@@ -209,12 +207,12 @@ function getFirstTagObjByName(name, array) {
 	}, this)
 	return out
 }
-function addErrorToObj(obj, error) {
+function addErrorToObj (obj, error) {
 	if (obj.e === undefined) {
 		obj.e = []
 	}
 	obj.e.push(error)
 }
-function equalObj(aList, bList) {
+function equalObj (aList, bList) {
 	return JSON.stringify(aList) === JSON.stringify(bList)
 }
