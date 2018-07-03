@@ -1,7 +1,6 @@
 <template>
 	<div class="start-page">
 		<h1>Übersicht</h1>
-
 	</div>
 </template>
 

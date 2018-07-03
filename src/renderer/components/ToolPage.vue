@@ -22,7 +22,7 @@
 			</b-tab>
 			<b-tab title="XML (Profi)">
 				<!-- <div class="viewxmlstring" v-if="xmlString">
-					<Monaco width="100%" height="100%" language="xml" theme="vs" :code="xmlString" :changeThrottle="500" :options="monacoOptions" @mounted="monacoOnMounted" @codeChange="monacoOnCodeChange"></Monaco>
+					<Monaco width="100%" height="100%" language="xml" theme="vs" :code="xmlString" :changeThrottle="500" :options="monacoOptions" @mounted="monacoOnMounted" @codeChange="monacoOnCodeChange" srcPath="/xxx/"></Monaco>
 				</div>
 				<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div> -->
 			</b-tab>
@@ -86,17 +86,17 @@
 			xmlDomCheck: FunctionsTool.xmlDomCheck,
 			xmlDom2Obj: FunctionsTool.xmlDom2Obj,
 			objParserUpdate: FunctionsTool.objParserUpdate,
-		// 	monacoOnMounted: function (editor) {
-		// 		this.monacoEditor = editor;
-		// 	},
-		// 	monacoOnCodeChange: function () {
-		// 		// console.log(this.monacoEditor.getValue());
-		// 	}
+			// monacoOnMounted: function (editor) {
+			// 	this.monacoEditor = editor
+			// },
+			// monacoOnCodeChange: function () {
+			// 	// console.log(this.monacoEditor.getValue())
+			// }
 		},
 		components: {
 			ViewObj,
 			ViewXmlEditor,
-		// 	Monaco
+			// Monaco
 		}
 	}
 </script>
