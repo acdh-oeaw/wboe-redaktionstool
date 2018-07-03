@@ -10,8 +10,8 @@
 			<font-awesome-icon :icon="'lock' + ((xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1) ? '-open' : '')"/>
 			<span class="title"><font-awesome-icon icon="font" v-if="xmlObj.n === '#text'"/>{{ ((xmlObj.n === '#text') ? '' : xmlObj.n) }}</span>
 			<span class="value" v-if="xmlObj.v">{{ xmlObj.v }}</span>
-			<span class="glyphicon glyphicon-pencil mil5" aria-hidden="true" v-if="xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1"></span>
-			<span class="error" v-if="Array.isArray(xmlObj.e)" :title="xmlObjError"><span class="glyphicon glyphicon-warning-sign" aria-hidden="true"></span></span>
+			<font-awesome-icon icon="edit" v-if="xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1"/>
+			<span class="error" v-if="Array.isArray(xmlObj.e)" :title="xmlObjError"><font-awesome-icon icon="exclamation-triangle"/></span>
 			<span class="attributes" v-if="xmlObj.a">
 				<span class="attr" v-for="(attr, attrKey) in xmlObj.a" :key="attrKey">{{ attrKey }}<i>{{ attr }}</i></span>
 			</span>
