@@ -1,6 +1,5 @@
 <template>
 	<div class="tool-page">
-		<h1>Tool</h1>
 		<b-tabs v-model="aTab" content-class="tabc">
 			<b-tab title="Editor">
 				Editor
@@ -9,13 +8,13 @@
 				Vorschau
 			</b-tab>
 			<b-tab title="Objekt">
-				<div class="viewobj">
+				<div class="viewobj scroll p20">
 					<ViewObj :xmlObj="xmlObj" v-if="xmlObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="XML">
-				<div class="viewxmleditor">
+				<div class="viewxmleditor scroll p20">
 					<ViewXmlEditor :xmlObj="xmlObj" v-if="xmlObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
 				</div>
@@ -102,22 +101,19 @@
 </script>
 
 <style>
+	.tool-page {
+		margin-top: 40px;
+	}
 	.tabc {
 		border: 1px solid #eee;
 		border-top: none;
-		min-height: 72vh;
-		margin-bottom: 50px;
+		min-height: 76vh;
 	}
-	.viewxmleditor {
-		padding: 20px;
-		overflow: auto;
-		max-height: 72vh;
-	}
-	.viewobj {
-		padding: 20px;
+	.tabc > div > .scroll {
+		max-height: 76vh;
 	}
 	.viewxmlstring {
 		overflow: hidden;
-		height: 72vh;
+		height: 76vh;
 	}
 </style>

@@ -70,6 +70,7 @@
 		padding: 0px;
 		background: none;
 		border: none;
+		width: 17px;
 	}
 	.item > .icon ~ .icon {
 		margin-left: 5px;

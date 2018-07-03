@@ -32,6 +32,12 @@
 <style>
 	/* @import url('~@/assets/css/bootstrap.min.css'); */
 	/* CSS */
+	.scroll {
+		overflow: auto;
+	}
+	.p20 {
+		padding: 20px;
+	}
 	.mit0 {
 		margin-top: 0px;
 	}
