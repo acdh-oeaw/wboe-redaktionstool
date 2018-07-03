@@ -4,7 +4,7 @@
 	</div>
 	<div class="obj" v-else>
 		<div :class="{'item': true, 'text-danger danger': Array.isArray(xmlObj.e)}">
-			<button  @click="isOpen = !isOpen" :disabled="!xmlObj.c" class="icon">
+			<button  @click="isOpen = !isOpen" :disabled="!xmlObj.c">
 				<font-awesome-icon :icon="((xmlObj.c) ? ((isOpen) ? 'caret-down' : 'caret-right') : 'angle-right')"/>
 			</button>
 			<font-awesome-icon :icon="'lock' + ((xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1) ? '-open' : '')"/>
@@ -112,5 +112,8 @@
 	.add-item > button {
 		width: 100%;
 		text-align: left;
+	}
+	.item > button:not([disabled]), .add-item > button:not([disabled]) {
+		cursor: pointer;
 	}
 </style>

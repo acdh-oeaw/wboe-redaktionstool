@@ -20,6 +20,10 @@
 				</div>
 			</b-tab>
 			<b-tab title="XML (Profi)">
+				<div class="viewxmlproeditor scroll p20">
+					<ViewXmlProEditor :xmlString="xmlString" v-if="xmlString"/>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div>
+				</div>
 				<!-- <div class="viewxmlstring" v-if="xmlString">
 					<Monaco width="100%" height="100%" language="xml" theme="vs" :code="xmlString" :changeThrottle="500" :options="monacoOptions" @mounted="monacoOnMounted" @codeChange="monacoOnCodeChange" srcPath="/xxx/"></Monaco>
 				</div>
@@ -32,7 +36,7 @@
 <script>
 	import ViewObj from './ToolPage/ViewObj'
 	import ViewXmlEditor from './ToolPage/ViewXmlEditor'
-	// import Monaco from 'monaco-editor-forvue'
+	import ViewXmlProEditor from './ToolPage/ViewXmlProEditor'
 	import FunctionsTool from './ToolPage/functions.js'
 	import test from './ToolPage/testData.js'
 
@@ -40,7 +44,7 @@
 		name: 'tool-page',
 		data () {
 			return {
-				aTab: 2,
+				aTab: 4,
 				objParser: undefined,
 				xmlOrgString: undefined,
 				xmlString: undefined,
@@ -95,6 +99,7 @@
 		components: {
 			ViewObj,
 			ViewXmlEditor,
+			ViewXmlProEditor,
 			// Monaco
 		}
 	}
