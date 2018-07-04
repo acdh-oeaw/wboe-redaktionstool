@@ -20,7 +20,7 @@
 				</div>
 			</b-tab>
 			<b-tab title="XML (Profi)">
-				<div class="viewxmlproeditor scroll p20">
+				<div class="viewxmlproeditor scroll">
 					<ViewXmlProEditor :xmlString="xmlString" v-if="xmlString"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div>
 				</div>
@@ -115,7 +115,7 @@
 		min-height: 76vh;
 	}
 	.tabc > div > .scroll {
-		max-height: 76vh;
+		height: 76vh;
 	}
 	.viewxmlstring {
 		overflow: hidden;
