@@ -1,7 +1,8 @@
 <template>
 	<div :class="{'file': true, 'open': isOpen}">
 		<div class="fileline">
-			<button @click="isOpen = !isOpen"><font-awesome-icon :icon="((file.isDir) ? ((isOpen) ? 'folder-open' : 'folder') : 'file')" :style="{'color': ((file.isDir) ? '' : '#999')}"/>
+			<button @click="isOpen = !isOpen">
+				<font-awesome-icon :icon="((file.isDir) ? ((isOpen) ? 'folder-open' : 'folder') : 'file')" :style="{'color': ((file.isDir) ? '' : '#999')}"/>
 				{{ file.file }}
 				<span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
 			</button>

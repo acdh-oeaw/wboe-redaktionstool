@@ -1,8 +1,12 @@
 <template>
 	<div class="start-page">
 		<br>
-		<h1>Übersicht</h1>
-		<br>
+		<h2>Übersicht</h2>
+		<p>
+			<font-awesome-icon icon="project-diagram"/>
+			{{ projectPath }}
+			<button @click="selectFolder"><font-awesome-icon icon="edit"/></button>
+		</p>
 		<FileLine :file="file" v-for="(file, fKey) in files" :key="fKey"/>
 	</div>
 </template>
@@ -11,24 +15,46 @@
 import FileLine from './StartPage/FileLine'
 import { remote } from 'electron'
 import path from 'path'
+
 const fs = remote.require('fs')
+const { dialog } = remote
 
 export default {
 	name: 'start-page',
 	data () {
 		return {
-			folder: undefined,
+			projectPath: undefined,
 			files: []
 		}
 	},
 	watch: {
-		folder: function (nVal) {
+		projectPath: function (nVal) {
 			if (nVal !== undefined) {
-				this.files = this.readFolder(this.folder)
+				this.files = []
+				this.files = this.readFolder(this.projectPath)
 			}
 		}
 	},
 	methods: {
+		selectFolder () {
+			var newFolder = dialog.showOpenDialog({
+				title: 'Projekt Verzeichniss auswählen',
+				defaultPath: this.projectPath,
+				properties: ['openDirectory']
+			})
+			if (newFolder === undefined) return
+			var folderState = fs.statSync(newFolder[0])
+			if (folderState && folderState.isDirectory) {
+				if (folderState.isDirectory()) {
+					this.projectPath = newFolder[0]
+					console.log(newFolder[0])
+				} else {
+					alert('Auswahl ist kein Verzeichniss!', 'Fehler!')
+				}
+			} else {
+				alert('Fehler beim auswählen des Verzeichnisses!\n\n' + JSON.stringify(folderState), 'Fehler!')
+			}
+		},
 		readFolder (aPath) {
 			var aPathContent = []
 			fs.readdirSync(aPath).forEach(function (file) {
@@ -50,10 +76,22 @@ export default {
 		}
 	},
 	mounted: function () {
-		this.folder = remote.app.getPath('userData')
+		this.projectPath = remote.app.getPath('userData')
 	},
 	components: {
 		FileLine
 	}
 }
 </script>
+
+<style scoped>
+	button {
+		margin: 0px;
+		padding: 0px;
+		background: none;
+		border: none;
+	}
+	button:not([disabled]) {
+		cursor: pointer;
+	}
+</style>
