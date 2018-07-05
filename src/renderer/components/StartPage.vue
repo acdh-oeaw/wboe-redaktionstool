@@ -57,14 +57,27 @@ export default {
 		},
 		readFolder (aPath) {
 			var aPathContent = []
-			fs.readdirSync(aPath).forEach(function (file) {
+			try {
+				var aPathRead = fs.readdirSync(aPath)
+			} catch (e) {
+				aPathRead = []
+				console.log(e)
+			}
+			aPathRead.forEach(function (file) {
 				var aFullFileName = path.join(aPath, file)
-				var stats = fs.statSync(aFullFileName)
-				var aFileData = {file: file, fullFileName: aFullFileName, isDir: stats.isDirectory(), size: stats.size}
-				if (aFileData.isDir) {	// ToDo: Nur laden wenn geöffnet wurde!
-					aFileData.folderContent = this.readFolder(aFileData.fullFileName)
+				try {
+					var stats = fs.statSync(aFullFileName)
+				} catch (e) {
+					stats = undefined
+					console.log(e)
 				}
-				aPathContent.push(aFileData)
+				if (stats) {
+					var aFileData = {file: file, fullFileName: aFullFileName, isDir: stats.isDirectory(), size: stats.size}
+					if (aFileData.isDir) {	// ToDo: Nur laden wenn geöffnet wurde!
+						aFileData.folderContent = this.readFolder(aFileData.fullFileName)
+					}
+					aPathContent.push(aFileData)
+				}
 			}, this)
 			return aPathContent.slice().sort((a, b) => {
 				if (a.isDir < b.isDir) { return 1 }
