@@ -1,9 +1,9 @@
 <template>
-	<div class="file">
+	<div :class="{'file': true, 'open': isOpen}">
 		<div class="fileline">
-			<button @click="isOpen = !isOpen"><font-awesome-icon :icon="((file.isDir) ? ((isOpen) ? 'folder-open' : 'folder') : 'file')"/>
+			<button @click="isOpen = !isOpen"><font-awesome-icon :icon="((file.isDir) ? ((isOpen) ? 'folder-open' : 'folder') : 'file')" :style="{'color': ((file.isDir) ? '' : '#999')}"/>
 				{{ file.file }}
-				<span class="filesize" v-if="!file.isDir">{{ file.size }}</span>
+				<span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
 			</button>
 		</div>
 		<FileLine :file="fFile" v-for="(fFile, fKey) in file.folderContent" :key="fKey" v-if="file.isDir && isOpen"/>
@@ -28,6 +28,10 @@
 </script>
 
 <style scoped>
+	/* .file.open {
+		border-bottom: 1px solid #ddd;
+		border-left: 1px solid #ddd;
+	} */
 	.fileline > button {
 		width: 100%;
 		text-align: left;
@@ -41,5 +45,8 @@
 	}
 	.filesize {
 		float: right;
+	}
+	.fileline > button:not([disabled]) {
+		cursor: pointer;
 	}
 </style>

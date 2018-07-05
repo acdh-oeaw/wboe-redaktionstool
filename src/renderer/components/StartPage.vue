@@ -1,6 +1,8 @@
 <template>
 	<div class="start-page">
+		<br>
 		<h1>Übersicht</h1>
+		<br>
 		<FileLine :file="file" v-for="(file, fKey) in files" :key="fKey"/>
 	</div>
 </template>
@@ -33,12 +35,18 @@ export default {
 				var aFullFileName = path.join(aPath, file)
 				var stats = fs.statSync(aFullFileName)
 				var aFileData = {file: file, fullFileName: aFullFileName, isDir: stats.isDirectory(), size: stats.size}
-				if (aFileData.isDir) {
-					aFileData.folderContent = this.readFolder(aFullFileName)
+				if (aFileData.isDir) {	// ToDo: Nur laden wenn geöffnet wurde!
+					aFileData.folderContent = this.readFolder(aFileData.fullFileName)
 				}
 				aPathContent.push(aFileData)
 			}, this)
-			return aPathContent
+			return aPathContent.slice().sort((a, b) => {
+				if (a.isDir < b.isDir) { return 1 }
+				if (a.isDir > b.isDir) { return -1 }
+				if (a.file.toLowerCase() > b.file.toLowerCase()) { return 1 }
+				if (a.file.toLowerCase() < b.file.toLowerCase()) { return -1 }
+				return 0
+			})
 		}
 	},
 	mounted: function () {
