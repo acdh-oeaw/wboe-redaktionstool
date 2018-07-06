@@ -3,12 +3,15 @@
 		<ViewObj :xmlObj="xmlObjItem" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)"/>
 	</div>
 	<div class="obj" v-else>
-		<div :class="{'item': true, 'text-danger danger': Array.isArray(xmlObj.e)}">
+		<div :class="'item' + ((Array.isArray(xmlObj.e)) ? ' text-danger danger' : '') + ((xmlObj.n === '#comment') ? ' comment-item' : '')">
 			<button  @click="isOpen = !isOpen" :disabled="!xmlObj.c">
 				<font-awesome-icon :icon="((xmlObj.c) ? ((isOpen) ? 'caret-down' : 'caret-right') : 'angle-right')"/>
 			</button>
 			<font-awesome-icon :icon="'lock' + ((xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1) ? '-open' : '')"/>
-			<span class="title"><font-awesome-icon icon="font" v-if="xmlObj.n === '#text'"/>{{ ((xmlObj.n === '#text') ? '' : xmlObj.n) }}</span>
+			<span class="title">
+				<font-awesome-icon :icon="((xmlObj.n === '#text') ? 'font' : ((xmlObj.n === '#comment')? 'comment' : ''))" v-if="xmlObj.n === '#text' || xmlObj.n === '#comment'"/>
+				<span>{{ ((xmlObj.n === '#text' || xmlObj.n === '#comment') ? '' : xmlObj.n) }}</span>
+			</span>
 			<span class="value" v-if="xmlObj.v">{{ xmlObj.v }}</span>
 			<font-awesome-icon icon="edit" v-if="xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1"/>
 			<span class="error" v-if="Array.isArray(xmlObj.e)" :title="xmlObjError"><font-awesome-icon icon="exclamation-triangle"/></span>
@@ -115,5 +118,9 @@
 	}
 	.item > button:not([disabled]), .add-item > button:not([disabled]) {
 		cursor: pointer;
+	}
+	.item.comment-item {
+		font-size: 12px;
+		background: #eee;
 	}
 </style>
