@@ -2,58 +2,66 @@
 	<div class="start-page">
 		<br>
 		<h2>Übersicht</h2>
-		<p>
-			<font-awesome-icon icon="project-diagram"/>
-			{{ projectPath }}
-			<button @click="selectFolder"><font-awesome-icon icon="edit"/></button>
-		</p>
-		<FileLine :file="file" v-for="(file, fKey) in files" :key="fKey"/>
+		<div class="project-path" v-if="Options.projectPath">
+			<p>
+				<font-awesome-icon icon="project-diagram"/>
+				{{ Options.projectPath }}
+				<button @click="selectFolder"><font-awesome-icon icon="edit"/></button>
+			</p>
+			<FileLine :file="file" v-for="(file, fKey) in files" :key="fKey"/>
+		</div>
+		<b-alert show variant="danger" v-else>Projektpfad nicht vergeben!</b-alert>
 	</div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import FileLine from './StartPage/FileLine'
 import { remote } from 'electron'
 import path from 'path'
 
 const fs = remote.require('fs')
-const { dialog } = remote
+// const { dialog } = remote
 
 export default {
 	name: 'start-page',
 	data () {
 		return {
-			projectPath: undefined,
 			files: []
 		}
 	},
+	computed: {
+		...mapState(['Options'])
+	},
 	watch: {
-		projectPath: function (nVal) {
+		'Options.projectPath': function (nVal) {
 			if (nVal !== undefined) {
 				this.files = []
-				this.files = this.readFolder(this.projectPath)
+				this.files = this.readFolder(this.Options.projectPath)
 			}
 		}
 	},
 	methods: {
 		selectFolder () {
-			var newFolder = dialog.showOpenDialog({
-				title: 'Projekt Verzeichniss auswählen',
-				defaultPath: this.projectPath,
-				properties: ['openDirectory']
-			})
-			if (newFolder === undefined) return
-			var folderState = fs.statSync(newFolder[0])
-			if (folderState && folderState.isDirectory) {
-				if (folderState.isDirectory()) {
-					this.projectPath = newFolder[0]
-					console.log(newFolder[0])
-				} else {
-					alert('Auswahl ist kein Verzeichniss!', 'Fehler!')
-				}
-			} else {
-				alert('Fehler beim auswählen des Verzeichnisses!\n\n' + JSON.stringify(folderState), 'Fehler!')
-			}
+			this.$store.dispatch('DIALOG_PROJECT_PATH')
+			this.$store.dispatch('SET_PROJECT_PATH')
+			// var newFolder = dialog.showOpenDialog({
+			// 	title: 'Projekt Verzeichniss auswählen',
+			// 	defaultPath: this.Options.projectPath,
+			// 	properties: ['openDirectory']
+			// })
+			// if (newFolder === undefined) return
+			// var folderState = fs.statSync(newFolder[0])
+			// if (folderState && folderState.isDirectory) {
+			// 	if (folderState.isDirectory()) {
+			// 		// this.Options.projectPath = newFolder[0]
+			// 		console.log(newFolder[0])
+			// 	} else {
+			// 		alert('Auswahl ist kein Verzeichniss!', 'Fehler!')
+			// 	}
+			// } else {
+			// 	alert('Fehler beim auswählen des Verzeichnisses!\n\n' + JSON.stringify(folderState), 'Fehler!')
+			// }
 		},
 		readFolder (aPath) {
 			var aPathContent = []
@@ -89,7 +97,9 @@ export default {
 		}
 	},
 	mounted: function () {
-		this.projectPath = remote.app.getPath('userData')
+		if (this.Options.projectPath === undefined) {
+			this.$store.dispatch('GET_PROJECT_PATH')
+		}
 	},
 	components: {
 		FileLine
