@@ -1,68 +1,67 @@
 export default {
 	objParserUpdate: function (srcObj, objParser) {
 		var pObj = srcObj
-		var parserContent = getFirstTagObjByName('objPaserContent', objParser).c
-		// console.log(JSON.parse(JSON.stringify(parserContent)))
 		function parse (obj, parser) {
 			var pPos = 0
 			obj.forEach(function (v) {
-				if (parser) {
-					var pOn = true
-					if (!parser[pPos]) {
-						if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1) {
-							pPos -= 1
-						} else {
-							addErrorToObj(v, 'Zeile stimmt nicht mit "Parser" Struktur überein!')
-							pOn = false
-						}
-					}
-					if (pOn) {
-						if (parser[pPos].n !== v.n) {
-							if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1 && parser[pPos - 1].n === v.n) {
+				if (v.n !== '#comment') {
+					if (parser) {
+						var pOn = true
+						if (!parser[pPos]) {
+							if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1) {
 								pPos -= 1
 							} else {
-								addErrorToObj(v, 'Unerwarteter Tag!')
+								addErrorToObj(v, 'Zeile stimmt nicht mit "Parser" Struktur überein!')
 								pOn = false
 							}
 						}
-					}
-					if (pOn) {
-						if (parser[pPos].a !== undefined && v.a === undefined) {
-							addErrorToObj(v, 'Keine Attribute erwartet!')
-						}
-						if (parser[pPos].a === undefined && v.a !== undefined) {
-							addErrorToObj(v, 'Attribute fehlen!')
-						}
-						if (parser[pPos].a !== undefined && v.a !== undefined && !equalObj(Object.keys(parser[pPos].a), Object.keys(v.a))) {
-							addErrorToObj(v, 'Unerwartete Attribute!')
-						} else if (!(parser[pPos].o && parser[pPos].o.attribut && (parser[pPos].o.attribut.indexOf('edit') > -1 || parser[pPos].o.attribut.indexOf('variable') > -1))
-										&& (parser[pPos].a !== undefined && v.a !== undefined && !equalObj(parser[pPos].a, v.a))) {
-							addErrorToObj(v, 'Unerwartete Attribut Werte!')
-						}
-						if (!(parser[pPos].o && parser[pPos].o.value && (parser[pPos].o.value.indexOf('edit') > -1 || parser[pPos].o.value.indexOf('variable') > -1))
-							&& (parser[pPos].v !== v.v)) {
-							addErrorToObj(v, 'Unerwartete Tag Wert!')
-						}
-						if (!Array.isArray(v.e) && parser[pPos].o) {
-							v.o = parser[pPos].o
-							if (parser[pPos].o.tag && parser[pPos].o.tag.indexOf('multibleSiblings') > -1) {
-								v.add = parser[pPos]
-								v.add.add = v.add
+						if (pOn) {
+							if (parser[pPos].n !== v.n) {
+								if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1 && parser[pPos - 1].n === v.n) {
+									pPos -= 1
+								} else {
+									addErrorToObj(v, 'Unerwarteter Tag!')
+									pOn = false
+								}
 							}
 						}
+						if (pOn) {
+							if (parser[pPos].a !== undefined && v.a === undefined) {
+								addErrorToObj(v, 'Keine Attribute erwartet!')
+							}
+							if (parser[pPos].a === undefined && v.a !== undefined) {
+								addErrorToObj(v, 'Attribute fehlen!')
+							}
+							if (parser[pPos].a !== undefined && v.a !== undefined && !equalObj(Object.keys(parser[pPos].a), Object.keys(v.a))) {
+								addErrorToObj(v, 'Unerwartete Attribute!')
+							} else if (!(parser[pPos].o && parser[pPos].o.attribut && (parser[pPos].o.attribut.indexOf('edit') > -1 || parser[pPos].o.attribut.indexOf('variable') > -1))
+											&& (parser[pPos].a !== undefined && v.a !== undefined && !equalObj(parser[pPos].a, v.a))) {
+								addErrorToObj(v, 'Unerwartete Attribut Werte!')
+							}
+							if (!(parser[pPos].o && parser[pPos].o.value && (parser[pPos].o.value.indexOf('edit') > -1 || parser[pPos].o.value.indexOf('variable') > -1))
+								&& (parser[pPos].v !== v.v)) {
+								addErrorToObj(v, 'Unerwartete Tag Wert!')
+							}
+							if (!Array.isArray(v.e) && parser[pPos].o) {
+								v.o = parser[pPos].o
+								if (parser[pPos].o.tag && parser[pPos].o.tag.indexOf('multibleSiblings') > -1) {
+									v.add = parser[pPos]
+									v.add.add = v.add
+								}
+							}
+						}
+					} else {
+						addErrorToObj(v, 'Kein "Parser" übergeben!')
 					}
-				} else {
-					addErrorToObj(v, 'Kein "Parser" übergeben!')
+					if (Array.isArray(v.c)) {
+						parse(v.c, ((parser && parser[pPos] && parser[pPos].c) ? parser[pPos].c : undefined))
+					}
+					pPos += 1
 				}
-				if (Array.isArray(v.c)) {
-					parse(v.c, ((parser && parser[pPos] && parser[pPos].c) ? parser[pPos].c : undefined))
-				}
-				pPos += 1
 			}, this)
 			return obj
 		}
-		// console.log('parse ...')
-		return parse(pObj, parserContent)
+		return parse(pObj, getFirstTagObjByName('objPaserContent', objParser).c)
 	},
 	obj2xmlString: function (srcObj) {
 		function obj2xmlString (obj, deep = 0) {
@@ -70,6 +69,8 @@ export default {
 			obj.forEach(function (v) {
 				if (v.n === '#text') {
 					out += '	'.repeat(deep) + v.v + '\n'
+				} else if (v.n === '#comment') {
+					out += '	'.repeat(deep) + '<!-- ' + v.v + ' -->\n'
 				} else {
 					out += '	'.repeat(deep) + '<' + v.n
 					if (v.a) {
@@ -170,14 +171,14 @@ export default {
 							}
 						}
 						obj.push(aObj)
-					} else if (v.nodeType === v.TEXT_NODE) {
+					} else if (v.nodeType === v.TEXT_NODE || v.nodeType === v.COMMENT_NODE) {
 						if (typeof v.nodeValue === 'string') {
 							var nVal = v.nodeValue.trim()
 							if (nVal.length > 0) {
-								if (val === undefined && obj.length === 0) {
+								if (v.nodeType !== v.COMMENT_NODE && val === undefined && obj.length === 0) {
 									val = nVal
 								} else {
-									obj.push({n: '#text', v: nVal})
+									obj.push({n: ((v.nodeType === v.COMMENT_NODE) ? '#comment' : '#text'), v: nVal})
 									val = undefined
 								}
 							}
