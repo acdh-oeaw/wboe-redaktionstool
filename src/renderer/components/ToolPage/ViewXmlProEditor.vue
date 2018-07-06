@@ -51,6 +51,18 @@
 					line: true,
 					indentWithTabs: true,
 					gutters: ['CodeMirror-linenumbers', 'CodeMirror-foldgutter'],
+				},
+				refreshCodemirror: true,
+				codemirrorReady: false
+			}
+		},
+		watch: {
+			code: function (nVal, oVal) {
+				// console.log('changed')
+			},
+			refreshCodemirror: function (nVal) {
+				if (nVal) {
+					this.refreshCM()
 				}
 			}
 		},
@@ -58,11 +70,23 @@
 			this.code = this.xmlString
 		},
 		methods: {
+			refresh () {
+				this.refreshCodemirror = true
+			},
+			refreshCM () {
+				if (this.codemirrorReady) {
+					this.$refs.myCm.refresh()
+					this.refreshCodemirror = false
+				}
+			},
 			onCmReady (cm) {
-				console.log('the editor is readied!', cm)
+				this.codemirrorReady = true
+				if (this.refreshCodemirror) {
+					this.refreshCM()
+				}
 			},
 			onCmCodeChange (newCode) {
-				// console.log('this is new code', newCode)
+				// console.log('changed')
 				this.code = newCode
 			}
 		}

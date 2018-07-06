@@ -15,7 +15,7 @@
 			</b-tab>
 			<b-tab title="XML">
 				<div class="viewxmlproeditor ohidden lh76vh">
-					<ViewXmlProEditor :xmlString="xmlString" v-if="xmlString"/>
+					<ViewXmlProEditor :xmlString="xmlString" ref="ViewXmlProEditor" v-if="xmlString"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -45,6 +45,9 @@
 		},
 		watch: {
 			aTab: function (nVal, oVal) {
+				if (nVal === 3) {
+					this.$refs.ViewXmlProEditor.refresh()
+				}
 			},
 			xmlDom: function (nVal) {
 				if (nVal) {
