@@ -11,10 +11,10 @@ import store from './store'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFolder, faFolderOpen, faFile, faProjectDiagram, faComment } from '@fortawesome/free-solid-svg-icons'
-// import { faComment } from '@fortawesome/free-regular-svg-icons'
+// import { faFolder, faFile } from '@fortawesome/free-regular-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 
-library.add(faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFolder, faFolderOpen, faFile, faProjectDiagram, faComment)
+library.add(faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFile, faFolder, faFolderOpen, faProjectDiagram, faComment)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 

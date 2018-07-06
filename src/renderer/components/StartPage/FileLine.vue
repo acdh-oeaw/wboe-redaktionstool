@@ -1,35 +1,51 @@
 <template>
-	<div :class="{'file': true, 'open': isOpen}">
-		<div class="fileline">
-			<button @click="isOpen = !isOpen">
-				<font-awesome-icon :icon="((file.isDir) ? ((isOpen) ? 'folder-open' : 'folder') : 'file')" :style="{'color': ((file.isDir) ? '' : '#999')}"/>
-				{{ file.file }}
+	<div :class="{'file': true, 'open': (path && path.isOpen)}">
+		<div class="pathline" v-if="path">
+			<button @click="toggleMe()" :title="path.fullFileName">
+				<font-awesome-icon :icon="((path.isOpen) ? 'folder-open' : 'folder')" style="width:20px;"/>
+				<span>{{ path.file }}</span>
+				<span class="foldercontent" v-if="Files.paths[path.fullFileName]">{{ Files.paths[path.fullFileName].files.length.toLocaleString() }} <font-awesome-icon icon="file" style="margin-right:5px;"/> {{ Files.paths[path.fullFileName].paths.length.toLocaleString() }} <font-awesome-icon icon="folder"/></span>
+				<span class="foldercontent unknown" v-else>? <font-awesome-icon icon="file" style="margin-right:5px;"/> ? <font-awesome-icon icon="folder"/></span>
+			</button>
+			<div class="subdata" v-if="path.isOpen && Files.paths[path.fullFileName]">
+				<FileLine :path="sPath" v-for="(sPath, fKey) in Files.paths[path.fullFileName].paths" :key="'path-' + fKey" :base="path.fullFileName"/>
+				<FileLine :file="sFile" v-for="(sFile, fKey) in Files.paths[path.fullFileName].files" :key="'file-' + fKey" :base="path.fullFileName"/>
+			</div>
+		</div>
+		<div class="fileline" v-if="file">
+			<button @click="" :title="file.fullFileName">
+				<font-awesome-icon icon="file" style="color: #999; width:20px;"/>
+				<span>{{ file.file }}</span>
 				<span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
 			</button>
 		</div>
-		<FileLine :file="fFile" v-for="(fFile, fKey) in file.folderContent" :key="fKey" v-if="file.isDir && isOpen"/>
 	</div>
 
 </template>
 
 <script>
+	import { mapState } from 'vuex'
+
 	export default {
 		name: 'FileLine',
 		props: {
-			file: Object
-		},
-		data () {
-			return {
-				'isOpen': false
-			}
+			base: String,
+			file: Object,
+			path: Object
 		},
 		computed: {
+			...mapState(['Files'])
+		},
+		methods: {
+			toggleMe () {
+				this.$store.dispatch('TOGGLE_OPEN', {path: this.base, fileKey: this.$vnode.key.split('-')[1]})
+			}
 		}
 	}
 </script>
 
 <style scoped>
-	.fileline > button {
+	.pathline > button, .fileline > button {
 		width: 100%;
 		text-align: left;
 		margin: 0px;
@@ -37,13 +53,20 @@
 		background: none;
 		border: none;
 	}
-	.file > .file {
+	.pathline > button:hover, .fileline > button:hover {
+		background: #eee;
+	}
+	.subdata {
     margin-left: 25px;
 	}
-	.filesize {
-		float: right;
-	}
-	.fileline > button:not([disabled]) {
+	button:not([disabled]) {
 		cursor: pointer;
+	}
+	.filesize, .foldercontent {
+		float: right;
+		font-size: 12px;
+	}
+	.foldercontent.unknown {
+		color: #999;
 	}
 </style>
