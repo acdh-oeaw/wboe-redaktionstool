@@ -33,13 +33,12 @@
 		name: 'tool-page',
 		data () {
 			return {
-				aTab: 4,
+				aTab: 2,
 				objParser: undefined,
 				xmlOrgString: undefined,
 				xmlString: undefined,
 				xmlStringError: undefined,
 				monacoOptions: { wrappingIndent: 'indent', autoIndent: true, showFoldingControls: 'always', minimap: {enabled: true, showSlider: 'always'} },
-				// monacoEditor: undefined,
 				xmlDom: undefined,
 				xmlObj: undefined
 			}

@@ -83,6 +83,7 @@ export default {
 		if (this.Options.projectPath === undefined) {
 			this.$store.dispatch('GET_PROJECT_PATH')
 		}
+		this.files = this.readFolder(this.Options.projectPath)
 	},
 	components: {
 		FileLine
