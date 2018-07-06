@@ -29,10 +29,6 @@
 </script>
 
 <style scoped>
-	/* .file.open {
-		border-bottom: 1px solid #ddd;
-		border-left: 1px solid #ddd;
-	} */
 	.fileline > button {
 		width: 100%;
 		text-align: left;

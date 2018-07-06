@@ -14,20 +14,10 @@
 				</div>
 			</b-tab>
 			<b-tab title="XML">
-				<div class="viewxmleditor scroll p20">
-					<ViewXmlEditor :xmlObj="xmlObj" v-if="xmlObj"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
-				</div>
-			</b-tab>
-			<b-tab title="XML (Profi)">
-				<div class="viewxmlproeditor scroll">
+				<div class="viewxmlproeditor ohidden lh76vh">
 					<ViewXmlProEditor :xmlString="xmlString" v-if="xmlString"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div>
 				</div>
-				<!-- <div class="viewxmlstring" v-if="xmlString">
-					<Monaco width="100%" height="100%" language="xml" theme="vs" :code="xmlString" :changeThrottle="500" :options="monacoOptions" @mounted="monacoOnMounted" @codeChange="monacoOnCodeChange" srcPath="/xxx/"></Monaco>
-				</div>
-				<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div> -->
 			</b-tab>
 		</b-tabs>
 	</div>
@@ -35,7 +25,6 @@
 
 <script>
 	import ViewObj from './ToolPage/ViewObj'
-	import ViewXmlEditor from './ToolPage/ViewXmlEditor'
 	import ViewXmlProEditor from './ToolPage/ViewXmlProEditor'
 	import FunctionsTool from './ToolPage/functions.js'
 	import test from './ToolPage/testData.js'
@@ -56,10 +45,7 @@
 			}
 		},
 		watch: {
-			aTab: function (nVal) {
-				// if (nVal === 4 && this.monacoEditor) {
-				// 	this.$nextTick(() => { this.monacoEditor.layout() })
-				// }
+			aTab: function (nVal, oVal) {
 			},
 			xmlDom: function (nVal) {
 				if (nVal) {
@@ -69,9 +55,6 @@
 				}
 			},
 			xmlString: function (nVal, oVal) {
-				// if (nVal !== oVal && this.monacoEditor) {
-				// 	this.monacoEditor.setValue(nVal)
-				// }
 			}
 		},
 		mounted: function () {
@@ -89,18 +72,10 @@
 			xmlDomCheck: FunctionsTool.xmlDomCheck,
 			xmlDom2Obj: FunctionsTool.xmlDom2Obj,
 			objParserUpdate: FunctionsTool.objParserUpdate,
-			// monacoOnMounted: function (editor) {
-			// 	this.monacoEditor = editor
-			// },
-			// monacoOnCodeChange: function () {
-			// 	// console.log(this.monacoEditor.getValue())
-			// }
 		},
 		components: {
 			ViewObj,
-			ViewXmlEditor,
 			ViewXmlProEditor,
-			// Monaco
 		}
 	}
 </script>
@@ -114,11 +89,7 @@
 		border-top: none;
 		min-height: 76vh;
 	}
-	.tabc > div > .scroll {
-		height: 76vh;
-	}
-	.viewxmlstring {
-		overflow: hidden;
+	.lh76vh, .tabc > div > .scroll {
 		height: 76vh;
 	}
 </style>

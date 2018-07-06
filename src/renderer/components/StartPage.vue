@@ -43,25 +43,8 @@ export default {
 	},
 	methods: {
 		selectFolder () {
-			this.$store.dispatch('DIALOG_PROJECT_PATH')
-			this.$store.dispatch('SET_PROJECT_PATH')
-			// var newFolder = dialog.showOpenDialog({
-			// 	title: 'Projekt Verzeichniss auswählen',
-			// 	defaultPath: this.Options.projectPath,
-			// 	properties: ['openDirectory']
-			// })
-			// if (newFolder === undefined) return
-			// var folderState = fs.statSync(newFolder[0])
-			// if (folderState && folderState.isDirectory) {
-			// 	if (folderState.isDirectory()) {
-			// 		// this.Options.projectPath = newFolder[0]
-			// 		console.log(newFolder[0])
-			// 	} else {
-			// 		alert('Auswahl ist kein Verzeichniss!', 'Fehler!')
-			// 	}
-			// } else {
-			// 	alert('Fehler beim auswählen des Verzeichnisses!\n\n' + JSON.stringify(folderState), 'Fehler!')
-			// }
+			this.$store.dispatch('DIALOG_PROJECT_PATH')	// Verzeichniss Dialog
+			this.$store.dispatch('SET_PROJECT_PATH')		// Projektpfad speichern
 		},
 		readFolder (aPath) {
 			var aPathContent = []

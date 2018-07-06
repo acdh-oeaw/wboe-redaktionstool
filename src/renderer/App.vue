@@ -33,7 +33,11 @@
 	/* @import url('~@/assets/css/bootstrap.min.css'); */
 	/* CSS */
 	.scroll {
-		overflow: auto;
+		overflow-x: auto;
+		overflow-y: scroll;
+	}
+	.ohidden {
+		overflow: hidden;
 	}
 	.p20 {
 		padding: 20px;
