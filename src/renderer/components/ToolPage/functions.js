@@ -103,7 +103,7 @@ export default {
 		}
 		return parse(pObj, getFirstTagObjByName('objPaserContent', objParser).c)
 	},
-	obj2xmlString: function (srcObj) {
+	obj2xmlString: function (srcObj) {		// Objekt in XML-String umwandeln
 		function obj2xmlString (obj, deep = 0) {
 			// ToDo: canBeEmpty mit Kindern beachten!
 			var out = ''
@@ -113,7 +113,9 @@ export default {
 						out += '	'.repeat(deep) + v.v + '\n'
 					}
 				} else if (v.n === '#comment') {
-					out += '	'.repeat(deep) + '<!-- ' + v.v + ' -->\n'
+					if (v.v !== undefined) {
+						out += '	'.repeat(deep) + '<!-- ' + v.v + ' -->\n'
+					}
 				} else {
 					out += '	'.repeat(deep) + '<' + v.n
 					if (v.a) {
@@ -134,6 +136,7 @@ export default {
 			return out
 		}
 		if (srcObj && srcObj.c) {
+			// ToDo: xmlParserHeader verwenden
 			var nXmlString = '<?xml version="1.0" encoding="UTF-8"?>\n<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>\n<?xml-model href="../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?>\n'
 			nXmlString += obj2xmlString(srcObj.c)
 			return nXmlString
@@ -141,7 +144,7 @@ export default {
 			return undefined
 		}
 	},
-	xmlString2xmlDom: function (xmlString) {
+	xmlString2xmlDom: function (xmlString) {		// xmlString in DOM-Objekt umwandeln
 		var xmlDom = new DOMParser().parseFromString(xmlString, 'application/xml')
 		this.xmlStringError = this.xmlDomCheck(xmlDom)
 		if (this.xmlStringError.length > 0) {
@@ -151,7 +154,7 @@ export default {
 		}
 		return {xmlDom: xmlDom, error: undefined}
 	},
-	xmlDomCheck: function (xmlDom, error = false) {
+	xmlDomCheck: function (xmlDom, error = false) {		// Eventuelle Fehlermeldung des DOM-Objekts ausgeben
 		var txt = ''
 		var x = xmlDom.childNodes
 		for (var i = 0; i < x.length; i++) {
@@ -168,34 +171,34 @@ export default {
 		}
 		return txt
 	},
-	xmlDom2Obj: function (xmlDom, parser = false) {
+	xmlDom2Obj: function (xmlDom, parser = false) {		// DOM-Objekt in Objekt umwandeln
 		function xml2Obj (xml) {
 			var obj = []
 			var val = undefined
 			if (xml.childNodes.length > 0) {
 				xml.childNodes.forEach(function (v) {
 					if (v.nodeType === v.ELEMENT_NODE) {
-						if (val !== undefined) {
+						if (val !== undefined) {		// Sollte sich im Parent bereits ein Text-Wert befinden dieses in ein Objekt umwandeln um weitere Objekte hinzufügen zu können
 							obj.push({n: '#text', v: val})
 							val = undefined
 						}
 						var aObj = {}
 						aObj.n = v.nodeName
-						if (v.attributes.length > 0) {
+						if (v.attributes.length > 0) {		// Attribute auswerten
 							for (var i = 0; i < v.attributes.length; i++) {
 								var a = v.attributes[i]
-								if (a.nodeName.substring(0, 9) === 'objParser') {
-									if (parser) {
+								if (a.nodeName.substring(0, 9) === 'objParser') {		// Handelt es sich um eine Parser option?
+									if (parser) {		// Nur auswerten wenn es sich um eine Parser-XML handelt
 										if (aObj.o === undefined) {
 											aObj.o = {}
 										}
 										var aParserOptionName = a.nodeName.substring(9).charAt(0).toLowerCase() + a.nodeName.substring(9).slice(1)
 										if (['title', 'tagAddTitle'].indexOf(aParserOptionName)) {
-											aObj.o[aParserOptionName] = a.nodeValue
+											aObj.o[aParserOptionName] = a.nodeValue		// Option als String
 										} else {
-											aObj.o[aParserOptionName] = a.nodeValue.split(' ')
+											aObj.o[aParserOptionName] = a.nodeValue.split(' ')		// Option als Array
 										}
-										if (aParserOptionName === 'text' && a.nodeValue === 'text') {
+										if (aParserOptionName === 'text' && a.nodeValue === 'text') {		// Tag als Text-Wert behandeln
 											aObj.n = '#text'
 										}
 									}
@@ -207,7 +210,7 @@ export default {
 								}
 							}
 						}
-						if (v.childNodes.length > 0) {
+						if (v.childNodes.length > 0) {		// Eventuell vorhandene Kinder auswerten
 							var cN = xml2Obj(v)
 							if (cN[0].length > 0) {
 								aObj.c = cN[0]
@@ -217,10 +220,10 @@ export default {
 							}
 						}
 						obj.push(aObj)
-					} else if (v.nodeType === v.TEXT_NODE || (v.nodeType === v.COMMENT_NODE && !parser)) {
+					} else if (v.nodeType === v.TEXT_NODE || (v.nodeType === v.COMMENT_NODE && !parser)) {		// Texte und Kommentare auswerten
 						if (typeof v.nodeValue === 'string') {
 							var nVal = v.nodeValue.trim()
-							if (nVal.length > 0) {
+							if (nVal.length > 0) {		// Nur Texte und Kommentare mit Inhalt verarbeiten
 								if (v.nodeType !== v.COMMENT_NODE && val === undefined && obj.length === 0) {
 									val = nVal
 								} else {
@@ -238,7 +241,7 @@ export default {
 	}
 }
 
-function getFirstTagObjByName (name, array) {
+function getFirstTagObjByName (name, array) {		// Findet ersten Tag mit Namen "name" in Objekt
 	var out = undefined
 	array.some(function (val) {
 		if (val.n === name) {
@@ -254,12 +257,12 @@ function getFirstTagObjByName (name, array) {
 	}, this)
 	return out
 }
-function addErrorToObj (obj, error) {
+function addErrorToObj (obj, error) {		// Fehlermeldung Liste von Fehlermeldungen bei Objekt hinzufügen
 	if (obj.e === undefined) {
 		obj.e = []
 	}
 	obj.e.push(error)
 }
-function equalObj (aList, bList) {
+function equalObj (aList, bList) {		// Vergleicht zwei Objekte/Arrays
 	return JSON.stringify(aList) === JSON.stringify(bList)
 }
