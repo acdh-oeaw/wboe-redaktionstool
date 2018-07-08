@@ -209,7 +209,7 @@ export default {
 							}
 						}
 						obj.push(aObj)
-					} else if (v.nodeType === v.TEXT_NODE || v.nodeType === v.COMMENT_NODE) {
+					} else if (v.nodeType === v.TEXT_NODE || (v.nodeType === v.COMMENT_NODE && !parser)) {
 						if (typeof v.nodeValue === 'string') {
 							var nVal = v.nodeValue.trim()
 							if (nVal.length > 0) {

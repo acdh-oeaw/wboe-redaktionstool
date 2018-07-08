@@ -13,7 +13,7 @@ export default {
 				<fileDesc>
 					<titleStmt>
 						<title objParserValue="edit required" objParserTitle="Titel"></title>
-						<test objParserTag="canBeEmpty">Test für Leeren Tag der gelöscht wird wenn leer ...</test>
+						<test objParserTag="canBeEmpty">Test für Tag der gelöscht wird wenn leer ...</test>
 						<respStmt>
 							<resp>Editor</resp>
 							<name objParserValue="edit required" objParserTitle="Name"></name>
