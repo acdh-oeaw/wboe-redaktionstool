@@ -48,6 +48,9 @@
 	.mil5 {
 		margin-left: 5px;
 	}
+	.mil-auto {
+		margin-left: auto !important;
+	}
 	.navbar-brand > img {
 		width: 100px;
 		margin-top: -13px;

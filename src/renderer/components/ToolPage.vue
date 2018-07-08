@@ -8,8 +8,14 @@
 				Vorschau
 			</b-tab>
 			<b-tab title="Objekt">
-				<div class="viewobj scroll p20">
-					<ViewObj :xmlObj="xmlObj" v-if="xmlObj"/>
+				<b-button-toolbar class="toolbar">
+					<b-button-group size="sm" class="mx-1 mil-auto">
+						<b-btn disabled><font-awesome-icon icon="eye"/></b-btn>
+						<b-btn :pressed.sync="viewobjShowComment"><font-awesome-layers><font-awesome-icon icon="comment"/><font-awesome-icon :icon="((viewobjShowComment) ? 'check' : 'times')" color="#000" transform="shrink-6"/></font-awesome-layers></b-btn>
+					</b-button-group>
+				</b-button-toolbar>
+				<div class="viewobj scroll wtool p20">
+					<ViewObj :xmlObj="xmlObj" :showComment="viewobjShowComment" v-if="xmlObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -40,7 +46,8 @@
 				xmlStringError: undefined,
 				monacoOptions: { wrappingIndent: 'indent', autoIndent: true, showFoldingControls: 'always', minimap: {enabled: true, showSlider: 'always'} },
 				xmlDom: undefined,
-				xmlObj: undefined
+				xmlObj: undefined,
+				viewobjShowComment: true
 			}
 		},
 		watch: {
@@ -93,5 +100,14 @@
 	}
 	.lh76vh, .tabc > div > .scroll {
 		height: 76vh;
+	}
+	.tabc > div > .scroll.wtool {
+		height: calc( 76vh - 49px )
+	}
+	.toolbar {
+		margin-bottom: 0px;
+		border-bottom: 1px solid #eee;
+		background: #f8f9fa;
+		padding: 8px 7px;
 	}
 </style>
