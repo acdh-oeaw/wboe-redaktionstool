@@ -45,13 +45,15 @@ export default {
 							}
 						}
 						if (pOn) {
-							if (parser[pPos].a !== undefined && v.a === undefined) {
+							if (parser[pPos].a !== undefined && v.a === undefined
+									&& parser[pPos].a !== undefined && v.a !== undefined && !equalObj(Object.keys(parser[pPos].a), Object.keys(v.a))) {
 								addErrorToObj(v, 'Keine Attribute erwartet!')
 							}
 							if (parser[pPos].a === undefined && v.a !== undefined) {
 								addErrorToObj(v, 'Attribute fehlen!')
 							}
-							if (parser[pPos].a !== undefined && v.a !== undefined && !equalObj(Object.keys(parser[pPos].a), Object.keys(v.a))) {
+							if (!(parser[pPos].o && parser[pPos].o.attribut && (parser[pPos].o.attribut.indexOf('edit') > -1 || parser[pPos].o.attribut.indexOf('variable') > -1))
+									&& parser[pPos].a !== undefined && v.a !== undefined && !equalObj(Object.keys(parser[pPos].a), Object.keys(v.a))) {
 								addErrorToObj(v, 'Unerwartete Attribute!')
 							} else if (!(parser[pPos].o && parser[pPos].o.attribut && (parser[pPos].o.attribut.indexOf('edit') > -1 || parser[pPos].o.attribut.indexOf('variable') > -1))
 											&& (parser[pPos].a !== undefined && v.a !== undefined && !equalObj(parser[pPos].a, v.a))) {
@@ -103,10 +105,13 @@ export default {
 	},
 	obj2xmlString: function (srcObj) {
 		function obj2xmlString (obj, deep = 0) {
+			// ToDo: canBeEmpty mit Kindern beachten!
 			var out = ''
 			obj.forEach(function (v) {
 				if (v.n === '#text') {
-					out += '	'.repeat(deep) + v.v + '\n'
+					if (v.v !== undefined) {
+						out += '	'.repeat(deep) + v.v + '\n'
+					}
 				} else if (v.n === '#comment') {
 					out += '	'.repeat(deep) + '<!-- ' + v.v + ' -->\n'
 				} else {
@@ -189,6 +194,9 @@ export default {
 											aObj.o[aParserOptionName] = a.nodeValue
 										} else {
 											aObj.o[aParserOptionName] = a.nodeValue.split(' ')
+										}
+										if (aParserOptionName === 'text' && a.nodeValue === 'text') {
+											aObj.n = '#text'
 										}
 									}
 								} else {

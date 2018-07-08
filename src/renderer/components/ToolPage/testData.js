@@ -60,18 +60,10 @@ export default {
 						<usg type="geo" objParserTag="multibleSiblings">
 							<placeName type="grossregion" objParserValue="edit" objParserTitle="Ort"></placeName>
 						</usg>
-						<form type="variant">
-							<pron xml:lang="bar-AT">fǫšts</pron>
+						<form type="variant" subtype="diminutive" objParserAttribut="variable" objParserTag="multibleSiblings">
+							<pron xml:lang="bar-AT" objParserValue="edit" objParserTitle="???"></pron>
 							<usg type="geo">
-								<placeName>Ahrntal</placeName>
-								<placeName type="grossregion">öSTir.</placeName>
-							</usg>
-						</form>
-						<form type="variant">
-							<pron xml:lang="bar-AT">fǫrts</pron>
-							<usg type="geo">
-								<placeName>Lüsen</placeName>
-								<placeName type="grossregion">öSTir.</placeName>
+								<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
 						</form>
 						<etym>
@@ -86,41 +78,21 @@ export default {
 								<citedRange>27</citedRange>
 							</ref>
 						</etym>
-						<sense>
-							<ref type="form">
-								auch
-								<oRef target="#Färzel"></oRef>
+						<sense objParserTag="multibleSiblings">
+							<ref type="form" objParserTag="canBeEmpty">
+								<text objParserText="text" objParserValue="edit" objParserTitle="???" objParserTag="canBeEmpty"></text>
+								<oRef target="" objParserAttribut="variable"></oRef>
 							</ref>
-							<def>Darmwind; Furz</def>
-							<usg type="geo">
-								<placeName type="grossregion">STir.</placeName>
-							</usg>
-							<usg type="geo">
-								<placeName type="grossregion">Tir.</placeName>
-							</usg>
-						</sense>
-						<sense>
-							<def>Kleinigkeit; Nichtigkeit</def>
-							<usg type="geo">
-								<placeName type="grossregion">öSTir.</placeName>
+							<def objParserValue="edit" objParserTitle="???"></def>
+							<usg type="geo" objParserTag="multibleSiblings">
+								<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
 							<cit type="example">
-								<quote xml:lang="bar-AT">pö̆gŋ an iǝdn fǫrts tsin dokχta špriŋ</quote>
+								<quote xml:lang="" objParserAttribut="variable" objParserValue="edit" objParserTitle="???"></quote>
 								<usg type="geo">
-									<placeName>Lüsen</placeName>
-									<placeName type="grossregion">öSTir.</placeName>
+									<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 								</usg>
 							</cit>
-						</sense>
-						<sense>
-							<ref type="form">
-								auch
-								<oRef target="#Pfarzel"></oRef>
-							</ref>
-							<def>kleine Pfeife aus Weidenrinde</def>
-							<usg type="geo">
-								<placeName type="grossregion">Industriev.</placeName>
-							</usg>
 						</sense>
 						<re>
 							<form type="lemma" subtype="compound">
