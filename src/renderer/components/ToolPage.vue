@@ -11,11 +11,12 @@
 				<b-button-toolbar class="toolbar">
 					<b-button-group size="sm" class="mx-1 mil-auto">
 						<b-btn disabled><font-awesome-icon icon="eye"/></b-btn>
-						<b-btn :pressed.sync="viewobjShowComment"><font-awesome-layers><font-awesome-icon icon="comment"/><font-awesome-icon :icon="((viewobjShowComment) ? 'check' : 'times')" color="#000" transform="shrink-6"/></font-awesome-layers></b-btn>
+						<b-btn :pressed.sync="viewobjShowComment"><font-awesome-layers><font-awesome-icon icon="comment"/><font-awesome-icon :icon="((viewobjShowComment) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
+						<b-btn :pressed.sync="viewobjShowAdd"><font-awesome-layers><font-awesome-icon icon="plus"/><font-awesome-icon :icon="((viewobjShowAdd) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
 					</b-button-group>
 				</b-button-toolbar>
 				<div class="viewobj scroll wtool p20">
-					<ViewObj :xmlObj="xmlObj" :showComment="viewobjShowComment" v-if="xmlObj"/>
+					<ViewObj :xmlObj="xmlObj" :showComment="viewobjShowComment" :showAdd="viewobjShowAdd" v-if="xmlObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -47,7 +48,8 @@
 				monacoOptions: { wrappingIndent: 'indent', autoIndent: true, showFoldingControls: 'always', minimap: {enabled: true, showSlider: 'always'} },
 				xmlDom: undefined,
 				xmlObj: undefined,
-				viewobjShowComment: true
+				viewobjShowComment: true,
+				viewobjShowAdd: true
 			}
 		},
 		watch: {
@@ -109,5 +111,9 @@
 		border-bottom: 1px solid #eee;
 		background: #f8f9fa;
 		padding: 8px 7px;
+	}
+	.fal-br {
+		transform: translate(9px, 8px);
+		color: #fff;
 	}
 </style>

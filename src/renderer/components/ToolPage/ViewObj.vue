@@ -1,6 +1,6 @@
 <template>
 	<div class="start" v-if="xmlObj.t === 'start'">
-		<ViewObj :xmlObj="xmlObjItem" :showComment="showComment" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)"/>
+		<ViewObj :xmlObj="xmlObjItem" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)"/>
 	</div>
 	<div class="obj" v-else>
 		<div :class="'item' + ((Array.isArray(xmlObj.e)) ? ' text-danger danger' : '') + ((xmlObj.n === '#comment') ? ' comment-item' : '')" v-if="xmlObj.n !== '#comment' || showComment">
@@ -19,8 +19,8 @@
 				<span class="attr" v-for="(attr, attrKey) in xmlObj.a" :key="attrKey">{{ attrKey }}<i>{{ attr }}</i></span>
 			</span>
 		</div>
-		<ViewObj :xmlObj="xmlObjItem" :showComment="showComment" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)" v-if="isOpen"/>
-		<div class="item add-item" v-if="xmlObj.n !== nextNodeName && xmlObj.o && xmlObj.add">
+		<ViewObj :xmlObj="xmlObjItem" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)" v-if="isOpen"/>
+		<div class="item add-item" v-if="showAdd && xmlObj.n !== nextNodeName && xmlObj.o && xmlObj.add">
 			<button><font-awesome-icon icon="plus"/>
 				<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
 				<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
@@ -36,7 +36,8 @@
 		props: {
 			xmlObj: Object,
 			nextNodeName: String,
-			showComment: Boolean
+			showComment: Boolean,
+			showAdd: Boolean
 		},
 		data () {
 			return {
