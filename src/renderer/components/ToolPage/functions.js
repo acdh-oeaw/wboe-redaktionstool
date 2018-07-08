@@ -1,9 +1,10 @@
 export default {
-	objParserUpdate: function (srcObj, objParser) {
+	objParserUpdate: function (srcObj, objParser) {		// Struktur des Objekts überprüfen
 		var pObj = srcObj
 		function parse (obj, parser) {
 			var pPos = 0
-			obj.forEach(function (v) {
+			var addEmptyObj = []
+			obj.forEach(function (v, k) {
 				if (v.n !== '#comment') {
 					if (parser) {
 						var pOn = true
@@ -16,7 +17,25 @@ export default {
 							}
 						}
 						if (pOn) {
-							if (parser[pPos].n !== v.n) {
+							if (parser[pPos].n !== v.n) {		// Überprüfen ob ein potentiell leeres Tag vorhanden ist (canBeEmpty)
+								let xPos = pPos
+								let addEmptyObjInTag = []
+								while (xPos <= parser.length
+									&& parser[xPos]
+									&& parser[xPos].o
+									&& parser[xPos].o.tag
+									&& parser[xPos].o.tag.indexOf('canBeEmpty') > -1
+									&& parser[xPos].n !== v.n
+								) {
+									addEmptyObjInTag.push(parser[xPos])
+									xPos += 1
+								}
+								pPos = xPos
+								if (addEmptyObjInTag.length > 0) {
+									addEmptyObj.push({pos: k, tags: addEmptyObjInTag})
+								}
+							}
+							if (parser[pPos].n !== v.n) {		// Überprüfen ob es sich um ein "multibleSiblings" handelt
 								if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1 && parser[pPos - 1].n === v.n) {
 									pPos -= 1
 								} else {
@@ -53,12 +72,31 @@ export default {
 					} else {
 						addErrorToObj(v, 'Kein "Parser" übergeben!')
 					}
-					if (Array.isArray(v.c)) {
+					if (Array.isArray(v.c)) {		// Kinder überprüfen
 						parse(v.c, ((parser && parser[pPos] && parser[pPos].c) ? parser[pPos].c : undefined))
 					}
 					pPos += 1
 				}
 			}, this)
+			if (parser) {
+				while (pPos < parser.length) {		// Weitere Parser Objekte hinzufügen!
+					let aKey = obj.push(parser[pPos]) - 1
+					if (!(obj[aKey] && obj[aKey].o && obj[aKey].o.tag && obj[aKey].o.tag.indexOf('canBeEmpty') > -1)) {
+						addErrorToObj(obj[aKey], 'Fehlender Tag!')
+					}
+					pPos += 1
+				}
+				if (addEmptyObj.length > 0) {		// Leere Objecte hinzufügen (canBeEmpty)
+					addEmptyObj = addEmptyObj.slice().sort((a, b) => {
+						if (a.pos < b.pos) { return 1 }
+						if (a.pos > b.pos) { return -1 }
+						return 0
+					})
+					addEmptyObj.forEach(function (aeo) {
+						obj.splice(aeo.pos, 0, ...aeo.tags)
+					})
+				}
+			}
 			return obj
 		}
 		return parse(pObj, getFirstTagObjByName('objPaserContent', objParser).c)
