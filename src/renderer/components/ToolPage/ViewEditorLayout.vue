@@ -1,5 +1,5 @@
 <template>
-	<div :class="editorClass" :data-tag="xmlObj.n">
+	<div :class="editorClasses" :data-tag="xmlObj.n">
 		<template v-if="xmlObj.o && xmlObj.o.editorLayout && xmlObj.o.editorLayout.indexOf('panel') > -1">
 			<b-card :header="header" no-body class="mib20">
 				<div slot="header" v-if="xmlObj.o && xmlObj.o.editorLayout && xmlObj.o.editorLayout.indexOf('collapse') > -1">
@@ -16,6 +16,7 @@
 			</b-card>
 		</template>
 		<template v-else>
+			<span class="title" v-if="xmlObj.o && xmlObj.o.title">{{ xmlObj.o.title }}</span>
 			<slot></slot>
 		</template>
 	</div>
@@ -34,10 +35,11 @@
 			}
 		},
 		computed: {
-			editorClass: function () {
+			editorClasses: function () {
 				var aClass = ['editor']
 				if (this.xmlObj.n === '#comment') aClass.push('comment')
 				if (this.xmlObj.n === '#text') aClass.push('text')
+				if (Array.isArray(this.xmlObj.e)) aClass.push('error')
 				return aClass.join(' ')
 			},
 			header: function () {
@@ -59,7 +61,14 @@
 	.header-btn-toggle .fa-icon {
 		font-size: 23px;
 	}
+	.editor {
+		position: relative;
+	}
+	.editor.error {
+		border: 1px solid #f66;
+	}
 	.editor > .value {
+		position: relative;
 		border: 1px solid #ccf;
 		padding: 1px 8px;
 		display: inline-block;

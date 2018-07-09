@@ -4,8 +4,18 @@ export default {
 		function parse (obj, parser) {
 			var pPos = 0
 			var addEmptyObj = []
+			var lastNodeObj = undefined
 			obj.forEach(function (v, k) {
-				if (v.n !== '#comment') {
+				delete v.commented
+				if (v.n === '#comment') {
+					if (lastNodeObj !== undefined && obj[lastNodeObj] !== undefined) {
+						if (obj[lastNodeObj].commented === undefined) {
+							obj[lastNodeObj].commented = []
+						}
+						obj[lastNodeObj].commented.push(k)
+						v.commented = true
+					}
+				} else {
 					if (parser) {
 						var pOn = true
 						if (!parser[pPos]) {
@@ -74,6 +84,7 @@ export default {
 					} else {
 						addErrorToObj(v, 'Kein "Parser" übergeben!')
 					}
+					lastNodeObj = k
 					if (Array.isArray(v.c)) {		// Kinder überprüfen
 						parse(v.c, ((parser && parser[pPos] && parser[pPos].c) ? parser[pPos].c : undefined))
 					}

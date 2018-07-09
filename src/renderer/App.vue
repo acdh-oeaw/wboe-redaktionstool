@@ -68,4 +68,11 @@
 	.tooltip-inner {
 		max-width: 80vw;
 	}
+	.tooltip-inner ul {
+		margin: 0px;
+		padding-left: 20px;
+	}
+	.tooltip-inner ul li {
+		text-align: left;
+	}
 </style>
