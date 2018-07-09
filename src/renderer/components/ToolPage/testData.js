@@ -9,7 +9,7 @@ export default {
 	</xmlParserHeader>
 	<objParserContent>
 		<TEI xmlns="http://www.tei-c.org/ns/1.0">
-			<teiHeader objParserTitle="Kopfzeile" objParserEditorLayout="panel collapse">
+			<teiHeader objParserTitle="Kopfzeile" objParserEditorLayout="panel collapse" objParserEditorClass="test">
 				<fileDesc>
 					<titleStmt>
 						<title objParserValue="edit required" objParserTitle="Titel"></title>
@@ -41,7 +41,7 @@ export default {
 					</sourceDesc>
 				</fileDesc>
 			</teiHeader>
-			<text>
+			<text objParserTitle="Text" objParserEditorLayout="panel collapse">
 				<body>
 					<entry>
 						<form type="lemma" objParserTag="multibleSiblings" objParserTagAddTitle="Ein &quot;Lemma&quot; hinzufügen">

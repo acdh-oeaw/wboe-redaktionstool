@@ -2,7 +2,13 @@
 	<div class="start" v-if="xmlObj.t === 'start'">
 		<ViewEditor :xmlObj="xmlObjItem" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)"/>
 	</div>
-	<div class="editor" v-else>
+	<div class="comment" v-else-if="xmlObj.n === '#comment'">
+		<button :title="xmlObj.v" v-b-tooltip.hover><font-awesome-icon icon="comment"/></button>
+	</div>
+	<ViewEditorLayout :xmlObj="xmlObj" v-else>
+		<span class="value" v-if="xmlObj.hasOwnProperty('v')">{{ xmlObj.v }}</span>
+		<ViewEditor :xmlObj="xmlObjItem" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)" v-if="isOpen"/>
+	</ViewEditorLayout>
 
 		<!-- <div :class="'item' + ((Array.isArray(xmlObj.e)) ? ' text-danger danger' : '') + ((xmlObj.n === '#comment') ? ' comment-item' : '')" v-if="xmlObj.n !== '#comment' || showComment">
 			<button  @click="isOpen = !isOpen" :disabled="!xmlObj.c">
@@ -32,6 +38,8 @@
 </template>
 
 <script>
+	import ViewEditorLayout from './ViewEditorLayout'
+
 	export default {
 		name: 'ViewEditor',
 		props: {
@@ -49,9 +57,17 @@
 			xmlObjError: function () {
 				return ((Array.isArray(this.xmlObj.e)) ? this.xmlObj.e.join('\n') : undefined)
 			}
+		},
+		components: {
+			ViewEditorLayout
 		}
 	}
 </script>
 
 <style scoped>
+	.comment > button {
+		border: none;
+		background: none;
+		color: #333;
+	}
 </style>

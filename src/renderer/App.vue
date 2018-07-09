@@ -51,11 +51,21 @@
 	.mil-auto {
 		margin-left: auto !important;
 	}
+	.mib10 {
+		margin-bottom: 10px;
+	}
+	.mib20 {
+		margin-bottom: 20px;
+	}
 	.navbar-brand > img {
 		width: 100px;
 		margin-top: -13px;
 		float: left;
 		margin-right: 20px;
 		margin-bottom: -13px;
+	}
+
+	.tooltip-inner {
+		max-width: 80vw;
 	}
 </style>

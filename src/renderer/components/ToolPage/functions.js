@@ -193,7 +193,7 @@ export default {
 											aObj.o = {}
 										}
 										var aParserOptionName = a.nodeName.substring(9).charAt(0).toLowerCase() + a.nodeName.substring(9).slice(1)
-										if (['title', 'tagAddTitle'].indexOf(aParserOptionName)) {
+										if (['title', 'tagAddTitle'].indexOf(aParserOptionName) > -1) {
 											aObj.o[aParserOptionName] = a.nodeValue		// Option als String
 										} else {
 											aObj.o[aParserOptionName] = a.nodeValue.split(' ')		// Option als Array
