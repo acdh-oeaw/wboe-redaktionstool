@@ -2,7 +2,17 @@
 	<div class="tool-page">
 		<b-tabs v-model="aTab" content-class="tabc">
 			<b-tab title="Editor">
-				Editor
+				<b-button-toolbar class="toolbar">
+					<b-button-group size="sm" class="mx-1 mil-auto">
+						<b-btn disabled><font-awesome-icon icon="eye"/></b-btn>
+						<b-btn :pressed.sync="viewEditorShowComment"><font-awesome-layers><font-awesome-icon icon="comment"/><font-awesome-icon :icon="((viewEditorShowComment) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
+						<b-btn :pressed.sync="viewEditorShowAdd"><font-awesome-layers><font-awesome-icon icon="plus"/><font-awesome-icon :icon="((viewEditorShowAdd) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
+					</b-button-group>
+				</b-button-toolbar>
+				<div class="viewobj scroll wtool p20">
+					<ViewEditor :xmlObj="xmlObj" :showComment="viewEditorShowComment" :showAdd="viewEditorShowAdd" v-if="xmlObj"/>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
+				</div>
 			</b-tab>
 			<b-tab title="Vorschau">
 				Vorschau
@@ -11,12 +21,12 @@
 				<b-button-toolbar class="toolbar">
 					<b-button-group size="sm" class="mx-1 mil-auto">
 						<b-btn disabled><font-awesome-icon icon="eye"/></b-btn>
-						<b-btn :pressed.sync="viewobjShowComment"><font-awesome-layers><font-awesome-icon icon="comment"/><font-awesome-icon :icon="((viewobjShowComment) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
-						<b-btn :pressed.sync="viewobjShowAdd"><font-awesome-layers><font-awesome-icon icon="plus"/><font-awesome-icon :icon="((viewobjShowAdd) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
+						<b-btn :pressed.sync="viewObjShowComment"><font-awesome-layers><font-awesome-icon icon="comment"/><font-awesome-icon :icon="((viewObjShowComment) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
+						<b-btn :pressed.sync="viewObjShowAdd"><font-awesome-layers><font-awesome-icon icon="plus"/><font-awesome-icon :icon="((viewObjShowAdd) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
 					</b-button-group>
 				</b-button-toolbar>
 				<div class="viewobj scroll wtool p20">
-					<ViewObj :xmlObj="xmlObj" :showComment="viewobjShowComment" :showAdd="viewobjShowAdd" v-if="xmlObj"/>
+					<ViewObj :xmlObj="xmlObj" :showComment="viewObjShowComment" :showAdd="viewObjShowAdd" v-if="xmlObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -31,6 +41,7 @@
 </template>
 
 <script>
+	import ViewEditor from './ToolPage/ViewEditor'
 	import ViewObj from './ToolPage/ViewObj'
 	import ViewXmlProEditor from './ToolPage/ViewXmlProEditor'
 	import FunctionsTool from './ToolPage/functions.js'
@@ -40,16 +51,17 @@
 		name: 'tool-page',
 		data () {
 			return {
-				aTab: 2,
+				aTab: 0,
 				objParser: undefined,
 				xmlOrgString: undefined,
 				xmlString: undefined,
 				xmlStringError: undefined,
-				monacoOptions: { wrappingIndent: 'indent', autoIndent: true, showFoldingControls: 'always', minimap: {enabled: true, showSlider: 'always'} },
 				xmlDom: undefined,
 				xmlObj: undefined,
-				viewobjShowComment: true,
-				viewobjShowAdd: true
+				viewEditorShowComment: true,
+				viewEditorShowAdd: true,
+				viewObjShowComment: true,
+				viewObjShowAdd: true,
 			}
 		},
 		watch: {
@@ -85,8 +97,9 @@
 			objParserUpdate: FunctionsTool.objParserUpdate,
 		},
 		components: {
+			ViewEditor,
 			ViewObj,
-			ViewXmlProEditor,
+			ViewXmlProEditor
 		}
 	}
 </script>

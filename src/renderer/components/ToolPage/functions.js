@@ -101,7 +101,7 @@ export default {
 			}
 			return obj
 		}
-		return parse(pObj, getFirstTagObjByName('objPaserContent', objParser).c)
+		return parse(pObj, getFirstTagObjByName('objParserContent', objParser).c)
 	},
 	obj2xmlString: function (srcObj) {		// Objekt in XML-String umwandeln
 		function obj2xmlString (obj, deep = 0) {
