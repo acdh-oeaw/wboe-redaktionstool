@@ -71,7 +71,7 @@ export default {
 							}
 							if (!(parser[pPos].o && parser[pPos].o.value && (parser[pPos].o.value.indexOf('edit') > -1 || parser[pPos].o.value.indexOf('variable') > -1))
 								&& (parser[pPos].v !== v.v)) {
-								addErrorToObj(v, 'Unerwartete Tag Wert!')
+								addErrorToObj(v, 'Unerwarteter Tag Wert!')
 							}
 							if (!Array.isArray(v.e) && parser[pPos].o) {
 								v.o = parser[pPos].o

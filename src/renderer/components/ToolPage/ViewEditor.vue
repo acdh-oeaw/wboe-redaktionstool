@@ -5,8 +5,9 @@
 	<div class="comment" v-else-if="xmlObj.n === '#comment'">
 		<button :title="xmlObj.v" v-b-tooltip.hover v-if="showComment && !xmlObj.commented"><font-awesome-icon icon="comment"/></button>
 	</div>
-	<ViewEditorLayout :xmlObj="xmlObj" v-else>
-		<span class="value" v-if="xmlObj.hasOwnProperty('v')">{{ xmlObj.v }}</span>
+	<ViewEditorLayout :xmlObj="xmlObj" :xmlObjParent="xmlObjParent" :oKey="$vnode.key" v-else>
+		<span :class="valueClasses" v-if="xmlObj.hasOwnProperty('v')">{{ xmlObj.v }}</span>
+		<span :class="valueClasses" v-else-if="(xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit')) > -1">...</span>
 		<div class="addon">
 			<button :title="xmlObjError" v-b-tooltip.hover.html v-if="Array.isArray(xmlObj.e)" class="error"><font-awesome-icon icon="exclamation-triangle"/></button>
 			<button :title="getComments" v-b-tooltip.hover.html v-if="showComment && xmlObj.commented"><font-awesome-icon icon="comment"/></button>
@@ -46,6 +47,17 @@
 			}
 		},
 		computed: {
+			valueClasses: function () {
+				var aClass = ['value']
+				if (this.xmlObj.v === undefined || (typeof this.xmlObj.v === 'string' && this.xmlObj.v.length === 0)) {
+					aClass.push('empty')
+				}
+				if (this.xmlObj.o && this.xmlObj.o.value) {
+					if (this.xmlObj.o.value.indexOf('edit') > -1) aClass.push('edit')
+					if (this.xmlObj.o.value.indexOf('required') > -1) aClass.push('required')
+				}
+				return aClass.join(' ')
+			},
 			xmlObjError: function () {
 				var errors = []
 				if (Array.isArray(this.xmlObj.e)) {

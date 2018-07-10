@@ -14,22 +14,22 @@ export default {
 					<titleStmt>
 						<title objParserValue="edit required" objParserTitle="Titel"></title>
 						<test objParserTag="canBeEmpty">Test für Tag der gelöscht wird wenn leer ...</test>
-						<respStmt>
-							<resp>Editor</resp>
+						<respStmt objParserEditorLayout="inlineChilds">
+							<resp objParserEditorLayout="isTitle">Editor</resp>
 							<name objParserValue="edit required" objParserTitle="Name"></name>
 						</respStmt>
-						<respStmt>
-							<resp>Encoding Scheme</resp>
+						<respStmt objParserEditorLayout="inlineChilds">
+							<resp objParserEditorLayout="isTitle">Encoding Scheme</resp>
 							<name>Jack Bowers</name>
 							<name>Daniel Schopper</name>
 							<name>Omar Siam</name>
 						</respStmt>
-						<respStmt>
-							<resp>DBOE Team</resp>
+						<respStmt objParserEditorLayout="inlineChilds">
+							<resp objParserEditorLayout="isTitle isBlock">DBOE Team</resp>
 							<name xml:id="" objParserTag="multibleSiblings" objParserValue="edit" objParserAttribut="variable" objParserTitle="Name"></name>
 						</respStmt>
-						<respStmt>
-							<resp>Student assistants</resp>
+						<respStmt objParserEditorLayout="inlineChilds">
+							<resp objParserEditorLayout="isTitle isBlock">Student assistants</resp>
 							<name objParserTag="multibleSiblings" objParserValue="edit" objParserTitle="Name"></name>
 						</respStmt>
 					</titleStmt>
@@ -158,7 +158,7 @@ export default {
 								<placeName type="grossregion">Mostv.</placeName>
 							</usg>
 							<cit type="example">
-								<quote xml:lang="bar-AT">u͂mǝdú͂m šiǝssn wiǝ dǝ pfåǝtts in dǝ raittǝ</quote>
+								<quote xml:lang="bar-AT">u͂mǝdú͂m šiǝssn</quote>
 								<usg type="geo">
 									<placeName>Herzogenburg</placeName>
 									<placeName type="grossregion">Mostv.</placeName>
