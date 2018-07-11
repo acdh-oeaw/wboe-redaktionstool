@@ -37,7 +37,7 @@
 			}
 		},
 		computed: {
-			editorClasses: function () {
+			editorClasses: function () {		// Klassen für den aktuellen Tag
 				var aClass = ['editor']
 				if (this.xmlObj.n === '#comment') aClass.push('comment')
 				if (this.xmlObj.n === '#text') aClass.push('text')
@@ -47,10 +47,10 @@
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'isBlock')) aClass.push('isblock')
 				return aClass.join(' ')
 			},
-			header: function () {
-				return ((this.xmlObj.o && this.xmlObj.o.title) ? this.xmlObj.o.title : this.xmlObj.n)
+			header: function () {		// Gibt den akutellen Titel aus den Optionen bzw. den Tag Titel zurück
+				return ((this.hasSubProp(this.xmlObj, 'o.title')) ? this.xmlObj.o.title : this.xmlObj.n)
 			},
-			showTitle: function () {
+			showTitle: function () {		// Soll der Titel angezeigt werden?
 				var show = this.getValOfSubProp(this.xmlObj, 'o.title')
 				if (show && this.isValInArrOfSubProp(this.xmlObj, 'o.tag', 'multibleSiblings')) {
 					if (this.isValInArrOfSubProp(this.xmlObjParent, 'o.editorLayout', 'inlineChilds')) {

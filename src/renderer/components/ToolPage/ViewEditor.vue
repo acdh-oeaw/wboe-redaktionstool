@@ -42,10 +42,10 @@
 			}
 		},
 		computed: {
-			displayValue: function () {
+			displayValue: function () {		// Aktueller Wert für Anzeige
 				return ((this.xmlObj.v) ? this.xmlObj.v : ((this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) ? '...' : ''))
 			},
-			valueClasses: function () {
+			valueClasses: function () {		// Klassen für den Wert
 				var aClass = ['value']
 				if (this.xmlObj.v === undefined || (typeof this.xmlObj.v === 'string' && this.xmlObj.v.length === 0)) {
 					aClass.push('empty')
@@ -54,7 +54,7 @@
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'required')) aClass.push('required')
 				return aClass.join(' ')
 			},
-			xmlObjError: function () {
+			xmlObjError: function () {		// Gab es Fehler in dem aktuellen Tag
 				var errors = []
 				if (Array.isArray(this.xmlObj.e)) {
 					this.xmlObj.e.forEach(function (v) {
@@ -63,7 +63,7 @@
 				}
 				return '<ul><li>' + errors.join('</li><li>') + '</li></ul>'
 			},
-			getComments: function () {
+			getComments: function () {		// Kommentare zu aktuellen Tag als HTML-Liste
 				var comments = []
 				if (this.xmlObj.commented) {
 					this.xmlObj.commented.forEach(function (v) {
@@ -80,9 +80,6 @@
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) {
 					console.log('clickValue')
 				}
-			},
-			htmlEncode: function (html) {
-				return document.createElement('a').appendChild(document.createTextNode(html)).parentNode.innerHTML
 			}
 		},
 		components: {

@@ -45,7 +45,7 @@
 			}
 		},
 		computed: {
-			xmlObjError: function () {
+			xmlObjError: function () {		// Gab es Fehler in dem aktuellen Tag
 				return ((Array.isArray(this.xmlObj.e)) ? this.xmlObj.e.join('\n') : undefined)
 			}
 		}

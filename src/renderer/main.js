@@ -27,7 +27,10 @@ Vue.use(VueCodemirror)
 
 Vue.mixin({		// Global verfügbare Funktionen
 	methods: {
-		hasSubProp: function (obj, propertys) {
+		htmlEncode: function (html) {		// HTML-Sonderzeichen schützen
+			return document.createElement('a').appendChild(document.createTextNode(html)).parentNode.innerHTML
+		},
+		hasSubProp: function (obj, propertys) {		// Ermitten ob Property in einem verschachtelten Objekt existiert
 			var out = false
 			if ((typeof propertys === 'string') && (propertys !== null) && propertys.length > 0) {
 				var aObj = obj
@@ -48,7 +51,7 @@ Vue.mixin({		// Global verfügbare Funktionen
 			}
 			return out
 		},
-		getValOfSubProp: function (obj, propertys) {
+		getValOfSubProp: function (obj, propertys) {		// Gibt Wert eines Property eines verschachtelten Objekts zurück
 			if (this.hasSubProp(obj, propertys)) {
 				var aObj = obj
 				propertys.split('.').some(function (property) {
@@ -59,7 +62,7 @@ Vue.mixin({		// Global verfügbare Funktionen
 				return undefined
 			}
 		},
-		isValInArrOfSubProp: function (obj, propertys, value) {
+		isValInArrOfSubProp: function (obj, propertys, value) {		// Ist Wert in Array eines verschachtelten Objekts vorhanden
 			var aObj = this.getValOfSubProp(obj, propertys)
 			if (Array.isArray(aObj)) {
 				return (aObj.indexOf(value) > -1)
@@ -70,7 +73,7 @@ Vue.mixin({		// Global verfügbare Funktionen
 	}
 })
 
-Vue.filter('prettyBytes', function (num) {
+Vue.filter('prettyBytes', function (num) {		// Byte-Angaben formatieren
 	if (typeof num !== 'number' || isNaN(num)) {
 		throw new TypeError('Expected a number')
 	}

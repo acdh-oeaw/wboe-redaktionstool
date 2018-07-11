@@ -40,13 +40,13 @@ export default {
 		}
 	},
 	methods: {
-		selectFolder () {
+		selectFolder () {		// Projektpfad auswählen und speichern
 			this.$store.dispatch('DIALOG_PROJECT_PATH')	// Verzeichniss Dialog
 			this.$store.dispatch('SET_PROJECT_PATH')		// Projektpfad speichern
 		},
 	},
 	mounted: function () {
-		if (this.Options.projectPath === undefined) {
+		if (this.Options.projectPath === undefined) {		// Projektpfad laden
 			this.$store.dispatch('GET_PROJECT_PATH')
 		}
 	},
