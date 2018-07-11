@@ -6,8 +6,7 @@
 		<button :title="xmlObj.v" v-b-tooltip.hover v-if="showComment && !xmlObj.commented"><font-awesome-icon icon="comment"/></button>
 	</div>
 	<ViewEditorLayout :xmlObj="xmlObj" :xmlObjParent="xmlObjParent" :oKey="$vnode.key" v-else>
-		<span :class="valueClasses" v-if="xmlObj.hasOwnProperty('v')">{{ xmlObj.v }}</span>
-		<span :class="valueClasses" v-else-if="(xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit')) > -1">...</span>
+		<span :class="valueClasses" v-if="xmlObj.hasOwnProperty('v') || isValInArrOfSubProp(xmlObj, 'o.value', 'edit')" @click="clickValue()">{{ displayValue }}</span>
 		<div class="addon">
 			<button :title="xmlObjError" v-b-tooltip.hover.html v-if="Array.isArray(xmlObj.e)" class="error"><font-awesome-icon icon="exclamation-triangle"/></button>
 			<button :title="getComments" v-b-tooltip.hover.html v-if="showComment && xmlObj.commented"><font-awesome-icon icon="comment"/></button>
@@ -15,11 +14,7 @@
 		<ViewEditor :xmlObj="xmlObjItem" :xmlObjParent="xmlObj" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)" v-if="isOpen"/>
 	</ViewEditorLayout>
 
-		<!-- <div :class="'item' + ((Array.isArray(xmlObj.e)) ? ' text-danger danger' : '') + ((xmlObj.n === '#comment') ? ' comment-item' : '')" v-if="xmlObj.n !== '#comment' || showComment">
-			<font-awesome-icon :icon="'lock' + ((xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1) ? '-open' : '')"/>
-			<font-awesome-icon icon="edit" v-if="xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1"/>
-		</div>
-		<div class="item add-item" v-if="showAdd && xmlObj.n !== nextNodeName && xmlObj.o && xmlObj.add">
+		<!-- <div class="item add-item" v-if="showAdd && xmlObj.n !== nextNodeName && xmlObj.o && xmlObj.add">
 			<button><font-awesome-icon icon="plus"/>
 				<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
 				<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
@@ -47,15 +42,16 @@
 			}
 		},
 		computed: {
+			displayValue: function () {
+				return ((this.xmlObj.v) ? this.xmlObj.v : ((this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) ? '...' : ''))
+			},
 			valueClasses: function () {
 				var aClass = ['value']
 				if (this.xmlObj.v === undefined || (typeof this.xmlObj.v === 'string' && this.xmlObj.v.length === 0)) {
 					aClass.push('empty')
 				}
-				if (this.xmlObj.o && this.xmlObj.o.value) {
-					if (this.xmlObj.o.value.indexOf('edit') > -1) aClass.push('edit')
-					if (this.xmlObj.o.value.indexOf('required') > -1) aClass.push('required')
-				}
+				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) aClass.push('edit')
+				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'required')) aClass.push('required')
 				return aClass.join(' ')
 			},
 			xmlObjError: function () {
@@ -80,6 +76,11 @@
 			}
 		},
 		methods: {
+			clickValue: function () {
+				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) {
+					console.log('clickValue')
+				}
+			},
 			htmlEncode: function (html) {
 				return document.createElement('a').appendChild(document.createTextNode(html)).parentNode.innerHTML
 			}

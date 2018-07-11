@@ -25,6 +25,51 @@ Vue.config.productionTip = false
 Vue.use(BootstrapVue)
 Vue.use(VueCodemirror)
 
+Vue.mixin({		// Global verfügbare Funktionen
+	methods: {
+		hasSubProp: function (obj, propertys) {
+			var out = false
+			if ((typeof propertys === 'string') && (propertys !== null) && propertys.length > 0) {
+				var aObj = obj
+				propertys.split('.').some(function (property) {
+					if ((typeof aObj === 'object') && (aObj !== null)) {
+						if (aObj.hasOwnProperty(property)) {
+							out = true
+							aObj = aObj[property]
+						} else {
+							out = false
+							return true
+						}
+					} else {
+						out = false
+						return true
+					}
+				})
+			}
+			return out
+		},
+		getValOfSubProp: function (obj, propertys) {
+			if (this.hasSubProp(obj, propertys)) {
+				var aObj = obj
+				propertys.split('.').some(function (property) {
+					aObj = aObj[property]
+				})
+				return aObj
+			} else {
+				return undefined
+			}
+		},
+		isValInArrOfSubProp: function (obj, propertys, value) {
+			var aObj = this.getValOfSubProp(obj, propertys)
+			if (Array.isArray(aObj)) {
+				return (aObj.indexOf(value) > -1)
+			} else {
+				return undefined
+			}
+		}
+	}
+})
+
 Vue.filter('prettyBytes', function (num) {
 	if (typeof num !== 'number' || isNaN(num)) {
 		throw new TypeError('Expected a number')
