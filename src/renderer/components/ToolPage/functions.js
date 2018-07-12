@@ -2,21 +2,21 @@ export default {
 	objParserUpdate: function (srcObj, objParser) {		// Struktur des Objekts überprüfen
 		var pObj = srcObj
 		function parse (obj, parser) {
-			var pPos = 0
-			var addEmptyObj = []
-			var lastNodeObj = undefined
-			obj.forEach(function (v, k) {
-				delete v.commented
-				if (v.n === '#comment') {
-					if (lastNodeObj !== undefined && obj[lastNodeObj] !== undefined) {
-						if (obj[lastNodeObj].commented === undefined) {
-							obj[lastNodeObj].commented = []
+			if (parser) {
+				var pPos = 0
+				var addEmptyObj = []
+				var lastNodeObj = undefined
+				obj.forEach(function (v, k) {
+					delete v.commented
+					if (v.n === '#comment') {
+						if (lastNodeObj !== undefined && obj[lastNodeObj] !== undefined) {
+							if (obj[lastNodeObj].commented === undefined) {
+								obj[lastNodeObj].commented = []
+							}
+							obj[lastNodeObj].commented.push(k)
+							v.commented = true
 						}
-						obj[lastNodeObj].commented.push(k)
-						v.commented = true
-					}
-				} else {
-					if (parser) {
+					} else {
 						var pOn = true
 						if (!parser[pPos]) {
 							if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1) {
@@ -81,17 +81,13 @@ export default {
 								}
 							}
 						}
-					} else {
-						addErrorToObj(v, 'Kein "Parser" übergeben!')
+						lastNodeObj = k
+						if (Array.isArray(v.c)) {		// Kinder überprüfen
+							parse(v.c, ((parser && parser[pPos] && parser[pPos].c) ? parser[pPos].c : undefined))
+						}
+						pPos += 1
 					}
-					lastNodeObj = k
-					if (Array.isArray(v.c)) {		// Kinder überprüfen
-						parse(v.c, ((parser && parser[pPos] && parser[pPos].c) ? parser[pPos].c : undefined))
-					}
-					pPos += 1
-				}
-			}, this)
-			if (parser) {
+				}, this)
 				while (pPos < parser.length) {		// Weitere Parser Objekte hinzufügen!
 					let aKey = obj.push(parser[pPos]) - 1
 					if (!(obj[aKey] && obj[aKey].o && obj[aKey].o.tag && obj[aKey].o.tag.indexOf('canBeEmpty') > -1)) {
@@ -109,8 +105,10 @@ export default {
 						obj.splice(aeo.pos, 0, ...aeo.tags)
 					})
 				}
+				return obj
+			} else {
+				alert('Kein "Parser" übergeben!')
 			}
-			return obj
 		}
 		return parse(pObj, getFirstTagObjByName('objParserContent', objParser).c)
 	},
