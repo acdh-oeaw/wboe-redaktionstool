@@ -1,0 +1,208 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objParser>
+	<xmlParserHeader>
+		&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+		&lt;?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?&gt;
+		&lt;?xml-model href="../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?&gt;
+	</xmlParserHeader>
+	<objParserContent>
+		<TEI xmlns="http://www.tei-c.org/ns/1.0">
+			<teiHeader objParserTitle="Kopfzeile" objParserEditorLayout="panel collapse" objParserEditorClass="test">
+				<fileDesc>
+					<titleStmt>
+						<title objParserValue="edit required" objParserTitle="Titel"></title>
+						<test objParserTag="canBeEmpty">Test für Tag der gelöscht wird wenn leer ...</test>
+						<respStmt objParserEditorLayout="inlineChilds">
+							<resp objParserEditorLayout="isTitle">Editor</resp>
+							<name objParserValue="edit required" objParserTitle="Name"></name>
+						</respStmt>
+						<respStmt objParserEditorLayout="inlineChilds">
+							<resp objParserEditorLayout="isTitle">Encoding Scheme</resp>
+							<name>Jack Bowers</name>
+							<name>Daniel Schopper</name>
+							<name>Omar Siam</name>
+						</respStmt>
+						<respStmt objParserEditorLayout="inlineChilds">
+							<resp objParserEditorLayout="isTitle isBlock">DBOE Team</resp>
+							<name xml:id="" objParserTag="multibleSiblings" objParserValue="edit" objParserAttribut="variable" objParserTitle="Name"></name>
+						</respStmt>
+						<respStmt objParserEditorLayout="inlineChilds">
+							<resp objParserEditorLayout="isTitle isBlock">Student assistants</resp>
+							<name objParserTag="multibleSiblings" objParserValue="edit" objParserTitle="Name"></name>
+						</respStmt>
+					</titleStmt>
+					<publicationStmt>
+						<p>Publication Information</p>
+					</publicationStmt>
+					<sourceDesc>
+						<p>Information about the source</p>
+					</sourceDesc>
+				</fileDesc>
+			</teiHeader>
+			<text objParserTitle="Text" objParserEditorLayout="panel collapse">
+				<body>
+					<entry>
+						<form type="lemma" objParserTag="multibleSiblings" objParserTagAddTitle="Ein &quot;Lemma&quot; hinzufügen">
+							<orth objParserValue="edit" objParserTitle="Orth"></orth>
+						</form>
+						<gramGrp>
+							<gram type="pos">Substantiv</gram>
+							<gram type="gender">Masculinum</gram>
+						</gramGrp>
+						<form type="variant" subtype="diminutive" xml:id="Färzel" objParserAttribut="edit" objParserTag="multibleSiblings">
+							<orth objParserValue="edit" objParserTitle="Name"></orth>
+							<gramGrp>
+								<gram type="gender">Neutrum</gram>
+							</gramGrp>
+						</form>
+						<usg type="geo" objParserTag="multibleSiblings">
+							<placeName type="grossregion" objParserValue="edit" objParserTitle="Ort"></placeName>
+						</usg>
+						<form type="variant" subtype="diminutive" objParserAttribut="variable" objParserTag="multibleSiblings">
+							<pron xml:lang="bar-AT" objParserValue="edit" objParserTitle="???"></pron>
+							<usg type="geo">
+								<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
+							</usg>
+						</form>
+						<etym>
+							<cit type="etymon">
+								<lang>mhd</lang>
+								<form>
+									<orth xml:lang="gmh">varz</orth>
+								</form>
+								<def>Darmwind</def>
+							</cit>
+							<ref type="bibl" target="#Lexer1878III">
+								<citedRange>27</citedRange>
+							</ref>
+						</etym>
+						<sense objParserTag="multibleSiblings">
+							<ref type="form" objParserTag="canBeEmpty">
+								<text objParserText="text" objParserValue="edit" objParserTitle="???" objParserTag="canBeEmpty"></text>
+								<oRef target="" objParserAttribut="variable"></oRef>
+							</ref>
+							<def objParserValue="edit" objParserTitle="???"></def>
+							<usg type="geo" objParserTag="multibleSiblings">
+								<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
+							</usg>
+							<cit type="example">
+								<quote xml:lang="" objParserAttribut="variable" objParserValue="edit" objParserTitle="???"></quote>
+								<usg type="geo">
+									<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
+								</usg>
+							</cit>
+						</sense>
+						<re>
+							<form type="lemma" subtype="compound">
+								<orth>Nonnenfarzel</orth>
+							</form>
+							<sense>
+								<def>kleines Lebkuchenstücklein</def>
+								<usg type="dom">Klosterspeise</usg>
+							</sense>
+							<usg type="geo">
+								<placeName type="grossregion">Stmk.</placeName>
+							</usg>
+						</re>
+						<re>
+							<form type="lemma" subtype="compound">
+								<orth>Schneiderfarz</orth>
+							</form>
+							<usg type="geo">
+								<placeName type="grossregion">Industriev.</placeName>
+							</usg>
+						</re>
+						<re>
+							<form type="lemma" subtype="MWE">
+								<orth>der Farz ist des Bauches Arzt</orth>
+							</form>
+							<usg type="geo">
+								<placeName type="grossregion">Ktn.</placeName>
+							</usg>
+							<cit type="example">
+								<quote xml:lang="bar-AT">dér Fàrz ist 's pauchis àrz</quote>
+								<ref type="bibl" target="#KÄRNTISCHESWB1862">
+									<citedRange>90</citedRange>
+								</ref>
+								<usg type="geo">
+									<placeName type="grossregion">Ktn.</placeName>
+								</usg>
+							</cit>
+						</re>
+						<re>
+							<form type="lemma" subtype="MWE">
+								<orth>Er lässt alle Farzen gehen</orth>
+							</form>
+							<sense>
+								<def>der Organist spielt mit allen gezogenen Registern</def>
+							</sense>
+							<cit type="example">
+								<quote xml:lang="bar-AT">Jetz låsst r af n Kchor owen widEr ålle Fårzn giehn</quote>
+								<usg type="geo">
+									<placeName>Matrei am Brenner</placeName>
+									<placeName type="grossregion">mNTir.</placeName>
+								</usg>
+							</cit>
+						</re>
+						<re>
+							<form type="lemma" subtype="MWE">
+								<orth>herumschießen wie der Farz in die/der/den Reite(rn)</orth>
+							</form>
+							<sense>
+								<def>geschäftig herumlaufen</def>
+								<usg type="reg">spöttisch</usg>
+							</sense>
+							<usg type="geo">
+								<placeName type="grossregion">Mostv.</placeName>
+							</usg>
+							<cit type="example">
+								<quote xml:lang="bar-AT">u͂mǝdú͂m šiǝssn</quote>
+								<usg type="geo">
+									<placeName>Herzogenburg</placeName>
+									<placeName type="grossregion">Mostv.</placeName>
+								</usg>
+							</cit>
+						</re>
+						<re>
+							<form type="lemma" subtype="MWE">
+								<orth>Man hat keinen Farz gehört</orth>
+							</form>
+							<sense>
+								<def>es ist nichts von einer Angelegenheit bekannt geworden</def>
+							</sense>
+							<usg type="geo">
+								<placeName type="grossregion">OTir.</placeName>
+							</usg>
+							<cit type="example">
+								<quote xml:lang="bar-AT">Man hat kan Få'z ghęat</quote>
+								<usg type="geo">
+									<placeName>uIselt.</placeName>
+									<placeName>Lienz.Beck.</placeName>
+									<placeName type="grossregion">OTir.</placeName>
+								</usg>
+							</cit>
+						</re>
+						<re>
+							<form type="lemma" subtype="MWE">
+								<orth>Schwarz und Weiß / Pfarz und Scheiß</orth>
+							</form>
+							<sense>
+								<usg type="dom">Kinderreim</usg>
+							</sense>
+							<usg type="geo">
+								<placeName type="grossregion">Hausrv.</placeName>
+							</usg>
+							<cit type="example">
+								<quote xml:lang="bar-AT">schwoaz und weis / Bfoaz und Scheis</quote>
+								<usg type="geo">
+									<placeName>Linz</placeName>
+									<placeName type="grossregion">Hausrv.</placeName>
+								</usg>
+							</cit>
+						</re>
+					</entry>
+				</body>
+			</text>
+		</TEI>
+	</objParserContent>
+</objParser>

@@ -29,7 +29,7 @@ const actions = {
 			}
 		}
 	},
-	CLEAN_PATH: function ({ commit, dispatch }, {path, fileKey}) {
+	CLEAN_PATH: function ({ commit }) {
 		commit('CLEAN_CONTENT')
 	},
 	GET_PATH: function ({ commit }, path) {

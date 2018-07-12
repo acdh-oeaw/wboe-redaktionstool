@@ -94,14 +94,16 @@
 	}
 	.editor > .value {
 		position: relative;
-		border: 1px solid #ccf;
+		border: 1px solid #ccc;
 		padding: 1px 8px;
 		display: inline-block;
 		margin: 2px 0px;
 	}
 	.editor > .value.edit {
+		border: 1px solid #beb;
 	}
 	.editor > .value.required {
+		border: 1px solid #ccf;
 	}
 	.editor > .value.edit.empty {
 		background: #ffe1a7;

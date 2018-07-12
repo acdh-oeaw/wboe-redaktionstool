@@ -1,14 +1,14 @@
 <template>
 	<div class="tool-page">
 		<b-button-toolbar class="main-toolbar">
-			<b-button-group size="sm" class="mx-1 mil-auto">
+			<b-button-group size="sm" class="mr-1 mil-auto">
 				<b-btn :title="xmlObjError" :variant="((Array.isArray(xmlObjErrors) && xmlObjErrors.length > 0) ? 'danger' : 'success')"  v-b-tooltip.hover.html :disabled="ViewXmlProEditorChanged"><font-awesome-icon :icon="((xmlObjErrors && xmlObjErrors.length > 0) ? 'exclamation-triangle' : 'clipboard-check')"/></b-btn>
 			</b-button-group>
 		</b-button-toolbar>
 		<b-tabs v-model="aTab" content-class="tabc">
 			<b-tab title="Editor" :disabled="ViewXmlProEditorChanged">
 				<b-button-toolbar class="toolbar">
-					<b-button-group size="sm" class="mx-1 mil-auto">
+					<b-button-group size="sm" class="mr-1 mil-auto">
 						<b-btn disabled><font-awesome-icon icon="eye"/></b-btn>
 						<b-btn :pressed.sync="viewEditorShowComment"><font-awesome-layers><font-awesome-icon icon="comment"/><font-awesome-icon :icon="((viewEditorShowComment) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
 						<b-btn :pressed.sync="viewEditorShowAdd"><font-awesome-layers><font-awesome-icon icon="plus"/><font-awesome-icon :icon="((viewEditorShowAdd) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
@@ -24,7 +24,7 @@
 			</b-tab>
 			<b-tab title="Objekt" :disabled="ViewXmlProEditorChanged">
 				<b-button-toolbar class="toolbar">
-					<b-button-group size="sm" class="mx-1 mil-auto">
+					<b-button-group size="sm" class="mr-1 mil-auto">
 						<b-btn disabled><font-awesome-icon icon="eye"/></b-btn>
 						<b-btn :pressed.sync="viewObjShowComment"><font-awesome-layers><font-awesome-icon icon="comment"/><font-awesome-icon :icon="((viewObjShowComment) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
 						<b-btn :pressed.sync="viewObjShowAdd"><font-awesome-layers><font-awesome-icon icon="plus"/><font-awesome-icon :icon="((viewObjShowAdd) ? 'check' : 'times')" transform="shrink-6" class="fal-br"/></font-awesome-layers></b-btn>
@@ -37,7 +37,7 @@
 			</b-tab>
 			<b-tab title="XML">
 				<b-button-toolbar class="toolbar">
-					<b-button-group size="sm" class="mx-1 mil-auto">
+					<b-button-group size="sm" class="mr-1 mil-auto">
 						<b-btn @click="ViewXmlProEditorChancel" :disabled="!ViewXmlProEditorChanged" variant="danger"><font-awesome-icon icon="times"/></b-btn>
 						<b-btn @click="ViewXmlProEditorApply" :disabled="!ViewXmlProEditorChanged" variant="primary"><font-awesome-icon icon="check"/></b-btn>
 					</b-button-group>
@@ -52,6 +52,7 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	import ViewEditor from './ToolPage/ViewEditor'
 	import ViewObj from './ToolPage/ViewObj'
 	import ViewXmlProEditor from './ToolPage/ViewXmlProEditor'
@@ -75,6 +76,18 @@
 				viewEditorShowAdd: true,
 				viewObjShowComment: true,
 				viewObjShowAdd: true,
+			}
+		},
+		computed: {
+			...mapState(['Options']),
+			xmlObjError: function () {		// Gab es Fehler in dem aktuellen Tag
+				var errors = []
+				if (Array.isArray(this.xmlObjErrors)) {
+					this.xmlObjErrors.forEach(function (v) {
+						errors.push(((v.obj.line) ? 'Zeile ' + v.obj.line + ': ' : '') + this.htmlEncode(v.error))
+					}, this)
+				}
+				return '<ul><li>' + errors.join('</li><li>') + '</li></ul>'
 			}
 		},
 		watch: {
@@ -108,20 +121,10 @@
 				}
 			}
 		},
-		computed: {
-			xmlObjError: function () {		// Gab es Fehler in dem aktuellen Tag
-				var errors = []
-				if (Array.isArray(this.xmlObjErrors)) {
-					this.xmlObjErrors.forEach(function (v) {
-						errors.push(((v.obj.line) ? 'Zeile ' + v.obj.line + ': ' : '') + this.htmlEncode(v.error))
-					}, this)
-				}
-				return '<ul><li>' + errors.join('</li><li>') + '</li></ul>'
-			}
-		},
 		mounted: function () {
 			var t0 = performance.now()
-			this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(test.testOptionObj).xmlDom, true)
+			this.$store.dispatch('GET_PROJECT_PATH')
+			this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(this.Options.parserFileContent).xmlDom, true)
 			this.xmlOrgString = test.testXML
 			this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
 			console.log('ToolPage mounted', Math.ceil(performance.now() - t0) + ' ms.')
