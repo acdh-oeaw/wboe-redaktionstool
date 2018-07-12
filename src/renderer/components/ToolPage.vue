@@ -38,7 +38,7 @@
 					</b-button-group>
 				</b-button-toolbar>
 				<div class="viewxmlproeditor ohidden wtool">
-					<ViewXmlProEditor v-model="xmlString" ref="ViewXmlProEditor" @changed="ViewXmlProEditorChange" v-if="xmlString"/>
+					<ViewXmlProEditor v-model="xmlString" ref="ViewXmlProEditor" @changed="ViewXmlProEditorChange" :errors="xmlObjErrors" v-if="xmlString"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -64,6 +64,7 @@
 				xmlStringError: undefined,
 				xmlDom: undefined,
 				xmlObj: undefined,
+				xmlObjErrors: undefined,
 				ViewXmlProEditorChanged: false,
 				viewEditorShowComment: true,
 				viewEditorShowAdd: true,
@@ -79,24 +80,22 @@
 			},
 			xmlDom: function (nVal) {
 				if (nVal) {
+					var t0 = performance.now()
 					var parsedObj = this.objParserUpdate(this.xmlDom2Obj(nVal), this.objParser)
-					console.log('xmlDom update')
-					if (parsedObj.errors) {
-						console.log('parsedObj.errors', parsedObj.errors)
-					}
 					this.xmlObj = {c: parsedObj.obj, t: 'start'}
-					this.$nextTick(() => {
-						this.xmlString = this.obj2xmlString(this.xmlObj)
-					})
+					this.xmlString = this.obj2xmlString(this.xmlObj)
+					if (parsedObj.errors) {
+						this.xmlObjErrors = parsedObj.errors
+					}
+					console.log('xmlDom update', Math.ceil(performance.now() - t0) + ' ms.')
 				} else {
 					this.xmlObj = undefined
 				}
 			},
 			xmlString: function (nVal) {
-				console.log('xmlString update')
-				this.$nextTick(() => {
-					this.xmlDom = this.xmlString2xmlDom(nVal).xmlDom
-				})
+				var t0 = performance.now()
+				this.xmlDom = this.xmlString2xmlDom(nVal).xmlDom
+				console.log('xmlString update', Math.ceil(performance.now() - t0) + ' ms.')
 			},
 			ViewXmlProEditorChanged: function (nVal) {
 				if (nVal) {
@@ -105,9 +104,11 @@
 			}
 		},
 		mounted: function () {
+			var t0 = performance.now()
 			this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(test.testOptionObj).xmlDom, true)
 			this.xmlOrgString = test.testXML
 			this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
+			console.log('ToolPage mounted', Math.ceil(performance.now() - t0) + ' ms.')
 		},
 		methods: {
 			ViewXmlProEditorChange () {
