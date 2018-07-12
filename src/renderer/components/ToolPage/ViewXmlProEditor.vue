@@ -1,6 +1,6 @@
 <template>
 	<codemirror ref="myCm"
-							:value="code"
+							v-model="code"
 							:options="cmOptions"
 							@ready="onCmReady"
 							@input="onCmCodeChange"></codemirror>
@@ -8,11 +8,12 @@
 
 <script>
 	import ViewXmlProEditorFunctions from './ViewXmlProEditorFunctions'
+	import _ from 'lodash'
 
 	export default {
 		name: 'ViewXmlProEditor',
 		props: {
-			xmlString: String
+			value: String
 		},
 		data () {
 			return {
@@ -23,18 +24,28 @@
 			}
 		},
 		watch: {
-			code: function (nVal, oVal) {
-				// console.log('changed')
-			},
 			refreshCodemirror: ViewXmlProEditorFunctions.refreshCodemirror,
+			value: function (nVal) {
+				this.code = this.value
+			}
 		},
 		mounted () {
-			this.code = this.xmlString
+			this.code = this.value
 		},
 		methods: {
-			onCmCodeChange (newCode) {
-				// console.log('changed')
-				this.code = newCode
+			onCmCodeChange: _.debounce(function (newCode) {
+				if (this.code !== this.value) {
+					this.$emit('changed')
+				}
+			}, 500),
+			reloadValue () {
+				this.code = this.value
+			},
+			setValue () {
+				this.$emit('input', this.code)
+			},
+			getCode () {
+				return this.code
 			},
 			refresh: ViewXmlProEditorFunctions.refresh,
 			refreshCM: ViewXmlProEditorFunctions.refreshCM,

@@ -31,8 +31,14 @@
 				</div>
 			</b-tab>
 			<b-tab title="XML">
-				<div class="viewxmlproeditor ohidden lh76vh">
-					<ViewXmlProEditor :xmlString="xmlString" ref="ViewXmlProEditor" v-if="xmlString"/>
+				<b-button-toolbar class="toolbar">
+					<b-button-group size="sm" class="mx-1 mil-auto">
+						<b-btn @click="ViewXmlProEditorChancel" :disabled="!ViewXmlProEditorChanged" variant="danger"><font-awesome-icon icon="times"/></b-btn>
+						<b-btn @click="ViewXmlProEditorApply" :disabled="!ViewXmlProEditorChanged" variant="primary"><font-awesome-icon icon="check"/></b-btn>
+					</b-button-group>
+				</b-button-toolbar>
+				<div class="viewxmlproeditor ohidden wtool">
+					<ViewXmlProEditor v-model="xmlString" ref="ViewXmlProEditor" @changed="ViewXmlProEditorChange" v-if="xmlString"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -58,6 +64,7 @@
 				xmlStringError: undefined,
 				xmlDom: undefined,
 				xmlObj: undefined,
+				ViewXmlProEditorChanged: false,
 				viewEditorShowComment: true,
 				viewEditorShowAdd: true,
 				viewObjShowComment: true,
@@ -65,31 +72,52 @@
 			}
 		},
 		watch: {
-			aTab: function (nVal, oVal) {
+			aTab: function (nVal) {
 				if (nVal === 3) {
 					this.$refs.ViewXmlProEditor.refresh()
 				}
 			},
 			xmlDom: function (nVal) {
 				if (nVal) {
+					console.log('xmlDom update')
 					this.xmlObj = {c: this.objParserUpdate(this.xmlDom2Obj(nVal), this.objParser), t: 'start'}
+					this.$nextTick(() => {
+						this.xmlString = this.obj2xmlString(this.xmlObj)
+					})
 				} else {
 					this.xmlObj = undefined
 				}
 			},
-			xmlString: function (nVal, oVal) {
+			xmlString: function (nVal) {
+				console.log('xmlString update')
+				this.$nextTick(() => {
+					this.xmlDom = this.xmlString2xmlDom(nVal).xmlDom
+				})
 			}
 		},
 		mounted: function () {
 			this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(test.testOptionObj).xmlDom, true)
 			this.xmlOrgString = test.testXML
 			this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
-			this.$nextTick(() => {
-				this.xmlString = this.obj2xmlString(this.xmlObj)
-				this.xmlDom = this.xmlString2xmlDom(this.xmlString).xmlDom
-			})
 		},
 		methods: {
+			ViewXmlProEditorChange () {
+				this.ViewXmlProEditorChanged = true
+				console.log('ViewXmlProEditorChange')
+			},
+			ViewXmlProEditorApply () {
+				console.log(this.$refs.ViewXmlProEditor.getCode())
+				if (confirm('Änderungen wirklich anwenden?')) {
+					this.ViewXmlProEditorChanged = false
+					this.$refs.ViewXmlProEditor.setValue()
+				}
+			},
+			ViewXmlProEditorChancel () {
+				if (confirm('Änderungen wirklich verwerfen?')) {
+					this.ViewXmlProEditorChanged = false
+					this.$refs.ViewXmlProEditor.reloadValue()
+				}
+			},
 			obj2xmlString: FunctionsTool.obj2xmlString,
 			xmlString2xmlDom: FunctionsTool.xmlString2xmlDom,
 			xmlDomCheck: FunctionsTool.xmlDomCheck,
@@ -116,7 +144,7 @@
 	.lh76vh, .tabc > div > .scroll {
 		height: 76vh;
 	}
-	.tabc > div > .scroll.wtool {
+	.tabc > div > .scroll.wtool, .tabc > div > .ohidden.wtool {
 		height: calc( 76vh - 49px )
 	}
 	.toolbar {
