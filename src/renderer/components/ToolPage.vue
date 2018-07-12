@@ -1,5 +1,10 @@
 <template>
 	<div class="tool-page">
+		<b-button-toolbar class="main-toolbar">
+			<b-button-group size="sm" class="mx-1 mil-auto">
+				<b-btn :title="xmlObjError" :variant="((Array.isArray(xmlObjErrors) && xmlObjErrors.length > 0) ? 'danger' : 'success')"  v-b-tooltip.hover.html :disabled="ViewXmlProEditorChanged"><font-awesome-icon :icon="((xmlObjErrors && xmlObjErrors.length > 0) ? 'exclamation-triangle' : 'clipboard-check')"/></b-btn>
+			</b-button-group>
+		</b-button-toolbar>
 		<b-tabs v-model="aTab" content-class="tabc">
 			<b-tab title="Editor" :disabled="ViewXmlProEditorChanged">
 				<b-button-toolbar class="toolbar">
@@ -103,6 +108,17 @@
 				}
 			}
 		},
+		computed: {
+			xmlObjError: function () {		// Gab es Fehler in dem aktuellen Tag
+				var errors = []
+				if (Array.isArray(this.xmlObjErrors)) {
+					this.xmlObjErrors.forEach(function (v) {
+						errors.push(((v.obj.line) ? 'Zeile ' + v.obj.line + ': ' : '') + this.htmlEncode(v.error))
+					}, this)
+				}
+				return '<ul><li>' + errors.join('</li><li>') + '</li></ul>'
+			}
+		},
 		mounted: function () {
 			var t0 = performance.now()
 			this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(test.testOptionObj).xmlDom, true)
@@ -145,24 +161,27 @@
 
 <style>
 	.tool-page {
-		margin-top: 40px;
+		margin-top: 10px;
 	}
 	.tabc {
 		border: 1px solid #eee;
 		border-top: none;
-		min-height: 76vh;
+		min-height: 75vh;
 	}
 	.lh76vh, .tabc > div > .scroll {
-		height: 76vh;
+		height: 75vh;
 	}
 	.tabc > div > .scroll.wtool, .tabc > div > .ohidden.wtool {
-		height: calc( 76vh - 49px )
+		height: calc( 75vh - 49px )
 	}
 	.toolbar {
 		margin-bottom: 0px;
 		border-bottom: 1px solid #eee;
 		background: #f8f9fa;
 		padding: 8px 7px;
+	}
+	.main-toolbar {
+		margin-bottom: 10px;
 	}
 	.fal-br {
 		transform: translate(9px, 8px);

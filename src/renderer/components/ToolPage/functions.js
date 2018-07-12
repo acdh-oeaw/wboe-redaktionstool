@@ -106,7 +106,7 @@ export default {
 						if (childParse.structureError) {
 							structureError = true
 						}
-					} else if (parser && parser[pPos] && parser[pPos].c) {
+					} else if ((parser && parser[pPos] && parser[pPos].n === v.n) && (parser[pPos].c)) {
 						parser[pPos].c.some(function (pV) {
 							if (!(pV.o && pV.o.tag && pV.o.tag.indexOf('canBeEmpty') > -1)) {
 								structureError = true

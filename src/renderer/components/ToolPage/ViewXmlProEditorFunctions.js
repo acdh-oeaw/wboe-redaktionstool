@@ -55,5 +55,8 @@ export default {
 		if (this.refreshCodemirror) {
 			this.refreshCM()
 		}
+		this.$nextTick(() => {
+			this.markErrors()
+		})
 	},
 }
