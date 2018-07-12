@@ -58,7 +58,7 @@
 				var errors = []
 				if (Array.isArray(this.xmlObj.e)) {
 					this.xmlObj.e.forEach(function (v) {
-						errors.push(this.htmlEncode(v))
+						errors.push(((v.obj.line) ? 'Zeile ' + v.obj.line + ': ' : '') + this.htmlEncode(v.error))
 					}, this)
 				}
 				return '<ul><li>' + errors.join('</li><li>') + '</li></ul>'

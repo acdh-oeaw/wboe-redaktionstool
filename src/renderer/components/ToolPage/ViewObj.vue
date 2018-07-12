@@ -14,7 +14,7 @@
 			</span>
 			<span class="value" v-if="xmlObj.v">{{ xmlObj.v }}</span>
 			<font-awesome-icon icon="edit" v-if="xmlObj.o && xmlObj.o.value && xmlObj.o.value.indexOf('edit') > -1"/>
-			<span class="error" v-if="Array.isArray(xmlObj.e)" :title="xmlObjError"><font-awesome-icon icon="exclamation-triangle"/></span>
+			<span class="error" v-if="Array.isArray(xmlObj.e)" :title="xmlObjError" v-b-tooltip.hover.html><font-awesome-icon icon="exclamation-triangle"/></span>
 			<span class="attributes" v-if="xmlObj.a">
 				<span class="attr" v-for="(attr, attrKey) in xmlObj.a" :key="attrKey">{{ attrKey }}<i>{{ attr }}</i></span>
 			</span>
@@ -46,7 +46,13 @@
 		},
 		computed: {
 			xmlObjError: function () {		// Gab es Fehler in dem aktuellen Tag
-				return ((Array.isArray(this.xmlObj.e)) ? this.xmlObj.e.join('\n') : undefined)
+				var errors = []
+				if (Array.isArray(this.xmlObj.e)) {
+					this.xmlObj.e.forEach(function (v) {
+						errors.push(((v.obj.line) ? 'Zeile ' + v.obj.line + ': ' : '') + this.htmlEncode(v.error))
+					}, this)
+				}
+				return '<ul><li>' + errors.join('</li><li>') + '</li></ul>'
 			}
 		}
 	}

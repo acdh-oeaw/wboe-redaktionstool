@@ -82,7 +82,7 @@
 					var parsedObj = this.objParserUpdate(this.xmlDom2Obj(nVal), this.objParser)
 					console.log('xmlDom update')
 					if (parsedObj.errors) {
-						console.log(parsedObj.errors)
+						console.log('parsedObj.errors', parsedObj.errors)
 					}
 					this.xmlObj = {c: parsedObj.obj, t: 'start'}
 					this.$nextTick(() => {

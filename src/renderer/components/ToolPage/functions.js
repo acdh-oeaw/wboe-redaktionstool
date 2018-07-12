@@ -1,3 +1,5 @@
+import Vue from 'vue'
+
 export default {
 	objParserUpdate: function (srcObj, objParser, structureError = false) {		// Struktur des Objekts überprüfen
 		var pObj = srcObj
@@ -144,17 +146,20 @@ export default {
 		return parsed
 	},
 	obj2xmlString: function (srcObj) {		// Objekt in XML-String umwandeln
-		function obj2xmlString (obj, deep = 0) {
+		function fObj2xmlString (obj, deep = 0, aLine = 0) {
 			// ToDo: canBeEmpty mit Kindern beachten!
 			var out = ''
 			obj.forEach(function (v) {
+				Vue.set(v, 'line', aLine)
 				if (v.n === '#text') {
 					if (v.v !== undefined) {
 						out += '	'.repeat(deep) + v.v + '\n'
+						aLine += 1
 					}
 				} else if (v.n === '#comment') {
 					if (v.v !== undefined) {
 						out += '	'.repeat(deep) + '<!-- ' + v.v + ' -->\n'
+						aLine += 1
 					}
 				} else {
 					out += '	'.repeat(deep) + '<' + v.n
@@ -168,17 +173,22 @@ export default {
 						out += v.v
 					}
 					if (Array.isArray(v.c)) {
-						out += '\n' + obj2xmlString(v.c, deep + 1) + '	'.repeat(deep)
+						aLine += 1
+						let cOut = fObj2xmlString(v.c, deep + 1, aLine)
+						aLine = cOut.aLine
+						out += '\n' + cOut.out + '	'.repeat(deep)
 					}
 					out += '</' + v.n + '>\n'
+					aLine += 1
 				}
 			}, this)
-			return out
+			return {'out': out, 'aLine': aLine}
 		}
 		if (srcObj && srcObj.c) {
 			// ToDo: xmlParserHeader verwenden
 			var nXmlString = '<?xml version="1.0" encoding="UTF-8"?>\n<?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?>\n<?xml-model href="../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?>\n'
-			nXmlString += obj2xmlString(srcObj.c)
+			var aLine = nXmlString.split(/\r\n|\r|\n/).length
+			nXmlString += fObj2xmlString(srcObj.c, 0, ((aLine > 0) ? aLine : 1)).out
 			return nXmlString
 		} else {
 			return undefined
@@ -301,8 +311,8 @@ function addErrorToObj (obj, error) {		// Fehlermeldung Liste von Fehlermeldunge
 	if (obj.e === undefined) {
 		obj.e = []
 	}
-	obj.e.push(error)
-	return {'error': error, 'n': obj.n, 'v': obj.v}
+	obj.e.push({'error': error, 'obj': obj})
+	return {'error': error, 'obj': obj}
 }
 function equalObj (aList, bList) {		// Vergleicht zwei Objekte/Arrays
 	return JSON.stringify(aList) === JSON.stringify(bList)
