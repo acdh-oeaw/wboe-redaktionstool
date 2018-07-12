@@ -1,7 +1,7 @@
 <template>
 	<div class="tool-page">
 		<b-tabs v-model="aTab" content-class="tabc">
-			<b-tab title="Editor">
+			<b-tab title="Editor" :disabled="ViewXmlProEditorChanged">
 				<b-button-toolbar class="toolbar">
 					<b-button-group size="sm" class="mx-1 mil-auto">
 						<b-btn disabled><font-awesome-icon icon="eye"/></b-btn>
@@ -14,10 +14,10 @@
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
 				</div>
 			</b-tab>
-			<b-tab title="Vorschau">
+			<b-tab title="Vorschau" :disabled="ViewXmlProEditorChanged">
 				Vorschau
 			</b-tab>
-			<b-tab title="Objekt">
+			<b-tab title="Objekt" :disabled="ViewXmlProEditorChanged">
 				<b-button-toolbar class="toolbar">
 					<b-button-group size="sm" class="mx-1 mil-auto">
 						<b-btn disabled><font-awesome-icon icon="eye"/></b-btn>
@@ -93,6 +93,11 @@
 				this.$nextTick(() => {
 					this.xmlDom = this.xmlString2xmlDom(nVal).xmlDom
 				})
+			},
+			ViewXmlProEditorChanged: function (nVal) {
+				if (nVal) {
+					this.aTab = 3
+				}
 			}
 		},
 		mounted: function () {
@@ -106,7 +111,8 @@
 				console.log('ViewXmlProEditorChange')
 			},
 			ViewXmlProEditorApply () {
-				console.log(this.$refs.ViewXmlProEditor.getCode())
+				// ToDo: Code überprüfen!
+				// console.log(this.$refs.ViewXmlProEditor.getCode())
 				if (confirm('Änderungen wirklich anwenden?')) {
 					this.ViewXmlProEditorChanged = false
 					this.$refs.ViewXmlProEditor.setValue()
