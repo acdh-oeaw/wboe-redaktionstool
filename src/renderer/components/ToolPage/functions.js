@@ -1,28 +1,31 @@
 export default {
-	objParserUpdate: function (srcObj, objParser) {		// Struktur des Objekts überprüfen
+	objParserUpdate: function (srcObj, objParser, structureError = false) {		// Struktur des Objekts überprüfen
 		var pObj = srcObj
+		var errors = []
 		function parse (obj, parser) {
-			if (parser) {
-				var pPos = 0
-				var addEmptyObj = []
-				var lastNodeObj = undefined
-				obj.forEach(function (v, k) {
-					delete v.commented
-					if (v.n === '#comment') {
-						if (lastNodeObj !== undefined && obj[lastNodeObj] !== undefined) {
-							if (obj[lastNodeObj].commented === undefined) {
-								obj[lastNodeObj].commented = []
-							}
-							obj[lastNodeObj].commented.push(k)
-							v.commented = true
+			var pPos = 0
+			var addEmptyObj = []
+			var lastNodeObj = undefined
+			obj.forEach(function (v, k) {
+				var tagError = false
+				delete v.commented
+				if (v.n === '#comment') {
+					if (lastNodeObj !== undefined && obj[lastNodeObj] !== undefined) {
+						if (obj[lastNodeObj].commented === undefined) {
+							obj[lastNodeObj].commented = []
 						}
-					} else {
+						obj[lastNodeObj].commented.push(k)
+						v.commented = true
+					}
+				} else {
+					if (parser) {
 						var pOn = true
 						if (!parser[pPos]) {
 							if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1) {
 								pPos -= 1
 							} else {
-								addErrorToObj(v, 'Zeile stimmt nicht mit "Parser" Struktur überein!')
+								errors.push(addErrorToObj(v, 'Zeile stimmt nicht mit "Parser" Struktur überein!'))
+								tagError = true
 								pOn = false
 							}
 						}
@@ -49,7 +52,8 @@ export default {
 								if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1 && parser[pPos - 1].n === v.n) {
 									pPos -= 1
 								} else {
-									addErrorToObj(v, 'Unerwarteter Tag!')
+									errors.push(addErrorToObj(v, 'Unerwarteter Tag!'))
+									tagError = true
 									pOn = false
 								}
 							}
@@ -57,21 +61,26 @@ export default {
 						if (pOn) {
 							if (parser[pPos].a !== undefined && v.a === undefined
 									&& parser[pPos].a !== undefined && v.a !== undefined && !equalObj(Object.keys(parser[pPos].a), Object.keys(v.a))) {
-								addErrorToObj(v, 'Keine Attribute erwartet!')
+								errors.push(addErrorToObj(v, 'Keine Attribute erwartet!'))
+								pOn = false
 							}
 							if (parser[pPos].a === undefined && v.a !== undefined) {
-								addErrorToObj(v, 'Attribute fehlen!')
+								errors.push(addErrorToObj(v, 'Attribute fehlen!'))
+								pOn = false
 							}
 							if (!(parser[pPos].o && parser[pPos].o.attribut && (parser[pPos].o.attribut.indexOf('edit') > -1 || parser[pPos].o.attribut.indexOf('variable') > -1))
 									&& parser[pPos].a !== undefined && v.a !== undefined && !equalObj(Object.keys(parser[pPos].a), Object.keys(v.a))) {
-								addErrorToObj(v, 'Unerwartete Attribute!')
+								errors.push(addErrorToObj(v, 'Unerwartete Attribute!'))
+								pOn = false
 							} else if (!(parser[pPos].o && parser[pPos].o.attribut && (parser[pPos].o.attribut.indexOf('edit') > -1 || parser[pPos].o.attribut.indexOf('variable') > -1))
 											&& (parser[pPos].a !== undefined && v.a !== undefined && !equalObj(parser[pPos].a, v.a))) {
-								addErrorToObj(v, 'Unerwartete Attribut Werte!')
+								errors.push(addErrorToObj(v, 'Unerwartete Attribut Werte!'))
+								pOn = false
 							}
 							if (!(parser[pPos].o && parser[pPos].o.value && (parser[pPos].o.value.indexOf('edit') > -1 || parser[pPos].o.value.indexOf('variable') > -1))
 								&& (parser[pPos].v !== v.v)) {
-								addErrorToObj(v, 'Unerwarteter Tag Wert!')
+								errors.push(addErrorToObj(v, 'Unerwarteter Tag Wert!'))
+								pOn = false
 							}
 							if (!Array.isArray(v.e) && parser[pPos].o) {
 								v.o = parser[pPos].o
@@ -81,17 +90,40 @@ export default {
 								}
 							}
 						}
-						lastNodeObj = k
-						if (Array.isArray(v.c)) {		// Kinder überprüfen
-							parse(v.c, ((parser && parser[pPos] && parser[pPos].c) ? parser[pPos].c : undefined))
+					} else {
+						errors.push(addErrorToObj(v, 'Kein "Parser" übergeben!'))
+						structureError = true
+					}
+					lastNodeObj = k
+					if (tagError || !pOn) {
+						structureError = true
+					}
+					if (Array.isArray(v.c)) {		// Kinder überprüfen
+						let childParse = parse(v.c, ((parser && parser[pPos] && parser[pPos].c) ? parser[pPos].c : undefined), structureError)
+						errors.concat(childParse.errors)
+						if (childParse.structureError) {
+							structureError = true
 						}
+					} else if (parser && parser[pPos] && parser[pPos].c) {
+						parser[pPos].c.some(function (pV) {
+							if (!(pV.o && pV.o.tag && pV.o.tag.indexOf('canBeEmpty') > -1)) {
+								structureError = true
+								tagError = true
+								errors.push(addErrorToObj(v, 'Erwartete "Kinder" nicht vorhanden!'))
+								return true
+							}
+						})
+					}
+					if (!tagError) {
 						pPos += 1
 					}
-				}, this)
+				}
+			}, this)
+			if (!structureError) {
 				while (pPos < parser.length) {		// Weitere Parser Objekte hinzufügen!
 					let aKey = obj.push(parser[pPos]) - 1
 					if (!(obj[aKey] && obj[aKey].o && obj[aKey].o.tag && obj[aKey].o.tag.indexOf('canBeEmpty') > -1)) {
-						addErrorToObj(obj[aKey], 'Fehlender Tag!')
+						errors.push(addErrorToObj(obj[aKey], 'Fehlender Tag!'))
 					}
 					pPos += 1
 				}
@@ -105,12 +137,11 @@ export default {
 						obj.splice(aeo.pos, 0, ...aeo.tags)
 					})
 				}
-				return obj
-			} else {
-				alert('Kein "Parser" übergeben!')
 			}
+			return {'obj': obj, 'structureError': structureError, 'errors': errors}
 		}
-		return parse(pObj, getFirstTagObjByName('objParserContent', objParser).c)
+		var parsed = parse(pObj, getFirstTagObjByName('objParserContent', objParser).c)
+		return parsed
 	},
 	obj2xmlString: function (srcObj) {		// Objekt in XML-String umwandeln
 		function obj2xmlString (obj, deep = 0) {
@@ -271,6 +302,7 @@ function addErrorToObj (obj, error) {		// Fehlermeldung Liste von Fehlermeldunge
 		obj.e = []
 	}
 	obj.e.push(error)
+	return {'error': error, 'n': obj.n, 'v': obj.v}
 }
 function equalObj (aList, bList) {		// Vergleicht zwei Objekte/Arrays
 	return JSON.stringify(aList) === JSON.stringify(bList)

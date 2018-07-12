@@ -79,8 +79,12 @@
 			},
 			xmlDom: function (nVal) {
 				if (nVal) {
+					var parsedObj = this.objParserUpdate(this.xmlDom2Obj(nVal), this.objParser)
 					console.log('xmlDom update')
-					this.xmlObj = {c: this.objParserUpdate(this.xmlDom2Obj(nVal), this.objParser), t: 'start'}
+					if (parsedObj.errors) {
+						console.log(parsedObj.errors)
+					}
+					this.xmlObj = {c: parsedObj.obj, t: 'start'}
 					this.$nextTick(() => {
 						this.xmlString = this.obj2xmlString(this.xmlObj)
 					})
