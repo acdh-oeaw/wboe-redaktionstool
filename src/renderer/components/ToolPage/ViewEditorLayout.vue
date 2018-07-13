@@ -16,7 +16,6 @@
 			</b-card>
 		</template>
 		<template v-else>
-			<span class="title" :title="'Tag: ' + xmlObj.n" v-if="showTitle">{{ xmlObj.o.title }}:</span>
 			<slot></slot>
 		</template>
 	</div>
@@ -42,6 +41,7 @@
 				if (this.xmlObj.n === '#comment') aClass.push('comment')
 				if (this.xmlObj.n === '#text') aClass.push('text')
 				if (Array.isArray(this.xmlObj.e)) aClass.push('error')
+				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'inline')) aClass.push('inline')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'inlineChilds')) aClass.push('inlinechilds')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'isTitle')) aClass.push('istitle')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'isBlock')) aClass.push('isblock')
@@ -51,26 +51,6 @@
 			header: function () {		// Gibt den akutellen Titel aus den Optionen bzw. den Tag Titel zurück
 				return ((this.hasSubProp(this.xmlObj, 'o.title')) ? this.xmlObj.o.title : this.xmlObj.n)
 			},
-			showTitle: function () {		// Soll der Titel angezeigt werden?
-				var show = this.getValOfSubProp(this.xmlObj, 'o.title')
-				if (show && this.isValInArrOfSubProp(this.xmlObj, 'o.tag', 'multibleSiblings')) {
-					if (this.isValInArrOfSubProp(this.xmlObjParent, 'o.editorLayout', 'inlineChilds')) {
-						if (this.oKey > 0) {
-							var xKey = this.oKey - 1
-							while (xKey >= 0) {
-								if (this.xmlObjParent.c[xKey].n !== '#comment') {
-									if (this.xmlObjParent.c[xKey].n === this.xmlObj.n) {
-										show = false
-									}
-									break
-								}
-								xKey -= 1
-							}
-						}
-					}
-				}
-				return show
-			}
 		}
 	}
 </script>
@@ -92,6 +72,9 @@
 	}
 	.editor.error {
 		border: 1px solid #f66;
+	}
+	.editor.inline {
+		display: inline-block;
 	}
 	.editor > .value {
 		position: relative;
@@ -134,5 +117,8 @@
 	}
 	.editor.inlinechilds > .editor.istitle:not(.isblock) > .value:after {
 		content: ":";
+	}
+	.editor > .title.boldtitle {
+		font-weight: bold;
 	}
 </style>

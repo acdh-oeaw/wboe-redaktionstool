@@ -42,8 +42,8 @@
 			<text objParserTitle="Text" objParserEditorLayout="panel collapse">
 				<body>
 					<entry>
-						<form type="lemma" objParserTag="multibleSiblings" objParserTagAddTitle="Ein &quot;Lemma&quot; hinzufügen">
-							<orth objParserValue="edit" objParserTitle="Orth"></orth>
+						<form type="lemma" objParserTag="multibleSiblings" objParserTitle="Lemma" objParserEditorLayout="boldTitle" objParserTagAddTitle="Ein &quot;Lemma&quot; hinzufügen">
+							<orth objParserValue="edit" objParserTitle="Orth" objParserEditorLayout="inline"></orth>
 						</form>
 						<gramGrp>
 							<gram type="pos">Substantiv</gram>

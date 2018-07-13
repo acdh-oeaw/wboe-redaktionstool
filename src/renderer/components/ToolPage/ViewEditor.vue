@@ -6,6 +6,9 @@
 		<button :title="xmlObj.v" v-b-tooltip.hover v-if="showComment && !xmlObj.commented"><font-awesome-icon icon="comment"/></button>
 	</div>
 	<ViewEditorLayout :xmlObj="xmlObj" :xmlObjParent="xmlObjParent" :oKey="$vnode.key" v-else>
+		<span :class="'title' + ((isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'boldTitle')) ? ' boldtitle' : '')" :title="'Tag: ' + xmlObj.n" v-if="showTitle"
+					@contextmenu.prevent="rightClickValue"
+					>{{ xmlObj.o.title }}:</span>
 		<span :class="valueClasses"
 					v-if="!refreshValue && (xmlObj.hasOwnProperty('v') || isValInArrOfSubProp(xmlObj, 'o.value', 'edit'))"
 					:contenteditable="isValInArrOfSubProp(xmlObj, 'o.value', 'edit')"
@@ -95,6 +98,29 @@
 					}, this)
 				}
 				return '<ul><li>' + comments.join('</li><li>') + '</li></ul>'
+			},
+			showTitle: function () {		// Soll der Titel angezeigt werden?
+				var show = false
+				if (!this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'panel')) {
+					show = this.getValOfSubProp(this.xmlObj, 'o.title')
+					if (show && this.isValInArrOfSubProp(this.xmlObj, 'o.tag', 'multibleSiblings')) {
+						if (this.isValInArrOfSubProp(this.xmlObjParent, 'o.editorLayout', 'inlineChilds')) {
+							if (this.oKey > 0) {
+								var xKey = this.oKey - 1
+								while (xKey >= 0) {
+									if (this.xmlObjParent.c[xKey].n !== '#comment') {
+										if (this.xmlObjParent.c[xKey].n === this.xmlObj.n) {
+											show = false
+										}
+										break
+									}
+									xKey -= 1
+								}
+							}
+						}
+					}
+				}
+				return show
 			}
 		},
 		methods: {

@@ -105,7 +105,8 @@
 	}
 	.lint-error {
 		background: #ffdfe0;
-		font-family: arial;
-		font-size: 12px;
+		font-family: "Lato";
+		font-size: 13px;
+		line-height: 1.3;
 	}
 </style>
