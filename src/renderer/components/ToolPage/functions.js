@@ -153,12 +153,12 @@ export default {
 				Vue.set(v, 'line', aLine)
 				if (v.n === '#text') {
 					if (v.v !== undefined) {
-						out += '	'.repeat(deep) + v.v + '\n'
+						out += '	'.repeat(deep) + xmlEncode(v.v) + '\n'
 						aLine += 1
 					}
 				} else if (v.n === '#comment') {
 					if (v.v !== undefined) {
-						out += '	'.repeat(deep) + '<!-- ' + v.v + ' -->\n'
+						out += '	'.repeat(deep) + '<!-- ' + v.v.replace(/--/g, '–') + ' -->\n'
 						aLine += 1
 					}
 				} else {
@@ -170,7 +170,7 @@ export default {
 					}
 					out += '>'
 					if (v.v) {
-						out += v.v
+						out += xmlEncode(v.v)
 					}
 					if (Array.isArray(v.c)) {
 						aLine += 1
@@ -316,4 +316,11 @@ function addErrorToObj (obj, error) {		// Fehlermeldung Liste von Fehlermeldunge
 }
 function equalObj (aList, bList) {		// Vergleicht zwei Objekte/Arrays
 	return JSON.stringify(aList) === JSON.stringify(bList)
+}
+function xmlEncode (text, comment = false) {		// XML-Sonderzeichen schützen
+	return text.replace(/&/g, '&amp;')
+						.replace(/</g, '&lt;')
+						.replace(/>/g, '&gt;')
+						.replace(/"/g, '&quot;')
+						.replace(/'/g, '&apos;')
 }
