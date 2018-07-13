@@ -30,6 +30,12 @@
 			</ul>
 		</vue-context>
 		<ViewEditor :xmlObj="xmlObjItem" :xmlObjParent="xmlObj" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)" v-if="isOpen" @childUpdate="childUpdate"/>
+		<div class="addtag" v-if="showAdd && xmlObj.n !== nextNodeName && xmlObj.o && xmlObj.add">
+			<button @click="addSibling"><font-awesome-icon icon="plus"/>
+				<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
+				<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
+			</button>
+		</div>
 	</ViewEditorLayout>
 	</div>
 

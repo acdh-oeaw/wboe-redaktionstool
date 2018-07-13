@@ -16,7 +16,7 @@
 			</b-card>
 		</template>
 		<template v-else>
-			<span class="title" v-if="showTitle">{{ xmlObj.o.title }}:</span>
+			<span class="title" :title="'Tag: ' + xmlObj.n" v-if="showTitle">{{ xmlObj.o.title }}:</span>
 			<slot></slot>
 		</template>
 	</div>
@@ -45,6 +45,7 @@
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'inlineChilds')) aClass.push('inlinechilds')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'isTitle')) aClass.push('istitle')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'isBlock')) aClass.push('isblock')
+				if (this.isValInArrOfSubProp(this.xmlObj, 'o.tag', 'multibleSiblings')) aClass.push('multiblesiblings')
 				return aClass.join(' ')
 			},
 			header: function () {		// Gibt den akutellen Titel aus den Optionen bzw. den Tag Titel zurück
@@ -107,6 +108,7 @@
 	}
 	.editor > .value.edit.empty {
 		background: #ffe1a7;
+		min-width: 29px;
 	}
 	.editor > .value.edit.required.empty {
 		    background: #ffa7a7;
@@ -117,6 +119,15 @@
 	}
 	.editor.inlinechilds > .comment {
 		display: inline-block;
+	}
+	.editor > .editor > .addtag > button {
+		width: 100%;
+	}
+	.editor.inlinechilds > .editor:not(.isblock) > .addtag {
+		display: inline-block;
+	}
+	.editor.inlinechilds > .editor:not(.isblock) > .addtag > button > span {
+		display: none;
 	}
 	.editor.istitle > .value {
 		font-weight: bold;
