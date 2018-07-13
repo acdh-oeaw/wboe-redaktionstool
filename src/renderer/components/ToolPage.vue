@@ -15,7 +15,7 @@
 					</b-button-group>
 				</b-button-toolbar>
 				<div class="viewobj scroll wtool p20">
-					<ViewEditor :xmlObj="xmlObj" :showComment="viewEditorShowComment" :showAdd="viewEditorShowAdd" v-if="xmlObj"/>
+					<ViewEditor :xmlObj="xmlObj" :showComment="viewEditorShowComment" :showAdd="viewEditorShowAdd" v-if="xmlObj" @childUpdate="xmlObjChildUpdate"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlObj</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -101,10 +101,10 @@
 					var t0 = performance.now()
 					var parsedObj = this.objParserUpdate(this.xmlDom2Obj(nVal), this.objParser)
 					this.xmlObj = {c: parsedObj.obj, t: 'start'}
-					this.xmlString = this.obj2xmlString(this.xmlObj)
 					if (parsedObj.errors) {
 						this.xmlObjErrors = parsedObj.errors
 					}
+					this.xmlString = this.obj2xmlString(this.xmlObj)
 					console.log('xmlDom update', Math.ceil(performance.now() - t0) + ' ms.')
 				} else {
 					this.xmlObj = undefined
@@ -130,6 +130,11 @@
 			console.log('ToolPage mounted', Math.ceil(performance.now() - t0) + ' ms.')
 		},
 		methods: {
+			xmlObjChildUpdate: function (childData, childKey, updateType) {
+				console.log('xmlObjChildUpdate', childData, updateType)
+				this.xmlObj = childData
+				this.xmlString = this.obj2xmlString(this.xmlObj)
+			},
 			ViewXmlProEditorChange () {
 				this.ViewXmlProEditorChanged = true
 				console.log('ViewXmlProEditorChange')
