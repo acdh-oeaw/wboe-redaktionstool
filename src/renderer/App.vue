@@ -30,8 +30,10 @@
 </script>
 
 <style>
-	/* @import url('~@/assets/css/bootstrap.min.css'); */
-	/* CSS */
+	@import url('./assets/fonts/lato.css');
+	body {
+		font-family: 'Lato';
+	}
 	.scroll {
 		overflow-x: auto;
 		overflow-y: scroll;
