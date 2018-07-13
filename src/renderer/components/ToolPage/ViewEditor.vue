@@ -105,8 +105,8 @@
 					show = this.getValOfSubProp(this.xmlObj, 'o.title')
 					if (show && this.isValInArrOfSubProp(this.xmlObj, 'o.tag', 'multibleSiblings')) {
 						if (this.isValInArrOfSubProp(this.xmlObjParent, 'o.editorLayout', 'inlineChilds')) {
-							if (this.oKey > 0) {
-								var xKey = this.oKey - 1
+							if (this.$vnode.key > 0) {
+								var xKey = this.$vnode.key - 1
 								while (xKey >= 0) {
 									if (this.xmlObjParent.c[xKey].n !== '#comment') {
 										if (this.xmlObjParent.c[xKey].n === this.xmlObj.n) {

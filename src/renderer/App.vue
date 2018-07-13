@@ -24,8 +24,41 @@
 	import 'bootstrap/dist/css/bootstrap.css'
 	import 'bootstrap-vue/dist/bootstrap-vue.css'
 
+	import searchInPage from 'electron-in-page-search'
+	import { remote } from 'electron'
+
+	const inPageSearch = searchInPage(remote.getCurrentWebContents())
+
 	export default {
-		name: 'redaktionstool-electron-vue'
+		name: 'redaktionstool-electron-vue',
+		methods: {
+			keyUp: function (e) {
+				if (e.ctrlKey && e.key === 'f') {
+					if (!inPageSearch.opened) {
+						inPageSearch.openSearchWindow()
+					}
+				}
+				if (e.key === 'F3') {
+					console.log(inPageSearch)
+					if (!inPageSearch.opened) {
+						inPageSearch.openSearchWindow()
+					} else if (inPageSearch.isSearching()) {
+						if (e.shiftKey) {
+							inPageSearch.findNext(false)
+						} else {
+							inPageSearch.findNext()
+						}
+					}
+				}
+			}
+		},
+		created: function () {
+			window.addEventListener('keyup', this.keyUp)
+		},
+		beforeDestroy: function () {
+			inPageSearch.closeSearchWindow()
+			window.removeEventListener('keyup', this.keyUp)
+		}
 	}
 </script>
 
@@ -76,5 +109,20 @@
 	}
 	.tooltip-inner ul li {
 		text-align: left;
+	}
+
+	.electron-in-page-search-window {
+		position: absolute;
+		right: 0px;
+		top: 0px;
+		width: 300px;
+		height: 36px;
+		background-color: white;
+	}
+	.electron-in-page-search-window.search-inactive {
+		visibility: hidden;
+	}
+	.electron-in-page-search-window.search-active {
+		visibility: visible;
 	}
 </style>
