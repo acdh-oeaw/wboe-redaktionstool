@@ -162,7 +162,7 @@
 		components: {
 			ViewEditor,
 			ViewObj,
-			ViewXmlProEditor
+			ViewXmlProEditor,
 		}
 	}
 </script>

@@ -9,25 +9,34 @@
 		<span :class="valueClasses"
 					v-if="!refreshValue && (xmlObj.hasOwnProperty('v') || isValInArrOfSubProp(xmlObj, 'o.value', 'edit'))"
 					:contenteditable="isValInArrOfSubProp(xmlObj, 'o.value', 'edit')"
+					@contextmenu.prevent="rightClickValue"
 					@focus="focusValue" @input="updateEditable" @keyup.enter="nextValue" @blur="updateValue">{{ displayValue }}</span>
 		<div class="addon">
 			<button :title="xmlObjError" v-b-tooltip.hover.html v-if="Array.isArray(xmlObj.e)" class="error"><font-awesome-icon icon="exclamation-triangle"/></button>
 			<button :title="getComments" v-b-tooltip.hover.html v-if="showComment && xmlObj.commented"><font-awesome-icon icon="comment"/></button>
 		</div>
+		<vue-context ref="contextMenuEditor" v-if="showContextMenuEditor">
+			<div class="context-menu-editor-title">Tag: {{ xmlObj.n }}</div>
+			<ul>
+				<li v-if="xmlObj.o && xmlObj.add" @click="addSibling">
+					<font-awesome-icon icon="plus"/>
+					<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
+					<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
+				</li>
+				<li v-if="xmlObj.o && xmlObj.add" @click="removeObject">
+					<font-awesome-icon icon="minus"/>
+					<span><b> "{{ xmlObj.n }}" löschen</b></span>
+				</li>
+			</ul>
+		</vue-context>
 		<ViewEditor :xmlObj="xmlObjItem" :xmlObjParent="xmlObj" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)" v-if="isOpen" @childUpdate="childUpdate"/>
 	</ViewEditorLayout>
-
-		<!-- <div class="item add-item" v-if="showAdd && xmlObj.n !== nextNodeName && xmlObj.o && xmlObj.add">
-			<button><font-awesome-icon icon="plus"/>
-				<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
-				<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
-			</button>
-		</div> -->
 	</div>
 
 </template>
 
 <script>
+	import { VueContext } from 'vue-context'
 	import ViewEditorFunctions from './ViewEditorFunctions'
 	import ViewEditorLayout from './ViewEditorLayout'
 	import _ from 'lodash'
@@ -45,6 +54,7 @@
 			return {
 				'isOpen': true,
 				'refreshValue': false,
+				'showContextMenuEditor': false
 			}
 		},
 		computed: {
@@ -82,10 +92,28 @@
 			}
 		},
 		methods: {
+			addSibling: function () {
+				if (this.xmlObj.add) {
+					this.$emit('childUpdate', this.xmlObj.add, this.$vnode.key, 'insertAfter')
+				}
+			},
+			removeObject: function () {
+				if (this.xmlObj.add) {
+					this.$emit('childUpdate', this.xmlObj, this.$vnode.key, 'remove')
+				}
+			},
+			rightClickValue: function (e) {
+				this.showContextMenuEditor = true
+				this.$nextTick(() => { this.$refs.contextMenuEditor.open(e) })
+			},
 			childUpdate: function (childData, childKey, updateType) {
 				console.log('childUpdate', childData, childKey, updateType)
 				if (updateType === 'update') {
 					this.xmlObj.c[childKey] = childData
+				} else if (updateType === 'insertAfter') {
+					this.xmlObj.c.splice(childKey + 1, 0, childData)
+				} else if (updateType === 'remove') {
+					this.xmlObj.c.splice(childKey, 1)
 				}
 				this.$emit('childUpdate', this.xmlObj, this.$vnode.key, 'update')
 			},
@@ -130,7 +158,8 @@
 			}
 		},
 		components: {
-			ViewEditorLayout
+			ViewEditorLayout,
+			VueContext
 		}
 	}
 </script>
@@ -160,5 +189,9 @@
 	}
 	.editor > .addon > button.error {
 		color: #d66;
+	}
+	.context-menu-editor-title {
+		padding: 2px 10px;
+		background: #eee;
 	}
 </style>
