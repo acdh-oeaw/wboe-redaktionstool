@@ -63,9 +63,9 @@
 </script>
 
 <style>
-	@import url('./assets/fonts/lato.css');
+	@import url('~@/assets/css/lato.css');
 	body {
-		font-family: 'Lato';
+		font-family: 'Lato' !important;
 	}
 	.scroll {
 		overflow-x: auto;
