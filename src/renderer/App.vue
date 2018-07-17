@@ -114,6 +114,21 @@
 		text-align: left !important;
 	}
 
+	.btn-none, .btn-ve-select {
+		background: none !important;
+		border: none !important;
+		border-radius: 0 !important;
+		color: #333 !important;
+		padding: 0 !important;
+		margin: 0 !important;
+	}
+	.btn-ve-select {
+		margin-left: -8px !important;
+		padding-left: 8px !important;
+		margin-right: -8px !important;
+		padding-right: 8px !important;
+	}
+
 	.electron-in-page-search-window {
 		position: absolute;
 		right: 0px;

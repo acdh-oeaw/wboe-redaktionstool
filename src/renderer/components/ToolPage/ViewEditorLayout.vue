@@ -87,17 +87,17 @@
 		display: inline-block;
 		margin: 2px 0px;
 	}
-	.editor > .value.edit {
+	.editor > .value.edit, .editor > .value.variable {
 		border: 1px solid #beb;
 	}
 	.editor > .value.required {
 		border: 1px solid #ccf;
 	}
-	.editor > .value.edit.empty {
+	.editor > .value.edit.empty, .editor > .value.variable.empty {
 		background: #ffe1a7;
 		min-width: 29px;
 	}
-	.editor > .value.edit.required.empty {
+	.editor > .value.edit.required.empty, .editor > .value.variable.required.empty {
 		    background: #ffa7a7;
 	}
 	.editor.inlinechilds > .editor:not(.isblock) {

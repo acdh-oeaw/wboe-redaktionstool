@@ -10,10 +10,17 @@
 					@contextmenu.prevent="rightClickValue"
 					>{{ xmlObj.o.title }}:</span>
 		<span :class="valueClasses"
-					v-if="!refreshValue && (xmlObj.hasOwnProperty('v') || isValInArrOfSubProp(xmlObj, 'o.value', 'edit'))"
+					v-if="!refreshValue && (xmlObj.hasOwnProperty('v') || isValInArrOfSubProp(xmlObj, 'o.value', 'edit') || isValInArrOfSubProp(xmlObj, 'o.value', 'variable'))"
 					:contenteditable="isValInArrOfSubProp(xmlObj, 'o.value', 'edit')"
 					@contextmenu.prevent="rightClickValue"
-					@focus="focusValue" @input="updateEditable" @keyup.enter="nextValue" @blur="updateValue">{{ displayValue }}</span>
+					@focus="focusValue" @input="updateEditable" @keyup.enter="nextValue" @blur="updateValue">
+			<template v-if="getValOfSubProp(xmlObj, 'o.fxForm.n') === 'select' && Array.isArray(getValOfSubProp(xmlObj, 'o.fxForm.c'))">
+				<b-dropdown :text="displayValue" variant="ve-select">
+					<b-dropdown-item @click="setSelectedOption(aOpt)" v-for="(aOpt, aOptKey) in xmlObj.o.fxForm.c" :key="'bdd-' + aOptKey" :class="{'active': (aOpt.v === xmlObj.v || aOpt.v === getValOfSubProp(aOpt, 'o.selectValue') || (!xmlObj.v && getValOfSubProp(aOpt, 'o.selectValue') === ''))}">{{ aOpt.v }}</b-dropdown-item>
+				</b-dropdown>
+			</template>
+			<template v-else>{{ displayValue }}</template>
+		</span>
 		<div class="addon">
 			<button :title="xmlObjError" v-b-tooltip.hover.html v-if="Array.isArray(xmlObj.e)" class="error"><font-awesome-icon icon="exclamation-triangle"/></button>
 			<button :title="getComments" v-b-tooltip.hover.html v-if="showComment && xmlObj.commented"><font-awesome-icon icon="comment"/></button>
@@ -81,7 +88,20 @@
 				return true
 			},
 			displayValue: function () {		// Aktueller Wert für Anzeige
-				return ((this.xmlObj.v) ? this.xmlObj.v : ((this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) ? '...' : ''))
+				if (this.xmlObj.v) {
+					return this.xmlObj.v
+				} else {
+					if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) {
+						return '...'
+					}
+					if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'variable')) {
+						if (this.getValOfSubProp(this.xmlObj, 'o.fxForm.n') === 'select' && Array.isArray(this.getValOfSubProp(this.xmlObj, 'o.fxForm.c'))) {
+							return this.xmlObj.o.fxForm.c[0].v
+						}
+						return '---'
+					}
+				}
+				return ''
 			},
 			valueClasses: function () {		// Klassen für den Wert
 				var aClass = ['value']
@@ -89,7 +109,9 @@
 					aClass.push('empty')
 				}
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) aClass.push('edit')
+				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'variable')) aClass.push('variable')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'required')) aClass.push('required')
+				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'select')) aClass.push('select')
 				return aClass.join(' ')
 			},
 			xmlObjError: function () {		// Gab es Fehler in dem aktuellen Tag
@@ -137,6 +159,21 @@
 			}
 		},
 		methods: {
+			setSelectedOption: function (aOpt) {
+				console.log(JSON.stringify(aOpt))
+				var aAttr = this.getValOfSubProp(aOpt, 'a')
+				if (aAttr) {
+					Object.keys(aAttr).map(function (aAttrKey) {
+						if (!this.xmlObj.a) {
+							this.$set(this.xmlObj, 'a', {})
+						}
+						this.$set(this.xmlObj.a, aAttrKey, aAttr[aAttrKey])
+					}, this)
+				}
+				var nVal = this.getValOfSubProp(aOpt, 'o.selectValue')
+				this.$set(this.xmlObj, 'v', ((nVal !== undefined) ? nVal : aOpt.v))
+				this.$emit('childUpdate', this.xmlObj, this.$vnode.key, 'update')
+			},
 			addSibling: function () {
 				if (this.xmlObj.add) {
 					this.$emit('childUpdate', this.xmlObj.add, this.$vnode.key, 'insertAfter')

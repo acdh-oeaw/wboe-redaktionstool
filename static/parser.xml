@@ -24,7 +24,7 @@
 						</respStmt>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle isBlock">DBOE Team</resp>
-							<name xml:id="" objParserTag="multibleSiblings" objParserValue="edit" objParserAttribut="variable" objParserTitle="Name"></name>
+							<name xml:id="" objParserTag="multibleSiblings" objParserAttribut="variable" objParserTitle="Name" objParserFxForm="dboeTeam"></name>
 						</respStmt>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle isBlock">Student assistants</resp>
@@ -118,4 +118,19 @@
 			</text>
 		</TEI>
 	</objParserContent>
+	<objParserSystem>
+		<objParserFxForm>
+			<select id="dboeTeam">
+				<option xml:id="" objParserSelectValue="">Bitte auswählen</option>
+				<option xml:id="AL">Alexandra N. Lenz</option>
+				<option xml:id="PhS">Philip Stöckle</option>
+				<option xml:id="AG">Andreas Gellan</option>
+				<option xml:id="PZ">Patrick Zeithuber</option>
+				<option xml:id="SW">Sabine Wahl</option>
+				<option xml:id="SS">Sonja Schwaiger</option>
+				<option xml:id="JD">Jan Braun</option>
+				<option xml:id="AB">Angela Bergmayer</option>
+			</select>
+		</objParserFxForm>
+	</objParserSystem>
 </objParser>

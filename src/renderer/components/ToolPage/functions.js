@@ -227,7 +227,7 @@ export default {
 		}
 		return txt
 	},
-	xmlDom2Obj: function (xmlDom, parser = false) {		// DOM-Objekt in Objekt umwandeln
+	xmlDom2Obj: function (xmlDom, isParser = false) {		// DOM-Objekt in Objekt umwandeln
 		function xml2Obj (xml) {
 			var obj = []
 			var val = undefined
@@ -244,12 +244,12 @@ export default {
 							for (var i = 0; i < v.attributes.length; i++) {
 								var a = v.attributes[i]
 								if (a.nodeName.substring(0, 9) === 'objParser') {		// Handelt es sich um eine Parser option?
-									if (parser) {		// Nur auswerten wenn es sich um eine Parser-XML handelt
+									if (isParser) {		// Nur auswerten wenn es sich um eine Parser-XML handelt
 										if (aObj.o === undefined) {
 											aObj.o = {}
 										}
 										var aParserOptionName = a.nodeName.substring(9).charAt(0).toLowerCase() + a.nodeName.substring(9).slice(1)
-										if (['title', 'tagAddTitle'].indexOf(aParserOptionName) > -1) {
+										if (['title', 'tagAddTitle', 'fxForm', 'selectValue'].indexOf(aParserOptionName) > -1) {
 											aObj.o[aParserOptionName] = a.nodeValue		// Option als String
 										} else {
 											aObj.o[aParserOptionName] = a.nodeValue.split(' ')		// Option als Array
@@ -276,7 +276,7 @@ export default {
 							}
 						}
 						obj.push(aObj)
-					} else if (v.nodeType === v.TEXT_NODE || (v.nodeType === v.COMMENT_NODE && !parser)) {		// Texte und Kommentare auswerten
+					} else if (v.nodeType === v.TEXT_NODE || (v.nodeType === v.COMMENT_NODE && !isParser)) {		// Texte und Kommentare auswerten
 						if (typeof v.nodeValue === 'string') {
 							var nVal = v.nodeValue.trim()
 							if (nVal.length > 0) {		// Nur Texte und Kommentare mit Inhalt verarbeiten
@@ -293,10 +293,67 @@ export default {
 			}
 			return [obj, val]
 		}
-		return xml2Obj(xmlDom)[0]
+		if (!isParser) {
+			return xml2Obj(xmlDom)[0]
+		} else {
+			return addParserFx(xml2Obj(xmlDom)[0])
+		}
 	}
 }
 
+function addParserFx (aObj, mainParser = undefined) {		// Spezial Funktionen abarbeiten
+	if (mainParser === undefined) {
+		aObj.forEach(function (cObj) {
+			cObj = addParserFx(cObj, aObj)
+		})
+	} else {
+		if (aObj.o) {
+			if (aObj.o.fxForm) {		// fxForm verarbeiten
+				var objPS = getFirstTagObjByName('objParserSystem', mainParser)
+				if (objPS && objPS.c) {
+					var objPFxForm = getFirstTagObjByName('objParserFxForm', objPS.c)
+					if (objPFxForm) {
+						var objPFxFormObj = getFirstTagObjByID(aObj.o.fxForm, objPFxForm.c)
+						if (objPFxFormObj) {
+							if (objPFxFormObj.n === 'select') {		// Wenn das fxForm ein Select ist Objekt zuweisen
+								if (!aObj.o.value) {
+									aObj.o.value = ['variable']
+								} else if (aObj.o.value.indexOf('variable') < 0) {
+									aObj.o.value.push('variable')
+								}
+								aObj.o.value.push('select')
+								aObj.o.fxForm = objPFxFormObj
+							}
+						}
+					}
+				}
+			}
+		}
+		if (Array.isArray(aObj.c)) {
+			aObj.c.forEach(function (cObj) {
+				cObj = addParserFx(cObj, mainParser)
+			})
+		}
+	}
+	return aObj
+}
+
+function getFirstTagObjByID (id, array) {		// Findet ersten Tag mit Attribut id "id" in Objekt
+	var out = undefined
+	array.some(function (val) {
+		if (val.a && val.a.id && val.a.id === id) {
+			out = val
+			return true
+		}
+		if (Array.isArray(val.c)) {
+			out = getFirstTagObjByID(id, val.c)
+			if (out !== undefined) {
+				return true
+			}
+		}
+	}, this)
+	return out
+}
 function getFirstTagObjByName (name, array) {		// Findet ersten Tag mit Namen "name" in Objekt
 	var out = undefined
 	array.some(function (val) {
