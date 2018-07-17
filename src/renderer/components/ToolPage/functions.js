@@ -50,14 +50,20 @@ export default {
 									addEmptyObj.push({pos: k, tags: addEmptyObjInTag})
 								}
 							}
-							if (parser[pPos].n !== v.n) {		// Überprüfen ob es sich um ein "multibleSiblings" handelt
-								if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1 && parser[pPos - 1].n === v.n) {
-									pPos -= 1
-								} else {
-									errors.push(addErrorToObj(v, 'Unerwarteter Tag!'))
-									tagError = true
-									pOn = false
+							if (parser[pPos]) {
+								if (parser[pPos].n !== v.n) {		// Überprüfen ob es sich um ein "multibleSiblings" handelt
+									if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1 && parser[pPos - 1].n === v.n) {
+										pPos -= 1
+									} else {
+										errors.push(addErrorToObj(v, 'Unerwarteter Tag!'))
+										tagError = true
+										pOn = false
+									}
 								}
+							} else {
+								errors.push(addErrorToObj(v, 'Parser fehlt!'))
+								tagError = true
+								pOn = false
 							}
 						}
 						if (pOn) {

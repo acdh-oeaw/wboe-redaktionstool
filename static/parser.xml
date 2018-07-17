@@ -60,7 +60,7 @@
 						</usg>
 						<form type="variant" subtype="diminutive" objParserAttribut="variable" objParserTag="multibleSiblings">
 							<pron xml:lang="bar-AT" objParserValue="edit" objParserTitle="???"></pron>
-							<usg type="geo">
+							<usg type="geo" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="geo">
 								<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
 						</form>
@@ -82,121 +82,34 @@
 								<oRef target="" objParserAttribut="variable"></oRef>
 							</ref>
 							<def objParserValue="edit" objParserTitle="???"></def>
-							<usg type="geo" objParserTag="multibleSiblings">
-								<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
+							<usg type="geo" objParserTag="multibleSiblings" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="Usg Geo">
+								<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
 							<cit type="example">
 								<quote xml:lang="" objParserAttribut="variable" objParserValue="edit" objParserTitle="???"></quote>
-								<usg type="geo">
-									<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
+								<usg type="geo" objParserEditorLayout="inlineChilds">
+									<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 								</usg>
 							</cit>
 						</sense>
-						<re>
-							<form type="lemma" subtype="compound">
-								<orth>Nonnenfarzel</orth>
+						<re objParserTag="multibleSiblings" objParserTitle="re" objParserEditorLayout="frameDecent boldTitle">
+							<form type="lemma" subtype="" objParserAttribut="variable" objParserTitle="Lemma" objParserEditorLayout="boldTitle">
+								<orth objParserValue="edit required" objParserTitle="Orth" objParserEditorLayout="inline"></orth>
 							</form>
-							<sense>
-								<def>kleines Lebkuchenstücklein</def>
-								<usg type="dom">Klosterspeise</usg>
+							<sense objParserTag="canBeEmpty" objParserTitle="Sense" objParserEditorLayout="boldTitle">
+								<def  objParserTag="canBeEmpty" objParserValue="edit" objParserTitle="Def"></def>
+								<usg type="" objParserTag="canBeEmpty" objParserValue="edit" objParserAttribut="variable" objParserTitle="Usg"></usg>
 							</sense>
-							<usg type="geo">
-								<placeName type="grossregion">Stmk.</placeName>
+							<usg type="geo" objParserTag="canBeEmpty" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="Usg Geo">
+								<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
-						</re>
-						<re>
-							<form type="lemma" subtype="compound">
-								<orth>Schneiderfarz</orth>
-							</form>
-							<usg type="geo">
-								<placeName type="grossregion">Industriev.</placeName>
-							</usg>
-						</re>
-						<re>
-							<form type="lemma" subtype="MWE">
-								<orth>der Farz ist des Bauches Arzt</orth>
-							</form>
-							<usg type="geo">
-								<placeName type="grossregion">Ktn.</placeName>
-							</usg>
-							<cit type="example">
-								<quote xml:lang="bar-AT">dér Fàrz ist 's pauchis àrz</quote>
-								<ref type="bibl" target="#KÄRNTISCHESWB1862">
-									<citedRange>90</citedRange>
+							<cit type="example" objParserTitle="Example" objParserEditorLayout="boldTitle">
+								<quote xml:lang="" objParserTag="canBeEmpty" objParserValue="edit" objParserAttribut="variable" objParserTitle="quote"></quote>
+								<ref type="" target="" objParserTag="canBeEmpty" objParserAttribut="variable" objParserTitle="Variable">
+									<citedRange objParserValue="edit" objParserTitle="Cited Range"></citedRange>
 								</ref>
-								<usg type="geo">
-									<placeName type="grossregion">Ktn.</placeName>
-								</usg>
-							</cit>
-						</re>
-						<re>
-							<form type="lemma" subtype="MWE">
-								<orth>Er lässt alle Farzen gehen</orth>
-							</form>
-							<sense>
-								<def>der Organist spielt mit allen gezogenen Registern</def>
-							</sense>
-							<cit type="example">
-								<quote xml:lang="bar-AT">Jetz låsst r af n Kchor owen widEr ålle Fårzn giehn</quote>
-								<usg type="geo">
-									<placeName>Matrei am Brenner</placeName>
-									<placeName type="grossregion">mNTir.</placeName>
-								</usg>
-							</cit>
-						</re>
-						<re>
-							<form type="lemma" subtype="MWE">
-								<orth>herumschießen wie der Farz in die/der/den Reite(rn)</orth>
-							</form>
-							<sense>
-								<def>geschäftig herumlaufen</def>
-								<usg type="reg">spöttisch</usg>
-							</sense>
-							<usg type="geo">
-								<placeName type="grossregion">Mostv.</placeName>
-							</usg>
-							<cit type="example">
-								<quote xml:lang="bar-AT">u͂mǝdú͂m šiǝssn</quote>
-								<usg type="geo">
-									<placeName>Herzogenburg</placeName>
-									<placeName type="grossregion">Mostv.</placeName>
-								</usg>
-							</cit>
-						</re>
-						<re>
-							<form type="lemma" subtype="MWE">
-								<orth>Man hat keinen Farz gehört</orth>
-							</form>
-							<sense>
-								<def>es ist nichts von einer Angelegenheit bekannt geworden</def>
-							</sense>
-							<usg type="geo">
-								<placeName type="grossregion">OTir.</placeName>
-							</usg>
-							<cit type="example">
-								<quote xml:lang="bar-AT">Man hat kan Få'z ghęat</quote>
-								<usg type="geo">
-									<placeName>uIselt.</placeName>
-									<placeName>Lienz.Beck.</placeName>
-									<placeName type="grossregion">OTir.</placeName>
-								</usg>
-							</cit>
-						</re>
-						<re>
-							<form type="lemma" subtype="MWE">
-								<orth>Schwarz und Weiß / Pfarz und Scheiß</orth>
-							</form>
-							<sense>
-								<usg type="dom">Kinderreim</usg>
-							</sense>
-							<usg type="geo">
-								<placeName type="grossregion">Hausrv.</placeName>
-							</usg>
-							<cit type="example">
-								<quote xml:lang="bar-AT">schwoaz und weis / Bfoaz und Scheis</quote>
-								<usg type="geo">
-									<placeName>Linz</placeName>
-									<placeName type="grossregion">Hausrv.</placeName>
+								<usg type="geo" objParserEditorLayout="inlineChilds">
+									<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 								</usg>
 							</cit>
 						</re>

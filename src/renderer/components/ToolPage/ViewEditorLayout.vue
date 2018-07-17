@@ -45,6 +45,7 @@
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'inlineChilds')) aClass.push('inlinechilds')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'isTitle')) aClass.push('istitle')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'isBlock')) aClass.push('isblock')
+				if (this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'frameDecent')) aClass.push('framedecent')
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.tag', 'multibleSiblings')) aClass.push('multiblesiblings')
 				return aClass.join(' ')
 			},
@@ -120,5 +121,12 @@
 	}
 	.editor > .title.boldtitle {
 		font-weight: bold;
+	}
+	.editor.framedecent {
+		border-top: 1px solid #ddd;
+		border-left: 1px solid #ddd;
+		margin-left: -10px;
+		padding-left: 10px;
+		margin-top: 5px;
 	}
 </style>
