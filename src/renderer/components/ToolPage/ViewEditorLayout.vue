@@ -1,7 +1,7 @@
 <template>
 	<div :class="editorClasses" :data-tag="xmlObj.n">
-		<template v-if="isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'panel')">
-			<b-card :header="header" no-body class="mib20">
+		<template v-if="isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'panel') || isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'panelDecent')">
+			<b-card :header="header" no-body :class="{'mib20': true, 'paneldecent': isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'panelDecent')}">
 				<div slot="header" v-if="isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'collapse')">
 					<button v-b-toggle="'collapse-'+uid" class="header-btn-toggle">
 						{{ header }}
@@ -71,6 +71,9 @@
 	.editor {
 		position: relative;
 	}
+	.editor.inline .editor {
+		padding-right: 17px;
+	}
 	.editor.error {
 		border: 1px solid #f66;
 	}
@@ -128,5 +131,11 @@
 		margin-left: -10px;
 		padding-left: 10px;
 		margin-top: 5px;
+	}
+	.paneldecent > .card-header {
+		padding: 0.1rem 0.5rem;
+	}
+	.paneldecent > .card-body, .paneldecent > .collapse > .card-body {
+		padding: 0.5rem;
 	}
 </style>

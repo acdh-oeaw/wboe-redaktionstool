@@ -67,6 +67,9 @@
 	body {
 		font-family: 'Lato' !important;
 	}
+	.hidden {
+		display: none;
+	}
 	.scroll {
 		overflow-x: auto;
 		overflow-y: scroll;
@@ -101,14 +104,14 @@
 	}
 
 	.tooltip-inner {
-		max-width: 80vw;
+		max-width: 80vw !important;
 	}
 	.tooltip-inner ul {
-		margin: 0px;
-		padding-left: 20px;
+		margin: 0px !important;
+		padding-left: 20px !important;
 	}
 	.tooltip-inner ul li {
-		text-align: left;
+		text-align: left !important;
 	}
 
 	.electron-in-page-search-window {

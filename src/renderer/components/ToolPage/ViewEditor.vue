@@ -1,8 +1,8 @@
 <template>
 	<div class="start" v-if="xmlObj.t === 'start'">
-		<ViewEditor :xmlObj="xmlObjItem" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)" @childUpdate="childUpdate"/>
+		<ViewEditor :xmlObj="xmlObjItem" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" @childUpdate="childUpdate"/>
 	</div>
-	<div class="comment" v-else-if="xmlObj.n === '#comment'">
+	<div :class="{'comment': true, 'hidden': !showComment || xmlObj.commented}" v-else-if="xmlObj.n === '#comment'">
 		<button :title="xmlObj.v" v-b-tooltip.hover v-if="showComment && !xmlObj.commented"><font-awesome-icon icon="comment"/></button>
 	</div>
 	<ViewEditorLayout :xmlObj="xmlObj" :xmlObjParent="xmlObjParent" :oKey="$vnode.key" v-else>
@@ -32,8 +32,8 @@
 				</li>
 			</ul>
 		</vue-context>
-		<ViewEditor :xmlObj="xmlObjItem" :xmlObjParent="xmlObj" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" :nextNodeName="((xmlObj.c[xmlObjKey + 1]) ? xmlObj.c[xmlObjKey + 1].n : undefined)" v-if="isOpen" @childUpdate="childUpdate"/>
-		<div class="addtag" v-if="showAdd && xmlObj.n !== nextNodeName && xmlObj.o && xmlObj.add">
+		<ViewEditor :xmlObj="xmlObjItem" :xmlObjParent="xmlObj" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" v-if="isOpen" @childUpdate="childUpdate"/>
+		<div class="addtag" v-if="showAdd && isLastAdd && xmlObj.o && xmlObj.add">
 			<button @click="addSibling"><font-awesome-icon icon="plus"/>
 				<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
 				<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
@@ -67,6 +67,19 @@
 			}
 		},
 		computed: {
+			isLastAdd: function () {
+				if (this.xmlObjParent && this.$vnode.key < this.xmlObjParent.c.length - 1) {
+					var aKey = this.$vnode.key + 1
+					while (aKey < this.xmlObjParent.c.length) {
+						var aSib = this.xmlObjParent.c[aKey]
+						if (aSib.name !== '#comment' && aSib.name !== this.xmlObj.n) {
+							return false
+						}
+						aKey += 1
+					}
+				}				// xmlObj.n !== nextNodeName
+				return true
+			},
 			displayValue: function () {		// Aktueller Wert für Anzeige
 				return ((this.xmlObj.v) ? this.xmlObj.v : ((this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) ? '...' : ''))
 			},
@@ -101,7 +114,7 @@
 			},
 			showTitle: function () {		// Soll der Titel angezeigt werden?
 				var show = false
-				if (!this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'panel')) {
+				if (!this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'panel') && !this.isValInArrOfSubProp(this.xmlObj, 'o.editorLayout', 'panelDecent')) {
 					show = this.getValOfSubProp(this.xmlObj, 'o.title')
 					if (show && this.isValInArrOfSubProp(this.xmlObj, 'o.tag', 'multibleSiblings')) {
 						if (this.isValInArrOfSubProp(this.xmlObjParent, 'o.editorLayout', 'inlineChilds')) {

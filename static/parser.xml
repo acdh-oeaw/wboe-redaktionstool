@@ -45,48 +45,48 @@
 						<form type="lemma" objParserTag="multibleSiblings" objParserTitle="Lemma" objParserEditorLayout="boldTitle" objParserTagAddTitle="Ein &quot;Lemma&quot; hinzufügen">
 							<orth objParserValue="edit" objParserTitle="Orth" objParserEditorLayout="inline"></orth>
 						</form>
-						<gramGrp>
-							<gram type="pos">Substantiv</gram>
-							<gram type="gender">Masculinum</gram>
+						<gramGrp objParserTitle="GramGrp" objParserEditorLayout="boldTitle">
+							<gram type="pos" objParserValue="edit" objParserTitle="Gram Pos"></gram>
+							<gram type="gender" objParserValue="edit" objParserTitle="Gram Gender"></gram>
 						</gramGrp>
-						<form type="variant" subtype="diminutive" xml:id="Färzel" objParserAttribut="edit" objParserTag="multibleSiblings">
+						<form type="variant" subtype="diminutive" xml:id="" objParserAttribut="edit" objParserTag="multibleSiblings" objParserTitle="Form Variant Diminutive" objParserEditorLayout="boldTitle panelDecent">
 							<orth objParserValue="edit" objParserTitle="Name"></orth>
-							<gramGrp>
-								<gram type="gender">Neutrum</gram>
+							<gramGrp objParserTitle="GramGrp" objParserEditorLayout="inline boldTitle">
+								<gram type="gender" objParserValue="edit" objParserTitle="Gram Gender"></gram>
 							</gramGrp>
 						</form>
 						<usg type="geo" objParserTag="multibleSiblings">
 							<placeName type="grossregion" objParserValue="edit" objParserTitle="Ort"></placeName>
 						</usg>
 						<form type="variant" subtype="diminutive" objParserAttribut="variable" objParserTag="multibleSiblings">
-							<pron xml:lang="bar-AT" objParserValue="edit" objParserTitle="???"></pron>
+							<pron xml:lang="bar-AT" objParserValue="edit" objParserTitle="Pron"></pron>
 							<usg type="geo" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="geo">
 								<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
 						</form>
-						<etym>
-							<cit type="etymon">
-								<lang>mhd</lang>
-								<form>
-									<orth xml:lang="gmh">varz</orth>
+						<etym objParserTitle="Etym" objParserEditorLayout="boldTitle frameDecent">
+							<cit type="etymon" objParserTitle="Etymon" objParserEditorLayout="boldTitle">
+								<lang objParserTitle="Lang">mhd</lang>
+								<form objParserTitle="Form" objParserEditorLayout="boldTitle inline">
+									<orth xml:lang="" objParserAttribut="variable" objParserValue="edit required" objParserTitle="Orth"></orth>
 								</form>
-								<def>Darmwind</def>
+								<def objParserValue="edit required" objParserTitle="Def">Darmwind</def>
 							</cit>
-							<ref type="bibl" target="#Lexer1878III">
-								<citedRange>27</citedRange>
+							<ref type="bibl" target="" objParserAttribut="edit" objParserTitle="Ref Bibl" objParserEditorLayout="boldTitle inline">
+								<citedRange objParserValue="edit" objParserTitle="Cited Range"></citedRange>
 							</ref>
 						</etym>
-						<sense objParserTag="multibleSiblings">
+						<sense objParserTag="multibleSiblings" objParserTitle="Sense" objParserEditorLayout="boldTitle frameDecent">
 							<ref type="form" objParserTag="canBeEmpty">
-								<text objParserText="text" objParserValue="edit" objParserTitle="???" objParserTag="canBeEmpty"></text>
+								<text objParserText="text" objParserValue="edit" objParserTitle="Ref Form Text" objParserTag="canBeEmpty"></text>
 								<oRef target="" objParserAttribut="variable"></oRef>
 							</ref>
-							<def objParserValue="edit" objParserTitle="???"></def>
+							<def objParserValue="edit" objParserTitle="Def"></def>
 							<usg type="geo" objParserTag="multibleSiblings" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="Usg Geo">
 								<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
 							<cit type="example">
-								<quote xml:lang="" objParserAttribut="variable" objParserValue="edit" objParserTitle="???"></quote>
+								<quote xml:lang="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Quote"></quote>
 								<usg type="geo" objParserEditorLayout="inlineChilds">
 									<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 								</usg>
