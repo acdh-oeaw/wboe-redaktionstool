@@ -128,7 +128,10 @@
 		margin-right: -8px !important;
 		padding-right: 8px !important;
 	}
-
+	.dropdown-scroll > .dropdown-menu {
+		max-height: 60vh;
+		overflow: auto;
+	}
 	.electron-in-page-search-window {
 		position: absolute;
 		right: 0px;

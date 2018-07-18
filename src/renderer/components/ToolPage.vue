@@ -42,7 +42,7 @@
 						<b-btn @click="ViewXmlProEditorApply" :disabled="!ViewXmlProEditorChanged" variant="primary"><font-awesome-icon icon="check"/></b-btn>
 					</b-button-group>
 				</b-button-toolbar>
-				<div class="viewxmlproeditor ohidden wtool">
+				<div class="viewxmlproeditor ohidden wtool" v-if="aTab === 3">
 					<ViewXmlProEditor v-model="xmlString" ref="ViewXmlProEditor" @changed="ViewXmlProEditorChange" :errors="xmlObjErrors" v-if="xmlString"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>xmlString</b> vorhanden!</div>
 				</div>
@@ -91,11 +91,6 @@
 			}
 		},
 		watch: {
-			aTab: function (nVal) {
-				if (nVal === 3) {
-					this.$refs.ViewXmlProEditor.refresh()
-				}
-			},
 			xmlDom: function (nVal) {
 				if (nVal) {
 					var t0 = performance.now()

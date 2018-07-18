@@ -15,8 +15,10 @@
 					@contextmenu.prevent="rightClickValue"
 					@focus="focusValue" @input="updateEditable" @keyup.enter="nextValue" @blur="updateValue">
 			<template v-if="getValOfSubProp(xmlObj, 'o.fxForm.n') === 'select' && Array.isArray(getValOfSubProp(xmlObj, 'o.fxForm.c'))">
-				<b-dropdown :text="displayValue" variant="ve-select">
-					<b-dropdown-item @click="setSelectedOption(aOpt)" v-for="(aOpt, aOptKey) in xmlObj.o.fxForm.c" :key="'bdd-' + aOptKey" :class="{'active': (aOpt.v === xmlObj.v || aOpt.v === getValOfSubProp(aOpt, 'o.selectValue') || (!xmlObj.v && getValOfSubProp(aOpt, 'o.selectValue') === ''))}">{{ aOpt.v }}</b-dropdown-item>
+				<b-dropdown :text="displayValue" variant="ve-select" class="edit-select dropdown-scroll" ref="selectButton" @shown="selectFocus">
+					<b-dropdown-item :class="{'active': (aOpt.v === xmlObj.v || aOpt.v === getValOfSubProp(aOpt, 'o.selectValue') || (!xmlObj.v && getValOfSubProp(aOpt, 'o.selectValue') === ''))}"
+						v-for="(aOpt, aOptKey) in xmlObj.o.fxForm.c" :key="'bdd-' + aOptKey"
+						@click="setSelectedOption(aOpt)">{{ aOpt.v }}</b-dropdown-item>
 				</b-dropdown>
 			</template>
 			<template v-else>{{ displayValue }}</template>
@@ -159,8 +161,11 @@
 			}
 		},
 		methods: {
+			selectFocus: _.debounce(function () {
+				var aSel = this.$refs.selectButton.$el.querySelector('.dropdown-item.active')
+				if (aSel) { aSel.focus() }
+			}, 25),
 			setSelectedOption: function (aOpt) {
-				console.log(JSON.stringify(aOpt))
 				var aAttr = this.getValOfSubProp(aOpt, 'a')
 				if (aAttr) {
 					Object.keys(aAttr).map(function (aAttrKey) {
@@ -173,6 +178,7 @@
 				var nVal = this.getValOfSubProp(aOpt, 'o.selectValue')
 				this.$set(this.xmlObj, 'v', ((nVal !== undefined) ? nVal : aOpt.v))
 				this.$emit('childUpdate', this.xmlObj, this.$vnode.key, 'update')
+				this.$refs.selectButton.$el.children[0].focus()
 			},
 			addSibling: function () {
 				if (this.xmlObj.add) {
@@ -226,7 +232,7 @@
 			},
 			nextValue: function (e) {
 				this.updateValue(e)
-				var allEditableValuesElements = document.querySelectorAll('.editor > .value.edit')
+				var allEditableValuesElements = document.querySelectorAll('.editor > .value.edit, .editor > .value > .edit-select > button')
 				for (var i = 0; i < allEditableValuesElements.length; i++) {
 					if (document.activeElement === allEditableValuesElements[i]) {
 						if (e.shiftKey) {
