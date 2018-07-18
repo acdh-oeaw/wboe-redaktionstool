@@ -180,7 +180,11 @@
 				if (updateType === 'update') {
 					this.xmlObj.c[childKey] = childData
 				} else if (updateType === 'insertAfter') {
-					this.xmlObj.c.splice(childKey + 1, 0, childData)
+					var aChildKey = childKey + 1
+					while (this.xmlObj.c[aChildKey] && this.xmlObj.c[aChildKey].n === '#comment') {
+						aChildKey += 1
+					}
+					this.xmlObj.c.splice(aChildKey, 0, childData)
 				} else if (updateType === 'remove') {
 					this.xmlObj.c.splice(childKey, 1)
 				}
