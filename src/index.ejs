@@ -2,7 +2,7 @@
 <html>
 	<head>
 		<meta charset="utf-8">
-		<title>redaktionstool-electron-vue</title>
+		<title><%= require('../package.json').name + ' - ' + require('../package.json').version %></title>
 		<% if (htmlWebpackPlugin.options.nodeModules) { %>
 			<!-- Add `node_modules/` to global paths so `require` works properly in development -->
 			<script>
