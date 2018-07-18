@@ -131,7 +131,7 @@ export default {
 				while (pPos < parser.length) {		// Weitere Parser Objekte hinzufügen!
 					let aKey = obj.push(parser[pPos]) - 1
 					if (!(obj[aKey] && obj[aKey].o && obj[aKey].o.tag && obj[aKey].o.tag.indexOf('canBeEmpty') > -1)) {
-						errors.push(addErrorToObj(obj[aKey], 'Fehlender Tag!'))
+						addErrorToObj(obj[aKey], 'Fehlender Tag hinzugefügt!', true)
 					}
 					pPos += 1
 				}
@@ -370,11 +370,18 @@ function getFirstTagObjByName (name, array) {		// Findet ersten Tag mit Namen "n
 	}, this)
 	return out
 }
-function addErrorToObj (obj, error) {		// Fehlermeldung Liste von Fehlermeldungen bei Objekt hinzufügen
-	if (obj.e === undefined) {
-		obj.e = []
+function addErrorToObj (obj, error, warning = false) {		// Fehlermeldung Liste von Fehlermeldungen bei Objekt hinzufügen
+	if (warning) {
+		if (obj.w === undefined) {
+			obj.w = []
+		}
+		obj.w.push({'error': error, 'obj': obj})
+	} else {
+		if (obj.e === undefined) {
+			obj.e = []
+		}
+		obj.e.push({'error': error, 'obj': obj})
 	}
-	obj.e.push({'error': error, 'obj': obj})
 	return {'error': error, 'obj': obj}
 }
 function equalObj (aList, bList) {		// Vergleicht zwei Objekte/Arrays

@@ -8,10 +8,16 @@ const store = new Store()
 const state = {
 	projectPath: undefined,
 	parserFile: undefined,
-	parserFileContent: undefined
+	parserFileContent: undefined,
+	useFile: undefined,
+	useFileContent: undefined
 }
 
 const mutations = {
+	SET_USE_FILE: (state, { file, content }) => {
+		state.useFile = file
+		state.useFileContent = content
+	},
 	SET_PROJECT_PATH: (state, { projectPath }) => {
 		state.projectPath = projectPath
 	},
@@ -22,6 +28,24 @@ const mutations = {
 }
 
 const actions = {
+	SET_USE_FILE: function ({ commit }, file) {
+		var aFile = file
+		let fileContents = undefined
+		try {
+			fileContents = fs.readFileSync(aFile, 'utf8')
+		} catch (e) {
+			try {
+				aFile = fPath.join(__static, '/demo.xml')
+				fileContents = fs.readFileSync(aFile, 'utf8')
+			} catch (e) {
+				console.log(e)
+			}
+		}
+		commit('SET_USE_FILE', { file: aFile, content: fileContents })
+	},
+	UNSET_USE_FILE: function ({ commit }, file) {
+		commit('SET_USE_FILE', { file: undefined, content: undefined })
+	},
 	GET_PROJECT_PATH: function ({ commit, dispatch }) {
 		commit('SET_PROJECT_PATH', { projectPath: store.get('projectPath', remote.app.getPath('userData')) })
 		dispatch('GET_PARSER_FILE')
@@ -51,7 +75,7 @@ const actions = {
 	},
 	GET_PARSER_FILE: function ({ commit, dispatch }) {
 		var aFile = fPath.join(state.projectPath, '/parser.xml')
-		let fileContents = ''
+		let fileContents = undefined
 		try {
 			fileContents = fs.readFileSync(aFile, 'utf8')
 		} catch (e) {

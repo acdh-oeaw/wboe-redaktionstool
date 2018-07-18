@@ -263,7 +263,7 @@
 		right: 0px;
 		top: 0px;
 		width: 15px;
-		z-index: 1000;
+		z-index: 55;
 	}
 	.editor > .addon > button {
 		border: none;

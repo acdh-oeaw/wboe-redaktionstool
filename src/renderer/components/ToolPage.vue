@@ -57,7 +57,6 @@
 	import ViewObj from './ToolPage/ViewObj'
 	import ViewXmlProEditor from './ToolPage/ViewXmlProEditor'
 	import FunctionsTool from './ToolPage/functions.js'
-	import test from './ToolPage/testData.js'
 
 	export default {
 		name: 'tool-page',
@@ -87,7 +86,7 @@
 						errors.push(((v.obj.line) ? 'Zeile ' + v.obj.line + ': ' : '') + this.htmlEncode(v.error))
 					}, this)
 				}
-				return '<ul><li>' + errors.join('</li><li>') + '</li></ul>'
+				return ((errors.length > 0) ? '<ul><li>' + errors.join('</li><li>') + '</li></ul>' : undefined)
 			}
 		},
 		watch: {
@@ -114,17 +113,37 @@
 				if (nVal) {
 					this.aTab = 3
 				}
+			},
+			'Options.useFile': function (nVal) {
+				this.loadData()
 			}
 		},
 		mounted: function () {
-			var t0 = performance.now()
-			this.$store.dispatch('GET_PROJECT_PATH')
-			this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(this.Options.parserFileContent).xmlDom, true)
-			this.xmlOrgString = test.testXML
-			this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
-			console.log('ToolPage mounted', Math.ceil(performance.now() - t0) + ' ms.')
+			this.$store.dispatch('GET_PROJECT_PATH')		// Parser ermitteln
+			if (!this.Options.useFile) {
+				this.$store.dispatch('SET_USE_FILE', undefined)
+			}
+			this.loadData()
 		},
 		methods: {
+			reset () {
+				this.objParser = undefined
+				this.xmlOrgString = undefined
+				this.xmlString = undefined
+				this.xmlStringError = undefined
+				this.xmlDom = undefined
+				this.xmlObj = undefined
+				this.xmlObjErrors = undefined
+				this.ViewXmlProEditorChanged = false
+			},
+			loadData () {
+				this.reset()
+				var t0 = performance.now()
+				this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(this.Options.parserFileContent).xmlDom, true)
+				this.xmlOrgString = this.Options.useFileContent
+				this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
+				console.log('Neue Datei geladen!', Math.ceil(performance.now() - t0) + ' ms.', this.Options.useFile)
+			},
 			xmlObjChildUpdate: function (childData, childKey, updateType) {
 				console.log('xmlObjChildUpdate', childData, updateType)
 				this.xmlObj = childData
