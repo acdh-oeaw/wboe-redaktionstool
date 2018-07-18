@@ -1,12 +1,15 @@
 <template>
 	<div :class="editorClasses" :data-tag="xmlObj.n">
 		<template v-if="isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'panel') || isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'panelDecent')">
-			<b-card :header="header" no-body :class="{'mib20': true, 'paneldecent': isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'panelDecent')}">
-				<div slot="header" v-if="isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'collapse')">
+			<b-card :header="header" no-body :class="{'mib20': !(showAdd && xmlObj.o && xmlObj.add && isLastOfSameTag), 'paneldecent': isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'panelDecent')}">
+				<div slot="header" @contextmenu.prevent="contextMenu($event)" v-if="isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'collapse')">
 					<button v-b-toggle="'collapse-'+uid" class="header-btn-toggle">
 						{{ header }}
 						<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 					</button>
+				</div>
+				<div slot="header" @contextmenu.prevent="contextMenu" v-else>
+					{{ header }}
 				</div>
 				<b-collapse v-model="isOpen" :id="'collapse-'+uid">
 					<b-card-body>
@@ -18,6 +21,12 @@
 		<template v-else>
 			<slot></slot>
 		</template>
+		<div class="addtag" v-if="showAdd && xmlObj.o && xmlObj.add && isLastOfSameTag">
+			<button @click="addSibling"><font-awesome-icon icon="plus"/>
+				<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
+				<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
+			</button>
+		</div>
 	</div>
 </template>
 
@@ -27,7 +36,8 @@
 		props: {
 			xmlObj: Object,
 			xmlObjParent: Object,
-			oKey: Number
+			oKey: Number,
+			showAdd: Boolean
 		},
 		data () {
 			return {
@@ -52,6 +62,31 @@
 			header: function () {		// Gibt den akutellen Titel aus den Optionen bzw. den Tag Titel zurück
 				return ((this.hasSubProp(this.xmlObj, 'o.title')) ? this.xmlObj.o.title : this.xmlObj.n)
 			},
+			isLastOfSameTag: function () {
+				if (this.xmlObjParent && this.oKey < this.xmlObjParent.c.length - 1) {
+					var aKey = this.oKey + 1
+					while (aKey < this.xmlObjParent.c.length) {
+						var aSib = this.xmlObjParent.c[aKey]
+						if (aSib.n !== '#comment') {
+							if (aSib.n === this.xmlObj.n) {
+								return false
+							} else {
+								return true
+							}
+						}
+						aKey += 1
+					}
+				}
+				return true
+			},
+		},
+		methods: {
+			addSibling () {
+				this.$emit('addSibling')
+			},
+			contextMenu (e) {
+				this.$emit('rightClickValue', e)
+			}
 		}
 	}
 </script>
@@ -107,8 +142,18 @@
 	.editor.inlinechilds > .comment {
 		display: inline-block;
 	}
+	.addtag > button {
+		background: #eef;
+		border: none;
+		cursor: pointer;
+	}
+	.addtag > button:hover {
+		background: #ccf;
+	}
 	.editor > .editor > .addtag > button {
 		width: 100%;
+		margin-top: 5px;
+		margin-bottom: 10px;
 	}
 	.editor.inlinechilds > .editor:not(.isblock) > .addtag {
 		display: inline-block;

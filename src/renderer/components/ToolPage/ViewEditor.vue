@@ -5,7 +5,7 @@
 	<div :class="{'comment': true, 'hidden': !showComment || xmlObj.commented}" v-else-if="xmlObj.n === '#comment'">
 		<button :title="xmlObj.v" v-b-tooltip.hover v-if="showComment && !xmlObj.commented"><font-awesome-icon icon="comment"/></button>
 	</div>
-	<ViewEditorLayout :xmlObj="xmlObj" :xmlObjParent="xmlObjParent" :oKey="$vnode.key" v-else>
+	<ViewEditorLayout :xmlObj="xmlObj" :showAdd="showAdd" :xmlObjParent="xmlObjParent" :oKey="$vnode.key" @addSibling="addSibling" @rightClickValue="rightClickValue" v-else>
 		<span :class="'title' + ((isValInArrOfSubProp(xmlObj, 'o.editorLayout', 'boldTitle')) ? ' boldtitle' : '')" :title="'Tag: ' + xmlObj.n" v-if="showTitle"
 					@contextmenu.prevent="rightClickValue"
 					>{{ xmlObj.o.title }}:</span>
@@ -42,12 +42,6 @@
 			</ul>
 		</vue-context>
 		<ViewEditor :xmlObj="xmlObjItem" :xmlObjParent="xmlObj" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" v-if="isOpen" @childUpdate="childUpdate"/>
-		<div class="addtag" v-if="showAdd && xmlObj.o && xmlObj.add && isLastAdd">
-			<button @click="addSibling"><font-awesome-icon icon="plus"/>
-				<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
-				<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
-			</button>
-		</div>
 	</ViewEditorLayout>
 	</div>
 
@@ -76,23 +70,6 @@
 			}
 		},
 		computed: {
-			isLastAdd: function () {
-				if (this.xmlObjParent && this.$vnode.key < this.xmlObjParent.c.length - 1) {
-					var aKey = this.$vnode.key + 1
-					while (aKey < this.xmlObjParent.c.length) {
-						var aSib = this.xmlObjParent.c[aKey]
-						if (aSib.n !== '#comment') {
-							if (aSib.n === this.xmlObj.n) {
-								return false
-							} else {
-								return true
-							}
-						}
-						aKey += 1
-					}
-				}
-				return true
-			},
 			displayValue: function () {		// Aktueller Wert für Anzeige
 				if (this.xmlObj.v) {
 					return this.xmlObj.v
@@ -262,14 +239,14 @@
 		background: none;
 		color: #333;
 	}
-	.editor > .addon {
+	.editor > .addon, .card-body > .addon {
 		position: absolute;
 		right: 0px;
 		top: 0px;
 		width: 15px;
 		z-index: 55;
 	}
-	.editor > .addon > button {
+	.editor > .addon > button, .addon > button {
 		border: none;
 		padding: 0px;
 		width: 15px;
@@ -279,7 +256,7 @@
 		margin: 0px auto;
 		background: none;
 	}
-	.editor > .addon > button.error {
+	.editor > .addon > button.error, .addon > button.error {
 		color: #d66;
 	}
 	.context-menu-editor-title {
