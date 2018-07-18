@@ -84,7 +84,7 @@
 							<usg type="geo" objParserTag="multibleSiblings" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="Usg Geo">
 								<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
-							<cit type="example">
+							<cit type="example" objParserTag="canBeEmpty">
 								<quote xml:lang="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Quote"></quote>
 								<usg type="geo" objParserEditorLayout="inlineChilds">
 									<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
@@ -102,7 +102,7 @@
 							<usg type="geo" objParserTag="canBeEmpty" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="Usg Geo">
 								<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
 							</usg>
-							<cit type="example" objParserTitle="Example" objParserEditorLayout="boldTitle">
+							<cit type="example" objParserTag="canBeEmpty" objParserTitle="Example" objParserEditorLayout="boldTitle">
 								<quote xml:lang="" objParserTag="canBeEmpty" objParserValue="edit" objParserAttribut="variable" objParserTitle="quote"></quote>
 								<ref type="" target="" objParserTag="canBeEmpty" objParserAttribut="variable" objParserTitle="Variable">
 									<citedRange objParserValue="edit" objParserTitle="Cited Range"></citedRange>

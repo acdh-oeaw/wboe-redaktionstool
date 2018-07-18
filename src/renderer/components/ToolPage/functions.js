@@ -33,6 +33,9 @@ export default {
 						}
 						if (pOn) {
 							if (parser[pPos].n !== v.n) {		// Überprüfen ob ein potentiell leeres Tag vorhanden ist (canBeEmpty)
+								if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1) {
+									pPos -= 1
+								}
 								let xPos = pPos
 								let addEmptyObjInTag = []
 								while (xPos <= parser.length
@@ -61,6 +64,7 @@ export default {
 									}
 								}
 							} else {
+								console.log(pPos)
 								errors.push(addErrorToObj(v, 'Parser fehlt!'))
 								tagError = true
 								pOn = false
@@ -131,7 +135,8 @@ export default {
 				while (pPos < parser.length) {		// Weitere Parser Objekte hinzufügen!
 					let aKey = obj.push(parser[pPos]) - 1
 					if (!(obj[aKey] && obj[aKey].o && obj[aKey].o.tag && obj[aKey].o.tag.indexOf('canBeEmpty') > -1)) {
-						addErrorToObj(obj[aKey], 'Fehlender Tag hinzugefügt!', true)
+						obj[aKey].addedByParser = true
+						errors.push(addErrorToObj(obj[aKey], 'Fehlender Tag hinzugefügt!'))
 					}
 					pPos += 1
 				}

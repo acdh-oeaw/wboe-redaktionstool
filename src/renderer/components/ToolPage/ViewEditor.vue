@@ -42,7 +42,7 @@
 			</ul>
 		</vue-context>
 		<ViewEditor :xmlObj="xmlObjItem" :xmlObjParent="xmlObj" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" v-if="isOpen" @childUpdate="childUpdate"/>
-		<div class="addtag" v-if="showAdd && isLastAdd && xmlObj.o && xmlObj.add">
+		<div class="addtag" v-if="showAdd && xmlObj.o && xmlObj.add && isLastAdd">
 			<button @click="addSibling"><font-awesome-icon icon="plus"/>
 				<span v-if="xmlObj.o.tagAddTitle"><b> {{ xmlObj.o.tagAddTitle }}</b></span>
 				<span v-else><b> "{{ xmlObj.n }}" hinzufügen</b></span>
@@ -81,12 +81,16 @@
 					var aKey = this.$vnode.key + 1
 					while (aKey < this.xmlObjParent.c.length) {
 						var aSib = this.xmlObjParent.c[aKey]
-						if (aSib.name !== '#comment' && aSib.name !== this.xmlObj.n) {
-							return false
+						if (aSib.n !== '#comment') {
+							if (aSib.n === this.xmlObj.n) {
+								return false
+							} else {
+								return true
+							}
 						}
 						aKey += 1
 					}
-				}				// xmlObj.n !== nextNodeName
+				}
 				return true
 			},
 			displayValue: function () {		// Aktueller Wert für Anzeige
