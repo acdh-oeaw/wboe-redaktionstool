@@ -13,7 +13,7 @@
 					v-if="!refreshValue && (xmlObj.hasOwnProperty('v') || isValInArrOfSubProp(xmlObj, 'o.value', 'edit') || isValInArrOfSubProp(xmlObj, 'o.value', 'variable'))"
 					:contenteditable="isValInArrOfSubProp(xmlObj, 'o.value', 'edit')"
 					@contextmenu.prevent="rightClickValue"
-					@focus="focusValue" @input="updateEditable" @keyup.enter="nextValue" @blur="updateValue">
+					@focus="focusValue" @input="updateEditable" @keyup.enter="nextValue($event, $event.shiftKey)" @blur="updateValue">
 			<template v-if="getValOfSubProp(xmlObj, 'o.fxForm.n') === 'select' && Array.isArray(getValOfSubProp(xmlObj, 'o.fxForm.c'))">
 				<b-dropdown :text="displayValue" variant="ve-select" class="edit-select dropdown-scroll" ref="selectButton" @shown="selectFocus">
 					<b-dropdown-item :class="{'active': (aOpt.v === xmlObj.v || aOpt.v === getValOfSubProp(aOpt, 'o.selectValue') || (!xmlObj.v && getValOfSubProp(aOpt, 'o.selectValue') === ''))}"
@@ -142,11 +142,11 @@
 			}
 		},
 		methods: {
-			selectFocus: _.debounce(function () {
+			selectFocus: _.debounce(function () {		// Focus auf aktives Element in Auswahl setzen
 				var aSel = this.$refs.selectButton.$el.querySelector('.dropdown-item.active')
 				if (aSel) { aSel.focus() }
 			}, 25),
-			setSelectedOption: function (aOpt) {
+			setSelectedOption: function (aOpt) {		// Aktives Element, in Auswahl, als Wert mit Attributen setzen
 				var aAttr = this.getValOfSubProp(aOpt, 'a')
 				if (aAttr) {
 					Object.keys(aAttr).map(function (aAttrKey) {
@@ -161,21 +161,21 @@
 				this.$emit('childUpdate', this.xmlObj, this.$vnode.key, 'update')
 				this.$refs.selectButton.$el.children[0].focus()
 			},
-			addSibling: function () {
+			addSibling: function () {		// Tag nach aktuellen einfügen
 				if (this.xmlObj.add) {
 					this.$emit('childUpdate', this.xmlObj.add, this.$vnode.key, 'insertAfter')
 				}
 			},
-			removeObject: function () {
+			removeObject: function () {		// Aktuellen Tag löschen
 				if (this.xmlObj.add) {
 					this.$emit('childUpdate', this.xmlObj, this.$vnode.key, 'remove')
 				}
 			},
-			rightClickValue: function (e) {
+			rightClickValue: function (e) {		// Kontextmenü anzeigen
 				this.showContextMenuEditor = true
 				this.$nextTick(() => { this.$refs.contextMenuEditor.open(e) })
 			},
-			childUpdate: function (childData, childKey, updateType) {
+			childUpdate: function (childData, childKey, updateType) {		// Daten update weiterleiten
 				console.log('childUpdate', childData, childKey, updateType)
 				if (updateType === 'update') {
 					this.xmlObj.c[childKey] = childData
@@ -190,7 +190,7 @@
 				}
 				this.$emit('childUpdate', this.xmlObj, this.$vnode.key, 'update')
 			},
-			updateEditable: function (e) {
+			updateEditable: function (e) {		// Eingabe bei bearbeitbaren Wert bereinigen
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) {
 					var restoreCaretPosition = ViewEditorFunctions.saveCaretPosition(e.target)
 					e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
@@ -199,7 +199,7 @@
 					e.target.innerText = this.xmlObj.v
 				}
 			},
-			updateValue: _.debounce(function (e) {
+			updateValue: _.debounce(function (e) {		// Eingabe bei bearbeitbaren Wert setzen
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit')) {
 					var nVal = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '').trim()
 					if (nVal !== this.xmlObj.v) {
@@ -210,17 +210,17 @@
 					this.$nextTick(() => { this.refreshValue = false })
 				}
 			}, 50),
-			focusValue: function (e) {
+			focusValue: function (e) {		// ggf. Platzhalter löschen
 				if (this.isValInArrOfSubProp(this.xmlObj, 'o.value', 'edit') && !this.xmlObj.v) {
 					e.target.innerText = ''
 				}
 			},
-			nextValue: function (e) {
+			nextValue: function (e, backward = false) {		// Zu nächsten bearbeitbaren Wert springen
 				this.updateValue(e)
 				var allEditableValuesElements = document.querySelectorAll('.editor > .value.edit, .editor > .value > .edit-select > button')
 				for (var i = 0; i < allEditableValuesElements.length; i++) {
 					if (document.activeElement === allEditableValuesElements[i]) {
-						if (e.shiftKey) {
+						if (backward) {
 							allEditableValuesElements[((i > 0) ? i - 1 : allEditableValuesElements.length - 1)].focus()
 						} else {
 							allEditableValuesElements[((i < allEditableValuesElements.length - 1) ? i + 1 : 0)].focus()

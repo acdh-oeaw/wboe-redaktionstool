@@ -16,7 +16,7 @@ import 'codemirror/addon/fold/comment-fold.js'
 import 'codemirror/addon/selection/active-line.js'
 
 export default {
-	cmOptions: {
+	cmOptions: {		// Optinen für Codemirror
 		mode: 'text/html',
 		theme: 'default',
 		autoCloseTags: true,
@@ -44,13 +44,13 @@ export default {
 			this.refreshCM()
 		}
 	},
-	refreshCM () {
+	refreshCM () {		// Codemirror neu zeichnen
 		if (this.codemirrorReady) {
 			this.$refs.myCm.refresh()
 			this.refreshCodemirror = false
 		}
 	},
-	onCmReady (cm) {
+	onCmReady (cm) {		// Codemirror bereit
 		this.codemirrorReady = true
 		if (this.refreshCodemirror) {
 			this.refreshCM()

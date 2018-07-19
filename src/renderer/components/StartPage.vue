@@ -23,67 +23,68 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import FileLine from './StartPage/FileLine'
-const { shell } = require('electron')
+	import { mapState } from 'vuex'
+	import FileLine from './StartPage/FileLine'
+	const { shell } = require('electron')
 
-export default {
-	name: 'start-page',
-	data () {
-		return {
-			loading: false
-		}
-	},
-	computed: {
-		...mapState(['Options']),
-		...mapState(['Files'])
-	},
-	watch: {
-		'Options.projectPath': function (nVal) {
-			if (nVal !== undefined) {
+	export default {
+		name: 'start-page',
+		data () {
+			return {
+				loading: false
+			}
+		},
+		computed: {
+			...mapState(['Options']),
+			...mapState(['Files'])
+		},
+		watch: {
+			'Options.projectPath': function (nVal) {
+				if (nVal !== undefined) {		// Wenn sich der Projektpfad ändert alle Verzeichnisse zurücksetzen
+					this.loading = true
+					this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
+					this.$store.dispatch('GET_PATH', this.Options.projectPath)
+					this.loading = false
+				}
+			}
+		},
+		methods: {
+			selectFolder () {		// Projektpfad auswählen und speichern
 				this.loading = true
+				this.$store.dispatch('DIALOG_PROJECT_PATH')	// Verzeichniss Dialog
+				this.$store.dispatch('SET_PROJECT_PATH')		// Projektpfad speichern
+				this.updateFolder()
+				this.loading = false
+			},
+			showFolder () {		// Ordner in Explorer öffnen
+				shell.openItem(this.Options.projectPath)
+			},
+			updateFolder () {		// Projektpfad neu laden
+				// ToDo: UPDATE_PATHS
 				this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
 				this.$store.dispatch('GET_PATH', this.Options.projectPath)
-				this.loading = false
+			},
+			showParser () {		// Parser-Datei in Explorer anzeigen
+				shell.showItemInFolder(this.Options.parserFile)
+			},
+			saveParser () {		// Parser-Datei speichern unter ...
+				this.$store.dispatch('DIALOG_SAVE_PARSER')	// Speicher Dialog
+				this.$store.dispatch('GET_PARSER_FILE')
+				this.updateFolder()
 			}
-		}
-	},
-	methods: {
-		selectFolder () {		// Projektpfad auswählen und speichern
+		},
+		mounted: function () {
 			this.loading = true
-			this.$store.dispatch('DIALOG_PROJECT_PATH')	// Verzeichniss Dialog
-			this.$store.dispatch('SET_PROJECT_PATH')		// Projektpfad speichern
+			if (this.Options.projectPath === undefined) {		// Projektpfad laden
+				this.$store.dispatch('GET_PROJECT_PATH')
+			}
 			this.updateFolder()
 			this.loading = false
 		},
-		showFolder () {		// Ordner in Explorer öffnen
-			shell.openItem(this.Options.projectPath)
-		},
-		updateFolder () {		// Projektpfad neu laden
-			this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
-			this.$store.dispatch('GET_PATH', this.Options.projectPath)
-		},
-		showParser () {		// Parser-Datei in Explorer anzeigen
-			shell.showItemInFolder(this.Options.parserFile)
-		},
-		saveParser () {		// Parser-Datei speichern unter ...
-			this.$store.dispatch('DIALOG_SAVE_PARSER')	// Speicher Dialog
-			this.$store.dispatch('GET_PARSER_FILE')
-			this.updateFolder()
+		components: {
+			FileLine
 		}
-	},
-	mounted: function () {
-		this.loading = true
-		if (this.Options.projectPath === undefined) {		// Projektpfad laden
-			this.$store.dispatch('GET_PROJECT_PATH')
-		}
-		this.updateFolder()
-		this.loading = false
-	},
-	components: {
-		FileLine
 	}
-}
 </script>
 
 <style scoped>

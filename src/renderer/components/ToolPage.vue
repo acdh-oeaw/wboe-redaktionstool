@@ -120,13 +120,13 @@
 		},
 		mounted: function () {
 			this.$store.dispatch('GET_PROJECT_PATH')		// Parser ermitteln
-			if (!this.Options.useFile) {		// Demo laden
+			if (!this.Options.useFile) {		// Demo laden falls keine Datei geladen wurde
 				this.$store.dispatch('SET_USE_FILE', undefined)
 			}
 			this.loadData()
 		},
 		methods: {
-			reset () {
+			reset () {		// Wichtige Variablen zurücksetzen
 				this.objParser = undefined
 				this.xmlOrgString = undefined
 				this.xmlString = undefined
@@ -136,7 +136,7 @@
 				this.xmlObjErrors = undefined
 				this.ViewXmlProEditorChanged = false
 			},
-			loadData () {
+			loadData () {		// Dateiinhalt verarbeiten
 				this.reset()
 				var t0 = performance.now()
 				this.objParser = this.xmlDom2Obj(this.xmlString2xmlDom(this.Options.parserFileContent).xmlDom, true)
@@ -144,7 +144,7 @@
 				this.xmlDom = this.xmlString2xmlDom(this.xmlOrgString).xmlDom
 				console.log('Neue Datei geladen!', Math.ceil(performance.now() - t0) + ' ms.', this.Options.useFile)
 			},
-			xmlObjChildUpdate: function (childData, childKey, updateType) {
+			xmlObjChildUpdate: function (childData, childKey, updateType) {		// Objekt-Daten aktuallisieren
 				console.log('xmlObjChildUpdate', childData, updateType)
 				this.xmlObj = childData
 				this.xmlString = this.obj2xmlString(this.xmlObj)
@@ -167,11 +167,11 @@
 					this.$refs.ViewXmlProEditor.reloadValue()
 				}
 			},
-			obj2xmlString: FunctionsTool.obj2xmlString,
-			xmlString2xmlDom: FunctionsTool.xmlString2xmlDom,
-			xmlDomCheck: FunctionsTool.xmlDomCheck,
-			xmlDom2Obj: FunctionsTool.xmlDom2Obj,
-			objParserUpdate: FunctionsTool.objParserUpdate,
+			obj2xmlString: FunctionsTool.obj2xmlString,					// Objekt in XML String umwandeln
+			xmlString2xmlDom: FunctionsTool.xmlString2xmlDom,		// String in xmlDom umwandeln
+			xmlDomCheck: FunctionsTool.xmlDomCheck,							// Fehler im xmlDom auswerten
+			xmlDom2Obj: FunctionsTool.xmlDom2Obj,								// xmlDom in Objekt umwandeln
+			objParserUpdate: FunctionsTool.objParserUpdate,			// Objekt parsen
 		},
 		components: {
 			ViewEditor,

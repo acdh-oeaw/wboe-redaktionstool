@@ -38,19 +38,20 @@
 			...mapState(['Options'])
 		},
 		methods: {
-			toggleMe () {
+			toggleMe () {		// Verzeichniss öffnen/schließen
 				this.$store.dispatch('TOGGLE_OPEN', {path: this.base, fileKey: this.$vnode.key.split('-')[1]})
 			},
 			loading () {
 				this.$emit('loading')
 			},
-			loadFile () {
+			loadFile () {		// Lade Datei
 				this.$emit('loading')
 				this.debouncedLoadFile()
 			},
-			debouncedLoadFile: _.debounce(function () {
-				this.$store.dispatch('SET_USE_FILE', this.file.fullFileName)
-				this.$router.push('/tool')
+			debouncedLoadFile: _.debounce(function () {		// Verzögert öffnen damit "Laden ..." angezeigt wird
+				this.$store.dispatch('SET_USE_FILE', this.file.fullFileName)		// Datei laden
+				// Nur Tool öffnen wenn Datei lesbar!
+				this.$router.push('/tool')		// Tool öffnen
 			}, 50),
 		}
 	}

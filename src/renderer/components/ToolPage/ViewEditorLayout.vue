@@ -62,7 +62,7 @@
 			header: function () {		// Gibt den akutellen Titel aus den Optionen bzw. den Tag Titel zurück
 				return ((this.hasSubProp(this.xmlObj, 'o.title')) ? this.xmlObj.o.title : this.xmlObj.n)
 			},
-			isLastOfSameTag: function () {
+			isLastOfSameTag: function () {		// Ist Tag letzter Tag mit selben Namen
 				if (this.xmlObjParent && this.oKey < this.xmlObjParent.c.length - 1) {
 					var aKey = this.oKey + 1
 					while (aKey < this.xmlObjParent.c.length) {

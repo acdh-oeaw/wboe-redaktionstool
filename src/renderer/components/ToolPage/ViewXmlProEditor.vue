@@ -43,16 +43,16 @@
 					this.$emit('changed')
 				}
 			}, 500),
-			reloadValue () {
+			reloadValue () {		// Aktuelle Eingabe bei codemirror verwerfen
 				this.code = this.value
 			},
-			setValue () {
+			setValue () {		// Aktuelle Eingabe setzen
 				this.$emit('input', this.code)
 			},
-			getCode () {
+			getCode () {		// Aktuelle Eingabe zurückgeben
 				return this.code
 			},
-			markErrors () {
+			markErrors () {		// Fehler markieren
 				if (this.codemirrorReady) {
 					this.errorMarks.forEach(function (m) {
 						this.$refs.myCm.codemirror.removeLineClass(m, 'background', 'line-error')
