@@ -8,13 +8,13 @@
 				<span class="foldercontent unknown" v-else>? <font-awesome-icon icon="file" style="margin-right:5px;"/> ? <font-awesome-icon icon="folder"/></span>
 			</button>
 			<div class="subdata" v-if="path.isOpen && Files.paths[path.fullFileName]">
-				<FileLine :path="sPath" v-for="(sPath, fKey) in Files.paths[path.fullFileName].paths" :key="'path-' + fKey" :base="path.fullFileName"/>
-				<FileLine :file="sFile" v-for="(sFile, fKey) in Files.paths[path.fullFileName].files" :key="'file-' + fKey" :base="path.fullFileName"/>
+				<FileLine :path="sPath" @loading="loading" v-for="(sPath, fKey) in Files.paths[path.fullFileName].paths" :key="'path-' + fKey" :base="path.fullFileName"/>
+				<FileLine :file="sFile" @loading="loading" v-for="(sFile, fKey) in Files.paths[path.fullFileName].files" :key="'file-' + fKey" :base="path.fullFileName"/>
 			</div>
 		</div>
 		<div class="fileline" v-if="file">
-			<button @click="" :title="file.fullFileName">
-				<font-awesome-icon icon="file" style="color: #999; width:20px;"/>
+			<button @click="loadFile" :title="file.fullFileName">
+				<font-awesome-icon icon="file" style="width:20px;"/>
 				<span>{{ file.file }}</span>
 				<span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
 			</button>
@@ -24,6 +24,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+	import _ from 'lodash'
 
 	export default {
 		name: 'FileLine',
@@ -33,12 +34,24 @@
 			path: Object
 		},
 		computed: {
-			...mapState(['Files'])
+			...mapState(['Files']),
+			...mapState(['Options'])
 		},
 		methods: {
 			toggleMe () {
 				this.$store.dispatch('TOGGLE_OPEN', {path: this.base, fileKey: this.$vnode.key.split('-')[1]})
-			}
+			},
+			loading () {
+				this.$emit('loading')
+			},
+			loadFile () {
+				this.$emit('loading')
+				this.debouncedLoadFile()
+			},
+			debouncedLoadFile: _.debounce(function () {
+				this.$store.dispatch('SET_USE_FILE', this.file.fullFileName)
+				this.$router.push('/tool')
+			}, 50),
 		}
 	}
 </script>

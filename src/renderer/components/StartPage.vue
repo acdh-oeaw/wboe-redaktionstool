@@ -13,11 +13,12 @@
 				<button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right" v-else-if="Options.parserFileContent && Options.parserFileContent.length > 1"><font-awesome-icon icon="file-download"/></button>
 			</p>
 			<div v-if="Files.paths[Options.projectPath]">
-				<FileLine :path="path" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
-				<FileLine :file="file" v-for="(file, fKey) in Files.paths[Options.projectPath].files" :key="'file-' + fKey" :base="Options.projectPath"/>
+				<FileLine :path="path" @loading="loading = true" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
+				<FileLine :file="file" @loading="loading = true" v-for="(file, fKey) in Files.paths[Options.projectPath].files" :key="'file-' + fKey" :base="Options.projectPath"/>
 			</div>
 		</div>
 		<b-alert show variant="danger" v-else>Projektpfad nicht vergeben!</b-alert>
+		<div id="loading" v-if="loading">Lade ...</div>
 	</div>
 </template>
 
@@ -30,6 +31,7 @@ export default {
 	name: 'start-page',
 	data () {
 		return {
+			loading: false
 		}
 	},
 	computed: {
@@ -39,16 +41,20 @@ export default {
 	watch: {
 		'Options.projectPath': function (nVal) {
 			if (nVal !== undefined) {
+				this.loading = true
 				this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
 				this.$store.dispatch('GET_PATH', this.Options.projectPath)
+				this.loading = false
 			}
 		}
 	},
 	methods: {
 		selectFolder () {		// Projektpfad auswählen und speichern
+			this.loading = true
 			this.$store.dispatch('DIALOG_PROJECT_PATH')	// Verzeichniss Dialog
 			this.$store.dispatch('SET_PROJECT_PATH')		// Projektpfad speichern
 			this.updateFolder()
+			this.loading = false
 		},
 		showFolder () {		// Ordner in Explorer öffnen
 			shell.openItem(this.Options.projectPath)
@@ -67,10 +73,12 @@ export default {
 		}
 	},
 	mounted: function () {
+		this.loading = true
 		if (this.Options.projectPath === undefined) {		// Projektpfad laden
 			this.$store.dispatch('GET_PROJECT_PATH')
 		}
 		this.updateFolder()
+		this.loading = false
 	},
 	components: {
 		FileLine
@@ -87,5 +95,18 @@ export default {
 	}
 	button:not([disabled]) {
 		cursor: pointer;
+	}
+	#loading {
+		position: absolute;
+		background: rgba(0, 0, 0, 0.25);
+		color: #fff;
+		text-align: center;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		padding-top: calc( 50vh - 25px );
+		font-size: 50px;
+		line-height: 1;
 	}
 </style>

@@ -120,7 +120,7 @@
 		},
 		mounted: function () {
 			this.$store.dispatch('GET_PROJECT_PATH')		// Parser ermitteln
-			if (!this.Options.useFile) {
+			if (!this.Options.useFile) {		// Demo laden
 				this.$store.dispatch('SET_USE_FILE', undefined)
 			}
 			this.loadData()
