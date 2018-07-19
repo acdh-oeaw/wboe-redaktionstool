@@ -73,11 +73,11 @@ export default {
 						if (pOn) {
 							if (parser[pPos].a !== undefined && v.a === undefined
 									&& parser[pPos].a !== undefined && v.a !== undefined && !equalObj(Object.keys(parser[pPos].a), Object.keys(v.a))) {
-								errors.push(addErrorToObj(v, 'Keine Attribute erwartet!'))
+								errors.push(addErrorToObj(v, 'Attribute fehlen!'))
 								pOn = false
 							}
-							if (parser[pPos].a === undefined && v.a !== undefined) {
-								errors.push(addErrorToObj(v, 'Attribute fehlen!'))
+							if ((parser[pPos].a === undefined || (parser[pPos].o && parser[pPos].o.attribut && parser[pPos].o.attribut.indexOf('none') > -1)) && v.a !== undefined) {
+								errors.push(addErrorToObj(v, 'Keine Attribute erwartet!'))
 								pOn = false
 							}
 							if (!(parser[pPos].o && parser[pPos].o.attribut && (parser[pPos].o.attribut.indexOf('edit') > -1 || parser[pPos].o.attribut.indexOf('variable') > -1))

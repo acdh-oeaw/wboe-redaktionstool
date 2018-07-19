@@ -147,14 +147,16 @@
 				if (aSel) { aSel.focus() }
 			}, 25),
 			setSelectedOption: function (aOpt) {		// Aktives Element, in Auswahl, als Wert mit Attributen setzen
-				var aAttr = this.getValOfSubProp(aOpt, 'a')
-				if (aAttr) {
-					Object.keys(aAttr).map(function (aAttrKey) {
-						if (!this.xmlObj.a) {
-							this.$set(this.xmlObj, 'a', {})
-						}
-						this.$set(this.xmlObj.a, aAttrKey, aAttr[aAttrKey])
-					}, this)
+				if (!this.isValInArrOfSubProp(this.xmlObj, 'o.attribut', 'none')) {
+					var aAttr = this.getValOfSubProp(aOpt, 'a')
+					if (aAttr) {
+						Object.keys(aAttr).map(function (aAttrKey) {
+							if (!this.xmlObj.a) {
+								this.$set(this.xmlObj, 'a', {})
+							}
+							this.$set(this.xmlObj.a, aAttrKey, aAttr[aAttrKey])
+						}, this)
+					}
 				}
 				var nVal = this.getValOfSubProp(aOpt, 'o.selectValue')
 				this.$set(this.xmlObj, 'v', ((nVal !== undefined) ? nVal : aOpt.v))

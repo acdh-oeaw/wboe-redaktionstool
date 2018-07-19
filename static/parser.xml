@@ -13,7 +13,7 @@
 						<title objParserValue="edit required" objParserTitle="Titel"></title>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle">Editor</resp>
-							<name objParserValue="edit required" objParserTitle="Name"></name>
+							<name objParserValue="required" objParserAttribut="none" objParserFxForm="dboeTeam" objParserTitle="Name"></name>
 						</respStmt>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle">Encoding Scheme</resp>
@@ -23,7 +23,14 @@
 						</respStmt>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle isBlock">DBOE Team</resp>
-							<name xml:id="" objParserTag="multibleSiblings" objParserAttribut="variable" objParserTitle="Name" objParserFxForm="dboeTeam"></name>
+							<name xml:id="AL">Alexandra N. Lenz</name>
+							<name xml:id="PhS">Philip Stöckle</name>
+							<name xml:id="AG">Andreas Gellan</name>
+							<name xml:id="PZ">Patrick Zeithuber</name>
+							<name xml:id="SW">Sabine Wahl</name>
+							<name xml:id="SS">Sonja Schwaiger</name>
+							<name xml:id="JD">Jan Braun</name>
+							<name xml:id="AB">Angela Bergmayer</name>
 						</respStmt>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle isBlock">Student assistants</resp>
