@@ -7,21 +7,22 @@
 	</xmlParserHeader>
 	<objParserContent>
 		<TEI xmlns="http://www.tei-c.org/ns/1.0">
-			<teiHeader objParserTitle="Kopfzeile" objParserEditorLayout="panel collapse" objParserEditorClass="test">
+			<teiHeader>
 				<?options { "title": "Kopfzeile",
 										"layout": {
-											class: "test"
+											"class": "test"
 										},
 										"editor": {
 											"layout": ["panel", "collapse"]
-										} ?>
+										}
+									} ?>
 				<fileDesc>
 					<titleStmt>
 						<?copy {"id": "titel"} ?>
-						<title objParserValue="edit required" objParserTitle="Titel">
+						<title>
 							<?options { "id": "title",
 													"title": "Titel",
-													"value": ["edit", "required"]
+													"value": ["edit", {"required": {"use": true}}]
 												} ?>
 						</title>
 						<respStmt objParserEditorLayout="inlineChilds">
@@ -38,9 +39,9 @@
 							<resp objParserEditorLayout="isTitle isBlock">DBOE Team</resp>
 							<name>
 								<?options { "title": "Name",
-														"attributes": ["xml:id"],
+														"attributes": [{"xml:id": {"type": "variable"}}],
 														"value": ["required"]
-								} ?>
+													} ?>
 								<?for [
 												{"attributes": { "xml:id": "AL"  }, "value": "Alexandra N. Lenz"},
 												{"attributes": { "xml:id": "PhS" }, "value": "Philip Stöckle"},

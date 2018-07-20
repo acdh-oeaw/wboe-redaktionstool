@@ -30,10 +30,12 @@
 		},
 		computed: {
 			...mapState(['Options']),
+			...mapState(['Parser']),
 		},
 		watch: {
 		},
 		mounted: function () {
+			this.$store.dispatch('LOAD_PARSER_FILE')
 		},
 		methods: {
 		},
