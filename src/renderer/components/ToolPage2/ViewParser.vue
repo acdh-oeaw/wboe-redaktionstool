@@ -53,6 +53,7 @@
 					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
 						{{ attr + ((attrOpt.value) ? ':' : '') }}
 						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
+						<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(getValOfSubProp(content, 'p.options.attributes.' + attr + '.possibleValues'))"/>
 						<font-awesome-icon :title="'type: ' + attrOpt.type" :icon="((attrOpt.type === 'fixed' || attrOpt.type === undefined) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
 					</span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
