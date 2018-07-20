@@ -8,9 +8,22 @@
 	<objParserContent>
 		<TEI xmlns="http://www.tei-c.org/ns/1.0">
 			<teiHeader objParserTitle="Kopfzeile" objParserEditorLayout="panel collapse" objParserEditorClass="test">
+				<?options { "title": "Kopfzeile",
+										"layout": {
+											class: "test"
+										},
+										"editor": {
+											"layout": ["panel", "collapse"]
+										} ?>
 				<fileDesc>
 					<titleStmt>
-						<title objParserValue="edit required" objParserTitle="Titel"></title>
+						<?copy {"id": "titel"} ?>
+						<title objParserValue="edit required" objParserTitle="Titel">
+							<?options { "id": "title",
+													"title": "Titel",
+													"value": ["edit", "required"]
+												} ?>
+						</title>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle">Editor</resp>
 							<name objParserValue="required" objParserAttribut="none" objParserFxForm="dboeTeam" objParserTitle="Name"></name>
@@ -23,14 +36,22 @@
 						</respStmt>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle isBlock">DBOE Team</resp>
-							<name xml:id="AL">Alexandra N. Lenz</name>
-							<name xml:id="PhS">Philip Stöckle</name>
-							<name xml:id="AG">Andreas Gellan</name>
-							<name xml:id="PZ">Patrick Zeithuber</name>
-							<name xml:id="SW">Sabine Wahl</name>
-							<name xml:id="SS">Sonja Schwaiger</name>
-							<name xml:id="JD">Jan Braun</name>
-							<name xml:id="AB">Angela Bergmayer</name>
+							<name>
+								<?options { "title": "Name",
+														"attributes": ["xml:id"],
+														"value": ["required"]
+								} ?>
+								<?for [
+												{"attributes": { "xml:id": "AL"  }, "value": "Alexandra N. Lenz"},
+												{"attributes": { "xml:id": "PhS" }, "value": "Philip Stöckle"},
+												{"attributes": { "xml:id": "AG"  }, "value": "Andreas Gellan"},
+												{"attributes": { "xml:id": "PZ"  }, "value": "Patrick Zeithuber"},
+												{"attributes": { "xml:id": "SW"  }, "value": "Sabine Wahl"},
+												{"attributes": { "xml:id": "SS"  }, "value": "Sonja Schwaiger"},
+												{"attributes": { "xml:id": "JD"  }, "value": "Jan Braun"},
+												{"attributes": { "xml:id": "AB"  }, "value": "Angela Bergmayer"}
+											] ?>
+							</name>
 						</respStmt>
 						<respStmt objParserEditorLayout="inlineChilds">
 							<resp objParserEditorLayout="isTitle isBlock">Student assistants</resp>

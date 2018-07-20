@@ -58,7 +58,7 @@ export default {
 									if (parser[pPos - 1] && parser[pPos - 1].o && parser[pPos - 1].o.tag && parser[pPos - 1].o.tag.indexOf('multibleSiblings') > -1 && parser[pPos - 1].n === v.n) {
 										pPos -= 1
 									} else {
-										errors.push(addErrorToObj(v, 'Unerwarteter Tag!'))
+										errors.push(addErrorToObj(v, 'Unerwarteter Tag! (' + parser[pPos].n + ' !== ' + v.n + ')'))
 										tagError = true
 										pOn = false
 									}
