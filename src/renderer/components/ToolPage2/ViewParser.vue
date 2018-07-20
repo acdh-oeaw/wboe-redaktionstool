@@ -1,0 +1,210 @@
+<template>
+	<div class="start" v-if="parser !== undefined && content === undefined">
+		<b-card header="Header" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
+			<div slot="header"><button v-b-toggle="'collapse-header'" class="header-btn-toggle" style="color: #fff"><b>Header</b><font-awesome-icon :icon="((headerOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="headerOpen" id="collapse-header">
+				<b-card-body>
+					<div v-if="parser.header">
+						<ul class="mi0 pl20">
+							<li v-for="line in parser.header.split('\n')">{{ line }}</li>
+						</ul>
+					</div>
+					<div v-else>
+						Keine Header-Daten vorhanden
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+		<b-card header="Content" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
+			<div slot="header"><button v-b-toggle="'collapse-content'" class="header-btn-toggle" style="color: #fff;"><b>Content</b><font-awesome-icon :icon="((contentOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="contentOpen" id="collapse-content">
+				<b-card-body>
+					<div v-if="parser.content">
+						<ViewParser :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.content"/>
+					</div>
+					<div v-else>
+						Keine Header-Daten vorhanden
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+		<b-card header="System" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
+			<div slot="header"><button v-b-toggle="'collapse-system'" class="header-btn-toggle" style="color: #fff;"><b>System</b><font-awesome-icon :icon="((systemOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="systemOpen" id="collapse-system">
+				<b-card-body>
+					<div v-if="parser.system">
+						<ViewParser :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.system"/>
+					</div>
+					<div v-else>
+						Keine Header-Daten vorhanden
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+	</div>
+
+	<div class="obj" v-else-if="content !== undefined">
+		<b-card :header="content.n" no-body class="mib20 paneldecent">
+			<div slot="header">
+				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
+					<span v-if="getValOfSubProp(content, 'p.options.title.use')"><b>{{ getValOfSubProp(content, 'p.options.title.value') }}</b> ({{ content.n }})</span>
+					<span v-else><b>{{ content.n }}</b></span>
+					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
+						{{ attr + ((attrOpt.value) ? ':' : '') }}
+						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
+						<font-awesome-icon :title="'type: ' + attrOpt.type" :icon="((attrOpt.type === 'fixed' || attrOpt.type === undefined) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
+					</span>
+					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
+				</button>
+			</div>
+			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
+				<b-card-body>
+					<div v-if="content.p">
+						<button @click="parserOpen = !parserOpen" class="btn-none"><b>Parser{{ ((parserOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((parserOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
+						<code class="lb" v-if="parserOpen">{{ content.p }}</code>
+					</div>
+					<div v-if="content.c">
+						<b>Kinder:</b><br>
+						<ViewParser :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+	</div>
+	<div class="error" v-else>
+		Weder "parser" noch "content" !!!!
+	</div>
+
+</template>
+
+<script>
+	export default {
+		name: 'ViewParser',
+		props: {
+			parser: Object,
+			content: Object,
+		},
+		data () {
+			return {
+				'isOpen': true,
+				'headerOpen': true,
+				'contentOpen': true,
+				'systemOpen': true,
+				'parserOpen': false,
+			}
+		},
+		computed: {
+		}
+	}
+</script>
+
+<style scoped>
+	code.lb {
+		white-space: pre;
+	}
+	.header-btn-toggle {
+		margin: 0px;
+		padding: 0px;
+		border: none;
+		background: none;
+		width: 100%;
+		text-align: left;
+	}
+	.header-btn-toggle > .fa-icon {
+		font-size: 23px;
+	}
+	.paneldecent > .card-header {
+		padding: 0.1rem 0.5rem;
+	}
+	.paneldecent > .card-body, .paneldecent > .collapse > .card-body, .paneldecent > .card-body, .paneldecent > .collapsing > .card-body {
+		padding: 0.5rem;
+	}
+	.obj > .obj {
+		margin-left: 23px;
+	}
+	.item {
+		border: 1px solid #ddd;
+		margin-top: -1px;
+		padding: 1px 6px;
+		border-radius: 20px;
+	}
+	.item.danger {
+		background: #fee;
+	}
+	.item > .title {
+		margin-left: 5px;
+		padding: 4px 12px;
+		font-weight: bold;
+	}
+	.item > button {
+		margin: 0px;
+		padding: 0px;
+		background: none;
+		border: none;
+		width: 17px;
+	}
+	.item > .icon ~ .icon {
+		margin-left: 5px;
+	}
+	.item > .error {
+		float: right;
+		margin-left: 15px;
+	}
+	.item > .attributes {
+		font-size: 11px;
+		color: #eee;
+		float: right;
+		margin-top: 3px;
+		margin-right: -3px;
+	}
+	.item > .attributes > .attr {
+		background: #888;
+		padding: 2px 6px;
+		border-radius: 8px;
+		margin-left: 1px;
+	}
+	.item > .attributes > .attr > i {
+		font-style: normal;
+		color: #666;
+		background: #eee;
+		margin-left: 5px;
+		padding: 1px 6px 1px 4px;
+		border-radius: 0px 10px 10px 0px;
+		margin-right: -5px;
+	}
+	.item > .value {
+	}
+	.item > .value:before {
+		content: "> ";
+	}
+	.add-item {
+		background: #eef;
+	}
+	.add-item > button {
+		width: 100%;
+		text-align: left;
+	}
+	.item > button:not([disabled]), .add-item > button:not([disabled]) {
+		cursor: pointer;
+	}
+	.item.comment-item {
+		font-size: 12px;
+		background: #eee;
+	}
+	.attribut {
+		display: inline-block;
+		color: #eee;
+		background: #444;
+		margin-left: 5px;
+		font-size: 12px;
+		line-height: 1.2;
+		padding: 3px 6px 2px 8px;
+		border-radius: 10px;
+	}
+	.attribut > span {
+		background: #eee;
+		color: #444;
+		padding: 1px 5px;
+		margin-right: 3px;
+	}
+</style>

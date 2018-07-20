@@ -7,8 +7,9 @@
 	</xmlParserHeader>
 	<objParserContent>
 		<TEI xmlns="http://www.tei-c.org/ns/1.0">
-			<teiHeader>
+			<teiHeader test="Test" test2="Test 2">
 				<?options { "title": "Kopfzeile",
+										"attributes": [{"test3": {"value": "Test 3"}}, "test4"],
 										"layout": {
 											"class": "test"
 										},

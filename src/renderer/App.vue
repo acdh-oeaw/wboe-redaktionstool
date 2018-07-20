@@ -78,11 +78,26 @@
 	.ohidden {
 		overflow: hidden;
 	}
+	.p0 {
+		padding: 0px;
+	}
 	.p20 {
 		padding: 20px;
 	}
+	.pl10 {
+		padding-left: 10px;
+	}
+	.pl20 {
+		padding-left: 20px;
+	}
+	.mi0 {
+		margin: 0px;
+	}
 	.mit0 {
 		margin-top: 0px;
+	}
+	.mit5 {
+		margin-top: 5px;
 	}
 	.mil5 {
 		margin-left: 5px;

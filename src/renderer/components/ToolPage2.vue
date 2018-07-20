@@ -14,18 +14,25 @@
 			</b-tab>
 			<b-tab title="XML">
 			</b-tab>
+			<b-tab title="Parser">
+				<div class="viewparser scroll p20">
+					<ViewParser :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content"/>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
+				</div>
+			</b-tab>
 		</b-tabs>
 	</div>
 </template>
 
 <script>
 	import { mapState } from 'vuex'
+	import ViewParser from './ToolPage2/ViewParser'
 
 	export default {
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 0,
+				aTab: 4,
 			}
 		},
 		computed: {
@@ -40,6 +47,7 @@
 		methods: {
 		},
 		components: {
+			ViewParser
 		}
 	}
 </script>

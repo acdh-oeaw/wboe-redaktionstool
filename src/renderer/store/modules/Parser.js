@@ -73,7 +73,7 @@ const actions = {
 			if (xml.nodeType === xml.ELEMENT_NODE) {		// Reguläres Element
 				obj.n = xml.nodeName
 				if (obj.n === 'xmlParserHeader') {		// Header auswerten
-					header = xml.textContent
+					header = xml.textContent.trim()
 					return {'unused': true}
 				}
 				if (childs.length > 0) {
@@ -113,15 +113,14 @@ const actions = {
 					processes.forEach(function (process) {
 						if (process.n === 'options') {
 							var aProcess = decompressProcessingOptions(process.p)
-							console.log(aProcess)
+							obj.p.options = combineProcessingOptions(obj.p.options, aProcess)
 						} else {
-							// console.log('Unbekannte "Processing Instruction": ' + process.n)
+							console.log('Unbekannte "Processing Instruction": ' + process.n)
 						}
 					})
-					// obj.p = processes
 				}
 				// Processing Instruction verarbeiten!
-
+				// ToDo ...
 				rObj = {'obj': obj}		// Sonstiges
 			} else if (xml.nodeType === xml.PROCESSING_INSTRUCTION_NODE) {		// Processing Instruction Element
 				if (xml.nodeName === 'copy') {
@@ -132,12 +131,12 @@ const actions = {
 			}
 			return rObj
 		}
-		var parserData = xml2Obj(xmlDom)
-		console.log('parserData', parserData)
-		console.log('header', header)
-		console.log('content', content)
-		console.log('system', system)
-		console.log('ids', ids)
+		xml2Obj(xmlDom)
+		// console.log('parserData', parserData)
+		// console.log('header', header)
+		// console.log('content', content)
+		// console.log('system', system)
+		// console.log('ids', ids)
 		commit('SET_PARSER', { parser: {'header': header, 'content': content, 'system': system, 'ids': ids} })
 	}
 }
@@ -148,12 +147,27 @@ export default {
 	actions
 }
 
+function combineProcessingOptions (orgOptions, newOptions) {
+	var comOptions = JSON.parse(JSON.stringify(orgOptions))
+	if (Array.isArray(newOptions)) {
+		console.log('combineProcessingOptions - array !!!???')
+	} else if (typeof newOptions === 'object') {
+		for (var key in newOptions) {
+			if (comOptions[key] !== undefined) {
+				comOptions[key] = combineProcessingOptions(comOptions[key], newOptions[key])
+			} else {
+				comOptions[key] = newOptions[key]
+			}
+		}
+	}
+	return comOptions
+}
 function decompressProcessingOptions (options) {		// Optionen dekomprimieren
 	var deflat = JSON.parse(JSON.stringify(options))
 	for (var key in deflat) {
 		// title
 		if (key === 'title' && typeof deflat[key] === 'string') {
-			deflat[key] = {'value': deflat[key], 'type': 'fixed'}
+			deflat[key] = {'value': deflat[key], 'use': true}
 		}
 		// attributes
 		if (key === 'attributes' && deflat[key] !== undefined) {
