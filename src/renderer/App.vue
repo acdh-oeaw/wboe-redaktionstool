@@ -10,6 +10,7 @@
 							<b-navbar-nav class="ml-auto">
 								<b-nav-item to="/">Home</b-nav-item>
 								<b-nav-item to="/tool">Tool</b-nav-item>
+								<b-nav-item to="/tool2">Tool 2</b-nav-item>
 							</b-navbar-nav>
 					</b-collapse>
 				</div>
