@@ -148,7 +148,7 @@ export default {
 	actions
 }
 
-function decompressProcessingOptions (options) {
+function decompressProcessingOptions (options) {		// Optionen dekomprimieren
 	var deflat = JSON.parse(JSON.stringify(options))
 	for (var key in deflat) {
 		// title
@@ -157,39 +157,11 @@ function decompressProcessingOptions (options) {
 		}
 		// attributes
 		if (key === 'attributes' && deflat[key] !== undefined) {
-			if (typeof deflat[key] === 'string') {
-				deflat[key] = {[deflat[key]]: {'type': 'variable'}}
-			} else if (Array.isArray(deflat[key])) {
-				let nObjValue = {}
-				deflat[key].forEach(function (attr) {
-					if (typeof attr === 'string') {
-						nObjValue[deflat[key]] = {'type': 'variable'}
-					} else if (typeof attr === 'object') {
-						for (var attrKey in attr) {
-							nObjValue[attrKey] = attr[attrKey]
-						}
-					}
-				})
-				deflat[key] = nObjValue
-			}
+			deflat[key] = dcpoSimpleToComplex(deflat[key], {'type': 'variable'})
 		}
 		// value
 		if (key === 'value' && deflat[key] !== undefined) {
-			if (typeof deflat[key] === 'string') {
-				deflat[key] = {[deflat[key]]: {'use': true}}
-			} else if (Array.isArray(deflat[key])) {
-				let nObjValue = {}
-				deflat[key].forEach(function (val) {
-					if (typeof val === 'string') {
-						nObjValue[val] = {'use': true}
-					} else if (typeof val === 'object') {
-						for (var valKey in val) {
-							nObjValue[valKey] = val[valKey]
-						}
-					}
-				})
-				deflat[key] = nObjValue
-			}
+			deflat[key] = dcpoSimpleToComplex(deflat[key], {'use': true})
 		}
 		// layout
 		if ((key === 'layout' && deflat[key] !== undefined)) {
@@ -207,12 +179,49 @@ function decompressProcessingOptions (options) {
 	// console.log('decompressProcessingOptions', JSON.parse(JSON.stringify(options)), JSON.parse(JSON.stringify(deflat)))
 	return deflat
 }
-// Layout
-function checkLayout (layout) {
+
+function checkLayout (layout) {		// Layout dekomprimieren
 	var deflat = JSON.parse(JSON.stringify(layout))
-	//
-	console.log('layout', JSON.parse(JSON.stringify(layout)), JSON.parse(JSON.stringify(deflat)))
+	if (Array.isArray(deflat)) {
+		var nObjValue = {}
+		deflat.forEach(function (value) {
+			if (typeof value === 'string') {
+				nObjValue[value] = {'use': true}
+			} else if (typeof value === 'object') {
+				for (var valueKey in value) {
+					nObjValue[valueKey] = value[valueKey]
+				}
+			}
+		})
+		deflat = nObjValue
+	}
+	if (typeof deflat === 'object') {
+		for (var key in deflat) {
+			if (key === 'class' && deflat[key] !== undefined) {
+				deflat[key] = dcpoSimpleToComplex(deflat[key], {'use': true})
+			}
+		}
+	}
+	// console.log('layout', JSON.parse(JSON.stringify(layout)), JSON.parse(JSON.stringify(deflat)), Array.isArray(deflat))
 	return deflat
+}
+function dcpoSimpleToComplex (content, standard) {
+	if (typeof content === 'string') {
+		return {[content]: standard}
+	} else if (Array.isArray(content)) {
+		var nObjValue = {}
+		content.forEach(function (value) {
+			if (typeof value === 'string') {
+				nObjValue[value] = standard
+			} else if (typeof value === 'object') {
+				for (var valueKey in value) {
+					nObjValue[valueKey] = value[valueKey]
+				}
+			}
+		})
+		return nObjValue
+	}
+	return content
 }
 
 function xmlDomCheck (xmlDom, error = false) {		// Eventuelle Fehlermeldung des DOM-Objekts ausgeben

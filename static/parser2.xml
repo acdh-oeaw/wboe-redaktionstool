@@ -13,7 +13,7 @@
 											"class": "test"
 										},
 										"editor": {
-											"layout": ["panel", "collapse"]
+											"layout": ["panel", "collapse", {"class": ["editor-test", "bla"]}]
 										}
 									} ?>
 				<fileDesc>
