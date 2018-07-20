@@ -57,6 +57,7 @@ const actions = {
 			// Kinder verarbeiten
 			var childs = []
 			var processes = []
+			var text = undefined
 			if (xml.childNodes.length > 0) {
 				xml.childNodes.forEach(function (v) {
 					var child = xml2Obj(v)
@@ -66,6 +67,8 @@ const actions = {
 						} else {
 							processes.push(child.process)
 						}
+					} else if (child.text !== undefined) {
+						text = child.text
 					}
 				})
 			}
@@ -107,19 +110,40 @@ const actions = {
 						obj.p.options.attributes[xml.attributes[i].nodeName] = {'value': xml.attributes[i].nodeValue, 'type': 'fixed'}
 					}
 				}
-				obj.p.options = decompressProcessingOptions(obj.p.options)
+				// Value auswerten
+				if (text !== undefined && childs.length === 0) {
+					if (obj.p.options.value) {
+						obj.p.options.value = combineProcessingOptions(obj.p.options.value, {'is': {'value': text, 'use': true}})
+					} else {
+						obj.p.options.value = {'is': {'value': text, 'use': true}}
+					}
+				}
 				// Processing Instruction hinzufügen
+				obj.p.options = decompressProcessingOptions(obj.p.options)
 				if (processes.length > 0) {
 					processes.forEach(function (process) {
 						if (process.n === 'options') {
-							var aProcess = decompressProcessingOptions(process.p)
-							obj.p.options = combineProcessingOptions(obj.p.options, aProcess)
+							obj.p.options = combineProcessingOptions(obj.p.options, decompressProcessingOptions(process.p))
 						} else {
 							console.log('Unbekannte "Processing Instruction": ' + process.n)
 						}
 					})
+					// Processing Instruction verarbeiten!
+					if (obj.p.options.value && obj.p.options.value.innerText && obj.p.options.value.innerText.use) {
+						delete obj.c
+						text = ''
+						if (xml.childNodes.length > 0) {
+							text = xml.innerHTML.replace(/<\?[^?>]*\?>/g, '').trim()
+							console.log(text)
+						}
+						if (obj.p.options.value) {
+							obj.p.options.value = combineProcessingOptions(obj.p.options.value, {'is': {'value': text, 'use': true}})
+						} else {
+							obj.p.options.value = {'is': {'value': text, 'use': true}}
+						}
+					}
+					// ToDo ...
 				}
-				// Processing Instruction verarbeiten!
 				// ToDo ...
 				rObj = {'obj': obj}		// Sonstiges
 			} else if (xml.nodeType === xml.PROCESSING_INSTRUCTION_NODE) {		// Processing Instruction Element
@@ -127,6 +151,11 @@ const actions = {
 					// ToDo: COPY?!?
 				} else {
 					return {'isProcess': true, 'process': {'n': xml.nodeName, 'p': JSON.parse(xml.textContent)}}
+				}
+			} else if (xml.nodeType === xml.TEXT_NODE) {		// Textnode auswerten
+				var nVal = xml.nodeValue.trim()
+				if (nVal.length > 0) {
+					return {'text': nVal, 'unused': true}
 				}
 			}
 			return rObj
@@ -147,21 +176,10 @@ export default {
 	actions
 }
 
-function combineProcessingOptions (orgOptions, newOptions) {
-	var comOptions = JSON.parse(JSON.stringify(orgOptions))
-	if (Array.isArray(newOptions)) {
-		console.log('combineProcessingOptions - array !!!???')
-	} else if (typeof newOptions === 'object') {
-		for (var key in newOptions) {
-			if (comOptions[key] !== undefined) {
-				comOptions[key] = combineProcessingOptions(comOptions[key], newOptions[key])
-			} else {
-				comOptions[key] = newOptions[key]
-			}
-		}
-	}
-	return comOptions
-}
+const defaultLayout = {'use': true}
+const defaultValue = {'use': true}
+const defaultAttributes = {'type': 'variable'}
+
 function decompressProcessingOptions (options) {		// Optionen dekomprimieren
 	var deflat = JSON.parse(JSON.stringify(options))
 	for (var key in deflat) {
@@ -171,11 +189,18 @@ function decompressProcessingOptions (options) {		// Optionen dekomprimieren
 		}
 		// attributes
 		if (key === 'attributes' && deflat[key] !== undefined) {
-			deflat[key] = dcpoSimpleToComplex(deflat[key], {'type': 'variable'})
+			deflat[key] = dcpoSimpleToComplex(deflat[key], defaultAttributes)
+			for (var attrKey in deflat[key]) {
+				for (var attrOption in deflat[key][attrKey]) {
+					if (attrOption === 'possibleValues' && typeof deflat[key][attrKey][attrOption] === 'string') {
+						deflat[key][attrKey][attrOption] = [deflat[key][attrKey][attrOption]]
+					}
+				}
+			}
 		}
 		// value
 		if (key === 'value' && deflat[key] !== undefined) {
-			deflat[key] = dcpoSimpleToComplex(deflat[key], {'use': true})
+			deflat[key] = dcpoSimpleToComplex(deflat[key], defaultValue)
 		}
 		// layout
 		if ((key === 'layout' && deflat[key] !== undefined)) {
@@ -194,13 +219,29 @@ function decompressProcessingOptions (options) {		// Optionen dekomprimieren
 	return deflat
 }
 
+function combineProcessingOptions (orgOptions, newOptions) {
+	var comOptions = JSON.parse(JSON.stringify(orgOptions))
+	if (Array.isArray(newOptions)) {
+		console.log('combineProcessingOptions - array !!!???')
+	} else if (typeof newOptions === 'object') {
+		for (var key in newOptions) {
+			if (comOptions[key] !== undefined) {
+				comOptions[key] = combineProcessingOptions(comOptions[key], newOptions[key])
+			} else {
+				comOptions[key] = newOptions[key]
+			}
+		}
+	}
+	return comOptions
+}
+
 function checkLayout (layout) {		// Layout dekomprimieren
 	var deflat = JSON.parse(JSON.stringify(layout))
 	if (Array.isArray(deflat)) {
 		var nObjValue = {}
 		deflat.forEach(function (value) {
 			if (typeof value === 'string') {
-				nObjValue[value] = {'use': true}
+				nObjValue[value] = defaultLayout
 			} else if (typeof value === 'object') {
 				for (var valueKey in value) {
 					nObjValue[valueKey] = value[valueKey]
@@ -212,7 +253,7 @@ function checkLayout (layout) {		// Layout dekomprimieren
 	if (typeof deflat === 'object') {
 		for (var key in deflat) {
 			if (key === 'class' && deflat[key] !== undefined) {
-				deflat[key] = dcpoSimpleToComplex(deflat[key], {'use': true})
+				deflat[key] = dcpoSimpleToComplex(deflat[key], defaultLayout)
 			}
 		}
 	}
@@ -229,7 +270,7 @@ function dcpoSimpleToComplex (content, standard) {
 				nObjValue[value] = standard
 			} else if (typeof value === 'object') {
 				for (var valueKey in value) {
-					nObjValue[valueKey] = value[valueKey]
+					nObjValue[valueKey] = combineProcessingOptions(standard, value[valueKey])
 				}
 			}
 		})

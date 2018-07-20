@@ -26,21 +26,29 @@
 													"value": ["edit", {"required": {"use": true}}]
 												} ?>
 						</title>
-						<respStmt objParserEditorLayout="inlineChilds">
-							<resp objParserEditorLayout="isTitle">Editor</resp>
-							<name objParserValue="required" objParserAttribut="none" objParserFxForm="dboeTeam" objParserTitle="Name"></name>
+						<respStmt>
+							<resp>Editor</resp>
+							<name>
+								<?options {
+														"value": ["edit", "required", {"is": {"value": "Testname"}}]
+													} ?>
+							</name>
 						</respStmt>
-						<respStmt objParserEditorLayout="inlineChilds">
-							<resp objParserEditorLayout="isTitle">Encoding Scheme</resp>
+						<respStmt>
+							<resp>
+								<?options {
+														"value": ["innerText"]
+													} ?>
+								Encoding Scheme</resp>
 							<name>Jack Bowers</name>
 							<name>Daniel Schopper</name>
 							<name>Omar Siam</name>
 						</respStmt>
-						<respStmt objParserEditorLayout="inlineChilds">
-							<resp objParserEditorLayout="isTitle isBlock">DBOE Team</resp>
+						<respStmt>
+							<resp>DBOE Team</resp>
 							<name>
 								<?options { "title": "Name",
-														"attributes": [{"xml:id": {"type": "variable"}}],
+														"attributes": [{"xml:id": {"type": "variable", "possibleValues": ["AL", "PhS", "AG", "PZ", "SW", "SS", "JD", "AB"]}}],
 														"value": ["required"]
 													} ?>
 								<?for [
@@ -55,116 +63,20 @@
 											] ?>
 							</name>
 						</respStmt>
-						<respStmt objParserEditorLayout="inlineChilds">
-							<resp objParserEditorLayout="isTitle isBlock">Student assistants</resp>
-							<name objParserTag="multibleSiblings" objParserValue="edit" objParserTitle="Name"></name>
+						<respStmt>
+							<resp>Student assistants</resp>
+							<name></name>
 						</respStmt>
 					</titleStmt>
-					<publicationStmt>
-						<p>Publication Information</p>
-					</publicationStmt>
-					<sourceDesc>
-						<p>Information about the source</p>
-					</sourceDesc>
 				</fileDesc>
 			</teiHeader>
-			<text objParserTitle="Text" objParserEditorLayout="panel collapse">
+			<text>
 				<body>
-					<entry>
-						<form type="lemma" objParserAttribut="variable" objParserTag="multibleSiblings" objParserTitle="Lemma" objParserEditorLayout="boldTitle" objParserTagAddTitle="Ein &quot;Lemma&quot; hinzufügen">
-							<orth objParserValue="edit" objParserTitle="Orth" objParserEditorLayout="inline"></orth>
-						</form>
-						<gramGrp objParserTitle="GramGrp" objParserEditorLayout="boldTitle">
-							<iType objParserValue="edit" objParserTag="canBeEmpty" objParserTitle="iType"></iType>
-							<gram type="pos" objParserValue="edit" objParserTitle="Gram Pos"></gram>
-							<gram type="gender" objParserValue="edit" objParserTitle="Gram Gender"></gram>
-						</gramGrp>
-						<form type="variant" subtype="diminutive" xml:id="" objParserAttribut="edit" objParserTag="multibleSiblings canBeEmpty" objParserTitle="Form Variant Diminutive" objParserEditorLayout="boldTitle panelDecent">
-							<orth objParserValue="edit" objParserTitle="Name"></orth>
-							<gramGrp objParserTitle="GramGrp" objParserEditorLayout="inline boldTitle">
-								<gram type="gender" objParserValue="edit" objParserTitle="Gram Gender"></gram>
-							</gramGrp>
-						</form>
-						<usg type="geo" objParserTag="multibleSiblings">
-							<placeName type="grossregion" objParserValue="edit" objParserTitle="Ort"></placeName>
-						</usg>
-						<form type="variant" subtype="diminutive" objParserAttribut="variable" objParserTag="multibleSiblings">
-							<pron xml:lang="bar-AT" objParserValue="edit" objParserTitle="Pron"></pron>
-							<usg type="geo" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="geo">
-								<placeName type="grossregion" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
-							</usg>
-						</form>
-						<etym objParserTitle="Etym" objParserEditorLayout="boldTitle frameDecent">
-							<desc part="" objParserAttribut="variable" objParserTitle="Desc" objParserValue="edit" objParserTag="canBeEmpty"></desc>
-							<cit type="etymon" objParserTitle="Etymon" objParserEditorLayout="boldTitle">
-								<gramGrp objParserTag="canBeEmpty" objParserTitle="GramGrp">
-									<gram type="pos" objParserValue="edit" objParserTitle="Gram"></gram>
-								</gramGrp>
-								<lang objParserTitle="Lang" objParserTag="canBeEmpty" objParserValue="edit"></lang>
-								<form objParserTitle="Form" objParserEditorLayout="boldTitle inline">
-									<orth xml:lang="" objParserAttribut="variable" objParserValue="edit required" objParserTitle="Orth"></orth>
-								</form>
-								<def objParserValue="edit required" objParserTitle="Def">Darmwind</def>
-							</cit>
-							<ref type="bibl" target="" objParserAttribut="edit" objParserTitle="Ref Bibl" objParserEditorLayout="boldTitle inline">
-								<citedRange objParserValue="edit" objParserTitle="Cited Range"></citedRange>
-							</ref>
-						</etym>
-						<sense objParserTag="multibleSiblings" objParserTitle="Sense" objParserEditorLayout="boldTitle frameDecent">
-							<ref type="form" objParserTag="canBeEmpty">
-								<text objParserText="text" objParserValue="edit" objParserTitle="Ref Form Text" objParserTag="canBeEmpty"></text>
-								<oRef target="" objParserAttribut="variable"></oRef>
-							</ref>
-							<def objParserValue="edit" objParserTitle="Def"></def>
-							<usg type="geo" objParserTag="multibleSiblings" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="Usg Geo">
-								<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
-							</usg>
-							<cit type="example" objParserTag="canBeEmpty">
-								<quote xml:lang="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Quote"></quote>
-								<usg type="geo" objParserEditorLayout="inlineChilds">
-									<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
-								</usg>
-							</cit>
-						</sense>
-						<re objParserTag="multibleSiblings" objParserTitle="re" objParserEditorLayout="frameDecent boldTitle">
-							<form type="lemma" subtype="" objParserAttribut="variable" objParserTitle="Lemma" objParserEditorLayout="boldTitle">
-								<orth objParserValue="edit required" objParserTitle="Orth" objParserEditorLayout="inline"></orth>
-							</form>
-							<sense objParserTag="canBeEmpty" objParserTitle="Sense" objParserEditorLayout="boldTitle">
-								<def  objParserTag="canBeEmpty" objParserValue="edit" objParserTitle="Def"></def>
-								<usg type="" objParserTag="canBeEmpty" objParserValue="edit" objParserAttribut="variable" objParserTitle="Usg"></usg>
-							</sense>
-							<usg type="geo" objParserTag="canBeEmpty" objParserEditorLayout="inlineChilds boldTitle" objParserTitle="Usg Geo">
-								<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
-							</usg>
-							<cit type="example" objParserTag="canBeEmpty" objParserTitle="Example" objParserEditorLayout="boldTitle">
-								<quote xml:lang="" objParserTag="canBeEmpty" objParserValue="edit" objParserAttribut="variable" objParserTitle="quote"></quote>
-								<ref type="" target="" objParserTag="canBeEmpty" objParserAttribut="variable" objParserTitle="Variable">
-									<citedRange objParserValue="edit" objParserTitle="Cited Range"></citedRange>
-								</ref>
-								<usg type="geo" objParserEditorLayout="inlineChilds">
-									<placeName type="" objParserAttribut="variable" objParserValue="edit" objParserTitle="Ort" objParserTag="multibleSiblings"></placeName>
-								</usg>
-							</cit>
-						</re>
-					</entry>
 				</body>
 			</text>
 		</TEI>
 	</objParserContent>
 	<objParserSystem>
-		<objParserFxForm>
-			<select id="dboeTeam">
-				<option xml:id="" objParserSelectValue="">Bitte auswählen</option>
-				<option xml:id="AL">Alexandra N. Lenz</option>
-				<option xml:id="PhS">Philip Stöckle</option>
-				<option xml:id="AG">Andreas Gellan</option>
-				<option xml:id="PZ">Patrick Zeithuber</option>
-				<option xml:id="SW">Sabine Wahl</option>
-				<option xml:id="SS">Sonja Schwaiger</option>
-				<option xml:id="JD">Jan Braun</option>
-				<option xml:id="AB">Angela Bergmayer</option>
-			</select>
-		</objParserFxForm>
+
 	</objParserSystem>
 </objParser>

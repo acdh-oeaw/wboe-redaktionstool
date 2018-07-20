@@ -49,6 +49,7 @@
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
 					<span v-if="getValOfSubProp(content, 'p.options.title.use')"><b>{{ getValOfSubProp(content, 'p.options.title.value') }}</b> ({{ content.n }})</span>
 					<span v-else><b>{{ content.n }}</b></span>
+					<span class="val" v-if="getValOfSubProp(content, 'p.options.value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
 					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
 						{{ attr + ((attrOpt.value) ? ':' : '') }}
 						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
@@ -59,6 +60,10 @@
 			</div>
 			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
 				<b-card-body>
+					<div v-if="getValOfSubProp(content, 'p.options.value.is.use')">
+						<button @click="valueOpen = !valueOpen" class="btn-none"><b>Value{{ ((parserOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((valueOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
+						<code class="lb val" v-if="valueOpen">{{ getValOfSubProp(content, 'p.options.value.is.value') }}</code>
+					</div>
 					<div v-if="content.p">
 						<button @click="parserOpen = !parserOpen" class="btn-none"><b>Parser{{ ((parserOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((parserOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
 						<code class="lb" v-if="parserOpen">{{ content.p }}</code>
@@ -71,10 +76,10 @@
 			</b-collapse>
 		</b-card>
 	</div>
+
 	<div class="error" v-else>
 		Weder "parser" noch "content" !!!!
 	</div>
-
 </template>
 
 <script>
@@ -91,9 +96,18 @@
 				'contentOpen': true,
 				'systemOpen': true,
 				'parserOpen': false,
+				'valueOpen': false,
 			}
 		},
 		computed: {
+			tranculatedValue () {
+				var aVal = this.getValOfSubProp(this.content, 'p.options.value.is.value')
+				if (aVal !== undefined) {
+					return aVal.length > 25 ? aVal.slice(0, 25) + '...' : aVal
+				} else {
+					return ''
+				}
+			}
 		}
 	}
 </script>
@@ -101,6 +115,12 @@
 <style scoped>
 	code.lb {
 		white-space: pre;
+	}
+	code.val {
+		color: #007bff;
+	}
+	.card-header .val > i {
+		color: #007bff;
 	}
 	.header-btn-toggle {
 		margin: 0px;
