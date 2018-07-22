@@ -68,7 +68,13 @@ const actions = {
 					}
 					if (child.unused !== true) {
 						if (child.isProcess !== true) {
-							childs.push(child.obj)
+							if (child.obj !== undefined) {
+								childs.push(child.obj)
+							} else if (child.objs !== undefined) {
+								child.objs.forEach(function (o) {
+									childs.push(o)
+								})
+							}
 						} else {
 							processes.push(child.process)
 						}
@@ -154,10 +160,21 @@ const actions = {
 					// ToDo ...
 				}
 				// ToDo ...
-				if (errors.length > 0) {
+				// Abschliesende Sachen ...
+				if (errors.length > 0) {		// Fehler hinzufügen
 					obj.errors = errors
 				}
-				obj.tree = tree
+				obj.tree = tree		// Aktueller Ast
+				if (Array.isArray(obj.p.for)) {		// For - Multiplikation
+					var nObjs = []
+					obj.p.for.forEach(function (f, k) {
+						var nObj = JSON.parse(JSON.stringify(obj))
+						nObj.forKey = k
+						nObj.p.options = combineProcessingOptions(nObj.p.options, decompressProcessingOptions(f))
+						nObjs.push(nObj)
+					})
+					return {'objs': nObjs}
+				}
 				rObj = {'obj': obj}		// Sonstiges
 			} else if (xml.nodeType === xml.PROCESSING_INSTRUCTION_NODE) {		// Processing Instruction Element
 				if (xml.nodeName === 'copy') {
