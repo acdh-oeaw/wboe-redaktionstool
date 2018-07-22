@@ -51,7 +51,9 @@ const actions = {
 		var content = []
 		var system = []
 		var ids = {}
-		function xml2Obj (xml) {
+		var gErrors = []
+		function xml2Obj (xml, tree = []) {
+			var errors = []
 			var obj = {}
 			var rObj = {'unused': true}
 			// Kinder verarbeiten
@@ -60,7 +62,10 @@ const actions = {
 			var text = undefined
 			if (xml.childNodes.length > 0) {
 				xml.childNodes.forEach(function (v) {
-					var child = xml2Obj(v)
+					var child = xml2Obj(v, tree.concat(v.nodeName))
+					if (child.errors) {
+						errors.splice(errors.length, 0, ...child.errors)
+					}
 					if (child.unused !== true) {
 						if (child.isProcess !== true) {
 							childs.push(child.obj)
@@ -125,7 +130,10 @@ const actions = {
 						if (process.n === 'options') {
 							obj.p.options = combineProcessingOptions(obj.p.options, decompressProcessingOptions(process.p))
 						} else {
-							console.log('Unbekannte "Processing Instruction": ' + process.n)
+							let err = 'Unbekannte "Processing Instruction": "' + process.n + '"'
+							errors.push(err)
+							gErrors.push({'error': err, 'tree': tree})
+							console.log(err)
 						}
 					})
 					// Processing Instruction verarbeiten!
@@ -134,7 +142,6 @@ const actions = {
 						text = ''
 						if (xml.childNodes.length > 0) {
 							text = xml.innerHTML.replace(/<\?[^?>]*\?>/g, '').trim()
-							console.log(text)
 						}
 						if (obj.p.options.value) {
 							obj.p.options.value = combineProcessingOptions(obj.p.options.value, {'is': {'value': text, 'use': true}})
@@ -145,12 +152,24 @@ const actions = {
 					// ToDo ...
 				}
 				// ToDo ...
+				if (errors.length > 0) {
+					obj.errors = errors
+				}
+				obj.tree = tree
 				rObj = {'obj': obj}		// Sonstiges
 			} else if (xml.nodeType === xml.PROCESSING_INSTRUCTION_NODE) {		// Processing Instruction Element
 				if (xml.nodeName === 'copy') {
 					// ToDo: COPY?!?
 				} else {
-					return {'isProcess': true, 'process': {'n': xml.nodeName, 'p': JSON.parse(xml.textContent)}}
+					try {
+						return {'isProcess': true, 'process': {'n': xml.nodeName, 'p': JSON.parse(xml.textContent)}}
+					} catch (e) {
+						let err = 'Node: "' + xml.nodeName + '" - Fehler: "' + e.message + '"'
+						errors.push(err)
+						gErrors.push({'error': err, 'tree': tree})
+						console.log(err)
+						return {'errors': errors, 'unused': true}
+					}
 				}
 			} else if (xml.nodeType === xml.TEXT_NODE) {		// Textnode auswerten
 				var nVal = xml.nodeValue.trim()
@@ -161,12 +180,7 @@ const actions = {
 			return rObj
 		}
 		xml2Obj(xmlDom)
-		// console.log('parserData', parserData)
-		// console.log('header', header)
-		// console.log('content', content)
-		// console.log('system', system)
-		// console.log('ids', ids)
-		commit('SET_PARSER', { parser: {'header': header, 'content': content, 'system': system, 'ids': ids} })
+		commit('SET_PARSER', { 'parser': {'header': header, 'content': content, 'system': system, 'errors': gErrors, 'ids': ids} })
 	}
 }
 

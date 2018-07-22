@@ -65,6 +65,10 @@
 
 <style>
 	@import url('~@/assets/css/lato.css');
+	dl.dots > dt {
+		display: list-item;
+		list-style-type: disc;
+	}
 	body {
 		font-family: 'Lato' !important;
 	}
@@ -104,6 +108,12 @@
 	}
 	.mil-auto {
 		margin-left: auto !important;
+	}
+	.mir5 {
+		margin-right: 5px;
+	}
+	.mir10 {
+		margin-right: 10px;
 	}
 	.mib10 {
 		margin-bottom: 10px;
