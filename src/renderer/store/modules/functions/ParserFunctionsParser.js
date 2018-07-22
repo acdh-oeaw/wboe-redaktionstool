@@ -1,3 +1,5 @@
+import ParserFunctions from './ParserFunctions'
+
 const defaultProcess = function () {
 	return {
 		'options': {
@@ -17,6 +19,7 @@ const localFunctions = {
 		var system = []
 		var ids = {}
 		var gErrors = []
+		var copyError = false
 		function xml2Obj (xml, tree = []) {
 			var errors = []
 			var obj = {}
@@ -94,6 +97,17 @@ const localFunctions = {
 				if (processes.length > 0) {
 					processes.forEach(function (process) {
 						if (process.n === 'options') {
+							if (process.p.id) {
+								if (!ids[process.p.id]) {
+									ids[process.p.id] = {'obj': obj}
+								} else {
+									let err = 'ID kommt doppelt vor!'
+									copyError = true
+									errors.push(err)
+									gErrors.push({'error': err, 'tree': tree})
+									console.log(err)
+								}
+							}
 							obj.p.options = combineProcessingOptions(obj.p.options, decompressProcessingOptions(process.p))
 						} else if (process.n === 'for') {
 							obj.p.for = process.p
@@ -138,7 +152,7 @@ const localFunctions = {
 				rObj = {'obj': obj}
 			} else if (xml.nodeType === xml.PROCESSING_INSTRUCTION_NODE) {		// Processing Instruction Element
 				if (xml.nodeName === 'copy') {
-					// ToDo: COPY?!?
+					return {'obj': {'n': '#copy', 'p': JSON.parse(xml.textContent)}}
 				} else {
 					try {
 						return {'isProcess': true, 'process': {'n': xml.nodeName, 'p': JSON.parse(xml.textContent)}}
@@ -159,6 +173,64 @@ const localFunctions = {
 			return rObj
 		}
 		xml2Obj(xmlDom)
+		// Durchführen von "copy":
+		if (!copyError) {
+			// überprüfen ob das zu Kopierende Element selber Kopien enthält und ggf. setzen
+			var hasCopyChild = true
+			var whileLoop = 0
+			while (hasCopyChild && whileLoop < 1000) {
+				hasCopyChild = false
+				for (var key in ids) {
+					if (Array.isArray(ids[key].obj.c)) {
+						var copyChild = ParserFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
+						var whileLoop2 = 0
+						while (copyChild && whileLoop2 < 500) {
+							if (ids[copyChild.p.fromId] !== undefined) {
+								if (Array.isArray(ids[copyChild.p.fromId].obj.c)) {
+									if (ParserFunctions.hasDescendantsTagWithName(ids[copyChild.p.fromId].obj.c, '#copy')) {
+										hasCopyChild = true
+										break
+									} else {
+										copyChild.p = combineProcessingOptions(copyChild.p, ids[copyChild.p.fromId].obj.p)
+										for (let idKey in ids[copyChild.p.fromId].obj) {
+											if (idKey !== 'p') {
+												copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
+											}
+										}
+									}
+								} else {
+									copyChild.p = combineProcessingOptions(copyChild.p, ids[copyChild.p.fromId].obj.p)
+									for (let idKey in ids[copyChild.p.fromId].obj) {
+										if (idKey !== 'p') {
+											copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
+										}
+									}
+								}
+							} else {
+								let err = 'Kein Objekt mit ID: "' + copyChild.p.fromId + '" vorhanden!'
+								if (!ids[key].obj.errors) { ids[key].obj.errors = [] }
+								ids[key].obj.errors.push(err)
+								gErrors.push({'error': err, 'tree': ids[key].obj.tree})
+							}
+							copyChild = ParserFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
+							whileLoop2 += 1
+						}
+						if (whileLoop2 >= 500) {
+							let err = 'Zuviele Durchgänge für Kopien! Schleife?!?'
+							if (!ids[key].obj.errors) { ids[key].obj.errors = [] }
+							ids[key].obj.errors.push(err)
+							gErrors.push({'error': err, 'tree': ids[key].obj.tree})
+						}
+					}
+				}
+				whileLoop += 1
+			}
+			if (whileLoop >= 1000) {
+				gErrors.push({'error': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Vorbereitung für Kopien']})
+			}
+			// Kopien durchführen
+			// ToDo: Copy
+		}
 		return {'header': header, 'content': content, 'system': system, 'errors': gErrors, 'ids': ids}
 	}
 }

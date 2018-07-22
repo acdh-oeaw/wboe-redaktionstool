@@ -19,7 +19,8 @@
 									} ?>
 				<fileDesc>
 					<titleStmt>
-						<?copy {"id": "titel"} ?>
+						<?copy {"fromId": "test"} ?>
+						<?copy {"fromId": "titel"} ?>
 						<title>
 							<?options { "id": "title",
 													"title": "Titel",
@@ -77,6 +78,24 @@
 		</TEI>
 	</objParserContent>
 	<objParserSystem>
-
+		<tags>
+			<test>
+				<?options { "id": "test",
+										"title": "Test",
+										"attributes": {"testAttr": "testAttrVal"},
+										"value": ["edit", {"required": {"use": true}}]
+									} ?>
+				<?copy {"fromId": "title"} ?>
+				<b><?copy {"fromId": "title"} ?></b>
+				<?copy {"fromId": "test2"} ?>
+			</test>
+			<test2>
+				<?options { "id": "test2",
+										"title": "Test 2",
+										"value": ["edit", {"required": {"use": true}}]
+									} ?>
+				<?copy {"fromId": "title"} ?>
+			</test2>
+		</tags>
 	</objParserSystem>
 </objParser>
