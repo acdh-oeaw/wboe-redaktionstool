@@ -198,6 +198,7 @@ const localFunctions = {
 												copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
 											}
 										}
+										delete copyChild.p.options.id
 									}
 								} else {
 									if (copyChild.p.options) { copyChild.p.options = decompressProcessingOptions(copyChild.p.options) }
@@ -207,6 +208,7 @@ const localFunctions = {
 											copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
 										}
 									}
+									delete copyChild.p.options.id
 								}
 							} else {
 								let err = 'Kein Objekt mit ID: "' + copyChild.p.fromId + '" vorhanden!'
@@ -242,6 +244,7 @@ const localFunctions = {
 							copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
 						}
 					}
+					delete copyChild.p.options.id
 					copyChild = ParserFunctions.getFirstDescendantsTagByName(content, '#copy')
 				} else {
 					let err = 'Kein Objekt mit ID: "' + copyChild.p.fromId + '" vorhanden!'
