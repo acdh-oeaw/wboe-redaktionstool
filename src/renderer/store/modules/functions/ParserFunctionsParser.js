@@ -152,7 +152,7 @@ const localFunctions = {
 				rObj = {'obj': obj}
 			} else if (xml.nodeType === xml.PROCESSING_INSTRUCTION_NODE) {		// Processing Instruction Element
 				if (xml.nodeName === 'copy') {
-					return {'obj': {'n': '#copy', 'p': JSON.parse(xml.textContent)}}
+					return {'obj': {'n': '#copy', 'p': JSON.parse(xml.textContent), 'tree': tree}}
 				} else {
 					try {
 						return {'isProcess': true, 'process': {'n': xml.nodeName, 'p': JSON.parse(xml.textContent)}}
@@ -177,13 +177,13 @@ const localFunctions = {
 		if (!copyError) {
 			// überprüfen ob das zu Kopierende Element selber Kopien enthält und ggf. setzen
 			var hasCopyChild = true
-			var whileLoop = 0
+			let whileLoop = 0
 			while (hasCopyChild && whileLoop < 1000) {
 				hasCopyChild = false
 				for (var key in ids) {
 					if (Array.isArray(ids[key].obj.c)) {
-						var copyChild = ParserFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
-						var whileLoop2 = 0
+						let copyChild = ParserFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
+						let whileLoop2 = 0
 						while (copyChild && whileLoop2 < 500) {
 							if (ids[copyChild.p.fromId] !== undefined) {
 								if (Array.isArray(ids[copyChild.p.fromId].obj.c)) {
@@ -229,6 +229,29 @@ const localFunctions = {
 				gErrors.push({'error': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Vorbereitung für Kopien']})
 			}
 			// Kopien durchführen
+			let copyChild = ParserFunctions.getFirstDescendantsTagByName(content, '#copy')
+			whileLoop = 0
+			while (copyChild && whileLoop < 1000) {
+				if (ids[copyChild.p.fromId] !== undefined) {
+					copyChild.p = combineProcessingOptions(copyChild.p, ids[copyChild.p.fromId].obj.p)
+					for (let idKey in ids[copyChild.p.fromId].obj) {
+						if (idKey !== 'p') {
+							copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
+						}
+					}
+					copyChild = ParserFunctions.getFirstDescendantsTagByName(content, '#copy')
+				} else {
+					let err = 'Kein Objekt mit ID: "' + copyChild.p.fromId + '" vorhanden!'
+					if (!copyChild.errors) { copyChild.errors = [] }
+					copyChild.errors.push(err)
+					gErrors.push({'error': err, 'tree': copyChild.tree})
+					break
+				}
+				whileLoop += 1
+			}
+			if (whileLoop >= 1000) {
+				gErrors.push({'error': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Content', 'Kopieren']})
+			}
 			// ToDo: Copy
 		}
 		return {'header': header, 'content': content, 'system': system, 'errors': gErrors, 'ids': ids}

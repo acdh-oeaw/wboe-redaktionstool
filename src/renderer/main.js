@@ -10,10 +10,10 @@ import router from './router'
 import store from './store'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
-import { faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faSyncAlt, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFolder, faFolderOpen, faFile, faFileDownload, faProjectDiagram, faComment, faEye, faEyeSlash, faCheck, faTimes, faClipboardCheck, faExternalLinkAlt, faQuestionCircle, faBars, faSitemap } from '@fortawesome/free-solid-svg-icons'
+import { faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faSyncAlt, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFolder, faFolderOpen, faFile, faFileDownload, faProjectDiagram, faComment, faEye, faEyeSlash, faCheck, faTimes, faClipboardCheck, faExternalLinkAlt, faQuestionCircle, faBars, faSitemap, faClone } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
 
-library.add(faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faSyncAlt, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFolder, faFolderOpen, faFile, faFileDownload, faProjectDiagram, faComment, faEye, faEyeSlash, faCheck, faTimes, faClipboardCheck, faExternalLinkAlt, faQuestionCircle, faBars, faSitemap)
+library.add(faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faSyncAlt, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFolder, faFolderOpen, faFile, faFileDownload, faProjectDiagram, faComment, faEye, faEyeSlash, faCheck, faTimes, faClipboardCheck, faExternalLinkAlt, faQuestionCircle, faBars, faSitemap, faClone)
 
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 Vue.component('font-awesome-layers', FontAwesomeLayers)

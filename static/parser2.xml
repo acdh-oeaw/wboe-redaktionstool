@@ -20,7 +20,7 @@
 				<fileDesc>
 					<titleStmt>
 						<?copy {"fromId": "test"} ?>
-						<?copy {"fromId": "titel"} ?>
+						<?copy {"fromId": "title"} ?>
 						<title>
 							<?options { "id": "title",
 													"title": "Titel",
