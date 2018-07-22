@@ -129,6 +129,8 @@ const actions = {
 					processes.forEach(function (process) {
 						if (process.n === 'options') {
 							obj.p.options = combineProcessingOptions(obj.p.options, decompressProcessingOptions(process.p))
+						} else if (process.n === 'for') {
+							obj.p.for = process.p
 						} else {
 							let err = 'Unbekannte "Processing Instruction": "' + process.n + '"'
 							errors.push(err)
@@ -203,7 +205,15 @@ function decompressProcessingOptions (options) {		// Optionen dekomprimieren
 		}
 		// attributes
 		if (key === 'attributes' && deflat[key] !== undefined) {
-			deflat[key] = dcpoSimpleToComplex(deflat[key], defaultAttributes)
+			if (typeof deflat[key] === 'object' && !Array.isArray(deflat[key])) {
+				for (var cKey in deflat[key]) {
+					if (typeof deflat[key][cKey] === 'string') {
+						deflat[key][cKey] = {'value': deflat[key][cKey], 'type': 'fixed'}
+					}
+					deflat[key][cKey] = combineProcessingOptions(defaultAttributes, deflat[key][cKey])
+				}
+			}
+			deflat[key] = dcpoSimpleToComplex(deflat[key], defaultAttributes, {'prop': 'value', 'std': {'type': 'fixed'}})
 			for (var attrKey in deflat[key]) {
 				for (var attrOption in deflat[key][attrKey]) {
 					if (attrOption === 'possibleValues' && typeof deflat[key][attrKey][attrOption] === 'string') {
@@ -245,6 +255,8 @@ function combineProcessingOptions (orgOptions, newOptions) {
 				comOptions[key] = newOptions[key]
 			}
 		}
+	} else {
+		return newOptions
 	}
 	return comOptions
 }
@@ -274,7 +286,7 @@ function checkLayout (layout) {		// Layout dekomprimieren
 	// console.log('layout', JSON.parse(JSON.stringify(layout)), JSON.parse(JSON.stringify(deflat)), Array.isArray(deflat))
 	return deflat
 }
-function dcpoSimpleToComplex (content, standard) {
+function dcpoSimpleToComplex (content, standard, str2Val = undefined) {
 	if (typeof content === 'string') {
 		return {[content]: standard}
 	} else if (Array.isArray(content)) {
@@ -284,7 +296,13 @@ function dcpoSimpleToComplex (content, standard) {
 				nObjValue[value] = standard
 			} else if (typeof value === 'object') {
 				for (var valueKey in value) {
-					nObjValue[valueKey] = combineProcessingOptions(standard, value[valueKey])
+					var nVal = value[valueKey]
+					if (str2Val !== undefined && typeof nVal === 'string') {
+						nVal = {[str2Val.prop]: nVal}
+						nObjValue[valueKey] = combineProcessingOptions(str2Val.std, nVal)
+					} else {
+						nObjValue[valueKey] = combineProcessingOptions(standard, nVal)
+					}
 				}
 			}
 		})
