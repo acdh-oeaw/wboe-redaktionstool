@@ -191,7 +191,8 @@ const localFunctions = {
 										hasCopyChild = true
 										break
 									} else {
-										copyChild.p = combineProcessingOptions(copyChild.p, ids[copyChild.p.fromId].obj.p)
+										if (copyChild.p.options) { copyChild.p.options = decompressProcessingOptions(copyChild.p.options) }
+										copyChild.p = combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
 										for (let idKey in ids[copyChild.p.fromId].obj) {
 											if (idKey !== 'p') {
 												copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
@@ -199,7 +200,8 @@ const localFunctions = {
 										}
 									}
 								} else {
-									copyChild.p = combineProcessingOptions(copyChild.p, ids[copyChild.p.fromId].obj.p)
+									if (copyChild.p.options) { copyChild.p.options = decompressProcessingOptions(copyChild.p.options) }
+									copyChild.p = combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
 									for (let idKey in ids[copyChild.p.fromId].obj) {
 										if (idKey !== 'p') {
 											copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
@@ -233,7 +235,8 @@ const localFunctions = {
 			whileLoop = 0
 			while (copyChild && whileLoop < 1000) {
 				if (ids[copyChild.p.fromId] !== undefined) {
-					copyChild.p = combineProcessingOptions(copyChild.p, ids[copyChild.p.fromId].obj.p)
+					if (copyChild.p.options) { copyChild.p.options = decompressProcessingOptions(copyChild.p.options) }
+					copyChild.p = combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
 					for (let idKey in ids[copyChild.p.fromId].obj) {
 						if (idKey !== 'p') {
 							copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))

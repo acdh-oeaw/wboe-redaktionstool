@@ -19,8 +19,7 @@
 									} ?>
 				<fileDesc>
 					<titleStmt>
-						<?copy {"fromId": "test"} ?>
-						<?copy {"fromId": "title"} ?>
+						<?copy {"fromId": "title", "options": {"title": "Kopierter Titel", "x": "x"}} ?>
 						<title>
 							<?options { "id": "title",
 													"title": "Titel",
