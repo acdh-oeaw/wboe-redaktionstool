@@ -6,7 +6,7 @@
    <teiHeader>
       <fileDesc>
          <titleStmt>
-            <title>Farz_AG_V1</title>
+            <title><?comment Das ist <b>ein</b> Test! ?>Farz_AG_V1</title>
             <!-- add version in appropriate location-->
             <respStmt>
                <resp>Editor</resp>

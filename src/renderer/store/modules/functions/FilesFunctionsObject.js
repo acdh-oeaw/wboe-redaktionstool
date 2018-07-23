@@ -34,6 +34,9 @@ const localFunctions = {
 				if (childs.length > 0 && !(childs.length === 1 && text !== undefined)) {
 					obj.c = childs
 				}
+				if (processes.length > 0) {
+					obj.p = processes
+				}
 				// Attribute auswerten
 				if (xml.attributes.length > 0) {
 					obj.a = {}
@@ -42,7 +45,7 @@ const localFunctions = {
 					}
 				}
 				// Value auswerten
-				if (text !== undefined && childs.length === 0) {
+				if (text !== undefined && childs.length <= 1) {
 					obj.v = text
 				}
 				// Abschliesende Sachen ...
@@ -51,10 +54,10 @@ const localFunctions = {
 				}
 				obj.tree = tree		// Aktueller Ast
 				obj.text = xml.textContent
-				obj.xml = xml.innerHTML
+				obj.xml = xml.innerHTML		// ToDo: Kommentare und PROCESSING_INSTRUCTION_NODE entfernen
 				return {'obj': obj}
 			} else if (xml.nodeType === xml.PROCESSING_INSTRUCTION_NODE) {		// Processing Instruction Element
-				return {'process': {'n': xml.nodeName, 'p': xml.textContent}}
+				return {'process': {'n': xml.nodeName, 'c': xml.textContent}}
 			} else if (xml.nodeType === xml.TEXT_NODE) {		// Textnode auswerten
 				var nVal = xml.nodeValue.trim()
 				if (nVal.length > 0) {
@@ -71,7 +74,7 @@ const localFunctions = {
 			}
 		}
 		var content = xml2Obj(xmlDom)
-		return {'content': content.obj, 'errors': gErrors}
+		return {'content': [content.obj], 'errors': gErrors}
 	}
 }
 

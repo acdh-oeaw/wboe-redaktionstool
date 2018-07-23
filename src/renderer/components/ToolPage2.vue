@@ -28,8 +28,8 @@
 			</b-tab>
 			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
 				<div class="viewxmlobject scroll p20" v-if="Options.show.develope">
-					<!-- <ViewParser :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content"/> -->
-					<!-- <div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div> -->
+					<ViewXmlObject :object="Files.fileObject" v-if="Files.fileObject"/>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>fileObject</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<template slot="tabs">
@@ -49,6 +49,7 @@
 	import { mapState } from 'vuex'
 	import ViewEditor from './ToolPage2/ViewEditor'
 	import ViewParser from './ToolPage2/ViewParser'
+	import ViewXmlObject from './ToolPage2/ViewXmlObject'
 
 	export default {
 		name: 'tool-page-2',
@@ -84,7 +85,8 @@
 		},
 		components: {
 			ViewEditor,
-			ViewParser
+			ViewParser,
+			ViewXmlObject
 		}
 	}
 </script>

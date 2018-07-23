@@ -59,7 +59,7 @@
 	</div>
 
 	<div class="obj" v-else-if="content !== undefined">
-		<b-card :header="content.n" no-body class="mib20 paneldecent">
+		<b-card :header="content.n" no-body class="mib10 paneldecent">
 			<div slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
 					<font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/>
