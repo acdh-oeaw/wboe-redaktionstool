@@ -7,7 +7,7 @@
 		</b-button-toolbar>
 		<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
 			<b-tab title="Editor">
-				<div class="vieweditor scroll p20">
+				<div class="vieweditor scroll p20" v-if="aTab === 0">
 					<ViewEditor :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
@@ -17,19 +17,25 @@
 			<b-tab title="Objekt">
 			</b-tab>
 			<b-tab title="XML" :title-item-class="{'professional': true, 'hidden': !Options.show.professional}">
-				<div class="viewxml scroll p20" v-if="Options.show.professional">
+				<div class="viewxml scroll p20" v-if="aTab === 3 && Options.show.professional">
 				</div>
 			</b-tab>
 			<b-tab title="Parser" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
 				<div class="viewparser scroll p20" v-if="Options.show.develope">
-					<ViewParser :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content"/>
+					<ViewParser :parser="Parser.parser" v-if="aTab === 4 && Parser.parser && Parser.parser.content"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
-				<div class="viewxmlobject scroll p20" v-if="Options.show.develope">
+				<div class="viewxmlobject scroll p20" v-if="aTab === 5 && Options.show.develope">
 					<ViewXmlObject :object="Files.fileObject" v-if="Files.fileObject"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>fileObject</b> vorhanden!</div>
+				</div>
+			</b-tab>
+			<b-tab title="Match" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
+				<div class="viewmatch scroll p20" v-if="aTab === 6 && Options.show.develope">
+					<ViewMatch :parser="parsedXmlObject" v-if="parsedXmlObject && parsedXmlObject.content"/>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>parsedXmlObject</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<template slot="tabs">
@@ -50,13 +56,16 @@
 	import ViewEditor from './ToolPage2/ViewEditor'
 	import ViewParser from './ToolPage2/ViewParser'
 	import ViewXmlObject from './ToolPage2/ViewXmlObject'
+	import ViewMatch from './ToolPage2/ViewMatch'
+	import functionParser from './ToolPage2/functionParser'
 
 	export default {
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 5,
-				showTabView: false
+				aTab: 6,
+				showTabView: false,
+				parsedXmlObject: undefined
 			}
 		},
 		computed: {
@@ -67,8 +76,16 @@
 		watch: {
 		},
 		mounted: function () {
+			var t0 = performance.now()
 			this.$store.dispatch('LOAD_PARSER_FILE')
+			console.log('LOAD_PARSER_FILE - ', Math.ceil(performance.now() - t0) + ' ms.')
+			var t1 = performance.now()
 			this.$store.dispatch('LOAD_FILE')
+			console.log('LOAD_FILE - ', Math.ceil(performance.now() - t1) + ' ms.')
+			t1 = performance.now()
+			this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
+			console.log('functionParser.parseXmlObject - ', Math.ceil(performance.now() - t1) + ' ms.')
+			console.log('ToolPage mounted - ', Math.ceil(performance.now() - t0) + ' ms.')
 		},
 		methods: {
 			click (e) {
@@ -86,7 +103,8 @@
 		components: {
 			ViewEditor,
 			ViewParser,
-			ViewXmlObject
+			ViewXmlObject,
+			ViewMatch,
 		}
 	}
 </script>
