@@ -1,10 +1,15 @@
 import Vue from 'vue'
 import { remote } from 'electron'
+import xmlFunctions from '@/functions/XmlFunctions'
+import FilesFunctionsObject from './functions/FilesFunctionsObject'
 import fPath from 'path'
 const fs = remote.require('fs')
 
 const state = {
-	paths: {}		// Cach für Verzeichnissstruktur
+	paths: {},		// Cach für Verzeichnissstruktur
+	file: undefined,
+	fileContent: undefined,
+	fileObject: undefined
 }
 
 const mutations = {
@@ -17,6 +22,14 @@ const mutations = {
 	TOGGLE_PATH_OPEN: (state, { path, fileKey }) => {		// Anzeige Pfad offen/geschlossen wechseln
 		state.paths[path].paths[fileKey].isOpen = !state.paths[path].paths[fileKey].isOpen
 	},
+	SET_FILE: (state, { file, content }) => {		// Aktuelle Datei laden
+		state.file = file
+		state.fileContent = content
+		state.fileObject = undefined
+	},
+	SET_FILE_OBJECT: (state, { object }) => {		// Aktuelles Datei Objekt setzen und cachen
+		state.fileObject = object
+	},
 }
 
 const actions = {
@@ -27,6 +40,33 @@ const actions = {
 			if (state.paths[path].paths[fileKey].isOpen && state.paths[state.paths[path].paths[fileKey].fullFileName] === undefined) {
 				dispatch('GET_PATH', state.paths[path].paths[fileKey].fullFileName)
 			}
+		}
+	},
+	LOAD_FILE: function ({ commit, dispatch }, file = undefined) {
+		var aFile = file
+		let fileContent = undefined
+		// ToDo: Datei laden!
+		try {
+			fileContent = fs.readFileSync(aFile, 'utf8')
+		} catch (e) {
+			try {
+				aFile = fPath.join(__static, '/demo2.xml')
+				fileContent = fs.readFileSync(aFile, 'utf8')
+			} catch (e) {
+				console.log(e)
+			}
+		}
+		console.log('SET_FILE', aFile)
+		commit('SET_FILE', { file: aFile, content: fileContent })
+		dispatch('MAKE_FILE_OBJECT')
+	},
+	MAKE_FILE_OBJECT: function ({ commit, dispatch }) {
+		// XML-Datei in DOM umwandeln:
+		var xmlDomObj = xmlFunctions.string2xmlDom(state.fileContent)
+		if (xmlDomObj.xmlDom === undefined || xmlDomObj.errors) {
+			commit('SET_FILE_OBJECT', { 'object': undefined })
+		} else {
+			commit('SET_FILE_OBJECT', { 'object': FilesFunctionsObject.xml2Obj(xmlDomObj.xmlDom) })
 		}
 	},
 	CLEAN_PATH: function ({ commit }) {		// Cache für Verzeichnissstruktur löschen

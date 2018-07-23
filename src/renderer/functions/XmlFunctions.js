@@ -1,4 +1,15 @@
 const localFunctions = {
+	string2xmlDom: function (string, showAlert = true) {
+		var xmlDom = new DOMParser().parseFromString(string, 'application/xml')
+		var xmlStringError = localFunctions.xmlDomCheck(xmlDom)
+		if (xmlStringError.length > 0) {
+			if (showAlert) {
+				alert('Beim verarbeiten der XML ist es zu einen Fehler gekommen:\n\n' + xmlStringError)
+			}
+			return { 'xmlDom': undefined, 'errors': xmlStringError }
+		}
+		return { 'xmlDom': xmlDom }
+	},
 	xmlDomCheck: function (xmlDom, error = false) {		// Eventuelle Fehlermeldung des DOM-Objekts ausgeben
 		var txt = ''
 		var x = xmlDom.childNodes

@@ -43,11 +43,13 @@
 		computed: {
 			...mapState(['Options']),
 			...mapState(['Parser']),
+			...mapState(['Files']),
 		},
 		watch: {
 		},
 		mounted: function () {
 			this.$store.dispatch('LOAD_PARSER_FILE')
+			this.$store.dispatch('LOAD_FILE')
 		},
 		methods: {
 		},

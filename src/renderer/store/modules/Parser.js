@@ -25,31 +25,29 @@ const mutations = {
 const actions = {
 	LOAD_PARSER_FILE: function ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
 		var aFile = undefined		// fPath.join(state.projectPath, '/parser.xml')
-		let fileContents = undefined
+		let fileContent = undefined
 		try {
-			fileContents = fs.readFileSync(aFile, 'utf8')
+			fileContent = fs.readFileSync(aFile, 'utf8')
 		} catch (e) {
 			try {
 				aFile = fPath.join(__static, '/parser2.xml')
-				fileContents = fs.readFileSync(aFile, 'utf8')
+				fileContent = fs.readFileSync(aFile, 'utf8')
 			} catch (e) {
 				console.log(e)
 			}
 		}
 		console.log('GET_PARSER_FILE', aFile)
-		commit('SET_PARSER_FILE', { file: aFile, content: fileContents })
+		commit('SET_PARSER_FILE', { file: aFile, content: fileContent })
 		dispatch('MAKE_PARSER')
 	},
 	MAKE_PARSER: function ({ commit, dispatch }) {
 		// XML-Datei in DOM umwandeln:
-		var xmlDom = new DOMParser().parseFromString(state.fileContent, 'application/xml')
-		var xmlStringError = xmlFunctions.xmlDomCheck(xmlDom)
-		if (xmlStringError.length > 0) {
-			alert('Beim verarbeiten der XML ist es zu einen Fehler gekommen:\n\n' + xmlStringError)
-			commit('SET_PARSER', { parser: undefined })
-			return false
+		var xmlDomObj = xmlFunctions.string2xmlDom(state.fileContent)
+		if (xmlDomObj.xmlDom === undefined || xmlDomObj.errors) {
+			commit('SET_PARSER', { 'parser': undefined })
+		} else {
+			commit('SET_PARSER', { 'parser': ParserFunctionsParser.xml2ParserObj(xmlDomObj.xmlDom) })
 		}
-		commit('SET_PARSER', { 'parser': ParserFunctionsParser.xml2ParserObj(xmlDom) })
 	}
 }
 
