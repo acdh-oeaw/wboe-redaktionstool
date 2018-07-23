@@ -15,47 +15,12 @@
 				</b-card-body>
 			</b-collapse>
 		</b-card>
-		<b-card header="Header" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
-			<div slot="header"><button v-b-toggle="'collapse-header'" class="header-btn-toggle" style="color: #fff;"><b>Header</b><font-awesome-icon :icon="((headerOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
-			<b-collapse v-model="headerOpen" id="collapse-header">
-				<b-card-body>
-					<div v-if="parser.header">
-						<ul class="mi0 pl20">
-							<li v-for="line in parser.header.split('\n')">{{ line }}</li>
-						</ul>
-					</div>
-					<div v-else>
-						Keine Header-Daten vorhanden
-					</div>
-				</b-card-body>
-			</b-collapse>
-		</b-card>
-		<b-card header="Content" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
-			<div slot="header"><button v-b-toggle="'collapse-content'" class="header-btn-toggle" style="color: #fff;"><b>Content</b><font-awesome-icon :icon="((contentOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
-			<b-collapse v-model="contentOpen" id="collapse-content">
-				<b-card-body>
-					<div v-if="parser.content">
-						<ViewParser :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.content"/>
-					</div>
-					<div v-else>
-						Keine Content-Daten vorhanden
-					</div>
-				</b-card-body>
-			</b-collapse>
-		</b-card>
-		<b-card header="System" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
-			<div slot="header"><button v-b-toggle="'collapse-system'" class="header-btn-toggle" style="color: #fff;"><b>System</b><font-awesome-icon :icon="((systemOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
-			<b-collapse v-model="systemOpen" id="collapse-system">
-				<b-card-body>
-					<div v-if="parser.system">
-						<ViewParser :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.system"/>
-					</div>
-					<div v-else>
-						Keine Header-Daten vorhanden
-					</div>
-				</b-card-body>
-			</b-collapse>
-		</b-card>
+		<div v-if="parser.content">
+			<ViewEditor :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.content"/>
+		</div>
+		<div v-else>
+			Keine Content-Daten vorhanden
+		</div>
 	</div>
 
 	<div class="obj" v-else-if="content !== undefined">
@@ -98,7 +63,7 @@
 					</div>
 					<div v-if="content.c">
 						<b>Kinder:</b><br>
-						<ViewParser :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
+						<ViewEditor :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -112,7 +77,7 @@
 
 <script>
 	export default {
-		name: 'ViewParser',
+		name: 'ViewEditor',
 		props: {
 			parser: Object,
 			content: Object,

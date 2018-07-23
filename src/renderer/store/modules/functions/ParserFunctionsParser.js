@@ -1,4 +1,4 @@
-import ParserFunctions from './ParserFunctions'
+import xmlFunctions from '@/functions/XmlFunctions'
 
 const defaultProcess = function () {
 	return {
@@ -182,12 +182,12 @@ const localFunctions = {
 				hasCopyChild = false
 				for (var key in ids) {
 					if (Array.isArray(ids[key].obj.c)) {
-						let copyChild = ParserFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
+						let copyChild = xmlFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
 						let whileLoop2 = 0
 						while (copyChild && whileLoop2 < 500) {
 							if (ids[copyChild.p.fromId] !== undefined) {
 								if (Array.isArray(ids[copyChild.p.fromId].obj.c)) {
-									if (ParserFunctions.hasDescendantsTagWithName(ids[copyChild.p.fromId].obj.c, '#copy')) {
+									if (xmlFunctions.hasDescendantsTagWithName(ids[copyChild.p.fromId].obj.c, '#copy')) {
 										hasCopyChild = true
 										break
 									} else {
@@ -216,7 +216,7 @@ const localFunctions = {
 								ids[key].obj.errors.push(err)
 								gErrors.push({'error': err, 'tree': ids[key].obj.tree})
 							}
-							copyChild = ParserFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
+							copyChild = xmlFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
 							whileLoop2 += 1
 						}
 						if (whileLoop2 >= 500) {
@@ -233,7 +233,7 @@ const localFunctions = {
 				gErrors.push({'error': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Vorbereitung für Kopien']})
 			}
 			// Kopien durchführen
-			let copyChild = ParserFunctions.getFirstDescendantsTagByName(content, '#copy')
+			let copyChild = xmlFunctions.getFirstDescendantsTagByName(content, '#copy')
 			whileLoop = 0
 			while (copyChild && whileLoop < 1000) {
 				if (ids[copyChild.p.fromId] !== undefined) {
@@ -245,7 +245,7 @@ const localFunctions = {
 						}
 					}
 					delete copyChild.p.options.id
-					copyChild = ParserFunctions.getFirstDescendantsTagByName(content, '#copy')
+					copyChild = xmlFunctions.getFirstDescendantsTagByName(content, '#copy')
 				} else {
 					let err = 'Kein Objekt mit ID: "' + copyChild.p.fromId + '" vorhanden!'
 					if (!copyChild.errors) { copyChild.errors = [] }

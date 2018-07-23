@@ -1,6 +1,6 @@
 // import Vue from 'vue'
 import { remote } from 'electron'
-import ParserFunctions from './functions/ParserFunctions'
+import xmlFunctions from '@/functions/XmlFunctions'
 import ParserFunctionsParser from './functions/ParserFunctionsParser'
 import fPath from 'path'
 const fs = remote.require('fs')
@@ -43,7 +43,7 @@ const actions = {
 	MAKE_PARSER: function ({ commit, dispatch }) {
 		// XML-Datei in DOM umwandeln:
 		var xmlDom = new DOMParser().parseFromString(state.fileContent, 'application/xml')
-		var xmlStringError = ParserFunctions.xmlDomCheck(xmlDom)
+		var xmlStringError = xmlFunctions.xmlDomCheck(xmlDom)
 		if (xmlStringError.length > 0) {
 			alert('Beim verarbeiten der XML ist es zu einen Fehler gekommen:\n\n' + xmlStringError)
 			commit('SET_PARSER', { parser: undefined })

@@ -7,6 +7,10 @@
 		</b-button-toolbar>
 		<b-tabs v-model="aTab" content-class="tabc">
 			<b-tab title="Editor">
+				<div class="vieweditor scroll p20">
+					<ViewEditor :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content"/>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
+				</div>
 			</b-tab>
 			<b-tab title="Vorschau">
 			</b-tab>
@@ -26,13 +30,14 @@
 
 <script>
 	import { mapState } from 'vuex'
+	import ViewEditor from './ToolPage2/ViewEditor'
 	import ViewParser from './ToolPage2/ViewParser'
 
 	export default {
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 4,
+				aTab: 0,
 			}
 		},
 		computed: {
@@ -47,6 +52,7 @@
 		methods: {
 		},
 		components: {
+			ViewEditor,
 			ViewParser
 		}
 	}
