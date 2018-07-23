@@ -10,7 +10,8 @@ const state = {
 	parserFile: undefined,
 	parserFileContent: undefined,
 	useFile: undefined,
-	useFileContent: undefined
+	useFileContent: undefined,
+	show: {}
 }
 
 const mutations = {
@@ -25,9 +26,21 @@ const mutations = {
 		state.parserFile = file
 		state.parserFileContent = content
 	},
+	SET_SHOW: (state, { show }) => {
+		state.show = show
+	},
 }
 
 const actions = {
+	LOAD_SHOW: function ({ commit }) {
+		commit('SET_SHOW', { show: store.get('show', { 'professional': true }) })
+	},
+	TOGGLE_SHOW: function ({ commit }, obj) {
+		var aShow = JSON.parse(JSON.stringify(state.show))
+		aShow[obj] = !aShow[obj]
+		store.set('show', aShow)
+		commit('SET_SHOW', { show: aShow })
+	},
 	SET_USE_FILE: function ({ commit }, file) {		// Aktuelle Datei zum bearbeiten setzen und cachen
 		var aFile = file
 		let fileContents = undefined

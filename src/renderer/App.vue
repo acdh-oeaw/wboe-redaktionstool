@@ -54,6 +54,7 @@
 			}
 		},
 		created: function () {
+			this.$store.dispatch('LOAD_SHOW')
 			window.addEventListener('keyup', this.keyUp)
 		},
 		beforeDestroy: function () {
@@ -65,6 +66,9 @@
 
 <style>
 	@import url('~@/assets/css/lato.css');
+	.rel {
+		position: relative;
+	}
 	dl.dots > dt {
 		display: list-item;
 		list-style-type: disc;
