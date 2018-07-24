@@ -31,17 +31,18 @@ const localFunctions = {
 			// Node verarbeiten
 			if (xml.nodeType === xml.ELEMENT_NODE) {		// Reguläres Element
 				obj.n = xml.nodeName
+				obj.p = { 'options': { 'attributes': undefined } }
 				if (childs.length > 0 && !(childs.length === 1 && text !== undefined)) {
 					obj.c = childs
 				}
 				if (processes.length > 0) {
-					obj.p = processes
+					obj.p.xp = processes
 				}
 				// Attribute auswerten
 				if (xml.attributes.length > 0) {
-					obj.a = {}
+					obj.p.options.attributes = {}
 					for (var i = 0; i < xml.attributes.length; i++) {
-						obj.a[xml.attributes[i].nodeName] = xml.attributes[i].nodeValue
+						obj.p.options.attributes[xml.attributes[i].nodeName] = {'value': xml.attributes[i].nodeValue}
 					}
 				}
 				// Value auswerten

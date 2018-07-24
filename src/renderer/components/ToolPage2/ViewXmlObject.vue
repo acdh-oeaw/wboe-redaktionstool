@@ -29,9 +29,9 @@
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
 					<span><b>{{ content.n }}</b></span>
 					<span class="val" v-if="content.v"> = <i>{{ tranculatedValue }}</i></span>
-					<span class="attribut" v-for="(attrOpt, attr) in content.a">
-						{{ attr + ((attrOpt) ? ':' : '') }}
-						<span v-if="attrOpt">{{ attrOpt }}</span>
+					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
+						{{ attr + ((attrOpt.value) ? ':' : '') }}
+						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
 					</span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="content.errors"/>
