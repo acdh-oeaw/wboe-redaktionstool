@@ -1,17 +1,5 @@
 import xmlFunctions from '@/functions/XmlFunctions'
 
-const defaultProcess = function () {
-	return {
-		'options': {
-			'tagAsTitle': true,
-			'attributes': undefined
-		}
-	}
-}
-const defaultLayout = function () { return {'use': true} }
-const defaultValue = function () { return {'use': true} }
-const defaultAttributes = function () { return {'type': 'variable'} }
-
 const localFunctions = {
 	xml2ParserObj: function (xmlDom) {
 		var header = ''
@@ -76,7 +64,7 @@ const localFunctions = {
 					}
 				}
 				// Default Processing setzen
-				obj.p = defaultProcess()
+				obj.p = xmlFunctions.defaultProcess()
 				// Attribute auswerten
 				if (xml.attributes.length > 0) {
 					obj.p.options.attributes = {}
@@ -87,13 +75,13 @@ const localFunctions = {
 				// Value auswerten
 				if (text !== undefined && childs.length === 0) {
 					if (obj.p.options.value) {
-						obj.p.options.value = combineProcessingOptions(obj.p.options.value, {'is': {'value': text, 'use': true}})
+						obj.p.options.value = xmlFunctions.combineProcessingOptions(obj.p.options.value, {'is': {'value': text, 'use': true}})
 					} else {
 						obj.p.options.value = {'is': {'value': text, 'use': true}}
 					}
 				}
 				// Processing Instruction hinzufügen
-				obj.p.options = decompressProcessingOptions(obj.p.options)
+				obj.p.options = xmlFunctions.decompressProcessingOptions(obj.p.options)
 				if (processes.length > 0) {
 					processes.forEach(function (process) {
 						if (process.n === 'options') {
@@ -108,7 +96,7 @@ const localFunctions = {
 									console.log(err)
 								}
 							}
-							obj.p.options = combineProcessingOptions(obj.p.options, decompressProcessingOptions(process.p))
+							obj.p.options = xmlFunctions.combineProcessingOptions(obj.p.options, xmlFunctions.decompressProcessingOptions(process.p))
 						} else if (process.n === 'for') {
 							obj.p.for = process.p
 						} else {
@@ -126,7 +114,7 @@ const localFunctions = {
 							text = xml.innerHTML.replace(/<\?[^?>]*\?>/g, '').trim()
 						}
 						if (obj.p.options.value) {
-							obj.p.options.value = combineProcessingOptions(obj.p.options.value, {'is': {'value': text, 'use': true}})
+							obj.p.options.value = xmlFunctions.combineProcessingOptions(obj.p.options.value, {'is': {'value': text, 'use': true}})
 						} else {
 							obj.p.options.value = {'is': {'value': text, 'use': true}}
 						}
@@ -144,7 +132,7 @@ const localFunctions = {
 					obj.p.for.forEach(function (f, k) {
 						var nObj = JSON.parse(JSON.stringify(obj))
 						nObj.forKey = k
-						nObj.p.options = combineProcessingOptions(nObj.p.options, decompressProcessingOptions(f))
+						nObj.p.options = xmlFunctions.combineProcessingOptions(nObj.p.options, xmlFunctions.decompressProcessingOptions(f))
 						nObjs.push(nObj)
 					})
 					return {'objs': nObjs}
@@ -191,8 +179,8 @@ const localFunctions = {
 										hasCopyChild = true
 										break
 									} else {
-										if (copyChild.p.options) { copyChild.p.options = decompressProcessingOptions(copyChild.p.options) }
-										copyChild.p = combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
+										if (copyChild.p.options) { copyChild.p.options = xmlFunctions.decompressProcessingOptions(copyChild.p.options) }
+										copyChild.p = xmlFunctions.combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
 										for (let idKey in ids[copyChild.p.fromId].obj) {
 											if (idKey !== 'p') {
 												copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
@@ -201,8 +189,8 @@ const localFunctions = {
 										delete copyChild.p.options.id
 									}
 								} else {
-									if (copyChild.p.options) { copyChild.p.options = decompressProcessingOptions(copyChild.p.options) }
-									copyChild.p = combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
+									if (copyChild.p.options) { copyChild.p.options = xmlFunctions.decompressProcessingOptions(copyChild.p.options) }
+									copyChild.p = xmlFunctions.combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
 									for (let idKey in ids[copyChild.p.fromId].obj) {
 										if (idKey !== 'p') {
 											copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
@@ -237,8 +225,8 @@ const localFunctions = {
 			whileLoop = 0
 			while (copyChild && whileLoop < 1000) {
 				if (ids[copyChild.p.fromId] !== undefined) {
-					if (copyChild.p.options) { copyChild.p.options = decompressProcessingOptions(copyChild.p.options) }
-					copyChild.p = combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
+					if (copyChild.p.options) { copyChild.p.options = xmlFunctions.decompressProcessingOptions(copyChild.p.options) }
+					copyChild.p = xmlFunctions.combineProcessingOptions(ids[copyChild.p.fromId].obj.p, copyChild.p)
 					for (let idKey in ids[copyChild.p.fromId].obj) {
 						if (idKey !== 'p') {
 							copyChild[idKey] = JSON.parse(JSON.stringify(ids[copyChild.p.fromId].obj[idKey]))
@@ -262,122 +250,6 @@ const localFunctions = {
 		}
 		return {'header': header, 'content': content, 'system': system, 'errors': gErrors, 'ids': ids}
 	}
-}
-
-function decompressProcessingOptions (options) {		// Optionen dekomprimieren
-	var deflat = JSON.parse(JSON.stringify(options))
-	for (var key in deflat) {
-		// title
-		if (key === 'title' && typeof deflat[key] === 'string') {
-			deflat[key] = {'value': deflat[key], 'use': true}
-		}
-		// attributes
-		if (key === 'attributes' && deflat[key] !== undefined) {
-			if (typeof deflat[key] === 'object' && !Array.isArray(deflat[key])) {
-				for (var cKey in deflat[key]) {
-					if (typeof deflat[key][cKey] === 'string') {
-						deflat[key][cKey] = {'value': deflat[key][cKey], 'type': 'fixed'}
-					}
-					deflat[key][cKey] = combineProcessingOptions(defaultAttributes(), deflat[key][cKey])
-				}
-			}
-			deflat[key] = dcpoSimpleToComplex(deflat[key], defaultAttributes(), {'prop': 'value', 'std': {'type': 'fixed'}})
-			for (var attrKey in deflat[key]) {
-				for (var attrOption in deflat[key][attrKey]) {
-					if (attrOption === 'possibleValues' && typeof deflat[key][attrKey][attrOption] === 'string') {
-						deflat[key][attrKey][attrOption] = [deflat[key][attrKey][attrOption]]
-					}
-				}
-			}
-		}
-		// value
-		if (key === 'value' && deflat[key] !== undefined) {
-			deflat[key] = dcpoSimpleToComplex(deflat[key], defaultValue())
-		}
-		// layout
-		if ((key === 'layout' && deflat[key] !== undefined)) {
-			deflat[key] = checkLayout(deflat[key])
-		}
-		// editor > layout
-		if (key === 'editor' && deflat[key] !== undefined && deflat[key].layout !== undefined) {
-			deflat[key].layout = checkLayout(deflat[key].layout)
-		}
-		// html > layout
-		if (key === 'html' && deflat[key] !== undefined && deflat[key].layout !== undefined) {
-			deflat[key].layout = checkLayout(deflat[key].layout)
-		}
-	}
-	// console.log('decompressProcessingOptions', JSON.parse(JSON.stringify(options)), JSON.parse(JSON.stringify(deflat)))
-	return deflat
-}
-
-function combineProcessingOptions (orgOptions, newOptions) {
-	var comOptions = JSON.parse(JSON.stringify(orgOptions))
-	if (Array.isArray(newOptions)) {
-		console.log('combineProcessingOptions - array !!!???')
-	} else if (typeof newOptions === 'object') {
-		for (var key in newOptions) {
-			if (comOptions[key] !== undefined) {
-				comOptions[key] = combineProcessingOptions(comOptions[key], newOptions[key])
-			} else {
-				comOptions[key] = newOptions[key]
-			}
-		}
-	} else {
-		return newOptions
-	}
-	return comOptions
-}
-
-function checkLayout (layout) {		// Layout dekomprimieren
-	var deflat = JSON.parse(JSON.stringify(layout))
-	if (Array.isArray(deflat)) {
-		var nObjValue = {}
-		deflat.forEach(function (value) {
-			if (typeof value === 'string') {
-				nObjValue[value] = defaultLayout()
-			} else if (typeof value === 'object') {
-				for (var valueKey in value) {
-					nObjValue[valueKey] = value[valueKey]
-				}
-			}
-		})
-		deflat = nObjValue
-	}
-	if (typeof deflat === 'object') {
-		for (var key in deflat) {
-			if (key === 'class' && deflat[key] !== undefined) {
-				deflat[key] = dcpoSimpleToComplex(deflat[key], defaultLayout())
-			}
-		}
-	}
-	// console.log('layout', JSON.parse(JSON.stringify(layout)), JSON.parse(JSON.stringify(deflat)), Array.isArray(deflat))
-	return deflat
-}
-
-function dcpoSimpleToComplex (content, standard, str2Val = undefined) {
-	if (typeof content === 'string') {
-		return {[content]: standard}
-	} else if (Array.isArray(content)) {
-		var nObjValue = {}
-		content.forEach(function (value) {
-			if (typeof value === 'string') {
-				nObjValue[value] = standard
-			} else if (typeof value === 'object') {
-				for (var valueKey in value) {
-					var nVal = value[valueKey]
-					if (str2Val !== undefined && typeof nVal === 'string') {
-						nVal = {[str2Val.prop]: nVal}
-						nObjValue[valueKey] = combineProcessingOptions(str2Val.std, nVal)
-					} else {
-						nObjValue[valueKey] = combineProcessingOptions(standard, nVal)
-					}
-				}
-			}
-		})
-		return nObjValue
-	}
-	return content
 }
 
 export default localFunctions
