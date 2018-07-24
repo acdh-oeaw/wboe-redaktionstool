@@ -44,12 +44,33 @@ function compareIt (obj, pos, parser, siblings) {
 			} else {
 				pMatch[pPos].errors.push({'t': 'attributes', 'e': attrMatchErrors})
 			}
-			//	Value überprüfen
+			let valMatchErrors = checkValue(obj, par.p.options.value)		//	Value überprüfen
+			if (valMatchErrors.length === 0) {
+				pMatch[pPos].score += 1
+			} else {
+				pMatch[pPos].errors.push({'t': 'value', 'e': valMatchErrors})
+			}
 		}
 	})
 	// ToDo: pMatch sortieren nach Fehlern und "score"
 	console.log(pMatch)
+
 	return xobj
+}
+
+function checkValue (objValue, parValue) {
+	var errors = []
+	// console.log('checkValue', objValue, parValue)
+	if (parValue === undefined && objValue.v !== undefined) {
+		errors.push({'e': 'Es sollte kein Wert vorhanden sein!'})
+	} else if (parValue !== undefined) {
+		let aVal = objValue.v || ''
+		// ToDo: innerText ... usw.
+		if (aVal === undefined && !parValue.canBeEmpty) {
+			errors.push({'e': 'Wert darf nicht leer sein!'})
+		}
+	}
+	return errors
 }
 
 function checkAttributes (objAttr, parAttr) {
