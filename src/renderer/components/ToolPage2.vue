@@ -88,17 +88,17 @@
 			console.log('ToolPage mounted - ', Math.ceil(performance.now() - t0) + ' ms.')
 		},
 		methods: {
-			click (e) {
-				if (this.showTabView && !(e.target.closest('.vis-dropdown') || e.target.closest('.vis-dropdown-button') || e.target.classList.contains('vis-dropdown') || e.target.classList.contains('vis-dropdown-button'))) {
+			mousedown (e) {
+				if (this.showTabView && !(e.target.closest('.vis-dropdown') || e.target.closest('.vis-dropdown-button'))) {
 					this.showTabView = false
 				}
 			}
 		},
 		created: function () {
-			window.addEventListener('click', this.click)
+			window.addEventListener('mousedown', this.mousedown)
 		},
 		beforeDestroy: function () {
-			window.removeEventListener('click', this.click)
+			window.removeEventListener('mousedown', this.mousedown)
 		},
 		components: {
 			ViewEditor,
