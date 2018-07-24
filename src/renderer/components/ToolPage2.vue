@@ -34,7 +34,7 @@
 			</b-tab>
 			<b-tab title="Match" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
 				<div class="viewmatch scroll p20" v-if="aTab === 6 && Options.show.develope">
-					<ViewMatch :parser="parsedXmlObject" v-if="parsedXmlObject && parsedXmlObject.content"/>
+					<ViewMatch :object="parsedXmlObject" v-if="parsedXmlObject && parsedXmlObject.content"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parsedXmlObject</b> vorhanden!</div>
 				</div>
 			</b-tab>

@@ -1,22 +1,27 @@
 <template>
-	<div class="start" v-if="parser !== undefined && content === undefined">
-		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="parser.errors && parser.errors.length > 0">
-			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ parser.errors.length }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+	<div class="start" v-if="content === undefined && object !== undefined">
+		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="object.errors && object.errors.length > 0">
+			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ object.errors.length }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
 					<div>
 						<dl class="mi0 pl20 dots">
-							<template  v-for="error in parser.errors">
+							<template  v-for="error in object.errors">
 								<dt><span v-for="node in error.tree" class="tree">{{ node }}</span></dt>
-								<dd>{{ error.error }}</dd>
+								<dd v-if="Array.isArray(error.error)">
+									<ul>
+										<li v-for="err in error.error">{{ err }}</li>
+									</ul>
+								</dd>
+								<dd v-else>{{ error.error }}</dd>
 							</template>
 						</dl>
 					</div>
 				</b-card-body>
 			</b-collapse>
 		</b-card>
-		<div v-if="parser.content">
-			<ViewMatch :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.content"/>
+		<div v-if="object.content">
+			<ViewXmlObject :content="aContent" :key="aKey" v-for="(aContent, aKey) in object.content"/>
 		</div>
 		<div v-else>
 			Keine Content-Daten vorhanden
@@ -24,22 +29,14 @@
 	</div>
 
 	<div class="obj" v-else-if="content !== undefined">
-		<b-card :header="content.n" no-body class="mib20 paneldecent">
+		<b-card :header="content.n" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
-				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
-					<font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/>
-					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.fromId')"/>
-					<font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/>
-					<span v-if="getValOfSubProp(content, 'p.options.title.use')"><b>{{ getValOfSubProp(content, 'p.options.title.value') }}</b> ({{ content.n }})</span>
-					<span v-else><b>{{ content.n }}</b></span>
-					<span class="val" v-if="getValOfSubProp(content, 'p.options.value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
-					<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(getValOfSubProp(content, 'p.options.value.possibleValues'))"/>
-					<font-awesome-icon :icon="((getValOfSubProp(content, 'p.options.value.edit.use')) ? 'edit' : ((getValOfSubProp(content, 'p.options.value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>
+				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
+					<span><b>{{ content.n }}</b></span>
+					<span class="val" v-if="content.v"> = <i>{{ tranculatedValue }}</i></span>
 					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
 						{{ attr + ((attrOpt.value) ? ':' : '') }}
 						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
-						<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(getValOfSubProp(content, 'p.options.attributes.' + attr + '.possibleValues'))"/>
-						<font-awesome-icon :icon="((attrOpt.type === 'fixed' || attrOpt.type === undefined) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
 					</span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="content.errors"/>
@@ -47,23 +44,31 @@
 			</div>
 			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
 				<b-card-body>
-					<div v-if="getValOfSubProp(content, 'p.options.value.is.use')">
-						<button @click="valueOpen = !valueOpen" class="btn-none"><b>Value{{ ((parserOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((valueOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
-						<code class="lb val" v-if="valueOpen">{{ getValOfSubProp(content, 'p.options.value.is.value') }}</code>
-					</div>
 					<div v-if="content.errors">
 						<b>Fehler:</b><br>
 						<ul style="color: #d33">
 							<li v-for="error in content.errors">{{ error }}</li>
 						</ul>
 					</div>
-					<div v-if="content.p">
+					<div v-if="content.parser">
 						<button @click="parserOpen = !parserOpen" class="btn-none"><b>Parser{{ ((parserOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((parserOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
-						<code class="lb" v-if="parserOpen">{{ content.p }}</code>
+						<code class="lb" v-if="parserOpen">{{ content.parser }}</code>
+					</div>
+					<div v-if="content.v">
+						<button @click="valueOpen = !valueOpen" class="btn-none"><b>Value{{ ((valueOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((valueOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
+						<code class="lb val" v-if="valueOpen">{{ content.v }}</code>
+					</div>
+					<div v-if="content.xml">
+						<button @click="xmlOpen = !xmlOpen" class="btn-none"><b>HTML{{ ((xmlOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((xmlOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
+						<code class="lb val" v-if="xmlOpen">{{ content.xml }}</code>
+					</div>
+					<div v-if="content.p">
+						<button @click="processOpen = !processOpen" class="btn-none"><b>Process{{ ((processOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((processOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
+						<code class="lb" v-if="processOpen">{{ content.p }}</code>
 					</div>
 					<div v-if="content.c">
 						<b>Kinder:</b><br>
-						<ViewMatch :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
+						<ViewXmlObject :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -71,31 +76,38 @@
 	</div>
 
 	<div class="error" v-else>
-		Weder "parser" noch "content" !!!!
+		Kein "object" übergeben !!!!
 	</div>
 </template>
 
 <script>
 	export default {
-		name: 'ViewMatch',
+		name: 'ViewXmlObject',
 		props: {
-			parser: Object,
+			object: Object,
 			content: Object,
 		},
 		data () {
 			return {
 				'isOpen': true,
 				'errorsOpen': true,
-				'headerOpen': true,
-				'contentOpen': true,
-				'systemOpen': true,
 				'parserOpen': false,
+				'processOpen': false,
 				'valueOpen': false,
+				'xmlOpen': false,
+				'pHeaderColor': '#333',
 			}
 		},
 		computed: {
+			headerVariante () {
+				if (!this.content.parser || this.content.parser.n === '#unknowen') {
+					this.pHeaderColor = '#eee'
+					return 'secondary'
+				}
+				return 'Default'
+			},
 			tranculatedValue () {
-				var aVal = this.getValOfSubProp(this.content, 'p.options.value.is.value')
+				var aVal = this.content.v
 				if (aVal !== undefined) {
 					return aVal.length > 25 ? aVal.slice(0, 25) + '...' : aVal
 				} else {
@@ -118,6 +130,9 @@
 	}
 	.card-header .val > i {
 		color: #007bff;
+	}
+	.invert > .card-header .val > i {
+		color: #999;
 	}
 	.header-btn-toggle {
 		margin: 0px;

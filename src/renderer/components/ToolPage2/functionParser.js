@@ -16,23 +16,30 @@ const localFunctions = {
 export default localFunctions
 
 function parseIt (xmlObject, parser) {
+	var gErrors = []
 	xmlObject.forEach(function (obj, pos) {
 		let aCompare = compareIt(obj, pos, parser, xmlObject)
 		if (aCompare.errors.length > 0) {
-			obj.error = aCompare.errors
+			obj.errors = aCompare.errors
+			gErrors.push({'error': aCompare.errors, 'tree': obj.tree})
 		}
 		if (aCompare.parserKey > -1) {
-			console.log(obj.n, 'compareIt', aCompare)
+			// console.log(obj.n, 'compareIt', aCompare)
 			obj.parser = parser[aCompare.parserKey]
 			if (Array.isArray(obj.c) && obj.c.length > 0) {
-				obj.c = parseIt(obj.c, obj.parser)
+				let childs = parseIt(obj.c, obj.parser.c)
+				obj.c = childs.content
+				if (childs.errors.length > 0) {
+					gErrors.splice(gErrors.length, 0, ...childs.errors)
+				}
 			}
 		} else {
 			console.log(obj.n, '#unknowen')
 			obj.parser = { 'n': '#unknowen', 'p': { 'options': { 'title': { 'value': 'Unbekannt', 'use': true } } } }
+			gErrors.push({'error': 'Tag "' + obj.n + '" konnte nicht zugewiesen werden!', 'tree': obj.tree})
 		}
 	})
-	return xmlObject
+	return { 'content': xmlObject, 'errors': gErrors }
 }
 
 function compareIt (obj, pos, parser, siblings) {
@@ -71,18 +78,22 @@ function compareIt (obj, pos, parser, siblings) {
 	})
 	// ToDo: pMatch sortieren nach Fehlern und "score"
 	// Fehler auswerten:
+	var aParserKey = pMatch[0].key
 	if (pMatch[0].errors.length > 0) {
 		errors.push({'e': 'Enthält Fehler!', 'se': pMatch[0].errors})
+		aParserKey = -1
 	}
 	if (pMatch.length > 1) {
 		if (pMatch[0].score === pMatch[1].score) {
 			errors.push({'e': 'Zuordnung nicht eindeutig!'})
+			aParserKey = -1
 		}
 	}
 	if (pMatch[0].score === 0) {
 		errors.push({'e': 'Keine Übereinstimmung gefunden!'})
+		aParserKey = -1
 	}
-	return {'parserKey': pMatch[0].key, 'errors': errors}
+	return {'parserKey': aParserKey, 'errors': errors}
 }
 
 function checkValue (objValue, parValue) {
