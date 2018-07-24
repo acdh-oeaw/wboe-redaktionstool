@@ -27,18 +27,22 @@ function parseIt (xmlObject, parser) {
 		if (aCompare.parserKey > -1) {
 			// console.log(obj.n, 'aCompare', aCompare)
 			obj.parser = parser[aCompare.parserKey]
-			if (Array.isArray(obj.c) && obj.c.length > 0) {
+			if (aCompare.parseChildren && Array.isArray(obj.c) && obj.c.length > 0) {
 				let childs = parseIt(obj.c, obj.parser.c)
 				obj.c = childs.content
 				if (childs.errors.length > 0) {
 					gErrors.splice(gErrors.length, 0, ...childs.errors)
 				}
 			}
+			if (obj.parser.p.options.value && obj.parser.p.options.value.innerText) {
+				delete obj.c
+				obj.v = obj.text
+			}
 			if (!aCompare.stopParPos) {
 				aParPos += 1
 			}
 		} else {
-			console.log(obj.n, '#unknowen')
+			// console.log(obj.n, '#unknowen')
 			obj.parser = { 'n': '#unknowen', 'p': { 'options': { 'title': { 'value': 'Unbekannt', 'use': true } } } }
 			gErrors.push({'error': 'Tag "' + obj.n + '" konnte nicht zugewiesen werden!', 'tree': obj.tree})
 		}
@@ -51,6 +55,7 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 	// Berechnen wie hoch die Übereinstimmung ist
 	var pMatch = []
 	var stopParPos = false
+	var parseChildren = true
 	if (!Array.isArray(parser) || parser.length === 0) {
 		errors.push({'e': 'Kein parser übergeben!'})
 		return {'parserKey': -1, 'errors': errors}
@@ -80,10 +85,13 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 				pMatch[pPos].errors.push({'t': 'attributes', 'se': attrMatchErrors})
 			}
 			let valMatchErrors = checkValue(obj, par.p.options.value)		//	Value überprüfen
-			if (valMatchErrors.length === 0) {
+			if (valMatchErrors.inner) {
+				parseChildren = false
+			}
+			if (valMatchErrors.errors.length === 0) {
 				pMatch[pPos].score += 1
 			} else {
-				pMatch[pPos].errors.push({'t': 'value', 'se': valMatchErrors})
+				pMatch[pPos].errors.push({'t': 'value', 'se': valMatchErrors.errors})
 			}
 		} else {
 			pMatch[pPos].errors.push({'t': 'tag', 'e': 'Keine Übereinstimmung gefunden!'})
@@ -121,22 +129,27 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 		errors.push({'e': 'Keine Übereinstimmung gefunden!'})
 		aParserKey = -1
 	}
-	return {'parserKey': aParserKey, 'errors': errors, 'stopParPos': stopParPos}
+	return {'parserKey': aParserKey, 'errors': errors, 'stopParPos': stopParPos, 'parseChildren': parseChildren}
 }
 
 function checkValue (objValue, parValue) {
 	var errors = []
+	var inner = false
 	// console.log('checkValue', objValue, parValue)
 	if (parValue === undefined && objValue.v !== undefined) {
 		errors.push({'e': 'Es sollte kein Wert vorhanden sein!'})
 	} else if (parValue !== undefined) {
 		let aVal = objValue.v || ''
-		// ToDo: innerText, min, max ... usw.
+		if (parValue.innerText !== undefined) {
+			aVal = objValue.text || ''
+			inner = true
+		}
+		// ToDo: min, max ... usw.
 		if (aVal === undefined && !parValue.canBeEmpty) {
 			errors.push({'e': 'Wert darf nicht leer sein!'})
 		}
 	}
-	return errors
+	return {'errors': errors, 'inner': inner}
 }
 
 function checkAttributes (objAttr, parAttr) {

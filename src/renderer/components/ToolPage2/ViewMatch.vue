@@ -4,7 +4,7 @@
 			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ object.errors.length }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
-					<div>
+					<div class="g-errors">
 						<dl class="mi0 pl20 dots">
 							<template  v-for="error in object.errors">
 								<dt><span v-for="node in error.tree" class="tree">{{ node }}</span></dt>
@@ -246,5 +246,11 @@
 		color: #444;
 		padding: 1px 5px;
 		margin-right: 3px;
+	}
+	div.g-errors {
+		max-height: calc( 70vh - 200px );
+		overflow: auto;
+		padding: 8px 10px;
+		margin: -8px;
 	}
 </style>
