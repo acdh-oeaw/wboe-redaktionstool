@@ -76,7 +76,22 @@ function compareIt (obj, pos, parser, siblings) {
 			pMatch[pPos].errors.push({'t': 'tag', 'e': 'Keine Übereinstimmung gefunden!'})
 		}
 	})
-	// ToDo: pMatch sortieren nach Fehlern und "score"
+	pMatch = pMatch.slice().sort((a, b) => {		// Sortieren: Mehr Fehler nach unten, höherer Score nach oben
+		console.log(a, b)
+		if (a.errors.length > b.errors.length) {
+			return 1
+		}
+		if (a.errors.length < b.errors.length) {
+			return -1
+		}
+		if (a.score < b.score) {
+			return 1
+		}
+		if (a.score > b.score) {
+			return -1
+		}
+		return 0
+	})
 	// Fehler auswerten:
 	var aParserKey = pMatch[0].key
 	if (pMatch[0].errors.length > 0) {

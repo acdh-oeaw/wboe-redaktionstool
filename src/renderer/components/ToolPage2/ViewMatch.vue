@@ -29,9 +29,10 @@
 	</div>
 
 	<div class="obj" v-else-if="content !== undefined">
-		<b-card :header="content.n" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
+		<b-card :header="content.n" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
+					<font-awesome-icon icon="question-circle" class="fa-icon icmd mir5" v-if="!content.parser || content.parser.n === '#unknowen'"/>
 					<span><b>{{ content.n }}</b></span>
 					<span class="val" v-if="content.v"> = <i>{{ tranculatedValue }}</i></span>
 					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
@@ -132,7 +133,7 @@
 		color: #007bff;
 	}
 	.invert > .card-header .val > i {
-		color: #999;
+		color: #ccf;
 	}
 	.header-btn-toggle {
 		margin: 0px;
