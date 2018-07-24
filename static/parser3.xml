@@ -69,8 +69,19 @@
 														"tag": ["multiple"]
 													} ?>
 							</name>
+							<test></test>
 						</respStmt>
 					</titleStmt>
+					<publicationStmt>
+						<?options {
+												"value": ["innerText"]
+											} ?>
+					</publicationStmt>
+					<sourceDesc>
+						<?options {
+												"value": ["innerText"]
+											} ?>
+					</sourceDesc>
 				</fileDesc>
 			</teiHeader>
 			<text>

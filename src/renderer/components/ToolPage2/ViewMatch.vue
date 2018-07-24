@@ -101,6 +101,10 @@
 		},
 		computed: {
 			headerVariante () {
+				if (this.content.errors) {
+					this.pHeaderColor = '#eee'
+					return 'danger'
+				}
 				if (!this.content.parser || this.content.parser.n === '#unknowen') {
 					this.pHeaderColor = '#eee'
 					return 'secondary'

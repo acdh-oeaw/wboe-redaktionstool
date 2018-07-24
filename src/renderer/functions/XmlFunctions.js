@@ -69,10 +69,15 @@ const localFunctions = {
 	},
 	defaultLayout: function () { return {'use': true} },
 	defaultValue: function () { return {'use': true} },
+	defaultTag: function () { return {'use': true} },
 	defaultAttributes: function () { return {'type': 'variable'} },
 	decompressProcessingOptions: function (options) {		// Optionen dekomprimieren
 		var deflat = JSON.parse(JSON.stringify(options))
 		for (var key in deflat) {
+			// tag
+			if (key === 'tag' && deflat[key] !== undefined) {
+				deflat[key] = localFunctions.dcpoSimpleToComplex(deflat[key], localFunctions.defaultTag())
+			}
 			// title
 			if (key === 'title' && typeof deflat[key] === 'string') {
 				deflat[key] = {'value': deflat[key], 'use': true}
