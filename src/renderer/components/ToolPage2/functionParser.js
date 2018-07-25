@@ -49,6 +49,7 @@ function parseIt (xmlObject, parser) {
 		}
 	})
 	return { 'content': xmlObject, 'errors': gErrors }
+	// ToDo: fehlende Parser ermitteln!
 }
 
 function compareIt (obj, pos, parser, siblings, parPos) {
@@ -137,7 +138,7 @@ function checkValue (objValue, parValue) {
 	var errors = []
 	var inner = false
 	// console.log('checkValue', objValue, parValue)
-	if (parValue === undefined && objValue.v !== undefined) {
+	if (parValue === undefined && (objValue.v !== undefined || (parValue !== undefined && parValue.is !== undefined && parValue.is.value !== undefined))) {
 		errors.push({'e': 'Es sollte kein Wert vorhanden sein!'})
 	} else if (parValue !== undefined) {
 		let aVal = objValue.v || ''
@@ -145,9 +146,26 @@ function checkValue (objValue, parValue) {
 			aVal = objValue.text || ''
 			inner = true
 		}
-		// ToDo: min, max ... usw.
-		if (aVal === undefined && !parValue.canBeEmpty) {
-			errors.push({'e': 'Wert darf nicht leer sein!'})
+		if (parValue.edit) {
+			// ToDo: min, max ... usw.
+			if (aVal === undefined && !parValue.canBeEmpty) {
+				if (Array.isArray(parValue.is.possibleValues)) {
+					if (parValue.is.possibleValues.indexOf(aVal) < 0) {
+						errors.push({'e': 'Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!'})
+					}
+				}
+				errors.push({'e': 'Wert darf nicht leer sein!'})
+			}
+		} else {
+			if (parValue.is) {
+				if (Array.isArray(parValue.is.possibleValues)) {
+					if (parValue.is.possibleValues.indexOf(aVal) < 0) {
+						errors.push({'e': 'Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!'})
+					}
+				} else if (parValue.is.value !== aVal) {
+					errors.push({'e': 'Tag Wert "' + aVal + '" stimmt nicht mit Vorlage "' + parValue.is.value + '" überein!'})
+				}
+			}
 		}
 	}
 	return {'errors': errors, 'inner': inner}

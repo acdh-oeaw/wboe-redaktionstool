@@ -18,7 +18,17 @@
 												} ?>
 						</title>
 						<respStmt>
-							<resp>Editor</resp>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Editor",
+											"use": true,
+											"possibleValues": ["Editor", "article editor"]
+										}
+									}
+								} ?>
+							</resp>
 							<name>
 								<?options {
 														"value": ["variable", "required"]
@@ -26,7 +36,17 @@
 							</name>
 						</respStmt>
 						<respStmt>
-							<resp>Encoding Scheme</resp>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Encoding Scheme",
+											"use": true,
+											"possibleValues": ["Encoding Scheme", "encoding"]
+										}
+									}
+								} ?>
+							</resp>
 							<name>Jack Bowers</name>
 							<name>Daniel Schopper</name>
 							<name>Omar Siam</name>
@@ -51,24 +71,33 @@
 							</name>
 						</respStmt>
 						<respStmt>
-							<resp>Student assistants</resp>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Editor",
+											"use": true,
+											"possibleValues": ["Student assistants", "student assistants"]
+										}
+									}
+								} ?>
+							</resp>
 							<name>
 								<?options { "title": "Name",
 														"value": ["variable", "required"],
 														"tag": ["multiple"]
 													} ?>
 							</name>
-							<test></test>
 						</respStmt>
 					</titleStmt>
 					<publicationStmt>
 						<?options {
-												"value": ["innerText"]
+												"value": ["edit", "innerText"]
 											} ?>
 					</publicationStmt>
 					<sourceDesc>
 						<?options {
-												"value": ["innerText"]
+												"value": ["edit", "innerText"]
 											} ?>
 					</sourceDesc>
 				</fileDesc>

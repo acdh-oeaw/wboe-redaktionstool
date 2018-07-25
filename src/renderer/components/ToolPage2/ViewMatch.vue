@@ -109,6 +109,7 @@
 					this.pHeaderColor = '#eee'
 					return 'secondary'
 				}
+				this.pHeaderColor = '#333'
 				return 'Default'
 			},
 			tranculatedValue () {

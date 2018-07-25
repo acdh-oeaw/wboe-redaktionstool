@@ -2,16 +2,20 @@
 	<div class="tool-page">
 		<b-button-toolbar class="main-toolbar">
 			<b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
-				<b-dropdown-item @click="updateData()"><b>Reload Parser and File</b></b-dropdown-item>
+				<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
 				<b-dropdown-divider></b-dropdown-divider>
 				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :key="aKey" v-for="(aFile, aKey) in devFiles">{{ aFile.file }}</b-dropdown-item>
 			</b-dropdown>
 			<b-button-group size="sm" class="mx-1" v-if="devMode">
 				<b-btn @click="devNextFile(false)" title="Vorherige Datei"><font-awesome-icon icon="angle-left"/></b-btn>
+				<b-btn @click="updateData()" title="Parser und Datei neu laden"><font-awesome-icon icon="sync-alt"/></b-btn>
 				<b-btn @click="devNextFile()" title="Nächste Datei"><font-awesome-icon icon="angle-right"/></b-btn>
 			</b-button-group>
 			<b-input-group size="sm" class="w-25 mx-1" prepend="Datei">
 				<p class="form-control file-name">{{ Files.file }}</p>
+				<b-input-group-append>
+					<b-btn @click="showFile()" variant="outline-secondary" title="Ordner in Explorer öffnen"><font-awesome-icon icon="external-link-alt"/></b-btn>
+				</b-input-group-append>
 			</b-input-group>
 			<b-button-group size="sm" class="mr-1 mil-auto">
 				<b-btn title="" v-b-tooltip.hover.html><font-awesome-icon icon="clipboard-check"/></b-btn>
@@ -70,7 +74,7 @@
 	import ViewXmlObject from './ToolPage2/ViewXmlObject'
 	import ViewMatch from './ToolPage2/ViewMatch'
 	import functionParser from './ToolPage2/functionParser'
-	import { remote } from 'electron'
+	import { remote, shell } from 'electron'
 	import fPath from 'path'
 	const fs = remote.require('fs')
 
@@ -107,6 +111,9 @@
 			console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
 		},
 		methods: {
+			showFile () {		// Ordner in Explorer öffnen
+				shell.showItemInFolder(this.Files.file)
+			},
 			devFileList () {
 				var aFiles = []
 				if (this.devMode) {
