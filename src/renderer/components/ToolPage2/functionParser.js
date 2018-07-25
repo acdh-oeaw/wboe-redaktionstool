@@ -103,7 +103,7 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 				pMatch[pPos].errors.push({'t': 'value', 'se': valMatchErrors.errors})
 			}
 		} else {
-			pMatch[pPos].errors.push({'t': 'tag', 'e': 'Keine Übereinstimmung gefunden!'})
+			pMatch[pPos].errors.push({'t': 'tag', 'e': 'Tag Name stimmt nicht überein!'})
 		}
 	})
 	pMatch = pMatch.slice().sort((a, b) => {		// Sortieren: Mehr Fehler nach unten, höherer Score nach oben
@@ -129,7 +129,7 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 		aParserKey = -1
 	}
 	if (pMatch.length > 1) {
-		if (pMatch[0].score === pMatch[1].score) {
+		if (pMatch[0].score > 0 && pMatch[0].score === pMatch[1].score) {
 			errors.push({'e': 'Zuordnung nicht eindeutig!'})
 			aParserKey = -1
 		}

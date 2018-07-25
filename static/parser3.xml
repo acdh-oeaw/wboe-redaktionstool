@@ -116,14 +116,12 @@
 							<?options {
 													"tag": ["multiple"]
 												} ?>
-							<?copy {
-												"fromId": "orth",
-												"options": {
-													"tag": ["multiple"]
-												}
-											} ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple"] } } ?>
             </form>
 						<gramGrp>
+							<?options {
+													"title": "Gram Guppe"
+												} ?>
                <gram type="pos">
 								 <?options {
   													"title": "Gram Pos",
@@ -136,9 +134,9 @@
 							<?options {
 													"title": "Form Variant Diminutive",
 													"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
-													"tag": ["multiple"]
+													"tag": ["multiple", "possibleTag"]
 												} ?>
-							<?copy { "fromId": "orth" } ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple"] } } ?>
 							<gramGrp> <!-- Formatting Rule: after (final) //form[@subtype='diminutive'], print in brackets "(" "Diminutiv" comma "," value of /gram[@type='gender'] ")"-->
 								<?copy {"fromId": "gram-gender"} ?>
 							</gramGrp>
@@ -180,7 +178,7 @@
   													} ?>
 								</lang>
               	<form>
-                   <?copy { "fromId": "orth" } ?>
+									 <?copy { "fromId": "orth", "options": { "tag": ["multiple"] } } ?>
               	</form>
                 <def>
 									<?options {
@@ -233,7 +231,7 @@
 													} ?>
 							</def>
               <?copy { "fromId": "usg-geo" } ?>
-							<?copy { "fromId": "cit-example" } ?>
+							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
             </sense>
 						<!-- Formatting Rule: before variant in Wortbildung surround form with brackets and print 'auch' before form -->
 						<!-- Formatting Rule: insert "Wortbildung" before first <re> (same label for: compound, derivations, suffixes  -->
@@ -254,12 +252,7 @@
 															"subtype": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["compound", "MWE"]}
 														}]
 													} ?>
-								<orth>
-									<?options {
-															"title": "Orth",
-															"value": ["edit", "required"]
-														} ?>
-								</orth>
+								<?copy { "fromId": "orth" } ?>
 							</form>
 							<sense>
 								<?options {
@@ -289,7 +282,7 @@
 								</usg>
 							</sense>
 							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
-							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
+							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
 						</re>
 
 					</entry>
@@ -308,16 +301,14 @@
 										"attributes": [{
 											"extent": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]},
 											"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
-										}],
-										"tag": ["multiple"]
+										}]
 									} ?>
-
 			</orth>
 			<gram type="gender">
 				<?options {
 										"id": "gram-gender",
 										"title": "Gram Pos",
-										"value": ["variable", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum"]}}]
+										"value": ["variable", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum", "Femininum"]}}]
 									} ?>
 			</gram><!-- Formatting Rule: wrap value of //gram[@type='gender'] in brackets -->
 			<usg type="geo">
