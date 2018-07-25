@@ -8,14 +8,7 @@
 	<objParserContent>
 		<TEI xmlns="http://www.tei-c.org/ns/1.0">
 			<teiHeader>
-				<?options { "title": "Kopfzeile",
-										"layout": {
-											"class": "test"
-										},
-										"editor": {
-											"layout": ["panel", "collapse", {"class": ["editor-test", "bla"]}]
-										}
-									} ?>
+				<?options { "title": "Kopfzeile" } ?>
 				<fileDesc>
 					<titleStmt>
 						<title>
@@ -28,16 +21,12 @@
 							<resp>Editor</resp>
 							<name>
 								<?options {
-														"value": ["edit", "required", {"is": {"value": "Testname"}}]
+														"value": ["variable", "required"]
 													} ?>
 							</name>
 						</respStmt>
 						<respStmt>
-							<resp>
-								<?options {
-														"value": ["innerText"]
-													} ?>
-								Encoding Scheme</resp>
+							<resp>Encoding Scheme</resp>
 							<name>Jack Bowers</name>
 							<name>Daniel Schopper</name>
 							<name>Omar Siam</name>
@@ -46,7 +35,7 @@
 							<resp>DBOE Team</resp>
 							<name>
 								<?options { "title": "Name",
-														"attributes": [{"xml:id": {"type": "variable", "possibleValues": ["AL", "PhS", "AG", "PZ", "SW", "SS", "JD", "AB"]}}],
+														"attributes": [{"xml:id": {"type": "variable"}}],
 														"value": ["variable", "required"]
 													} ?>
 								<?for [

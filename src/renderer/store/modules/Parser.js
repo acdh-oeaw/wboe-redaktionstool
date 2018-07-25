@@ -40,6 +40,12 @@ const actions = {
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent })
 		dispatch('MAKE_PARSER')
 	},
+	RELOAD_PARSER_FILE: function ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
+		var aFile = state.file
+		var fileContent = fs.readFileSync(aFile, 'utf8')
+		commit('SET_PARSER_FILE', { file: aFile, content: fileContent })
+		dispatch('MAKE_PARSER')
+	},
 	MAKE_PARSER: function ({ commit, dispatch }) {
 		// XML-Datei in DOM umwandeln:
 		var xmlDomObj = xmlFunctions.string2xmlDom(state.fileContent)

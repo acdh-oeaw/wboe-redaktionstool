@@ -60,6 +60,12 @@ const actions = {
 		commit('SET_FILE', { file: aFile, content: fileContent })
 		dispatch('MAKE_FILE_OBJECT')
 	},
+	RELOAD_FILE: function ({ commit, dispatch }) {
+		var aFile = state.file
+		var fileContent = fs.readFileSync(aFile, 'utf8')
+		commit('SET_FILE', { file: aFile, content: fileContent })
+		dispatch('MAKE_FILE_OBJECT')
+	},
 	MAKE_FILE_OBJECT: function ({ commit, dispatch }) {
 		// XML-Datei in DOM umwandeln:
 		var xmlDomObj = xmlFunctions.string2xmlDom(state.fileContent)

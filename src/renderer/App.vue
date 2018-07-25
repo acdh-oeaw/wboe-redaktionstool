@@ -176,4 +176,8 @@
 	.electron-in-page-search-window.search-active {
 		visibility: visible;
 	}
+	.dropdown-menu[x-placement="top-end"] {
+		max-height: 95vh;
+		overflow-y: auto;
+	}
 </style>

@@ -1,6 +1,18 @@
 <template>
 	<div class="tool-page">
 		<b-button-toolbar class="main-toolbar">
+			<b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
+				<b-dropdown-item @click="updateData()"><b>Reload Parser and File</b></b-dropdown-item>
+				<b-dropdown-divider></b-dropdown-divider>
+				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :key="aKey" v-for="(aFile, aKey) in devFiles">{{ aFile.file }}</b-dropdown-item>
+			</b-dropdown>
+			<b-button-group size="sm" class="mx-1" v-if="devMode">
+				<b-btn @click="devNextFile(false)" title="Vorherige Datei"><font-awesome-icon icon="angle-left"/></b-btn>
+				<b-btn @click="devNextFile()" title="Nächste Datei"><font-awesome-icon icon="angle-right"/></b-btn>
+			</b-button-group>
+			<b-input-group size="sm" class="w-25 mx-1" prepend="Datei">
+				<p class="form-control file-name">{{ Files.file }}</p>
+			</b-input-group>
 			<b-button-group size="sm" class="mr-1 mil-auto">
 				<b-btn title="" v-b-tooltip.hover.html><font-awesome-icon icon="clipboard-check"/></b-btn>
 			</b-button-group>
@@ -58,6 +70,9 @@
 	import ViewXmlObject from './ToolPage2/ViewXmlObject'
 	import ViewMatch from './ToolPage2/ViewMatch'
 	import functionParser from './ToolPage2/functionParser'
+	import { remote } from 'electron'
+	import fPath from 'path'
+	const fs = remote.require('fs')
 
 	export default {
 		name: 'tool-page-2',
@@ -65,7 +80,10 @@
 			return {
 				aTab: 6,
 				showTabView: false,
-				parsedXmlObject: undefined
+				parsedXmlObject: undefined,
+				updateTimer: performance.now(),
+				devMode: (process.env.NODE_ENV === 'development'),
+				devFiles: undefined,
 			}
 		},
 		computed: {
@@ -74,20 +92,75 @@
 			...mapState(['Files']),
 		},
 		watch: {
+			aTab: function (nVal) {
+				// ToDo: Caching!
+			}
 		},
 		mounted: function () {
 			var t0 = performance.now()
 			this.$store.dispatch('LOAD_PARSER_FILE')
-			console.log('LOAD_PARSER_FILE - ', Math.ceil(performance.now() - t0) + ' ms.')
-			var t1 = performance.now()
 			this.$store.dispatch('LOAD_FILE')
-			console.log('LOAD_FILE - ', Math.ceil(performance.now() - t1) + ' ms.')
-			t1 = performance.now()
 			this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
-			console.log('functionParser.parseXmlObject - ', Math.ceil(performance.now() - t1) + ' ms.')
-			console.log('ToolPage mounted - ', Math.ceil(performance.now() - t0) + ' ms.')
+			if (this.devMode) {
+				this.devFiles = this.devFileList()
+			}
+			console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
 		},
 		methods: {
+			devFileList () {
+				var aFiles = []
+				if (this.devMode) {
+					aFiles.push({'file': 'demo2.xml', 'fullFileName': fPath.join(__static, '/demo2.xml')})
+					var aPath = 'D:\\OEAW\\Redaktionstool\\Vorlagen\\2018-06-18\\wboe_articles-master\\102_derived_tei'
+					var aPathRead = fs.readdirSync(aPath)
+					aPathRead.forEach(function (file) {
+						var aFullFileName = fPath.join(aPath, file)
+						var stats = fs.statSync(aFullFileName)
+						if (!stats.isDirectory()) {
+							let aExt = file.split('.').pop()
+							if (aExt === 'xml') {
+								aFiles.push({ 'file': file, 'fullFileName': aFullFileName })
+							}
+						}
+					}, this)
+				}
+				return aFiles
+			},
+			devNextFile (next = true) {
+				if (this.devMode) {
+					var aList = ((next) ? this.devFiles : this.devFiles.slice().reverse())
+					var aPos = -1
+					aList.some(function (aVal, aKey) {
+						// console.log(aVal.fullFileName, this.Files.file, aVal.fullFileName === this.Files.file)
+						if (aVal.fullFileName === this.Files.file) {
+							aPos = aKey
+							return true
+						}
+					}, this)
+					console.log(aPos)
+					if (aPos >= 0 && aPos < aList.length - 1) {
+						aPos += 1
+					} else {
+						aPos = 0
+					}
+					console.log(aPos)
+					console.log(aList[aPos])
+					this.devSelectFile(aList[aPos].fullFileName)
+				}
+			},
+			devSelectFile (file) {
+				if (this.devMode && file !== undefined) {
+					var t0 = performance.now()
+					this.$store.dispatch('LOAD_FILE', file)
+					this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
+					console.log('devSelectFile - ' + Math.ceil(performance.now() - t0) + ' ms.')
+				}
+			},
+			updateData () {
+				this.$store.dispatch('RELOAD_PARSER_FILE')
+				this.$store.dispatch('RELOAD_FILE')
+				this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
+			},
 			mousedown (e) {
 				if (this.showTabView && !(e.target.closest('.vis-dropdown') || e.target.closest('.vis-dropdown-button'))) {
 					this.showTabView = false
@@ -96,6 +169,12 @@
 		},
 		created: function () {
 			window.addEventListener('mousedown', this.mousedown)
+		},
+		beforeUpdate: function () {
+			this.updateTimer = performance.now()
+		},
+		updated: function () {
+			console.log('updated: ' + Math.ceil(performance.now() - this.updateTimer) + ' ms.')
 		},
 		beforeDestroy: function () {
 			window.removeEventListener('mousedown', this.mousedown)
@@ -171,7 +250,7 @@
 	.vis-dropdown {
 		position: absolute;
 		right: 5px;
-		top: calc( 100% - 5px );
+		top: calc( 100% - 2px );
 		background: #fff;
 		border: 1px solid #ddd;
 		border-radius: 5px;
@@ -186,5 +265,12 @@
 		margin-bottom: 2px;
 		border: none;
 		cursor: pointer;
+	}
+	p.form-control.file-name {
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		direction: rtl;
+		text-align: left;
 	}
 </style>
