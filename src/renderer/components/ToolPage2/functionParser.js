@@ -41,7 +41,7 @@ function parseIt (xmlObject, parser) {
 				obj.v = obj.text
 			}
 			if (!aCompare.stopParPos) {
-				aParPos += 1
+				aParPos += aCompare.plusParPos
 			}
 		} else {
 			obj.parser = { 'n': '#unknowen', 'p': { 'options': { 'title': { 'value': 'Unbekannt', 'use': true } } } }
@@ -57,10 +57,11 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 	// Berechnen wie hoch die Übereinstimmung ist
 	var pMatch = []
 	var stopParPos = false
+	var plusParPos = 1
 	var parseChildren = true
 	if (!Array.isArray(parser) || parser.length === 0) {
 		errors.push({'e': 'Kein parser übergeben!'})
-		return {'parserKey': -1, 'errors': errors}
+		return {'parserKey': -1, 'plusParPos': plusParPos, 'errors': errors}
 	}
 	parser.some(function (par, pPos) {
 		pMatch[pPos] = {'key': pPos, 'score': 0, 'errors': []}
@@ -69,15 +70,21 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 			if (pPos === parPos) {		// Position überprüfen
 				pMatch[pPos].score += 1
 			} else {
+				var isTagPosCorr = false
 				if (par.p.options.tag && par.p.options.tag.multiple) {
 					if (pPos === parPos - 1) {
 						pMatch[pPos].score += 1
 						stopParPos = true
-					} else {
-						pMatch[pPos].errors.push({'t': 'tag', 'e': 'Position stimmt nicht! (m)'})
+						isTagPosCorr = true
 					}
-				} else {
-					pMatch[pPos].errors.push({'t': 'tag', 'e': 'Position stimmt nicht!'})
+				}
+				if (!isTagPosCorr) {
+					if (pPos > 0 && parser[pPos - 1] && parser[pPos - 1].p.options.tag && parser[pPos - 1].p.options.tag.possibleTag) {
+						pMatch[pPos].score += 1
+						plusParPos += 1
+					} else {
+						pMatch[pPos].errors.push({'t': 'tag', 'e': 'Position stimmt nicht!'})
+					}
 				}
 			}
 			let attrMatchErrors = checkAttributes(obj.p.options.attributes, par.p.options.attributes)		// Attribute überprüfen
@@ -117,7 +124,7 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 	// Fehler auswerten:
 	var aParserKey = pMatch[0].key
 	if (pMatch[0].errors.length > 0) {
-		console.log('pMatch', pMatch, parser)
+		// console.log('pMatch', pMatch, parser)
 		errors.push({'e': 'Enthält Fehler!', 'se': pMatch[0].errors})
 		aParserKey = -1
 	}
@@ -131,14 +138,16 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 		errors.push({'e': 'Keine Übereinstimmung gefunden!'})
 		aParserKey = -1
 	}
-	return {'parserKey': aParserKey, 'errors': errors, 'stopParPos': stopParPos, 'parseChildren': parseChildren}
+	return {'parserKey': aParserKey, 'errors': errors, 'stopParPos': stopParPos, 'plusParPos': plusParPos, 'parseChildren': parseChildren}
 }
 
 function checkValue (objValue, parValue) {
 	var errors = []
 	var inner = false
 	// console.log('checkValue', objValue, parValue)
-	if (parValue === undefined && (objValue.v !== undefined || (parValue !== undefined && parValue.is !== undefined && parValue.is.value !== undefined))) {
+	if (parValue === undefined && (objValue.v !== undefined
+	|| (parValue !== undefined && parValue.is !== undefined && parValue.is.value !== undefined)
+	|| (parValue !== undefined && parValue.variable !== undefined))) {
 		errors.push({'e': 'Es sollte kein Wert vorhanden sein!'})
 	} else if (parValue !== undefined) {
 		let aVal = objValue.v || ''
@@ -146,20 +155,21 @@ function checkValue (objValue, parValue) {
 			aVal = objValue.text || ''
 			inner = true
 		}
-		if (parValue.edit) {
+		if (parValue.edit || parValue.variable) {
 			// ToDo: min, max ... usw.
-			if (aVal === undefined && !parValue.canBeEmpty) {
-				if (Array.isArray(parValue.is.possibleValues)) {
+			if ((aVal === undefined || aVal.length === 0) && !parValue.canBeEmpty) {
+				errors.push({'e': 'Wert darf nicht leer sein!'})
+			} else {
+				if (parValue.is && Array.isArray(parValue.is.possibleValues)) {
 					if (parValue.is.possibleValues.indexOf(aVal) < 0) {
 						errors.push({'e': 'Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!'})
 					}
 				}
-				errors.push({'e': 'Wert darf nicht leer sein!'})
 			}
 		} else {
 			if (parValue.is) {
 				if (Array.isArray(parValue.is.possibleValues)) {
-					if (parValue.is.possibleValues.indexOf(aVal) < 0) {
+					if (aVal === undefined || parValue.is.possibleValues.indexOf(aVal) < 0) {
 						errors.push({'e': 'Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!'})
 					}
 				} else if (parValue.is.value !== aVal) {
@@ -185,7 +195,7 @@ function checkAttributes (objAttr, parAttr) {
 					if (!aParAttr[pKey].canBeEmpty && (aObjAttr[pKey].value === undefined || aObjAttr[pKey].value.length === 0)) {
 						errors.push({'a': pKey, 'e': 'Wert darf nicht leer sein!'})
 					}
-					if (aParAttr[pKey].possibleValues.indexOf(aObjAttr[pKey].value) < 0) {
+					if (aObjAttr[pKey] && aParAttr[pKey].possibleValues.indexOf(aObjAttr[pKey].value) < 0) {
 						errors.push({'a': pKey, 'e': 'Wert "' + aObjAttr[pKey].value + '" nicht in der Liste möglicher Werte!'})
 					}
 				}

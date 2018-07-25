@@ -4,7 +4,7 @@
 			<b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
 				<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
 				<b-dropdown-divider></b-dropdown-divider>
-				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :key="aKey" v-for="(aFile, aKey) in devFiles">{{ aFile.file }}</b-dropdown-item>
+				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : aFile.errors}" :key="aKey" v-for="(aFile, aKey) in devFiles">{{ aFile.file + ((aFile.errors) ? ' (Fehler: ' + aFile.errors.length + ')' : '') }}</b-dropdown-item>
 			</b-dropdown>
 			<b-button-group size="sm" class="mx-1" v-if="devMode">
 				<b-btn @click="devNextFile(false)" title="Vorherige Datei"><font-awesome-icon icon="angle-left"/></b-btn>
@@ -75,6 +75,8 @@
 	import ViewMatch from './ToolPage2/ViewMatch'
 	import functionParser from './ToolPage2/functionParser'
 	import { remote, shell } from 'electron'
+	import xmlFunctions from '@/functions/XmlFunctions'
+	import FilesFunctionsObject from '@/store/modules/functions/FilesFunctionsObject'
 	import fPath from 'path'
 	const fs = remote.require('fs')
 
@@ -102,8 +104,12 @@
 		},
 		mounted: function () {
 			var t0 = performance.now()
-			this.$store.dispatch('LOAD_PARSER_FILE')
-			this.$store.dispatch('LOAD_FILE')
+			if (this.Parser.parser === undefined) {
+				this.$store.dispatch('LOAD_PARSER_FILE')
+			}
+			if (this.Files.fileObject === undefined) {
+				this.$store.dispatch('LOAD_FILE')
+			}
 			this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
 			if (this.devMode) {
 				this.devFiles = this.devFileList()
@@ -115,6 +121,7 @@
 				shell.showItemInFolder(this.Files.file)
 			},
 			devFileList () {
+				var t0 = performance.now()
 				var aFiles = []
 				if (this.devMode) {
 					aFiles.push({'file': 'demo2.xml', 'fullFileName': fPath.join(__static, '/demo2.xml')})
@@ -126,11 +133,18 @@
 						if (!stats.isDirectory()) {
 							let aExt = file.split('.').pop()
 							if (aExt === 'xml') {
-								aFiles.push({ 'file': file, 'fullFileName': aFullFileName })
+								var fileContent = fs.readFileSync(aFullFileName, 'utf8')
+								var xmlDomObj = xmlFunctions.string2xmlDom(fileContent)
+								var xmlObj = undefined
+								if (xmlDomObj.xmlDom !== undefined && !xmlDomObj.errors) {
+									xmlObj = functionParser.parseXmlObject(this.Parser.parser, FilesFunctionsObject.xml2Obj(xmlDomObj.xmlDom))
+								}
+								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': xmlObj.errors })
 							}
 						}
 					}, this)
 				}
+				console.log('devFileList() - ' + Math.ceil(performance.now() - t0) + ' ms.')
 				return aFiles
 			},
 			devNextFile (next = true) {
@@ -167,6 +181,9 @@
 				this.$store.dispatch('RELOAD_PARSER_FILE')
 				this.$store.dispatch('RELOAD_FILE')
 				this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
+				if (this.devMode) {
+					this.devFiles = this.devFileList()
+				}
 			},
 			mousedown (e) {
 				if (this.showTabView && !(e.target.closest('.vis-dropdown') || e.target.closest('.vis-dropdown-button'))) {
@@ -279,5 +296,11 @@
 		text-overflow: ellipsis;
 		direction: rtl;
 		text-align: left;
+	}
+	a.dropdown-item.error {
+    background: #fee !important;
+	}
+	a.dropdown-item.active.error {
+    background: #dc3545 !important;
 	}
 </style>

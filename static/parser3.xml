@@ -12,7 +12,8 @@
 				<fileDesc>
 					<titleStmt>
 						<title>
-							<?options { "id": "title",
+							<?options {
+													"id": "title",
 													"title": "Titel",
 													"value": ["edit", {"required": {"use": true}}]
 												} ?>
@@ -54,7 +55,8 @@
 						<respStmt>
 							<resp>DBOE Team</resp>
 							<name>
-								<?options { "title": "Name",
+								<?options {
+														"title": "Name",
 														"attributes": [{"xml:id": {"type": "variable"}}],
 														"value": ["variable", "required"]
 													} ?>
@@ -83,7 +85,8 @@
 								} ?>
 							</resp>
 							<name>
-								<?options { "title": "Name",
+								<?options {
+														"title": "Name",
 														"value": ["variable", "required"],
 														"tag": ["multiple"]
 													} ?>
@@ -105,13 +108,248 @@
 			<text>
 				<body>
 					<entry>
+						<?options {
+												"title": "Eintrag",
+												"attributes": [{"n": {"type": "edit", "canBeEmpty": {"use": true}}}]
+											} ?>
+						<form type="lemma">
+							<?options {
+													"tag": ["multiple"]
+												} ?>
+							<?copy {
+												"fromId": "orth",
+												"options": {
+													"tag": ["multiple"]
+												}
+											} ?>
+            </form>
+						<gramGrp>
+               <gram type="pos">
+								 <?options {
+  													"title": "Gram Pos",
+  													"value": ["variable", "required"]
+  												} ?>
+							 </gram>
+               <?copy {"fromId": "gram-gender"} ?>
+            </gramGrp>
+						<form type="variant" subtype="diminutive"><!-- ISSUE: THESE CAN'T BE NESTED IN "LEMMA" BECAUSE THERE ARE TWO LEMMAS,  AND THEY ARE NOT ADJECENT TO EACH OF THEIR RESPECTIVE FORMS -->
+							<?options {
+													"title": "Form Variant Diminutive",
+													"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
+													"tag": ["multiple"]
+												} ?>
+							<?copy { "fromId": "orth" } ?>
+							<gramGrp> <!-- Formatting Rule: after (final) //form[@subtype='diminutive'], print in brackets "(" "Diminutiv" comma "," value of /gram[@type='gender'] ")"-->
+								<?copy {"fromId": "gram-gender"} ?>
+							</gramGrp>
+						</form>
+						<!-- Formatting Rule: (Subheading)  "Verbreitung": before the first instance of: /entry/usg[@type = "geo"] -->
+            <!-- Formatting Rule: insert semicolon ";" between each: /entry/usg[@type="geo"] -->
+            <!-- Note: editor can replace <placeName type="grossregion"> with <placeName type="region"> if needed -->
+						<?copy { "fromId": "usg-geo" } ?>
+						<!-- Formatting Rule: (Subheading)  "Belegauswahl": before the first form[@type = "lautung"] -->
+
+            <!-- Formatting Rule: (Subheading)  "Datenbankbbeleg (exempl.)": before the first form[@type = "lautung"] -->
+            <!-- Formatting Rule: surround /entry/form/usg[@type="geo"] contents with brackets "(" ")" -->
+
+						<form type="variant">	<!-- Formatting Rule: semicolon between <form type="variant">'s -->		<!-- Formatting Rule: /form/pron in italics -->
+							<?options {
+													"title": "Form Variant",
+													"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
+													"tag": ["multiple"]
+												} ?>
+							 <pron xml:lang="bar-AT">
+								 <?options {
+ 														"title": "Pron bar-AT",
+ 														"value": ["variable", "required"]
+ 													} ?>
+							 </pron>
+							 <?copy { "fromId": "usg-geo" } ?>
+						</form>
+
+						<!-- Formatting Rule: print "Etymologie" before <etym> -->
+            <!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
+            <!-- Formatting Rule:  enter comma after <def> where //cit/desc -->
+            <!--Formatting Rule:  add colon betweeen: (/date  or /edition>) and /citedRange within /bibl -->
+						<etym>
+              <cit type="etymon">
+              	<lang>
+									<?options {
+  														"title": "Lang",
+  														"value": ["variable", "required"]
+  													} ?>
+								</lang>
+              	<form>
+                   <?copy { "fromId": "orth" } ?>
+              	</form>
+                <def>
+									<?options {
+  														"title": "Def",
+  														"value": ["variable", "required"]
+  													} ?>
+								</def>
+              </cit>
+              <!-- Formatting Rule: print bibl title & year "Lexer 1878 III" in small caps with colon followed by page number (value of <citedRange>) all wrapped in brackets "(" ")"  -->
+              <ref type="bibl" target="#Lexer1878III">
+								<?options {
+														"title": "Bibl",
+														"attributes": [{
+															"target": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["#Lexer1878III"]}
+														}]
+													} ?>
+								<citedRange>
+									<?options {
+  														"title": "Cited Range",
+  														"value": ["variable", "required"]
+  													} ?>
+							 	</citedRange>
+							</ref>
+            </etym>
+						<!-- Formatting Rule: Print "Bedeutung" (project should only have one or the other!) -->
+            <!-- Formatting Rule: where (2...n) <sense> for each print number in roman numerals with period -->
+            <!-- Formatting Rule: where (2...n) <def> 's in <sense> before each print number in arabic numerals with period -->
+            <!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
+            <!--Formatting Rule: letter spacing within def should be 1 pt -->
+            <!-- Formatting Rule: <cit type="example"><quote> in italics -->
+            <!-- Formatting Rule: surround <cit type="example"><usg type="geo"> contents with brackets "(" ")" -->
+            <!-- Formatting Rule: add a long dash before each //cit[@type="example"]  -->
+						<sense>
+							<?options {
+													"title": "Sense",
+													"tag": ["multiple"]
+												} ?>
+              <!-- below is a preliminary attempt  -->
+              <ref type="form">
+								<?options {
+		 												"title": "Ref Form",
+														"value": ["edit", "innerText"],
+														"tag": ["possibleTag"]
+		 											} ?>
+							</ref><!-- Formatting rule: if target (/form[@type='variant' and @subtype='diminutive] print "(Dim.)");-->
+              <def>
+								<?options {
+														"title": "Def",
+														"value": ["edit", "required"]
+													} ?>
+							</def>
+              <?copy { "fromId": "usg-geo" } ?>
+							<?copy { "fromId": "cit-example" } ?>
+            </sense>
+						<!-- Formatting Rule: before variant in Wortbildung surround form with brackets and print 'auch' before form -->
+						<!-- Formatting Rule: insert "Wortbildung" before first <re> (same label for: compound, derivations, suffixes  -->
+						<!-- Formatting Rule: <cit type="example"><quote> in italics -->
+						<!-- Formatting Rule: surround <cit type="example"><usg type="geo"> contents with brackets "(" ")" -->
+						<!-- Formatting Rule: add a long dash before each //cit[@type="example"]  -->
+						<!-- Formatting Rule: <re><orth> in italics -->
+						<!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
+						<re>
+							<?options {
+													"title": "Re",
+													"tag": ["multiple"]
+												} ?>
+							<form type="lemma">
+								<?options {
+														"title": "Form Lemma",
+														"attributes": [{
+															"subtype": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["compound", "MWE"]}
+														}]
+													} ?>
+								<orth>
+									<?options {
+															"title": "Orth",
+															"value": ["edit", "required"]
+														} ?>
+								</orth>
+							</form>
+							<sense>
+								<?options {
+														"title": "Form Lemma",
+														"tag": ["possibleTag"]
+													} ?>
+								<def>
+									<?options {
+															"title": "Def",
+															"value": ["edit", "required"],
+															"tag": ["possibleTag"]
+														} ?>
+								</def>
+								<!-- formatting Rule: wrap /usg[@type="dom"] in brackets -->
+								<usg>
+									<?options {
+															"title": "Form Lemma",
+															"attributes": [{
+																"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg"]}
+															}]
+														} ?>
+									<?options {
+															"title": "Usg Dom",
+															"value": ["edit", "required"],
+															"tag": ["possibleTag"]
+														} ?>
+								</usg>
+							</sense>
+							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
+							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
+						</re>
+
 					</entry>
 				</body>
 			</text>
 		</TEI>
 	</objParserContent>
+
 	<objParserSystem>
 		<tags>
+			<orth>
+				<?options {
+				 						"id": "orth",
+										"title": "Orth",
+										"value": ["variable", "required"],
+										"attributes": [{
+											"extent": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]},
+											"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
+										}],
+										"tag": ["multiple"]
+									} ?>
+
+			</orth>
+			<gram type="gender">
+				<?options {
+										"id": "gram-gender",
+										"title": "Gram Pos",
+										"value": ["variable", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum"]}}]
+									} ?>
+			</gram><!-- Formatting Rule: wrap value of //gram[@type='gender'] in brackets -->
+			<usg type="geo">
+				<?options {
+			 							"id": "usg-geo",
+										"title": "Usg Geo",
+										"tag": ["multiple"]
+									} ?>
+				<placeName>
+					<?options {
+											"title": "Place Name",
+											"value": ["variable", "required"],
+											"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion"]}}],
+											"tag": ["multiple"]
+										} ?>
+				</placeName>
+			</usg>
+			<cit type="example">
+				<?options {
+										"id": "cit-example",
+										"title": "Cit Example",
+										"value": ["edit", "innerText"],
+										"tag": ["possibleTag"]
+									} ?>
+				 <quote xml:lang="bar-AT">
+					 <?options {
+											"title": "Quote",
+											"value": ["edit", "required"]
+										} ?>
+				 </quote>
+				 <?copy { "fromId": "usg-geo" } ?>
+			</cit>
 		</tags>
 	</objParserSystem>
 </objParser>

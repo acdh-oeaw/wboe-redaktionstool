@@ -10,7 +10,7 @@
             <!-- add version in appropriate location-->
             <respStmt>
                <resp>Editor</resp>
-               <name></name>
+               <name>xxx</name>
                <!-- Author of each article should enter name -->
             </respStmt>
             <respStmt>
@@ -79,9 +79,6 @@
                   <gram type="gender">Neutrum</gram><!-- Formatting Rule: wrap value of //gram[@type='gender'] in brackets -->
                </gramGrp>
             </form>
-
-
-
 
             <!-- Formatting Rule: (Subheading)  "Verbreitung": before the first instance of: /entry/usg[@type = "geo"] -->
             <!-- Formatting Rule: insert semicolon ";" between each: /entry/usg[@type="geo"] -->
