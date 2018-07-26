@@ -37,7 +37,7 @@
 				<b-card-body>
 					<b-alert show variant="danger" v-if="content.errors">
 						<b>Fehler:</b><br>
-						<cError :error="content.errors" class="error-col" forceli="true"/>
+						<cError :error="content.errors" class="mi0" forceli="true"/>
 					</b-alert>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
 						<b-button-group size="sm" class="mr-1">

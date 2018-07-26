@@ -61,7 +61,7 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 	var plusParPos = 1
 	var parseChildren = true
 	if (!Array.isArray(parser) || parser.length === 0) {
-		errors.push({'e': 'Kein parser übergeben!'})
+		errors.push({'e': 'Kein Parser übergeben!'})
 		return {'parserKey': -1, 'plusParPos': plusParPos, 'errors': errors}
 	}
 	parser.some(function (par, pPos) {
@@ -210,7 +210,7 @@ function checkAttributes (objAttr, parAttr) {
 	}
 	for (var oKey in aObjAttr) {		// Überprüfen ob es sich um ein unerwatetes Attribut handelt
 		if (aParAttr[oKey] === undefined) {
-			errors.push({'a': pKey, 'e': 'Unerwartetes Attribut!'})
+			errors.push({'a': pKey, 'e': 'Attribut "' + oKey + '" nicht erwartet.'})
 		}
 	}
 	return errors

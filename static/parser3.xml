@@ -153,12 +153,18 @@
 						<form type="variant">	<!-- Formatting Rule: semicolon between <form type="variant">'s -->		<!-- Formatting Rule: /form/pron in italics -->
 							<?options {
 													"title": "Form Variant",
-													"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
+													"attributes": [{
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
+														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
+													}],
 													"tag": ["multiple"]
 												} ?>
 							 <pron xml:lang="bar-AT">
 								 <?options {
  														"title": "Pron bar-AT",
+														"attributes": [{
+															"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
+														}],
  														"value": ["variable", "required"]
  													} ?>
 							 </pron>
@@ -284,7 +290,6 @@
 							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
 						</re>
-
 					</entry>
 				</body>
 			</text>
@@ -321,7 +326,7 @@
 					<?options {
 											"title": "Place Name",
 											"value": ["variable", "required"],
-											"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion"]}}],
+											"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]}}],
 											"tag": ["multiple"]
 										} ?>
 				</placeName>
