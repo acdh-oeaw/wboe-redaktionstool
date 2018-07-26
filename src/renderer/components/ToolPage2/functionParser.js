@@ -85,7 +85,12 @@ function compareIt (obj, pos, parser, siblings, parPos, checkChilds = true) {
 						pMatch[pPos].score += 1
 						plusParPos += 1
 					} else {
-						pMatch[pPos].errors.push({'t': 'tag', 'e': 'Position stimmt nicht!'})
+						if (par.p.options.tag && par.p.options.tag.anywhere) {
+							pMatch[pPos].score += 1
+							// plusParPos += 1
+						} else {
+							pMatch[pPos].errors.push({'t': 'tag', 'e': 'Position "' + (pPos - parPos) + '" stimmt nicht!'})
+						}
 					}
 				}
 			}
@@ -134,7 +139,7 @@ function compareIt (obj, pos, parser, siblings, parPos, checkChilds = true) {
 				}
 			}
 		} else {
-			pMatch[pPos].errors.push({'t': 'tag', 'e': 'Tag Name stimmt nicht überein!'})
+			pMatch[pPos].errors.push({'t': 'tag', 'e': 'Tag Name "' + obj.n + '" stimmt nicht mit "' + par.n + '" überein!'})
 		}
 	})
 	pMatch = pMatch.slice().sort((a, b) => {		// Sortieren: Mehr Fehler nach unten, höherer Score nach oben
@@ -159,7 +164,7 @@ function compareIt (obj, pos, parser, siblings, parPos, checkChilds = true) {
 		errors.push({'e': 'Enthält Fehler!', 'se': pMatch[0].errors})
 		aParserKey = -1
 	}
-	if (pMatch.length > 1) {
+	if (checkChilds && pMatch.length > 1) {
 		if (pMatch[0].score > 0 && pMatch[0].score === pMatch[1].score) {
 			errors.push({'e': 'Zuordnung nicht eindeutig!'})
 			aParserKey = -1
