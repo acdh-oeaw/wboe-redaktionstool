@@ -3,7 +3,18 @@
 	schematypens="http://purl.oclc.org/dsdl/schematron"?>
 <?xml-model href="../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?>
 <TEI xmlns="http://www.tei-c.org/ns/1.0">
-	 <teiHeader>
+	<test>
+		<test>
+			<test3></test3>
+		</test>
+		<test>
+			<test2></test2>
+		</test>
+		<test>
+			<test1></test1>
+		</test>
+	</test>
+	<teiHeader>
 			<fileDesc>
 				 <titleStmt>
 						<title><?comment Das ist <b>ein</b> Test! ?>Farz_AG_V1</title>

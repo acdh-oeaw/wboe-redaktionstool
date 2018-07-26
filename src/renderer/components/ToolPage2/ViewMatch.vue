@@ -45,6 +45,7 @@
 							<b-button @click="setInfoOpen('value')" v-if="content.v" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process</b></b-button>
 							<b-button @click="setInfoOpen('parser')" v-if="content.parser" :pressed="infoOpen === 'parser'" variant="outline-secondary"><b>Parser</b></b-button>
+							<b-button @click="setInfoOpen('match')" v-if="content.parser" :pressed="infoOpen === 'match'" variant="outline-secondary"><b>Match</b></b-button>
 							<b-button @click="setInfoOpen('xml')" v-if="content.xml" :pressed="infoOpen === 'xml'" variant="outline-secondary"><b>HTML</b></b-button>
 						</b-button-group>
 						<b-input-group size="sm" class="mx-1" v-if="content.c">
@@ -58,6 +59,7 @@
 						<code class="lb" v-if="infoOpen === 'process'">{{ content.p }}</code>
 						<code class="lb" v-if="infoOpen === 'parser'">{{ content.parser }}</code>
 						<code class="lb val" v-if="infoOpen === 'xml'">{{ content.xml }}</code>
+						<code class="lb" v-if="infoOpen === 'match'">{{ content.pMatch }}</code>
 					</div>
 					<div v-if="content.c" class="mit10">
 						<ViewXmlObject ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>

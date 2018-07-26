@@ -23,6 +23,7 @@ function parseIt (xmlObject, parser) {
 		delete obj.parser
 		let aCompare = compareIt(obj, pos, parser, xmlObject, aParPos)
 		// console.log(obj.n, 'aCompare', aCompare)
+		obj.pMatch = aCompare.pMatch
 		if (aCompare.errors.length > 0) {
 			obj.errors = aCompare.errors
 			gErrors.push({'e': aCompare.errors, 'tree': obj.tree})
@@ -49,11 +50,11 @@ function parseIt (xmlObject, parser) {
 			gErrors.push({'e': 'Tag "' + obj.n + '" konnte nicht zugewiesen werden!', 'tree': obj.tree})
 		}
 	})
-	return { 'content': xmlObject, 'errors': gErrors }
 	// ToDo: fehlende Parser ermitteln!
+	return { 'content': xmlObject, 'errors': gErrors }
 }
 
-function compareIt (obj, pos, parser, siblings, parPos) {
+function compareIt (obj, pos, parser, siblings, parPos, checkChilds = true) {
 	var errors = []
 	// Berechnen wie hoch die Übereinstimmung ist
 	var pMatch = []
@@ -103,6 +104,35 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 			} else {
 				pMatch[pPos].errors.push({'t': 'value', 'se': valMatchErrors.errors})
 			}
+			if (parseChildren) {
+				if (Array.isArray(obj.c) && obj.c.length > 0) {		// Kinder überprüfen
+					if (checkChilds) {
+						console.log('Kinder überprüfen!')
+						var aParPos = 0
+						let accErr = false
+						obj.c.some(function (obj, pos) {
+							let aCompare = compareIt(obj, pos, par.c, obj.c, aParPos, false)
+							// console.log(obj.n, 'aCompare', aCompare)
+							if (aCompare.errors.length > 0) {
+								pMatch[pPos].errors.push({'t': 'childs', 'e': 'Kinder haben Fehler!', 'se': aCompare.errors})
+								accErr = true
+								return true
+							}
+							if (aCompare.parserKey > -1) {
+								if (!aCompare.stopParPos) {
+									aParPos += aCompare.plusParPos
+								}
+							}
+						})
+						if (!accErr) {
+							pMatch[pPos].score += 2		// Extra Punkt wenn die Kinder stimmen
+						}
+					}
+				} else if (Array.isArray(par.c) && par.c.length > 0) {
+					// ToDo: überprüfen ob die Kinder nur "possibleTag" sind!
+					pMatch[pPos].errors.push({'t': 'childs', 'e': 'Keine der erwarteten Kinder da!'})
+				}
+			}
 		} else {
 			pMatch[pPos].errors.push({'t': 'tag', 'e': 'Tag Name stimmt nicht überein!'})
 		}
@@ -139,7 +169,7 @@ function compareIt (obj, pos, parser, siblings, parPos) {
 		errors.push({'e': 'Keine Übereinstimmung gefunden!'})
 		aParserKey = -1
 	}
-	return {'parserKey': aParserKey, 'errors': errors, 'stopParPos': stopParPos, 'plusParPos': plusParPos, 'parseChildren': parseChildren}
+	return {'parserKey': aParserKey, 'errors': errors, 'stopParPos': stopParPos, 'plusParPos': plusParPos, 'parseChildren': parseChildren, 'pMatch': pMatch}
 }
 
 function checkValue (objValue, parValue) {
