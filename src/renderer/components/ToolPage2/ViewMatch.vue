@@ -5,17 +5,7 @@
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
 					<div class="g-errors">
-						<dl class="mi0 pl20 dots">
-							<template  v-for="error in object.errors">
-								<dt><span v-for="node in error.tree" class="tree">{{ node }}</span></dt>
-								<dd v-if="Array.isArray(error.error)">
-									<ul>
-										<li v-for="err in error.error">{{ err }}</li>
-									</ul>
-								</dd>
-								<dd v-else>{{ error.error }}</dd>
-							</template>
-						</dl>
+						<cError :error="object.errors" class="mi0 pl20" forceli="true"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -45,15 +35,13 @@
 			</div>
 			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
 				<b-card-body>
-					<div v-if="content.errors">
+					<b-alert show variant="danger" v-if="content.errors">
 						<b>Fehler:</b><br>
-						<ul style="color: #d33">
-							<li v-for="error in content.errors">{{ error }}</li>
-						</ul>
-					</div>
+						<cError :error="content.errors" class="error-col" forceli="true"/>
+					</b-alert>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
 						<b-button-group size="sm" class="mr-1">
-							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></b-button>
+							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 							<b-button @click="setInfoOpen('value')" v-if="content.v" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process</b></b-button>
 							<b-button @click="setInfoOpen('parser')" v-if="content.parser" :pressed="infoOpen === 'parser'" variant="outline-secondary"><b>Parser</b></b-button>
@@ -61,8 +49,8 @@
 						</b-button-group>
 						<b-input-group size="sm" class="mx-1" v-if="content.c">
 							<b-input-group-prepend is-text><b>Kinder:</b>&nbsp;({{ content.c.length }})</b-input-group-prepend>
-							<b-button @click="showChilds(true)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye" class="fa-icon mil5"/></b-button>
-							<b-button @click="showChilds(false)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye-slash" class="fa-icon mil5"/></b-button>
+							<b-button @click="showChilds(true)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye" class="fa-icon"/></b-button>
+							<b-button @click="showChilds(false)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye-slash" class="fa-icon"/></b-button>
 						</b-input-group>
 					</b-button-toolbar>
 					<div>
@@ -85,6 +73,7 @@
 </template>
 
 <script>
+	import cError from './cError'
 	export default {
 		name: 'ViewXmlObject',
 		props: {
@@ -137,14 +126,14 @@
 			setInfoOpen (open) {
 				this.infoOpen = ((this.infoOpen !== open) ? open : undefined)
 			}
+		},
+		components: {
+			cError
 		}
 	}
 </script>
 
 <style scoped>
-	span.tree+span.tree:before {
-		content: " > "
-	}
 	code.lb {
 		white-space: pre;
 	}

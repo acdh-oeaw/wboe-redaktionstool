@@ -25,7 +25,7 @@ function parseIt (xmlObject, parser) {
 		// console.log(obj.n, 'aCompare', aCompare)
 		if (aCompare.errors.length > 0) {
 			obj.errors = aCompare.errors
-			gErrors.push({'error': aCompare.errors, 'tree': obj.tree})
+			gErrors.push({'e': aCompare.errors, 'tree': obj.tree})
 		}
 		if (aCompare.parserKey > -1) {
 			obj.parser = parser[aCompare.parserKey]
@@ -46,7 +46,7 @@ function parseIt (xmlObject, parser) {
 			}
 		} else {
 			obj.parser = { 'n': '#unknowen', 'p': { 'options': { 'title': { 'value': 'Unbekannt', 'use': true } } } }
-			gErrors.push({'error': 'Tag "' + obj.n + '" konnte nicht zugewiesen werden!', 'tree': obj.tree})
+			gErrors.push({'e': 'Tag "' + obj.n + '" konnte nicht zugewiesen werden!', 'tree': obj.tree})
 		}
 	})
 	return { 'content': xmlObject, 'errors': gErrors }
