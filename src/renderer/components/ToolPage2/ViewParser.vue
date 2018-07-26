@@ -4,13 +4,8 @@
 			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ parser.errors.length }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
-					<div>
-						<dl class="mi0 pl20 dots">
-							<template  v-for="error in parser.errors">
-								<dt><span v-for="node in error.tree" class="tree">{{ node }}</span></dt>
-								<dd>{{ error.error }}</dd>
-							</template>
-						</dl>
+					<div class="g-errors">
+						<cError :error="parser.errors" class="mi0 pl20" forceli="true"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -65,7 +60,6 @@
 					<font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/>
 					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.fromId')"/>
 					<font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/>
-					<span v-if="content.pNr !== undefined">{{ content.pNr }}) </span>
 					<span v-if="getValOfSubProp(content, 'p.options.title.use')"><b>{{ getValOfSubProp(content, 'p.options.title.value') }}</b> ({{ content.n }})</span>
 					<span v-else><b>{{ content.n }}</b></span>
 					<span class="val" v-if="getValOfSubProp(content, 'p.options.value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
@@ -83,23 +77,29 @@
 			</div>
 			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
 				<b-card-body>
-					<div v-if="getValOfSubProp(content, 'p.options.value.is.use')">
-						<button @click="valueOpen = !valueOpen" class="btn-none"><b>Value{{ ((parserOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((valueOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
-						<code class="lb val" v-if="valueOpen">{{ getValOfSubProp(content, 'p.options.value.is.value') }}</code>
-					</div>
-					<div v-if="content.errors">
+					<b-alert show variant="danger" v-if="content.errors">
 						<b>Fehler:</b><br>
-						<ul style="color: #d33">
-							<li v-for="error in content.errors">{{ error }}</li>
-						</ul>
-					</div>
-					<div v-if="content.p">
-						<button @click="parserOpen = !parserOpen" class="btn-none"><b>Parser{{ ((parserOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((parserOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
-						<code class="lb" v-if="parserOpen">{{ content.p }}</code>
+						<cError :error="content.errors" class="mi0" forceli="true"/>
+					</b-alert>
+					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
+						<b-button-group size="sm" class="mr-1">
+							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
+							<b-button @click="setInfoOpen('value')" v-if="content.v" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
+							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process {{ ((content.pNr !== undefined) ? '(Nr. ' + content.pNr + ')' : '') }}</b></b-button>
+						</b-button-group>
+						<b-input-group size="sm" class="mx-1" v-if="content.c">
+							<b-input-group-prepend is-text><b>Kinder:</b>&nbsp;({{ content.c.length }})</b-input-group-prepend>
+							<b-button @click="showChilds(true)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye" class="fa-icon"/></b-button>
+							<b-button @click="showChilds(false)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye-slash" class="fa-icon"/></b-button>
+						</b-input-group>
+					</b-button-toolbar>
+					<div>
+						<code class="lb val" v-if="infoOpen === 'value'">{{ content.v }}</code>
+						<code class="lb" v-if="infoOpen === 'process'">{{ content.p }}</code>
 					</div>
 					<div v-if="content.c">
 						<b>Kinder:</b><br>
-						<ViewParser :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
+						<ViewParser ref="childs" :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -112,6 +112,7 @@
 </template>
 
 <script>
+	import cError from './cError'
 	export default {
 		name: 'ViewParser',
 		props: {
@@ -124,9 +125,8 @@
 				'errorsOpen': true,
 				'headerOpen': true,
 				'contentOpen': true,
-				'systemOpen': true,
-				'parserOpen': false,
-				'valueOpen': false,
+				'systemOpen': false,
+				'infoOpen': undefined,
 			}
 		},
 		computed: {
@@ -138,6 +138,22 @@
 					return ''
 				}
 			}
+		},
+		methods: {
+			showChilds (state) {
+				this.$refs.childs.forEach(function (c) {
+					c.setIsOpen(state)
+				})
+			},
+			setIsOpen (state) {
+				this.isOpen = state
+			},
+			setInfoOpen (open) {
+				this.infoOpen = ((this.infoOpen !== open) ? open : undefined)
+			}
+		},
+		components: {
+			cError
 		}
 	}
 </script>
@@ -262,5 +278,11 @@
 		color: #444;
 		padding: 1px 5px;
 		margin-right: 3px;
+	}
+	div.g-errors {
+		max-height: calc( 70vh - 200px );
+		overflow: auto;
+		padding: 8px 10px;
+		margin: -8px;
 	}
 </style>

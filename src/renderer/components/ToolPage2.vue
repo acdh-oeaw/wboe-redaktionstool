@@ -36,7 +36,7 @@
 				<div class="viewxml scroll p20" v-if="aTab === 3 && Options.show.professional">
 				</div>
 			</b-tab>
-			<b-tab title="Parser" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
+			<b-tab title="Parser" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (Parser.parser && Parser.parser.errors && Parser.parser.errors.length > 0)}">
 				<div class="viewparser scroll p20" v-if="Options.show.develope">
 					<ViewParser :parser="Parser.parser" v-if="aTab === 4 && Parser.parser && Parser.parser.content"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
@@ -84,7 +84,7 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 6,
+				aTab: 4,
 				showTabView: false,
 				parsedXmlObject: undefined,
 				updateTimer: performance.now(),
@@ -269,6 +269,21 @@
 	li.nav-item.professional > a:after {
 		content: "Pro";
 		color: #fbbe60;
+	}
+
+	li.nav-item.error > a:before {
+		content: "!";
+		position: absolute;
+		top: -9px;
+		right: -9px;
+		font-size: 14px;
+		color: #fff;
+		background: #dc3545;
+		width: 19px;
+		height: 19px;
+		text-align: center;
+		line-height: 1.24;
+		border-radius: 100%;
 	}
 
 	.vis-dropdown {

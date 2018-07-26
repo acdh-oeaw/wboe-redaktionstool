@@ -92,7 +92,7 @@ const localFunctions = {
 									let err = 'ID kommt doppelt vor!'
 									copyError = true
 									errors.push(err)
-									gErrors.push({'error': err, 'tree': tree})
+									gErrors.push({'e': err, 'tree': tree})
 									console.log(err)
 								}
 							}
@@ -102,7 +102,7 @@ const localFunctions = {
 						} else {
 							let err = 'Unbekannte "Processing Instruction": "' + process.n + '"'
 							errors.push(err)
-							gErrors.push({'error': err, 'tree': tree})
+							gErrors.push({'e': err, 'tree': tree})
 							console.log(err)
 						}
 					})
@@ -145,7 +145,7 @@ const localFunctions = {
 					} catch (e) {
 						let err = 'Node: "' + xml.nodeName + '" - Fehler: "' + e.message + '"'
 						errors.push(err)
-						gErrors.push({'error': err, 'tree': tree})
+						gErrors.push({'e': err, 'tree': tree})
 						console.log(err)
 						return {'errors': errors, 'unused': true}
 					}
@@ -200,7 +200,7 @@ const localFunctions = {
 								let err = 'Kein Objekt mit ID: "' + copyChild.p.fromId + '" vorhanden!'
 								if (!ids[key].obj.errors) { ids[key].obj.errors = [] }
 								ids[key].obj.errors.push(err)
-								gErrors.push({'error': err, 'tree': ids[key].obj.tree})
+								gErrors.push({'e': err, 'tree': ids[key].obj.tree})
 							}
 							copyChild = xmlFunctions.getFirstDescendantsTagByName(ids[key].obj.c, '#copy')
 							whileLoop2 += 1
@@ -209,14 +209,14 @@ const localFunctions = {
 							let err = 'Zuviele Durchgänge für Kopien! Schleife?!?'
 							if (!ids[key].obj.errors) { ids[key].obj.errors = [] }
 							ids[key].obj.errors.push(err)
-							gErrors.push({'error': err, 'tree': ids[key].obj.tree})
+							gErrors.push({'e': err, 'tree': ids[key].obj.tree})
 						}
 					}
 				}
 				whileLoop += 1
 			}
 			if (whileLoop >= 1000) {
-				gErrors.push({'error': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Vorbereitung für Kopien']})
+				gErrors.push({'e': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Vorbereitung für Kopien']})
 			}
 			// Kopien durchführen
 			let copyChild = xmlFunctions.getFirstDescendantsTagByName(content, '#copy')
@@ -236,13 +236,13 @@ const localFunctions = {
 					let err = 'Kein Objekt mit ID: "' + copyChild.p.fromId + '" vorhanden!'
 					if (!copyChild.errors) { copyChild.errors = [] }
 					copyChild.errors.push(err)
-					gErrors.push({'error': err, 'tree': copyChild.tree})
+					gErrors.push({'e': err, 'tree': copyChild.tree})
 					break
 				}
 				whileLoop += 1
 			}
 			if (whileLoop >= 1000) {
-				gErrors.push({'error': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Content', 'Kopieren']})
+				gErrors.push({'e': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Content', 'Kopieren']})
 			}
 		}
 		// Allen Objekten eine individuelle Nummer zuweisen

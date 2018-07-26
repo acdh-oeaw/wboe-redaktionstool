@@ -4,6 +4,7 @@
 			<cError :error="errorObj"/>
 		</li>
 	</ul>
+	<span v-else-if="typeof aError === 'string'">{{ aError }}</span>
 	<span v-else>
 		<b v-if="aError.tree"><span v-for="node in aError.tree" class="error-tree">{{ node }}</span><br></b>
 		<cError :error="aError.e" v-if="Array.isArray(aError.e)"/>
