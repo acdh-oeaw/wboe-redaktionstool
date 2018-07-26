@@ -65,6 +65,7 @@
 					<font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/>
 					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.fromId')"/>
 					<font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/>
+					<span v-if="content.pNr !== undefined">{{ content.pNr }}) </span>
 					<span v-if="getValOfSubProp(content, 'p.options.title.use')"><b>{{ getValOfSubProp(content, 'p.options.title.value') }}</b> ({{ content.n }})</span>
 					<span v-else><b>{{ content.n }}</b></span>
 					<span class="val" v-if="getValOfSubProp(content, 'p.options.value.is.use')"> = <i>{{ tranculatedValue }}</i></span>

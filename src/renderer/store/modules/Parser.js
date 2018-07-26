@@ -52,6 +52,7 @@ const actions = {
 		if (xmlDomObj.xmlDom === undefined || xmlDomObj.errors) {
 			commit('SET_PARSER', { 'parser': undefined })
 		} else {
+			// console.log(ParserFunctionsParser.xml2ParserObj(xmlDomObj.xmlDom))
 			commit('SET_PARSER', { 'parser': ParserFunctionsParser.xml2ParserObj(xmlDomObj.xmlDom) })
 		}
 	}

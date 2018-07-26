@@ -119,9 +119,7 @@ const localFunctions = {
 							obj.p.options.value = {'is': {'value': text, 'use': true}}
 						}
 					}
-					// ToDo ...
 				}
-				// ToDo ...
 				// Abschliesende Sachen ...
 				if (errors.length > 0) {		// Fehler hinzufügen
 					obj.errors = errors
@@ -246,8 +244,21 @@ const localFunctions = {
 			if (whileLoop >= 1000) {
 				gErrors.push({'error': 'Zuviele Durchgänge für Kopien! Schleife?!?', 'tree': ['Content', 'Kopieren']})
 			}
-			// ToDo: Copy
 		}
+		// Allen Objekten eine individuelle Nummer zuweisen
+		var objNr = 0
+		function numObj (objs) {
+			objs.forEach(function (obj) {
+				obj.pNr = objNr
+				objNr += 1
+				if (obj.c) {
+					obj.c = numObj(obj.c)
+				}
+			})
+			return objs
+		}
+		content = numObj(content)
+		// ToDo: Before Liste
 		return {'header': header, 'content': content, 'system': system, 'errors': gErrors, 'ids': ids}
 	}
 }

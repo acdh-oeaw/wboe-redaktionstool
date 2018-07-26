@@ -112,7 +112,7 @@ function compareIt (obj, pos, parser, siblings, parPos, checkChilds = true) {
 			if (parseChildren) {
 				if (Array.isArray(obj.c) && obj.c.length > 0) {		// Kinder überprüfen
 					if (checkChilds) {
-						console.log('Kinder überprüfen!')
+						// console.log('Kinder überprüfen!')
 						var aParPos = 0
 						let accErr = false
 						obj.c.some(function (obj, pos) {

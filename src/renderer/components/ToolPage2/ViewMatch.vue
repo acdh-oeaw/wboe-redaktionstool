@@ -44,7 +44,7 @@
 							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 							<b-button @click="setInfoOpen('value')" v-if="content.v" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process</b></b-button>
-							<b-button @click="setInfoOpen('parser')" v-if="content.parser" :pressed="infoOpen === 'parser'" variant="outline-secondary"><b>Parser</b></b-button>
+							<b-button @click="setInfoOpen('parser')" v-if="content.parser" :pressed="infoOpen === 'parser'" variant="outline-secondary"><b>Parser (Nr. {{ content.parser.pNr }})</b></b-button>
 							<b-button @click="setInfoOpen('match')" v-if="content.parser" :pressed="infoOpen === 'match'" variant="outline-secondary"><b>Match</b></b-button>
 							<b-button @click="setInfoOpen('xml')" v-if="content.xml" :pressed="infoOpen === 'xml'" variant="outline-secondary"><b>HTML</b></b-button>
 						</b-button-group>
