@@ -107,6 +107,9 @@
 	.mit5 {
 		margin-top: 5px;
 	}
+	.mit10 {
+    margin-top: 10px;
+	}
 	.mil5 {
 		margin-left: 5px;
 	}
@@ -151,6 +154,9 @@
 		color: #333 !important;
 		padding: 0 !important;
 		margin: 0 !important;
+	}
+	.btn-none.mil5 {
+		margin-left: 5px !important;
 	}
 	.btn-ve-select {
 		margin-left: -8px !important;

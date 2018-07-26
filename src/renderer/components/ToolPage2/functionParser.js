@@ -34,6 +34,7 @@ function parseIt (xmlObject, parser) {
 				obj.c = childs.content
 				if (childs.errors.length > 0) {
 					gErrors.splice(gErrors.length, 0, ...childs.errors)
+					obj.childHasError = true
 				}
 			}
 			if (obj.parser.p.options.value && obj.parser.p.options.value.innerText) {

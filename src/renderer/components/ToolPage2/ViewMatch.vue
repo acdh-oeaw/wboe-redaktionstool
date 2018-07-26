@@ -51,25 +51,28 @@
 							<li v-for="error in content.errors">{{ error }}</li>
 						</ul>
 					</div>
-					<div v-if="content.parser">
-						<button @click="parserOpen = !parserOpen" class="btn-none"><b>Parser{{ ((parserOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((parserOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
-						<code class="lb" v-if="parserOpen">{{ content.parser }}</code>
+					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
+						<b-button-group size="sm" class="mr-1">
+							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></b-button>
+							<b-button @click="setInfoOpen('value')" v-if="content.v" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
+							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process</b></b-button>
+							<b-button @click="setInfoOpen('parser')" v-if="content.parser" :pressed="infoOpen === 'parser'" variant="outline-secondary"><b>Parser</b></b-button>
+							<b-button @click="setInfoOpen('xml')" v-if="content.xml" :pressed="infoOpen === 'xml'" variant="outline-secondary"><b>HTML</b></b-button>
+						</b-button-group>
+						<b-input-group size="sm" class="mx-1" v-if="content.c">
+							<b-input-group-prepend is-text><b>Kinder:</b>&nbsp;({{ content.c.length }})</b-input-group-prepend>
+							<b-button @click="showChilds(true)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye" class="fa-icon mil5"/></b-button>
+							<b-button @click="showChilds(false)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye-slash" class="fa-icon mil5"/></b-button>
+						</b-input-group>
+					</b-button-toolbar>
+					<div>
+						<code class="lb val" v-if="infoOpen === 'value'">{{ content.v }}</code>
+						<code class="lb" v-if="infoOpen === 'process'">{{ content.p }}</code>
+						<code class="lb" v-if="infoOpen === 'parser'">{{ content.parser }}</code>
+						<code class="lb val" v-if="infoOpen === 'xml'">{{ content.xml }}</code>
 					</div>
-					<div v-if="content.v">
-						<button @click="valueOpen = !valueOpen" class="btn-none"><b>Value{{ ((valueOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((valueOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
-						<code class="lb val" v-if="valueOpen">{{ content.v }}</code>
-					</div>
-					<div v-if="content.xml">
-						<button @click="xmlOpen = !xmlOpen" class="btn-none"><b>HTML{{ ((xmlOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((xmlOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
-						<code class="lb val" v-if="xmlOpen">{{ content.xml }}</code>
-					</div>
-					<div v-if="content.p">
-						<button @click="processOpen = !processOpen" class="btn-none"><b>Process{{ ((processOpen) ? ':' : '') }}</b> <font-awesome-icon :icon="((processOpen) ? 'eye' : 'eye-slash')" class="fa-icon mil5"/></button><br>
-						<code class="lb" v-if="processOpen">{{ content.p }}</code>
-					</div>
-					<div v-if="content.c">
-						<b>Kinder:</b><br>
-						<ViewXmlObject :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
+					<div v-if="content.c" class="mit10">
+						<ViewXmlObject ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.c"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -92,10 +95,7 @@
 			return {
 				'isOpen': true,
 				'errorsOpen': true,
-				'parserOpen': false,
-				'processOpen': false,
-				'valueOpen': false,
-				'xmlOpen': false,
+				'infoOpen': undefined,
 				'pHeaderColor': '#333',
 			}
 		},
@@ -104,6 +104,10 @@
 				if (this.content.errors) {
 					this.pHeaderColor = '#eee'
 					return 'danger'
+				}
+				if (this.content.childHasError && !this.isOpen) {
+					this.pHeaderColor = '#eee'
+					return 'warning'
 				}
 				if (!this.content.parser || this.content.parser.n === '#unknowen') {
 					this.pHeaderColor = '#eee'
@@ -119,6 +123,19 @@
 				} else {
 					return ''
 				}
+			}
+		},
+		methods: {
+			showChilds (state) {
+				this.$refs.childs.forEach(function (c) {
+					c.setIsOpen(state)
+				})
+			},
+			setIsOpen (state) {
+				this.isOpen = state
+			},
+			setInfoOpen (open) {
+				this.infoOpen = ((this.infoOpen !== open) ? open : undefined)
 			}
 		}
 	}
