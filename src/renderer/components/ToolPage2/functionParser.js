@@ -135,10 +135,10 @@ function compareIt (obj, pos, parser, familyObj, checkChilds = true) {
 		}
 	})
 	pMatch = pMatch.slice().sort((a, b) => {		// Sortieren: Mehr Fehler nach unten, höherer Score nach oben
-		if (a.errors.length > b.errors.length) {
+		if ((a.errors.length > 0) > (b.errors.length > 0)) {
 			return 1
 		}
-		if (a.errors.length < b.errors.length) {
+		if ((a.errors.length > 0) < (b.errors.length > 0)) {
 			return -1
 		}
 		if (a.score < b.score) {

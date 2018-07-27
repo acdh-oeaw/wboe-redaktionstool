@@ -5,7 +5,7 @@
 				<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
 				<b-dropdown-divider></b-dropdown-divider>
 				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : (aFile.errors && aFile.errors.length > 0), 'warning': (aFile.warnings && aFile.warnings.length > 0)}" :key="aKey" v-for="(aFile, aKey) in devFiles">
-					{{ aFile.file + ' (Fehler: ' + ((aFile.errors) ? aFile.errors.length : '0') + ', Warnungen: ' + ((aFile.warnings) ? aFile.warnings.length : '0') + ', Unbekannte: ' + aFile.unknown + ')' }}
+					{{ aFile.file + ((aFile.errors || aFile.warnings || aFile.unknown) ? ' (Fehler: ' + ((aFile.errors) ? aFile.errors.length : '0') + ', Warnungen: ' + ((aFile.warnings) ? aFile.warnings.length : '0') + ', Unbekannte: ' + aFile.unknown + ')' : '') }}
 				</b-dropdown-item>
 			</b-dropdown>
 			<b-button-group size="sm" class="mx-1" v-if="devMode">
