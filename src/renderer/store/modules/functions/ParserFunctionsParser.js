@@ -258,7 +258,54 @@ const localFunctions = {
 			return objs
 		}
 		content = numObj(content)
-		// ToDo: Before Liste
+		// Bei allen Objekten ermitteln welche Objekte vor ihnen sein dürfen (Start = #start)
+		function possPosition (objs) {
+			objs.forEach(function (obj, oKey) {
+				obj.posBefore = []
+				if (obj.p.options.tag && obj.p.options.tag.anywhere) {		// Darf der Tag überall sein?
+					obj.posBefore.push('#start')
+					objs.forEach(function (sObj) {
+						if (sObj.pNr !== obj.pNr || obj.p.options.tag.multiple) {
+							obj.posBefore.push(sObj.pNr)
+						}
+					})
+				} else {
+					if (oKey === 0) {		// Als erstes
+						obj.posBefore.push('#start')
+					} else {
+						var checkPrev = true
+						var aKey = oKey - 1
+						while (checkPrev && aKey > -1) {
+							if (objs[aKey].pNr !== obj.pNr) {		// Vorgänger hinzufügen
+								obj.posBefore.push(objs[aKey].pNr)
+							}
+							if (!objs[aKey].p.options.tag
+							|| (!objs[aKey].p.options.tag.anywhere
+								&& !objs[aKey].p.options.tag.possibleTag)) {		// Wenn der Vorgänger nicht Variabel ist Suche abbrechen
+								checkPrev = false
+							}
+							aKey -= 1
+						}
+						if (checkPrev) {		// Falls alle Vorgänger Variabel waren "#start" hinzufügen
+							obj.posBefore.push('#start')
+						}
+					}
+					if (obj.p.options.tag && obj.p.options.tag.multiple) {	// Wenn Tag "multiple" ist kann es auch nach sich selber vorkommen
+						obj.posBefore.push(obj.pNr)
+					}
+					objs.forEach(function (sObj) {		// "anywehre"s hinzufügen
+						if (sObj.p.options.tag && sObj.p.options.tag.anywhere && obj.posBefore.indexOf(sObj.pNr) === -1) {
+							obj.posBefore.push(sObj.pNr)
+						}
+					})
+				}
+				if (obj.c) {		// Kinder überprüfen
+					obj.c = possPosition(obj.c)
+				}
+			})
+			return objs
+		}
+		content = possPosition(content)
 		return {'header': header, 'content': content, 'system': system, 'errors': gErrors, 'ids': ids}
 	}
 }
