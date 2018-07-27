@@ -84,7 +84,7 @@
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
 						<b-button-group size="sm" class="mr-1">
 							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
-							<b-button @click="setInfoOpen('value')" v-if="content.v" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
+							<b-button @click="setInfoOpen('value')" v-if="getValOfSubProp(content, 'p.options.value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process {{ ((content.pNr !== undefined) ? '(Nr. ' + content.pNr + ')' : '') }}</b></b-button>
 						</b-button-group>
 						<b-input-group size="sm" class="mx-1" v-if="content.c">
@@ -94,7 +94,7 @@
 						</b-input-group>
 					</b-button-toolbar>
 					<div>
-						<code class="lb val" v-if="infoOpen === 'value'">{{ content.v }}</code>
+						<code class="lb val" v-if="infoOpen === 'value'">{{ getValOfSubProp(content, 'p.options.value.is.value') }}</code>
 						<code class="lb" v-if="infoOpen === 'process'">{{ content.p }}</code>
 					</div>
 					<div v-if="content.c">

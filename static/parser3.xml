@@ -214,20 +214,7 @@
 								</def>
               </cit>
               <!-- Formatting Rule: print bibl title & year "Lexer 1878 III" in small caps with colon followed by page number (value of <citedRange>) all wrapped in brackets "(" ")"  -->
-              <ref type="bibl" target="#Lexer1878III">
-								<?options {
-														"title": "Bibl",
-														"attributes": [{
-															"target": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["#Lexer1878III"]}
-														}]
-													} ?>
-								<citedRange>
-									<?options {
-  														"title": "Cited Range",
-  														"value": ["variable", "required"]
-  													} ?>
-							 	</citedRange>
-							</ref>
+							<?copy {"fromId": "ref-bibl"} ?>
             </etym>
 						<!-- Formatting Rule: Print "Bedeutung" (project should only have one or the other!) -->
             <!-- Formatting Rule: where (2...n) <sense> for each print number in roman numerals with period -->
@@ -355,7 +342,6 @@
 				<?options {
 										"id": "cit-example",
 										"title": "Cit Example",
-										"value": ["edit", "innerText"],
 										"tag": ["possibleTag"]
 									} ?>
 				 <quote xml:lang="bar-AT">
@@ -364,8 +350,24 @@
 											"value": ["edit", "required"]
 										} ?>
 				 </quote>
+				 <?copy {"fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "usg-geo" } ?>
 			</cit>
+			<ref type="bibl">
+				<?options {
+										"id": "ref-bibl",
+										"title": "Bibl",
+										"attributes": [{
+											"target": {"type": "variable", "canBeEmpty": {"use": true}}
+										}]
+									} ?>
+				<citedRange>
+					<?options {
+											"title": "Cited Range",
+											"value": ["variable", "required"]
+										} ?>
+				</citedRange>
+			</ref>
 		</tags>
 	</objParserSystem>
 </objParser>
