@@ -17,6 +17,8 @@ export default localFunctions
 
 function parseIt (xmlObject, parser) {
 	var gErrors = []
+	var gWarnings = []
+	var gUnknown = 0
 	xmlObject.forEach(function (obj, pos) {
 		delete obj.errors
 		delete obj.parser
@@ -27,6 +29,10 @@ function parseIt (xmlObject, parser) {
 			obj.errors = aCompare.errors
 			gErrors.push({'e': aCompare.errors, 'tree': obj.tree})
 		}
+		if (aCompare.warnings.length > 0) {
+			obj.warnings = aCompare.warnings
+			gWarnings.push({'e': aCompare.warnings, 'tree': obj.tree})
+		}
 		if (aCompare.parserKey > -1) {
 			obj.parser = parser[aCompare.parserKey]
 			if (aCompare.parseChildren && Array.isArray(obj.c) && obj.c.length > 0) {
@@ -36,33 +42,40 @@ function parseIt (xmlObject, parser) {
 					gErrors.splice(gErrors.length, 0, ...childs.errors)
 					obj.childHasError = true
 				}
+				if (childs.warnings.length > 0) {
+					gWarnings.splice(gWarnings.length, 0, ...childs.warnings)
+					obj.childHasWarning = true
+				}
+				gUnknown += childs.unknown
 			}
 			if (obj.parser.p.options.value && obj.parser.p.options.value.innerText) {
 				delete obj.c
 				obj.v = obj.text
 			}
 		} else {
-			// console.log(obj.n, '#unknowen')
-			obj.parser = { 'n': '#unknowen', 'pNr': -1, 'p': { 'options': { 'title': { 'value': 'Unbekannt', 'use': true } } } }
+			// console.log(obj.n, '#unknown')
+			obj.parser = { 'n': '#unknown', 'pNr': -1, 'p': { 'options': { 'title': { 'value': 'Unbekannt', 'use': true } } } }
 			let aErr = {'e': 'Tag "' + obj.n + '" konnte nicht zugewiesen werden!', 'tree': obj.tree}
+			gUnknown += 1
 			gErrors.push(aErr)
 		}
 	})
 	// ToDo: fehlende Parser ermitteln!
-	return { 'content': xmlObject, 'errors': gErrors }
+	return { 'content': xmlObject, 'errors': gErrors, 'warnings': gWarnings, 'unknown': gUnknown }
 }
 
 function compareIt (obj, pos, parser, familyObj, checkChilds = true) {
 	var errors = []
+	var warnings = []
 	// Berechnen wie hoch die Übereinstimmung ist
 	var pMatch = []
 	var parseChildren = true
 	if (!Array.isArray(parser) || parser.length === 0) {
 		errors.push({'e': 'Kein Parser übergeben!'})
-		return {'parserKey': -1, 'errors': errors}
+		return {'parserKey': -1, 'errors': errors, 'warnings': warnings}
 	}
 	parser.some(function (par, pPos) {
-		pMatch[pPos] = {'key': pPos, 'score': 0, 'errors': []}
+		pMatch[pPos] = {'key': pPos, 'score': 0, 'errors': [], 'warnings': []}
 		if (par.n === obj.n) {		// Namen überprüfen
 			pMatch[pPos].score += 1
 			if (checkChilds) {		// Nur wenn auch die Kinder überprüft werden!
@@ -86,7 +99,7 @@ function compareIt (obj, pos, parser, familyObj, checkChilds = true) {
 			if (valMatchErrors.errors.length === 0) {
 				pMatch[pPos].score += 1
 			} else {
-				pMatch[pPos].errors.push({'t': 'value', 'se': valMatchErrors.errors})
+				pMatch[pPos].warnings.push({'t': 'value', 'se': valMatchErrors.errors})
 			}
 			if (parseChildren) {
 				if (Array.isArray(obj.c) && obj.c.length > 0) {		// Kinder überprüfen
@@ -97,7 +110,7 @@ function compareIt (obj, pos, parser, familyObj, checkChilds = true) {
 							let aCompare = compareIt(obj, pos, par.c, obj.c, false)
 							// console.log(obj.n, 'aCompare', aCompare)
 							if (aCompare.errors.length > 0) {
-								pMatch[pPos].errors.push({'t': 'childs', 'e': 'Kinder haben Fehler!', 'se': aCompare.errors})
+								pMatch[pPos].warnings.push({'t': 'childs', 'e': 'Kinder haben Fehler!', 'se': aCompare.errors})
 								accErr = true
 								return true
 							}
@@ -114,6 +127,12 @@ function compareIt (obj, pos, parser, familyObj, checkChilds = true) {
 		} else {
 			pMatch[pPos].errors.push({'t': 'tag', 'e': 'Tag Name "' + obj.n + '" stimmt nicht mit "' + par.n + '" überein!'})
 		}
+		if (pMatch[pPos].errors.length > 0) {
+			pMatch[pPos].score -= 0.5
+		}
+		if (pMatch[pPos].warnings.length > 0) {
+			pMatch[pPos].score -= 0.25
+		}
 	})
 	pMatch = pMatch.slice().sort((a, b) => {		// Sortieren: Mehr Fehler nach unten, höherer Score nach oben
 		if (a.errors.length > b.errors.length) {
@@ -128,6 +147,12 @@ function compareIt (obj, pos, parser, familyObj, checkChilds = true) {
 		if (a.score > b.score) {
 			return -1
 		}
+		if (a.warnings.length > b.warnings.length) {
+			return 1
+		}
+		if (a.warnings.length < b.warnings.length) {
+			return -1
+		}
 		return 0
 	})
 	// Fehler auswerten:
@@ -136,6 +161,9 @@ function compareIt (obj, pos, parser, familyObj, checkChilds = true) {
 		// console.log('pMatch', pMatch, parser)
 		errors.push({'e': 'Enthält Fehler!', 'se': pMatch[0].errors})
 		aParserKey = -1
+	}
+	if (pMatch[0].warnings.length > 0) {
+		warnings.push({'e': 'Enthält Warnungen!', 'se': pMatch[0].warnings})
 	}
 	if (checkChilds && pMatch.length > 1) {
 		if (pMatch[0].score > 0 && pMatch[0].score === pMatch[1].score) {
@@ -147,7 +175,7 @@ function compareIt (obj, pos, parser, familyObj, checkChilds = true) {
 		errors.push({'e': 'Keine Übereinstimmung gefunden!'})
 		aParserKey = -1
 	}
-	return {'parserKey': aParserKey, 'errors': errors, 'parseChildren': parseChildren, 'pMatch': pMatch}
+	return {'parserKey': aParserKey, 'errors': errors, 'warnings': warnings, 'parseChildren': parseChildren, 'pMatch': pMatch}
 }
 
 function checkPosition (obj, pos, par, familyObj) {
@@ -155,7 +183,7 @@ function checkPosition (obj, pos, par, familyObj) {
 	var aPosBefore = '#start'
 	if (pos > 0) {
 		let bPos = pos - 1
-		while (bPos >= 0 && familyObj[bPos].parser.pNr === -1) {		// #unknowen ignorieren
+		while (bPos >= 0 && familyObj[bPos].parser.pNr === -1) {		// #unknown ignorieren
 			bPos -= 1
 		}
 		if (bPos >= 0) {

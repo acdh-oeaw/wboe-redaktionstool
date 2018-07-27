@@ -132,8 +132,9 @@
 												"title": "Eintrag",
 												"attributes": [{"n": {"type": "edit", "canBeEmpty": {"use": true}}}]
 											} ?>
-						<form type="lemma">
+						<form>
 							<?options {
+													"attributes": [{"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variant"]}}],
 													"tag": ["multiple"]
 												} ?>
 							<?copy { "fromId": "orth", "options": { "tag": ["multiple"] } } ?>
@@ -145,7 +146,8 @@
                <gram type="pos">
 								 <?options {
   													"title": "Gram Pos",
-  													"value": ["variable", "required"]
+  													"value": ["variable", "required"],
+														"tag": ["possibleTag"]
   												} ?>
 							 </gram>
                <?copy {"fromId": "gram-gender"} ?>

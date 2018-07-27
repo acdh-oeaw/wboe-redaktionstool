@@ -4,7 +4,9 @@
 			<b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
 				<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
 				<b-dropdown-divider></b-dropdown-divider>
-				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : aFile.errors}" :key="aKey" v-for="(aFile, aKey) in devFiles">{{ aFile.file + ((aFile.errors) ? ' (Fehler: ' + aFile.errors.length + ')' : '') }}</b-dropdown-item>
+				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : (aFile.errors && aFile.errors.length > 0), 'warning': (aFile.warnings && aFile.warnings.length > 0)}" :key="aKey" v-for="(aFile, aKey) in devFiles">
+					{{ aFile.file + ' (Fehler: ' + ((aFile.errors) ? aFile.errors.length : '0') + ', Warnungen: ' + ((aFile.warnings) ? aFile.warnings.length : '0') + ', Unbekannte: ' + aFile.unknown + ')' }}
+				</b-dropdown-item>
 			</b-dropdown>
 			<b-button-group size="sm" class="mx-1" v-if="devMode">
 				<b-btn @click="devNextFile(false)" title="Vorherige Datei"><font-awesome-icon icon="angle-left"/></b-btn>
@@ -139,7 +141,7 @@
 								if (xmlDomObj.xmlDom !== undefined && !xmlDomObj.errors) {
 									xmlObj = functionParser.parseXmlObject(this.Parser.parser, FilesFunctionsObject.xml2Obj(xmlDomObj.xmlDom))
 								}
-								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': xmlObj.errors })
+								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': xmlObj.errors, 'warnings': xmlObj.warnings, 'unknown': xmlObj.unknown })
 							}
 						}
 					}, this)
@@ -311,6 +313,12 @@
 		text-overflow: ellipsis;
 		direction: rtl;
 		text-align: left;
+	}
+	a.dropdown-item.warning {
+    background: #ffe !important;
+	}
+	a.dropdown-item.active.warning {
+    background: #dcdc45 !important;
 	}
 	a.dropdown-item.error {
     background: #fee !important;

@@ -1,11 +1,22 @@
 <template>
 	<div class="start" v-if="content === undefined && object !== undefined">
-		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="object.errors && object.errors.length > 0">
+		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="(object.errors && object.errors.length > 0) || object.unknown > 0">
 			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ object.errors.length }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
 					<div class="g-errors">
+						<div v-if="object.unknown > 0"><b>Unbekannte Tags:</b> {{ object.unknown }}<hr></div>
 						<cError :error="object.errors" class="mi0 pl20" forceli="true"/>
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+		<b-card header="Warnings" no-body class="mib20 paneldecent" border-variant="warning" header-bg-variant="warning" v-if="object.warnings && object.warnings.length > 0">
+			<div slot="header"><button v-b-toggle="'collapse-warnings'" class="header-btn-toggle" style="color: #fff;"><b>Warnings ({{ object.warnings.length }})</b><font-awesome-icon :icon="((warningsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="warningsOpen" id="collapse-warnings">
+				<b-card-body>
+					<div class="g-warnings">
+						<cError :error="object.warnings" class="mi0 pl20" forceli="true"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -22,7 +33,7 @@
 		<b-card :header="content.n" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
-					<font-awesome-icon icon="question-circle" class="fa-icon icmd mir5" v-if="!content.parser || content.parser.n === '#unknowen'"/>
+					<font-awesome-icon icon="question-circle" class="fa-icon icmd mir5" v-if="!content.parser || content.parser.n === '#unknown'"/>
 					<span><b>{{ content.n }}</b></span>
 					<span class="val" v-if="content.v"> = <i>{{ tranculatedValue }}</i></span>
 					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
@@ -38,6 +49,10 @@
 					<b-alert show variant="danger" v-if="content.errors">
 						<b>Fehler:</b><br>
 						<cError :error="content.errors" class="mi0" forceli="true"/>
+					</b-alert>
+					<b-alert show variant="warning" v-if="content.warnings">
+						<b>Warnungen:</b><br>
+						<cError :error="content.warnings" class="mi0" forceli="true"/>
 					</b-alert>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
 						<b-button-group size="sm" class="mr-1">
@@ -86,6 +101,7 @@
 			return {
 				'isOpen': true,
 				'errorsOpen': true,
+				'warningsOpen': true,
 				'infoOpen': undefined,
 				'pHeaderColor': '#333',
 			}
@@ -100,7 +116,7 @@
 					this.pHeaderColor = '#eee'
 					return 'warning'
 				}
-				if (!this.content.parser || this.content.parser.n === '#unknowen') {
+				if (!this.content.parser || this.content.parser.n === '#unknown') {
 					this.pHeaderColor = '#eee'
 					return 'secondary'
 				}

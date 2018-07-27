@@ -8,7 +8,7 @@
 	<span v-else>
 		<b v-if="aError.tree"><span v-for="node in aError.tree" class="error-tree">{{ node }}</span><br></b>
 		<cError :error="aError.e" v-if="Array.isArray(aError.e)"/>
-		<span v-else><i v-if="aError.t">{{ aError.t }} &gt; </i>{{ aError.e }}<br></span>
+		<span v-else><i v-if="aError.t">{{ aError.t }} &gt; </i><i v-if="aError.a">{{ aError.a }} &gt; </i>{{ aError.e }}<br></span>
 		<cError :error="aError.se" forceli="true" v-if="Array.isArray(aError.se)"/>
 	</span>
 </template>
