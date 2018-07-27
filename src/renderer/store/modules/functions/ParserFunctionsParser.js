@@ -270,25 +270,21 @@ const localFunctions = {
 						}
 					})
 				} else {
-					if (oKey === 0) {		// Als erstes
+					var checkPrev = true
+					var aKey = oKey - 1
+					while (checkPrev && aKey > -1) {
+						if (objs[aKey].pNr !== obj.pNr) {		// Vorgänger hinzufügen
+							obj.posBefore.push(objs[aKey].pNr)
+						}
+						if (!objs[aKey].p.options.tag
+						|| (!objs[aKey].p.options.tag.anywhere
+							&& !objs[aKey].p.options.tag.possibleTag)) {		// Wenn der Vorgänger nicht Variabel ist Suche abbrechen
+							checkPrev = false
+						}
+						aKey -= 1
+					}
+					if (checkPrev) {		// Falls alle Vorgänger Variabel waren "#start" hinzufügen
 						obj.posBefore.push('#start')
-					} else {
-						var checkPrev = true
-						var aKey = oKey - 1
-						while (checkPrev && aKey > -1) {
-							if (objs[aKey].pNr !== obj.pNr) {		// Vorgänger hinzufügen
-								obj.posBefore.push(objs[aKey].pNr)
-							}
-							if (!objs[aKey].p.options.tag
-							|| (!objs[aKey].p.options.tag.anywhere
-								&& !objs[aKey].p.options.tag.possibleTag)) {		// Wenn der Vorgänger nicht Variabel ist Suche abbrechen
-								checkPrev = false
-							}
-							aKey -= 1
-						}
-						if (checkPrev) {		// Falls alle Vorgänger Variabel waren "#start" hinzufügen
-							obj.posBefore.push('#start')
-						}
 					}
 					if (obj.p.options.tag && obj.p.options.tag.multiple) {	// Wenn Tag "multiple" ist kann es auch nach sich selber vorkommen
 						obj.posBefore.push(obj.pNr)
