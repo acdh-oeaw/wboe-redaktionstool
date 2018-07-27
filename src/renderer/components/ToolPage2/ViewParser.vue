@@ -60,6 +60,9 @@
 					<font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/>
 					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.fromId')"/>
 					<font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/>
+					<font-awesome-icon icon="bars" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.multiple')"/>
+					<font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.anywhere')"/>
+					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.possibleTag')"/>
 					<span v-if="getValOfSubProp(content, 'p.options.title.use')"><b>{{ getValOfSubProp(content, 'p.options.title.value') }}</b> ({{ content.n }})</span>
 					<span v-else><b>{{ content.n }}</b></span>
 					<span class="val" v-if="getValOfSubProp(content, 'p.options.value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
@@ -86,6 +89,7 @@
 							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 							<b-button @click="setInfoOpen('value')" v-if="getValOfSubProp(content, 'p.options.value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process {{ ((content.pNr !== undefined) ? '(Nr. ' + content.pNr + ')' : '') }}</b></b-button>
+							<b-button @click="setInfoOpen('posBefore')" v-if="content.posBefore" :pressed="infoOpen === 'posBefore'" variant="outline-secondary"><b>posBefore</b></b-button>
 						</b-button-group>
 						<b-input-group size="sm" class="mx-1" v-if="content.c">
 							<b-input-group-prepend is-text><b>Kinder:</b>&nbsp;({{ content.c.length }})</b-input-group-prepend>
@@ -96,6 +100,7 @@
 					<div>
 						<code class="lb val" v-if="infoOpen === 'value'">{{ getValOfSubProp(content, 'p.options.value.is.value') }}</code>
 						<code class="lb" v-if="infoOpen === 'process'">{{ content.p }}</code>
+						<code class="lb" v-if="infoOpen === 'posBefore'">{{ content.posBefore }}</code>
 					</div>
 					<div v-if="content.c">
 						<b>Kinder:</b><br>
