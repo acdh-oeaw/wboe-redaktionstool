@@ -84,7 +84,7 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 4,
+				aTab: 6,
 				showTabView: false,
 				parsedXmlObject: undefined,
 				updateTimer: performance.now(),

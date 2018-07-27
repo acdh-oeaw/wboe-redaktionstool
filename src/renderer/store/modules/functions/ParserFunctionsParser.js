@@ -258,7 +258,7 @@ const localFunctions = {
 			return objs
 		}
 		content = numObj(content)
-		// Bei allen Objekten ermitteln welche Objekte vor ihnen sein dürfen (Start = #start)
+		// Bei allen Objekten ermitteln welche Objekte vor ihnen sein könnten (Start = #start)
 		function possPosition (objs) {
 			objs.forEach(function (obj, oKey) {
 				obj.posBefore = []
