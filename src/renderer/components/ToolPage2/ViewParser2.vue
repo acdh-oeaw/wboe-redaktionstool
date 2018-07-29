@@ -1,0 +1,294 @@
+<template>
+	<div class="start" v-if="parser !== undefined && content === undefined">
+		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="parser.errors && parser.errors.length > 0">
+			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ parser.errors.length }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="errorsOpen" id="collapse-error">
+				<b-card-body>
+					<div class="g-errors">
+						{{ parser.errors }}
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+		<b-card header="Header" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
+			<div slot="header"><button v-b-toggle="'collapse-header'" class="header-btn-toggle" style="color: #fff;"><b>Header</b><font-awesome-icon :icon="((headerOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="headerOpen" id="collapse-header">
+				<b-card-body>
+					<div v-if="parser.header">
+						<ul class="mi0 pl20">
+							<li v-for="line in parser.header.split('\n')">{{ line }}</li>
+						</ul>
+					</div>
+					<div v-else>
+						Keine Header-Daten vorhanden
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+		<b-card header="Content" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
+			<div slot="header"><button v-b-toggle="'collapse-content'" class="header-btn-toggle" style="color: #fff;"><b>Content</b><font-awesome-icon :icon="((contentOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="contentOpen" id="collapse-content">
+				<b-card-body>
+					<div v-if="parser.content">
+						<ViewParser2 :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.content"/>
+					</div>
+					<div v-else>
+						Keine Content-Daten vorhanden
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+		<b-card header="System" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
+			<div slot="header"><button v-b-toggle="'collapse-system'" class="header-btn-toggle" style="color: #fff;"><b>System</b><font-awesome-icon :icon="((systemOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="systemOpen" id="collapse-system">
+				<b-card-body>
+					<div v-if="parser.system">
+						<ViewParser2 :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.system"/>
+					</div>
+					<div v-else>
+						Keine Header-Daten vorhanden
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+	</div>
+
+	<div class="obj" v-else-if="content !== undefined">
+		<b-card :header="content.n" no-body class="mib10 paneldecent">
+			<div slot="header">
+				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
+					{{ content.name }}
+					<!-- <font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/>
+					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.fromId')"/>
+					<font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/>
+					<font-awesome-icon icon="bars" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.multiple')"/>
+					<font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.anywhere')"/>
+					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.possibleTag')"/>
+					<span v-if="getValOfSubProp(content, 'p.options.title.use')"><b>{{ getValOfSubProp(content, 'p.options.title.value') }}</b> ({{ content.n }})</span>
+					<span v-else><b>{{ content.n }}</b></span>
+					<span class="val" v-if="getValOfSubProp(content, 'p.options.value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
+					<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(getValOfSubProp(content, 'p.options.value.possibleValues'))"/>
+					<font-awesome-icon :icon="((getValOfSubProp(content, 'p.options.value.edit.use')) ? 'edit' : ((getValOfSubProp(content, 'p.options.value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>
+					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
+						{{ attr + ((attrOpt.value) ? ':' : '') }}
+						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
+						<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(getValOfSubProp(content, 'p.options.attributes.' + attr + '.possibleValues'))"/>
+						<font-awesome-icon :icon="((attrOpt.type === 'fixed' || attrOpt.type === undefined) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
+					</span>
+					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
+					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="content.errors.length > 0"/> -->
+				</button>
+			</div>
+			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
+				<b-card-body>
+					<b-alert show variant="danger" v-if="content.errors.length > 0">
+						<b>Fehler:</b><br>
+						{{ content.errors }}
+					</b-alert>
+					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
+						<!-- <b-button-group size="sm" class="mr-1">
+							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
+							<b-button @click="setInfoOpen('value')" v-if="getValOfSubProp(content, 'p.options.value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
+							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process {{ ((content.pNr !== undefined) ? '(Nr. ' + content.pNr + ')' : '') }}</b></b-button>
+							<b-button @click="setInfoOpen('posBefore')" v-if="content.posBefore" :pressed="infoOpen === 'posBefore'" variant="outline-secondary"><b>posBefore</b></b-button>
+						</b-button-group> -->
+						<b-input-group size="sm" class="mx-1" v-if="content.childs">
+							<b-input-group-prepend is-text><b>Kinder:</b>&nbsp;({{ content.childs.length }})</b-input-group-prepend>
+							<b-button @click="showChilds(true)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye" class="fa-icon"/></b-button>
+							<b-button @click="showChilds(false)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye-slash" class="fa-icon"/></b-button>
+						</b-input-group>
+					</b-button-toolbar>
+					<!-- <div>
+						<code class="lb val" v-if="infoOpen === 'value'">{{ getValOfSubProp(content, 'p.options.value.is.value') }}</code>
+						<code class="lb" v-if="infoOpen === 'process'">{{ content.p }}</code>
+						<code class="lb" v-if="infoOpen === 'posBefore'">{{ content.posBefore }}</code>
+					</div> -->
+					<div v-if="content.childs">
+						<b>Kinder:</b><br>
+						<ViewParser2 ref="childs" :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"/>
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+	</div>
+
+	<div class="error" v-else>
+		Weder "parser" noch "content" !!!!
+	</div>
+</template>
+
+<script>
+	import cError from './cError'
+	export default {
+		name: 'ViewParser2',
+		props: {
+			parser: Object,
+			content: Object,
+		},
+		data () {
+			return {
+				'isOpen': true,
+				'errorsOpen': true,
+				'headerOpen': true,
+				'contentOpen': true,
+				'systemOpen': false,
+				'infoOpen': undefined,
+			}
+		},
+		computed: {
+			tranculatedValue () {
+				var aVal = this.getValOfSubProp(this.content, 'p.options.value.is.value')
+				if (aVal !== undefined) {
+					return aVal.length > 25 ? aVal.slice(0, 25) + '...' : aVal
+				} else {
+					return ''
+				}
+			}
+		},
+		methods: {
+			showChilds (state) {
+				this.$refs.childs.forEach(function (c) {
+					c.setIsOpen(state)
+				})
+			},
+			setIsOpen (state) {
+				this.isOpen = state
+			},
+			setInfoOpen (open) {
+				this.infoOpen = ((this.infoOpen !== open) ? open : undefined)
+			}
+		},
+		components: {
+			cError
+		}
+	}
+</script>
+
+<style scoped>
+	span.tree+span.tree:before {
+		content: " > "
+	}
+	code.lb {
+		white-space: pre;
+	}
+	code.val {
+		color: #007bff;
+	}
+	.card-header .val > i {
+		color: #007bff;
+	}
+	.header-btn-toggle {
+		margin: 0px;
+		padding: 0px;
+		border: none;
+		background: none;
+		width: 100%;
+		text-align: left;
+	}
+	.header-btn-toggle > .fa-icon {
+		font-size: 23px;
+	}
+	.icmd {
+		font-size: 16px !important;
+	}
+	.paneldecent > .card-header {
+		padding: 0.1rem 0.5rem;
+	}
+	.paneldecent > .card-body, .paneldecent > .collapse > .card-body, .paneldecent > .card-body, .paneldecent > .collapsing > .card-body {
+		padding: 0.5rem;
+	}
+	.obj > .obj {
+		margin-left: 23px;
+	}
+	.item {
+		border: 1px solid #ddd;
+		margin-top: -1px;
+		padding: 1px 6px;
+		border-radius: 20px;
+	}
+	.item.danger {
+		background: #fee;
+	}
+	.item > .title {
+		margin-left: 5px;
+		padding: 4px 12px;
+		font-weight: bold;
+	}
+	.item > button {
+		margin: 0px;
+		padding: 0px;
+		background: none;
+		border: none;
+		width: 17px;
+	}
+	.item > .icon ~ .icon {
+		margin-left: 5px;
+	}
+	.item > .error {
+		float: right;
+		margin-left: 15px;
+	}
+	.item > .attributes {
+		font-size: 11px;
+		color: #eee;
+		float: right;
+		margin-top: 3px;
+		margin-right: -3px;
+	}
+	.item > .attributes > .attr {
+		background: #888;
+		padding: 2px 6px;
+		border-radius: 8px;
+		margin-left: 1px;
+	}
+	.item > .attributes > .attr > i {
+		font-style: normal;
+		color: #666;
+		background: #eee;
+		margin-left: 5px;
+		padding: 1px 6px 1px 4px;
+		border-radius: 0px 10px 10px 0px;
+		margin-right: -5px;
+	}
+	.item > .value {
+	}
+	.item > .value:before {
+		content: "> ";
+	}
+	.add-item {
+		background: #eef;
+	}
+	.add-item > button {
+		width: 100%;
+		text-align: left;
+	}
+	.item > button:not([disabled]), .add-item > button:not([disabled]) {
+		cursor: pointer;
+	}
+	.item.comment-item {
+		font-size: 12px;
+		background: #eee;
+	}
+	.attribut {
+		display: inline-block;
+		color: #eee;
+		background: #444;
+		margin-left: 5px;
+		font-size: 12px;
+		line-height: 1.2;
+		padding: 3px 6px 2px 8px;
+		border-radius: 10px;
+	}
+	.attribut > span {
+		background: #eee;
+		color: #444;
+		padding: 1px 5px;
+		margin-right: 3px;
+	}
+	div.g-errors {
+		max-height: calc( 70vh - 200px );
+		overflow: auto;
+		padding: 8px 10px;
+		margin: -8px;
+	}
+</style>

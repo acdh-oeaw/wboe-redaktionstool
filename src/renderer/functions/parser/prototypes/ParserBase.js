@@ -29,7 +29,7 @@ const localFunctions = {
 						topChild.childNodes.forEach(function (parserChild) {
 							if (parserChild.nodeType === parserChild.ELEMENT_NODE) {
 								if (parserChild.nodeName === 'xmlParserHeader') {		// "this.header" setzen
-									this.header = parserChild.textContent
+									this.header = parserChild.textContent.trim()
 								} else if (parserChild.nodeName === 'objParserContent') {		// "this.content" setzen
 									if (parserChild.childNodes.length > 0) {
 										parserChild.childNodes.forEach(function (contentChild) {
