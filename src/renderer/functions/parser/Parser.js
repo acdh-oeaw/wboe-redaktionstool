@@ -27,6 +27,7 @@ const localFunctions = {
 		this.warnings = []						// Liste der Warnungen
 		this.uId = undefined					// Individuelle Nummer des ParserObjects
 		this.name = undefined					// Tagname
+		this.attributes = {}					// Attribute des Tags
 		this.childs = []							// Enthaltene "ParserObject" Kinder
 		this.parents = parents || []	// Liste der Eltern
 		this.root = root							// Enthält die "ParserBase"
@@ -43,9 +44,10 @@ const localFunctions = {
 		this.warnings = []						// Liste der Warnungen
 		this.options = {}							// Aktuelle Optionen
 		this.init()										// Immer dirket initialisieren
+		// this.initFromParserObject(ParserObject)	// Startwerte von "ParserObject" ermitteln
 		// this.extendJSON(jsonString)		// Optionen erweitern durch JSON String
 		// this.extendObj(optionObj)			// Optionen erweitern durch Objekt
-		// this.get('x', 'y', ...)				// Option nach Pfad ermitteln x -> y -> ...
+		// this.get('x.y')								// Option nach Pfad ermitteln x -> y -> ...
 	},
 }
 
@@ -60,5 +62,11 @@ localFunctions.ParserObject.prototype.init = prototypeParserObject.init
 // ParserOptions Prototypen
 localFunctions.ParserOptions.prototype.addError = prototypeParserMultible.addError
 localFunctions.ParserOptions.prototype.init = prototypeParserOptions.init
+localFunctions.ParserOptions.prototype.initFromParserObject = prototypeParserOptions.initFromParserObject
+localFunctions.ParserOptions.prototype.decompressOptions = prototypeParserOptions.decompressOptions
+localFunctions.ParserOptions.prototype.extendJSON = prototypeParserOptions.extendJSON
+localFunctions.ParserOptions.prototype.extendObj = prototypeParserOptions.extendObj
+localFunctions.ParserOptions.prototype.combineObj = prototypeParserOptions.combineObj
+localFunctions.ParserOptions.prototype.get = prototypeParserOptions.get
 
 export default localFunctions

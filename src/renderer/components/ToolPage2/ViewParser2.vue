@@ -54,29 +54,28 @@
 	</div>
 
 	<div class="obj" v-else-if="content !== undefined">
-		<b-card :header="content.n" no-body class="mib10 paneldecent">
+		<b-card :header="content.name" no-body class="mib10 paneldecent">
 			<div slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
-					{{ content.name }}
-					<!-- <font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/>
-					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.fromId')"/>
-					<font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/>
-					<font-awesome-icon icon="bars" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.multiple')"/>
-					<font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.anywhere')"/>
-					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.tag.possibleTag')"/>
-					<span v-if="getValOfSubProp(content, 'p.options.title.use')"><b>{{ getValOfSubProp(content, 'p.options.title.value') }}</b> ({{ content.n }})</span>
-					<span v-else><b>{{ content.n }}</b></span>
-					<span class="val" v-if="getValOfSubProp(content, 'p.options.value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
-					<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(getValOfSubProp(content, 'p.options.value.possibleValues'))"/>
-					<font-awesome-icon :icon="((getValOfSubProp(content, 'p.options.value.edit.use')) ? 'edit' : ((getValOfSubProp(content, 'p.options.value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>
-					<span class="attribut" v-for="(attrOpt, attr) in getValOfSubProp(content, 'p.options.attributes')">
+					<!-- <font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/> -->
+					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="content.isCopy"/>
+					<!-- <font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/> -->
+					<font-awesome-icon icon="bars" class="fa-icon icmd" v-if="content.options.get('tag.multiple')"/>
+					<font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="content.options.get('tag.anywhere')"/>
+					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.options.get('tag.possibleTag')"/>
+					<span v-if="content.options.get('title.use')"><b>{{ content.options.get('title.value') }}</b> ({{ content.name }})</span>
+					<span v-else><b>{{ content.name }}</b></span>
+					<span class="val" v-if="content.options.get('value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
+					<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('value.possibleValues'))"/>
+					<font-awesome-icon :icon="((content.options.get('value.edit.use')) ? 'edit' : ((content.options.get('value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>
+					<span class="attribut" v-for="(attrOpt, attr) in content.options.get('attributes')">
 						{{ attr + ((attrOpt.value) ? ':' : '') }}
 						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
-						<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(getValOfSubProp(content, 'p.options.attributes.' + attr + '.possibleValues'))"/>
+						<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('attributes.' + attr + '.possibleValues'))"/>
 						<font-awesome-icon :icon="((attrOpt.type === 'fixed' || attrOpt.type === undefined) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
 					</span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
-					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="content.errors.length > 0"/> -->
+					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="content.errors.length > 0"/>
 				</button>
 			</div>
 			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
@@ -86,23 +85,21 @@
 						{{ content.errors }}
 					</b-alert>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
-						<!-- <b-button-group size="sm" class="mr-1">
+						<b-button-group size="sm" class="mr-1">
 							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
-							<b-button @click="setInfoOpen('value')" v-if="getValOfSubProp(content, 'p.options.value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
-							<b-button @click="setInfoOpen('process')" v-if="content.p" :pressed="infoOpen === 'process'" variant="outline-secondary"><b>Process {{ ((content.pNr !== undefined) ? '(Nr. ' + content.pNr + ')' : '') }}</b></b-button>
-							<b-button @click="setInfoOpen('posBefore')" v-if="content.posBefore" :pressed="infoOpen === 'posBefore'" variant="outline-secondary"><b>posBefore</b></b-button>
-						</b-button-group> -->
+							<b-button @click="setInfoOpen('value')" v-if="content.options.get('value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
+							<b-button @click="setInfoOpen('options')" :pressed="infoOpen === 'options'" variant="outline-secondary"><b>Optionen (uId: {{ content.uId }})</b></b-button>
+						</b-button-group>
 						<b-input-group size="sm" class="mx-1" v-if="content.childs">
 							<b-input-group-prepend is-text><b>Kinder:</b>&nbsp;({{ content.childs.length }})</b-input-group-prepend>
 							<b-button @click="showChilds(true)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye" class="fa-icon"/></b-button>
 							<b-button @click="showChilds(false)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye-slash" class="fa-icon"/></b-button>
 						</b-input-group>
 					</b-button-toolbar>
-					<!-- <div>
+					<div>
 						<code class="lb val" v-if="infoOpen === 'value'">{{ getValOfSubProp(content, 'p.options.value.is.value') }}</code>
-						<code class="lb" v-if="infoOpen === 'process'">{{ content.p }}</code>
-						<code class="lb" v-if="infoOpen === 'posBefore'">{{ content.posBefore }}</code>
-					</div> -->
+						<code class="lb" v-if="infoOpen === 'options'">{{ content.options.options }}</code>
+					</div>
 					<div v-if="content.childs">
 						<b>Kinder:</b><br>
 						<ViewParser2 ref="childs" :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"/>
@@ -137,7 +134,7 @@
 		},
 		computed: {
 			tranculatedValue () {
-				var aVal = this.getValOfSubProp(this.content, 'p.options.value.is.value')
+				var aVal = this.content.options.get('value.is.value')
 				if (aVal !== undefined) {
 					return aVal.length > 25 ? aVal.slice(0, 25) + '...' : aVal
 				} else {

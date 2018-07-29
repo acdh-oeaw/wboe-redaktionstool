@@ -2,7 +2,7 @@ const localFunctions = {
 	htmlEncode: function (html) {		// HTML-Sonderzeichen schützen
 		return document.createElement('a').appendChild(document.createTextNode(html)).parentNode.innerHTML
 	},
-	hasSubProp: function (obj, propertys) {		// Ermitten ob Property in einem verschachtelten Objekt existiert
+	hasSubProp: function (obj, propertys, retVal = false) {		// Ermitten ob Property in einem verschachtelten Objekt existiert
 		var out = false
 		if ((typeof propertys === 'string') && (propertys !== null) && propertys.length > 0) {
 			var aObj = obj
@@ -21,18 +21,10 @@ const localFunctions = {
 				}
 			})
 		}
-		return out
+		return ((retVal) ? ((out) ? aObj : undefined) : out)
 	},
 	getValOfSubProp: function (obj, propertys) {		// Gibt Wert eines Property eines verschachtelten Objekts zurück
-		if (localFunctions.hasSubProp(obj, propertys)) {
-			var aObj = obj
-			propertys.split('.').some(function (property) {
-				aObj = aObj[property]
-			})
-			return aObj
-		} else {
-			return undefined
-		}
+		return localFunctions.hasSubProp(obj, propertys, true)
 	},
 	isValInArrOfSubProp: function (obj, propertys, value) {		// Ist Wert in Array eines verschachtelten Objekts vorhanden
 		var aObj = localFunctions.getValOfSubProp(obj, propertys)

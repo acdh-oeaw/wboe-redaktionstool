@@ -87,16 +87,6 @@
 														"attributes": [{"xml:id": {"type": "variable"}}],
 														"value": ["variable", "required"]
 													} ?>
-								<?for [
-												{"attributes": { "xml:id": "AL"  }, "value": "Alexandra N. Lenz"},
-												{"attributes": { "xml:id": "PhS" }, "value": "Philip Stöckle"},
-												{"attributes": { "xml:id": "AG"  }, "value": "Andreas Gellan"},
-												{"attributes": { "xml:id": "PZ"  }, "value": "Patrick Zeithuber"},
-												{"attributes": { "xml:id": "SW"  }, "value": "Sabine Wahl"},
-												{"attributes": { "xml:id": "SS"  }, "value": "Sonja Schwaiger"},
-												{"attributes": { "xml:id": "JD"  }, "value": "Jan Braun"},
-												{"attributes": { "xml:id": "AB"  }, "value": "Angela Bergmayer"}
-											] ?>
 							</name>
 						</respStmt>
 						<respStmt>
