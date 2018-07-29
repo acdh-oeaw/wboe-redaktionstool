@@ -9,6 +9,8 @@ import App from './App'
 import router from './router'
 import store from './store'
 
+import stdFunctions from './functions/stdFunctions'
+
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faSyncAlt, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFolder, faFolderOpen, faFile, faFileDownload, faProjectDiagram, faComment, faEye, faEyeSlash, faCheck, faTimes, faClipboardCheck, faExternalLinkAlt, faQuestionCircle, faBars, faSitemap, faClone, faIdBadge, faArrowsAltV } from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon, FontAwesomeLayers } from '@fortawesome/vue-fontawesome'
@@ -27,49 +29,10 @@ Vue.use(VueCodemirror)
 
 Vue.mixin({		// Global verfügbare Funktionen
 	methods: {
-		htmlEncode: function (html) {		// HTML-Sonderzeichen schützen
-			return document.createElement('a').appendChild(document.createTextNode(html)).parentNode.innerHTML
-		},
-		hasSubProp: function (obj, propertys) {		// Ermitten ob Property in einem verschachtelten Objekt existiert
-			var out = false
-			if ((typeof propertys === 'string') && (propertys !== null) && propertys.length > 0) {
-				var aObj = obj
-				propertys.split('.').some(function (property) {
-					if ((typeof aObj === 'object') && (aObj !== null)) {
-						if (aObj.hasOwnProperty(property)) {
-							out = true
-							aObj = aObj[property]
-						} else {
-							out = false
-							return true
-						}
-					} else {
-						out = false
-						return true
-					}
-				})
-			}
-			return out
-		},
-		getValOfSubProp: function (obj, propertys) {		// Gibt Wert eines Property eines verschachtelten Objekts zurück
-			if (this.hasSubProp(obj, propertys)) {
-				var aObj = obj
-				propertys.split('.').some(function (property) {
-					aObj = aObj[property]
-				})
-				return aObj
-			} else {
-				return undefined
-			}
-		},
-		isValInArrOfSubProp: function (obj, propertys, value) {		// Ist Wert in Array eines verschachtelten Objekts vorhanden
-			var aObj = this.getValOfSubProp(obj, propertys)
-			if (Array.isArray(aObj)) {
-				return (aObj.indexOf(value) > -1)
-			} else {
-				return undefined
-			}
-		}
+		htmlEncode: stdFunctions.htmlEncode,
+		hasSubProp: stdFunctions.hasSubProp,
+		getValOfSubProp: stdFunctions.getValOfSubProp,
+		isValInArrOfSubProp: stdFunctions.isValInArrOfSubProp,
 	}
 })
 
