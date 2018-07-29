@@ -38,15 +38,15 @@
 				<div class="viewxml scroll p20" v-if="aTab === 3 && Options.show.professional">
 				</div>
 			</b-tab>
-			<b-tab title="Parser" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (Parser.parser && Parser.parser.errors && Parser.parser.errors.length > 0)}">
+			<b-tab title="Parser2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (testParser && testParser.errors && Object.keys(testParser.errors).length > 0)}">
 				<div class="viewparser scroll p20" v-if="Options.show.develope">
-					<ViewParser :parser="Parser.parser" v-if="aTab === 4 && Parser.parser && Parser.parser.content"/>
+					<ViewParser2 :parser="testParser" v-if="aTab === 4 && testParser && testParser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
-			<b-tab title="Parser2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (testParser && testParser.errors && Object.keys(testParser.errors).length > 0)}">
+			<b-tab title="Parser" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (Parser.parser && Parser.parser.errors && Parser.parser.errors.length > 0)}">
 				<div class="viewparser scroll p20" v-if="Options.show.develope">
-					<ViewParser2 :parser="testParser" v-if="aTab === 5 && testParser && testParser.content.length > 0"/>
+					<ViewParser :parser="Parser.parser" v-if="aTab === 5 && Parser.parser && Parser.parser.content"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -87,6 +87,7 @@
 	import xmlFunctions from '@/functions/XmlFunctions'
 	import FilesFunctionsObject from '@/store/modules/functions/FilesFunctionsObject'
 	import ParserObject from '@/functions/parser/Parser'
+	import XmlObject from '@/functions/xml/Xml'
 	import fPath from 'path'
 	const fs = remote.require('fs')
 
@@ -94,10 +95,11 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 5,
+				aTab: 4,
 				showTabView: false,
 				parsedXmlObject: undefined,
 				testParser: new ParserObject.ParserBase(),
+				testXml: new XmlObject.XmlBase(),
 				updateTimer: performance.now(),
 				devMode: (process.env.NODE_ENV === 'development'),
 				devFiles: undefined,
@@ -129,6 +131,9 @@
 			t0 = performance.now()
 			this.testParser.init(this.Parser.fileContent)
 			console.log('testParser - ' + Math.ceil(performance.now() - t0) + ' ms.')
+			t0 = performance.now()
+			// this.testXml.init(this.File.fileContent)
+			console.log('testXml - ' + Math.ceil(performance.now() - t0) + ' ms.')
 			console.log(this.testParser)
 		},
 		methods: {
