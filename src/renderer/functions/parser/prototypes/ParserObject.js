@@ -5,7 +5,7 @@ const localFunctions = {
 	init: function () {
 		// Aktuelles DOM Objekt auswerten
 		if (!(typeof this.uId === 'number') || this.root.family.indexOf[this.uId] === -1) {		// Die "uId" zuweisen falls noch nicht vorhanden
-			this.uId = this.root.family.push(this)
+			this.uId = this.root.family.push(this) - 1
 		}
 		if (this.orgDOM.nodeType === this.orgDOM.ELEMENT_NODE) {		// Handelt es sich um ein Element
 			this.name = this.orgDOM.nodeName		// Tag Namen setzen
@@ -24,6 +24,7 @@ const localFunctions = {
 						this.options.extendJSON(child.nodeValue)
 					}
 				}, this)
+				// Handelt es sich bei den Childs um einen "innerTest"?
 				if (this.options.get('value.innerText')) {
 					let iText = ''
 					if (this.orgDOM.childNodes.length > 0) {
@@ -70,6 +71,24 @@ const localFunctions = {
 			return false
 		}
 		return true
+	},
+	makeCopy: function () {
+		if (this.isCopy) {
+			let aCopyOptions = JSON.parse(this.orgDOM.nodeValue)
+			if (this.root.idList[aCopyOptions.fromId]) {
+				this.name = this.root.idList[aCopyOptions.fromId].name
+				this.attributes = this.root.idList[aCopyOptions.fromId].attributes
+				this.childs = this.root.idList[aCopyOptions.fromId].childs
+				this.options.extendJSON(JSON.stringify(this.root.idList[aCopyOptions.fromId].options.options))
+				if (aCopyOptions.options) {
+					this.options.extendJSON(JSON.stringify(aCopyOptions.options))
+				}
+				this.ready = true
+				this.useable = true
+			} else {
+				this.addError('Original Objekt mit ID "' + aCopyOptions.fromId + '" existiert nicht!')
+			}
+		}
 	},
 }
 

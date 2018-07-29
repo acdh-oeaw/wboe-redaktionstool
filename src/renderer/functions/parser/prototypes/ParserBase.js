@@ -59,6 +59,12 @@ const localFunctions = {
 			this.addError('Es wurde kein "objParserContent" gefunden!')
 			return false
 		}
+		// "copy"-Objekte befüllen
+		this.family.forEach(function (aObj) {
+			if (aObj.isCopy) {
+				aObj.makeCopy()
+			}
+		})
 		this.ready = true
 		if (Object.keys(this.errors).length > 0) {
 			return false

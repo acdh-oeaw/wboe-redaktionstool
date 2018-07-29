@@ -424,6 +424,13 @@
 				<?copy { "fromId": "usg-geo" } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
 			</sense>
+			<!-- <test>
+				<?options {
+										"id": "test",
+										"title": "Test"
+									} ?>
+				<?copy { "fromId": "test" } ?>
+			</test> -->
 		</tags>
 	</objParserSystem>
 </objParser>

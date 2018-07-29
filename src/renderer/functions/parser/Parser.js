@@ -58,6 +58,7 @@ localFunctions.ParserBase.prototype.init = prototypeParserBase.init
 // ParserObject Prototypen
 localFunctions.ParserObject.prototype.addError = prototypeParserMultible.addError
 localFunctions.ParserObject.prototype.init = prototypeParserObject.init
+localFunctions.ParserObject.prototype.makeCopy = prototypeParserObject.makeCopy
 
 // ParserOptions Prototypen
 localFunctions.ParserOptions.prototype.addError = prototypeParserMultible.addError

@@ -90,7 +90,7 @@
 							<b-button @click="setInfoOpen('value')" v-if="content.options.get('value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('options')" :pressed="infoOpen === 'options'" variant="outline-secondary"><b>Optionen (uId: {{ content.uId }})</b></b-button>
 						</b-button-group>
-						<b-input-group size="sm" class="mx-1" v-if="content.childs">
+						<b-input-group size="sm" class="mx-1" v-if="content.childs.length > 0">
 							<b-input-group-prepend is-text><b>Kinder:</b>&nbsp;({{ content.childs.length }})</b-input-group-prepend>
 							<b-button @click="showChilds(true)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye" class="fa-icon"/></b-button>
 							<b-button @click="showChilds(false)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye-slash" class="fa-icon"/></b-button>
@@ -100,9 +100,9 @@
 						<code class="lb val" v-if="infoOpen === 'value'">{{ getValOfSubProp(content, 'p.options.value.is.value') }}</code>
 						<code class="lb" v-if="infoOpen === 'options'">{{ content.options.options }}</code>
 					</div>
-					<div v-if="content.childs">
+					<div v-if="content.childs.length > 0">
 						<b>Kinder:</b><br>
-						<ViewParser2 ref="childs" :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"/>
+						<ViewParser2 ref="childs" :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"  v-if="!content.isCopy || isOpen"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -124,7 +124,7 @@
 		},
 		data () {
 			return {
-				'isOpen': true,
+				'isOpen': false,
 				'errorsOpen': true,
 				'headerOpen': true,
 				'contentOpen': true,
@@ -154,6 +154,9 @@
 			setInfoOpen (open) {
 				this.infoOpen = ((this.infoOpen !== open) ? open : undefined)
 			}
+		},
+		created: function () {
+			this.isOpen = !(this.content && this.content.isCopy)
 		},
 		components: {
 			cError
