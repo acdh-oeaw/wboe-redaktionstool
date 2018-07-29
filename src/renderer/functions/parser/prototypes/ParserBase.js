@@ -33,7 +33,8 @@ const localFunctions = {
 								} else if (parserChild.nodeName === 'objParserContent') {		// "this.content" setzen
 									if (parserChild.childNodes.length > 0) {
 										parserChild.childNodes.forEach(function (contentChild) {
-											if (contentChild.nodeType === contentChild.ELEMENT_NODE) {
+											if (contentChild.nodeType === contentChild.ELEMENT_NODE
+											|| (contentChild.nodeType === contentChild.PROCESSING_INSTRUCTION_NODE && contentChild.nodeName === 'copy')) {
 												this.content.push(new Parser.ParserObject(this, null, contentChild))
 											}
 										}, this)
@@ -41,7 +42,8 @@ const localFunctions = {
 								} else if (parserChild.nodeName === 'objParserSystem') {		// "this.system" setzen
 									if (parserChild.childNodes.length > 0) {
 										parserChild.childNodes.forEach(function (systemChild) {
-											if (systemChild.nodeType === systemChild.ELEMENT_NODE) {
+											if (systemChild.nodeType === systemChild.ELEMENT_NODE
+											|| (systemChild.nodeType === systemChild.PROCESSING_INSTRUCTION_NODE && systemChild.nodeName === 'copy')) {
 												this.system.push(new Parser.ParserObject(this, null, systemChild))
 											}
 										}, this)
@@ -58,6 +60,9 @@ const localFunctions = {
 			return false
 		}
 		this.ready = true
+		if (Object.keys(this.errors).length > 0) {
+			return false
+		}
 		this.useable = true
 		return true
 	},

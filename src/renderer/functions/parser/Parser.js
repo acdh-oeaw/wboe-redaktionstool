@@ -30,7 +30,8 @@ const localFunctions = {
 		this.parents = parents || []	// Liste der Eltern
 		this.root = root							// Enthält die "ParserBase"
 		this.orgDOM = dom							// Original DOM
-		this.siblings = ((this.parents.length > 0) ? this.parents[0].c : this.root.content)		// Geschwister
+		this.isCopy = false						// Hanelt es sich um eine Kopie?
+		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : this.root.content)		// Geschwister
 		this.init()										// Immer dirket initialisieren
 	}
 }
