@@ -6,6 +6,8 @@ const localFunctions = {
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = {}							// Fehler. Property = "ParserObject.nr" oder "-1" für "ParserBase"
 		this.content = []							// Enthaltene "ParserObject" Kinder
+		this.system = []							// Enthaltene "ParserObject" Kinder
+		this.header = undefined				// Wird als String bei der ausgegebenen XML-Datei eingefügt
 		this.family = []							// Alle "ParserObject"e "Key" = "nr"
 		this.idList = {}							// Alle "ParserObject"e mit "id". Property = "id"
 		this.orgString = undefined		// Original String über init(xmlString) geladen
