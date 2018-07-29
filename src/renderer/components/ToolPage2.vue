@@ -79,7 +79,7 @@
 	import { remote, shell } from 'electron'
 	import xmlFunctions from '@/functions/XmlFunctions'
 	import FilesFunctionsObject from '@/store/modules/functions/FilesFunctionsObject'
-	import ParserObject from '@/functions/parser/ParserObject'
+	import ParserObject from '@/functions/parser/Parser'
 	import fPath from 'path'
 	const fs = remote.require('fs')
 

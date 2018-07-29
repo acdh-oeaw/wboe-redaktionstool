@@ -1,17 +1,7 @@
 import xmlFunctions from '@/functions/XmlFunctions'
+import Parser from '../Parser'
 
 const localFunctions = {
-	addError: function (error) {
-		var aNr = -1
-		if (this.nr || this.nr === 0) {		// Handelt es sich um ein "ParserObject"?
-			aNr = this.nr
-		}
-		if (!Array.isArray(this.errors[aNr])) {
-			this.errors[aNr] = []
-		}
-		this.errors[aNr].push({'obj': this, 'err': error})
-	},
-
 	init: function (xmlString) {
 		// "xmlString" überprüfen und auf "this.orgString" setzen
 		if (typeof xmlString !== 'string') {		// Prüfen ob der übergebene Wert ein String ist
@@ -44,7 +34,7 @@ const localFunctions = {
 									if (parserChild.childNodes.length > 0) {
 										parserChild.childNodes.forEach(function (contentChild) {
 											if (contentChild.nodeType === contentChild.ELEMENT_NODE) {
-												// this.content.push(new ParserObject(contentChild))
+												this.content.push(new Parser.ParserObject(this, null, contentChild))
 											}
 										}, this)
 									}
@@ -52,7 +42,7 @@ const localFunctions = {
 									if (parserChild.childNodes.length > 0) {
 										parserChild.childNodes.forEach(function (systemChild) {
 											if (systemChild.nodeType === systemChild.ELEMENT_NODE) {
-												// this.system.push(new ParserObject(systemChild))
+												this.system.push(new Parser.ParserObject(this, null, systemChild))
 											}
 										}, this)
 									}
@@ -67,6 +57,8 @@ const localFunctions = {
 			this.addError('Es wurde kein "objParserContent" gefunden!')
 			return false
 		}
+		this.ready = true
+		this.useable = true
 		return true
 	},
 }
