@@ -18,15 +18,16 @@ const localFunctions = {
 			}
 			// Kinder auswerten
 			if (this.orgDOM.childNodes.length > 0) {
-				// Optionen auswerten
+				// Processing Instruction Nodes auswerten
 				this.orgDOM.childNodes.forEach(function (child) {
-					if (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'comment') {
-						this.comment.push(child.nodeValue)
+					if (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'comment') {		// Kommentare
+						this.comments.push(child.nodeValue)
 					}
 				}, this)
 				// Kinder auswerten
 				this.orgDOM.childNodes.forEach(function (child) {
-					if (!(child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'comment')) {
+					if (!(child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'comment')
+					&& !(child.nodeType === child.TEXT_NODE && child.nodeValue.trim().length < 1)) {		// Leere Text Felder ignorieren
 						this.childs.push(new Xml.XmlObject(this.root, [this, ...this.parents], child))
 					}
 				}, this)
@@ -38,9 +39,13 @@ const localFunctions = {
 			this.parserIgnore = false
 		} else if (this.orgDOM.nodeType === this.orgDOM.PROCESSING_INSTRUCTION_NODE) {
 			this.type = 'PROCESSING_INSTRUCTION'
+			this.name = this.orgDOM.nodeName		// Processing Namen setzen
+			this.value = this.orgDOM.nodeValue
 		} else {
 			this.type = 'UNKNOWN'
-			this.addError('Unbekannter "nodeType": ' + this.orgDOM.nodeType + '!')
+			this.name = this.orgDOM.nodeName
+			this.value = this.orgDOM.outerHTML || this.orgDOM.nodeValue
+			// this.addError('Unbekannter "nodeType": ' + this.orgDOM.nodeType + '!')
 			return false
 		}
 		return true

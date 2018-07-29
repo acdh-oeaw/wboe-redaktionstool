@@ -1,11 +1,11 @@
 <template>
 	<div class="start" v-if="parser !== undefined && content === undefined">
-		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="parser.errors && parser.errors.length > 0">
+		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="parser.errors && Object.keys(parser.errors).length > 0">
 			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ parser.errors.length }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
 					<div class="g-errors">
-						{{ parser.errors }}
+						<!-- {{ parser.errors }} -->
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -153,7 +153,14 @@
 			},
 			setInfoOpen (open) {
 				this.infoOpen = ((this.infoOpen !== open) ? open : undefined)
-			}
+			},
+			length (val) {
+				if (Array.isArray(val)) {
+					return val.length
+				} else {
+					return Object.keys(val).length
+				}
+			},
 		},
 		created: function () {
 			this.isOpen = !(this.content && this.content.isCopy)

@@ -39,25 +39,31 @@
 				</div>
 			</b-tab>
 			<b-tab title="Parser2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (testParser && testParser.errors && Object.keys(testParser.errors).length > 0)}">
-				<div class="viewparser scroll p20" v-if="Options.show.develope">
-					<ViewParser2 :parser="testParser" v-if="aTab === 4 && testParser && testParser.content.length > 0"/>
+				<div class="viewparser scroll p20" v-if="aTab === 4 && Options.show.develope">
+					<ViewParser2 :parser="testParser" v-if="testParser && testParser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
+				</div>
+			</b-tab>
+			<b-tab title="XML Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
+				<div class="viewxmlobject scroll p20" v-if="aTab === 5 && Options.show.develope">
+					<ViewXmlObject2 :object="testXml" v-if="testXml && testXml.content.length > 0"/>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>fileObject</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Parser" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (Parser.parser && Parser.parser.errors && Parser.parser.errors.length > 0)}">
 				<div class="viewparser scroll p20" v-if="Options.show.develope">
-					<ViewParser :parser="Parser.parser" v-if="aTab === 5 && Parser.parser && Parser.parser.content"/>
+					<ViewParser :parser="Parser.parser" v-if="aTab === 6 && Parser.parser && Parser.parser.content"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
-				<div class="viewxmlobject scroll p20" v-if="aTab === 6 && Options.show.develope">
+				<div class="viewxmlobject scroll p20" v-if="aTab === 7 && Options.show.develope">
 					<ViewXmlObject :object="Files.fileObject" v-if="Files.fileObject"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>fileObject</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Match" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
-				<div class="viewmatch scroll p20" v-if="aTab === 7 && Options.show.develope">
+				<div class="viewmatch scroll p20" v-if="aTab === 8 && Options.show.develope">
 					<ViewMatch :object="parsedXmlObject" v-if="parsedXmlObject && parsedXmlObject.content"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parsedXmlObject</b> vorhanden!</div>
 				</div>
@@ -81,6 +87,7 @@
 	import ViewParser from './ToolPage2/ViewParser'
 	import ViewParser2 from './ToolPage2/ViewParser2'
 	import ViewXmlObject from './ToolPage2/ViewXmlObject'
+	import ViewXmlObject2 from './ToolPage2/ViewXmlObject2'
 	import ViewMatch from './ToolPage2/ViewMatch'
 	import functionParser from './ToolPage2/functionParser'
 	import { remote, shell } from 'electron'
@@ -95,7 +102,7 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 4,
+				aTab: 5,
 				showTabView: false,
 				parsedXmlObject: undefined,
 				testParser: new ParserObject.ParserBase(),
@@ -229,6 +236,7 @@
 			ViewParser,
 			ViewParser2,
 			ViewXmlObject,
+			ViewXmlObject2,
 			ViewMatch,
 		}
 	}
