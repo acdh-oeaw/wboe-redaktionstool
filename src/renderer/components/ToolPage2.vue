@@ -79,6 +79,7 @@
 	import { remote, shell } from 'electron'
 	import xmlFunctions from '@/functions/XmlFunctions'
 	import FilesFunctionsObject from '@/store/modules/functions/FilesFunctionsObject'
+	import ParserObject from '@/functions/parser/ParserObject'
 	import fPath from 'path'
 	const fs = remote.require('fs')
 
@@ -86,9 +87,10 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 6,
+				aTab: 4,
 				showTabView: false,
 				parsedXmlObject: undefined,
+				testParser: new ParserObject.ParserBase(),
 				updateTimer: performance.now(),
 				devMode: (process.env.NODE_ENV === 'development'),
 				devFiles: undefined,
@@ -117,6 +119,10 @@
 				this.devFiles = this.devFileList()
 			}
 			console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
+			t0 = performance.now()
+			this.testParser.init(this.Parser.fileContent)
+			console.log('testParser - ' + Math.ceil(performance.now() - t0) + ' ms.')
+			console.log(this.testParser)
 		},
 		methods: {
 			showFile () {		// Ordner in Explorer öffnen

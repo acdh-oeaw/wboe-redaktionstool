@@ -7,11 +7,8 @@
 	</xmlParserHeader>
 	<objParserContent>
 		<TEI xmlns="http://www.tei-c.org/ns/1.0">
-			<!-- ToDo: possibleChildIds ?!?
+			<!-- ToDo: possibleAfterIds ?!?
 				"tag": {
-					"possibleChildIds": [
-						{ "id": "test", "use": true }
-					],
 					"possibleAfterIds": [
 						{ "id": "test", "use": true, "prefered": true }
 					]
