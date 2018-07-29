@@ -131,10 +131,11 @@
 			t0 = performance.now()
 			this.testParser.init(this.Parser.fileContent)
 			console.log('testParser - ' + Math.ceil(performance.now() - t0) + ' ms.')
-			t0 = performance.now()
-			// this.testXml.init(this.File.fileContent)
-			console.log('testXml - ' + Math.ceil(performance.now() - t0) + ' ms.')
 			console.log(this.testParser)
+			t0 = performance.now()
+			this.testXml.init(this.Files.fileContent)
+			console.log('testXml - ' + Math.ceil(performance.now() - t0) + ' ms.')
+			console.log(this.testXml)
 		},
 		methods: {
 			showFile () {		// Ordner in Explorer öffnen
