@@ -102,7 +102,7 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 5,
+				aTab: 4,
 				showTabView: false,
 				parsedXmlObject: undefined,
 				testParser: new ParserObject.ParserBase(),

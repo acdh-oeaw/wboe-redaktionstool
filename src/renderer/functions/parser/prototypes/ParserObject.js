@@ -36,13 +36,13 @@ const localFunctions = {
 					let aValue = null
 					this.orgDOM.childNodes.forEach(function (child) {
 						if (child.nodeType === child.ELEMENT_NODE
-						|| (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'copy')) {
+						|| (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && (child.nodeName === 'copy' || child.nodeName === 'text'))) {
 							this.childs.push(new Parser.ParserObject(this.root, [this, ...this.parents], child))
 						} else if (child.nodeType === child.TEXT_NODE) {
 							aValue = child.nodeValue
 						}
 					}, this)
-					if (typeof aValue === 'string' && this.childs.length === 1 && aValue.trim().length > 0) {
+					if (typeof aValue === 'string' && this.childs.length === 0 && aValue.trim().length > 0) {
 						this.options.extendObj({'value': {'is': {'value': aValue.trim(), 'use': true}}})
 					}
 				}
@@ -62,6 +62,16 @@ const localFunctions = {
 		} else if (this.orgDOM.nodeType === this.orgDOM.PROCESSING_INSTRUCTION_NODE) {
 			if (this.orgDOM.nodeName === 'copy') {		// Kopie vorbereiten
 				this.isCopy = true
+			} else if (this.orgDOM.nodeName === 'text') {		// Textobjekt verarbeiten
+				this.name = '#text'
+				let aTextOptions = JSON.parse(this.orgDOM.nodeValue)
+				if (aTextOptions.options) {
+					this.options.extendJSON(JSON.stringify(aTextOptions.options))
+				}
+				if (this.errors.length === 0) {
+					this.useable = true
+				}
+				this.ready = true
 			} else {
 				this.addError('Unbekannte "Processing Instruction": ' + this.orgDOM.nodeName + '!')
 				return false
