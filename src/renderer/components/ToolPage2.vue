@@ -95,6 +95,7 @@
 	import FilesFunctionsObject from '@/store/modules/functions/FilesFunctionsObject'
 	import ParserObject from '@/functions/parser/Parser'
 	import XmlObject from '@/functions/xml/Xml'
+	import EditorObject from '@/functions/editor/Editor'
 	import fPath from 'path'
 	const fs = remote.require('fs')
 
@@ -107,6 +108,7 @@
 				parsedXmlObject: undefined,
 				testParser: new ParserObject.ParserBase(),
 				testXml: new XmlObject.XmlBase(),
+				testEditor: null,
 				updateTimer: performance.now(),
 				devMode: (process.env.NODE_ENV === 'development'),
 				devFiles: undefined,
@@ -143,6 +145,10 @@
 			this.testXml.init(this.Files.fileContent)
 			console.log('testXml - ' + Math.ceil(performance.now() - t0) + ' ms.')
 			console.log(this.testXml)
+			t0 = performance.now()
+			this.testEditor = new EditorObject.EditorBase(this.testParser, this.testXml)
+			console.log('testEditor - ' + Math.ceil(performance.now() - t0) + ' ms.')
+			console.log(this.testEditor)
 		},
 		methods: {
 			showFile () {		// Ordner in Explorer öffnen
