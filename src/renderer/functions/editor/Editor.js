@@ -1,6 +1,6 @@
 import prototypeEditorMultible from './prototypes/EditorMultible'
-// import prototypeEditorBase from './prototypes/EditorBase'
-// import prototypeEditorObject from './prototypes/EditorObject'
+import prototypeEditorBase from './prototypes/EditorBase'
+import prototypeEditorObject from './prototypes/EditorObject'
 
 const localFunctions = {
 	EditorBase: function (parserObj, xmlObj) {
@@ -14,7 +14,7 @@ const localFunctions = {
 		this.family = []							// Alle "EditorObject"e "Key" = "uId"
 		this.parserObj = parserObj || null		// Original von parserObj
 		this.xmlObj = xmlObj || null	// Original von xmlObj
-		// 	this.init()										// Immer dirket initialisieren
+			this.init()										// Immer dirket initialisieren
 	},
 	EditorObject: function (root, parents) {
 		this.parserObj = null					// Aktuelles Parser Objekt
@@ -29,17 +29,16 @@ const localFunctions = {
 		this.root = root							// Enthält die "EditorBase"
 		this.isCopy = false						// Hanelt es sich um eine Kopie?
 		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : this.root.content)		// Geschwister
-		// this.init()										// Immer dirket initialisieren
+		this.init()										// Immer dirket initialisieren
 	},
 }
 
 // EditorBase Prototypen
 localFunctions.EditorBase.prototype.addError = prototypeEditorMultible.addError
-// localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
+localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 
 // EditorObject Prototypen
 localFunctions.EditorObject.prototype.addError = prototypeEditorMultible.addError
-// localFunctions.EditorObject.prototype.init = prototypeEditorObject.init
-// localFunctions.EditorObject.prototype.makeCopy = prototypeEditorObject.makeCopy
+localFunctions.EditorObject.prototype.init = prototypeEditorObject.init
 
 export default localFunctions
