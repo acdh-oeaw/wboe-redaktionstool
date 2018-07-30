@@ -37,10 +37,21 @@ const localFunctions = {
 			}
 			this.ready = true
 			this.parserIgnore = false
-		} else if (this.orgDOM.nodeType === this.orgDOM.PROCESSING_INSTRUCTION_NODE) {
+		} else if (this.orgDOM.nodeType === this.orgDOM.PROCESSING_INSTRUCTION_NODE) {		// Ist es eine Processing Instruction
 			this.type = 'PROCESSING_INSTRUCTION'
 			this.name = this.orgDOM.nodeName		// Processing Namen setzen
 			this.value = this.orgDOM.nodeValue
+		} else if (this.orgDOM.nodeType === this.orgDOM.COMMENT_NODE) {		// Ist es Kommentar
+			this.type = 'COMMENT'
+			this.name = '#comment'
+			this.value = this.orgDOM.nodeValue
+		} else if (this.orgDOM.nodeType === this.orgDOM.TEXT_NODE) {		// Ist es ein Text
+			this.type = 'TEXT'
+			this.name = '#text'
+			this.value = this.orgDOM.nodeValue.trim()
+			this.useable = true
+			this.ready = true
+			this.parserIgnore = false
 		} else {
 			this.type = 'UNKNOWN'
 			this.name = this.orgDOM.nodeName

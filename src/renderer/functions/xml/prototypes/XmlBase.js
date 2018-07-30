@@ -28,7 +28,9 @@ const localFunctions = {
 		}
 		if (this.orgDOM.childNodes.length > 0) {
 			this.orgDOM.childNodes.forEach(function (topChild) {
-				this.content.push(new Xml.XmlObject(this, null, topChild))
+				if (topChild.nodeType !== topChild.PROCESSING_INSTRUCTION_NODE) {
+					this.content.push(new Xml.XmlObject(this, null, topChild))
+				}
 			}, this)
 		}
 		if (this.content.length === 0) {

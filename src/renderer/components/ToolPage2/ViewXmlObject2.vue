@@ -23,6 +23,9 @@
 			<div slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
 					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
+					<font-awesome-icon icon="font" class="fa-icon icmd" v-if="content.type === 'TEXT'"/>
+					<font-awesome-icon icon="comment" class="fa-icon icmd" v-if="content.type === 'COMMENT'"/>
+					<font-awesome-icon icon="project-diagram" class="fa-icon icmd" v-if="content.type === 'PROCESSING_INSTRUCTION'"/>
 					<span><b>{{ content.name }}</b></span>
 					<span class="val" v-if="content.value"> = <i>{{ tranculatedValue }}</i></span>
 					<span class="attribut" v-for="(attrOpt, attr) in content.attributes">
