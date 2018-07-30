@@ -19,9 +19,9 @@
 	</div>
 
 	<div class="obj" v-else-if="content !== undefined">
-		<b-card :header="content.name" no-body class="mib10 paneldecent">
+		<b-card :header="content.name" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
-				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
+				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
 					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
 					<font-awesome-icon icon="font" class="fa-icon icmd" v-if="content.type === 'TEXT'"/>
 					<font-awesome-icon icon="comment" class="fa-icon icmd" v-if="content.type === 'COMMENT'"/>
@@ -87,9 +87,26 @@
 				'valueOpen': false,
 				'xmlOpen': false,
 				'infoOpen': undefined,
+				'pHeaderColor': '#333',
 			}
 		},
 		computed: {
+			headerVariante () {
+				if (this.content.errors.length > 0) {
+					this.pHeaderColor = '#eee'
+					return 'danger'
+				}
+				if (this.content.type === 'UNKNOWN' || this.content.type === 'COMMENT' || this.content.type === 'PROCESSING_INSTRUCTION') {
+					this.pHeaderColor = '#eee'
+					return 'secondary'
+				}
+				if (this.content.type === 'TEXT') {
+					this.pHeaderColor = '#eee'
+					return 'primary'
+				}
+				this.pHeaderColor = '#333'
+				return 'Default'
+			},
 			tranculatedValue () {
 				var aVal = this.content.value
 				if (aVal !== undefined) {
@@ -141,6 +158,9 @@
 	}
 	.card-header .val > i {
 		color: #007bff;
+	}
+	.invert > .card-header .val > i {
+		color: #ccf;
 	}
 	.header-btn-toggle {
 		margin: 0px;

@@ -54,9 +54,9 @@
 	</div>
 
 	<div class="obj" v-else-if="content !== undefined">
-		<b-card :header="content.name" no-body class="mib10 paneldecent">
+		<b-card :header="content.name" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
-				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
+				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
 					<!-- <font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/> -->
 					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="content.isCopy"/>
 					<!-- <font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/> -->
@@ -130,9 +130,22 @@
 				'contentOpen': true,
 				'systemOpen': false,
 				'infoOpen': undefined,
+				'pHeaderColor': '#333',
 			}
 		},
 		computed: {
+			headerVariante () {
+				if (this.content.errors.length > 0) {
+					this.pHeaderColor = '#eee'
+					return 'danger'
+				}
+				if (this.content.name === '#unknown') {
+					this.pHeaderColor = '#eee'
+					return 'secondary'
+				}
+				this.pHeaderColor = '#333'
+				return 'Default'
+			},
 			tranculatedValue () {
 				var aVal = this.content.options.get('value.is.value')
 				if (aVal !== undefined) {
@@ -183,6 +196,9 @@
 	}
 	.card-header .val > i {
 		color: #007bff;
+	}
+	.invert > .card-header .val > i {
+		color: #ccf;
 	}
 	.header-btn-toggle {
 		margin: 0px;
