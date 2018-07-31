@@ -36,6 +36,8 @@ const localFunctions = {
 		this.isCopy = false						// Hanelt es sich um eine Kopie?
 		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : this.root.content)		// Geschwister
 		this.init()										// Immer dirket initialisieren
+		// this.hasToBeHere(EditorObject)		// Ermitteln ob es sich um ein notwendiges Kind des "EditorObject"s handelt
+		// this.match(XmlObject)					// Ermittelt die Übereinstimmung zwischen "ParserObjekt" und "XmlObjekt"
 	},
 	ParserOptions: function () {
 		this.ready = false						// Ist die Option bereit?
@@ -59,6 +61,8 @@ localFunctions.ParserBase.prototype.init = prototypeParserBase.init
 localFunctions.ParserObject.prototype.addError = prototypeParserMultible.addError
 localFunctions.ParserObject.prototype.init = prototypeParserObject.init
 localFunctions.ParserObject.prototype.makeCopy = prototypeParserObject.makeCopy
+localFunctions.ParserObject.prototype.hasToBeHere = prototypeParserObject.hasToBeHere
+localFunctions.ParserObject.prototype.match = prototypeParserObject.match
 
 // ParserOptions Prototypen
 localFunctions.ParserOptions.prototype.addError = prototypeParserMultible.addError

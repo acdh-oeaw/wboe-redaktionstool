@@ -23,13 +23,14 @@ const localFunctions = {
 		this.warnings = []						// Liste der Warnungen
 		this.uId = undefined					// Individuelle Nummer des EditorObjects
 		this.childs = []							// Enthaltene "EditorObject" Kinder
+		this.parserUsed = {}					// Wie oft wurde jeder Parser bereits verwendet? { [uId] : [EditorObject, ...] }
 		this.parents = parents || []	// Liste der Eltern
 		this.root = root							// Enthält die "EditorBase"
 		this.isRoot = isRoot || false
 		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : [this])		// Geschwister
 		this.init()										// Immer dirket initialisieren
-		// this.add(pos, parser)			// Kind hinzufügen
-		// this.delete(pos)						// Kind löschen (Rekursion beachten)
+		// this.add(parser, pos, xml)			// Kind hinzufügen (XML hinzufügen falls nicht vorhanden!)
+		// this.delete(pos)						// Kind löschen (Rekursion beachten)	(XML entfernen!)
 		// this.allPrevSiblings(useable)	//	Alle vorherigen Geschwister
 		// this.allAfterSiblings(useable)	//	Alle nachfolgende Geschwister
 	},
@@ -42,7 +43,7 @@ localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 // EditorObject Prototypen
 localFunctions.EditorObject.prototype.addError = prototypeEditorMultible.addError
 localFunctions.EditorObject.prototype.init = prototypeEditorObject.init
-// localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
+localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
 // localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
 // localFunctions.EditorObject.prototype.allPrevSiblings = prototypeEditorObject.allPrevSiblings
 // localFunctions.EditorObject.prototype.allAfterSiblings = prototypeEditorObject.delete

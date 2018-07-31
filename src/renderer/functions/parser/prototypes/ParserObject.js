@@ -100,6 +100,23 @@ const localFunctions = {
 			}
 		}
 	},
+	hasToBeHere: function (orgEditorObj) {
+		// ToDo!
+		return true
+	},
+	match: function (orgXmlObj) {
+		// ToDo!
+		let errors = []
+		let warnings = []
+		let score = 0
+		let possible = true
+		if (this.name === orgXmlObj.name) {
+		} else {
+			errors.push({'err': 'Tag Name stimmt nicht überein!'})
+			possible = false
+		}
+		return {'score': score, 'errors': errors, 'warnings': warnings, 'possible': possible}
+	}
 }
 
 export default localFunctions
