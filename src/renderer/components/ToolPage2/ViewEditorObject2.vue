@@ -4,7 +4,7 @@
 			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ length(object.errors) }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
-					<div class="g-errors"> -->
+					<div class="g-errors">
 						<!-- {{ object.errors }} -->
 					</div>
 				</b-card-body>
@@ -19,11 +19,11 @@
 	</div>
 
 	<div class="obj" v-else-if="content !== undefined">
-		<b-card :header="content.parserObj.name || content.orgXmlObj.name || 'Root'" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
+		<b-card :header="objName" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
 					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
-					<span><b>{{ content.parserObj.name || content.orgXmlObj.name || 'Root' }}</b></span>
+					<span><b>{{ objName }}</b></span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="length(content.errors) > 0"/>
 				</button>
@@ -84,20 +84,27 @@
 		},
 		computed: {
 			headerVariante () {
-				// if (this.content.errors.length > 0) {
-				// 	this.pHeaderColor = '#eee'
-				// 	return 'danger'
-				// }
-				// if (this.content.type === 'UNKNOWN' || this.content.type === 'COMMENT' || this.content.type === 'PROCESSING_INSTRUCTION') {
-				// 	this.pHeaderColor = '#eee'
-				// 	return 'secondary'
-				// }
-				// if (this.content.type === 'TEXT') {
-				// 	this.pHeaderColor = '#eee'
-				// 	return 'primary'
-				// }
+				if (this.content.errors.length > 0) {
+					this.pHeaderColor = '#eee'
+					return 'danger'
+				}
+				if (!this.content.parserObj) {
+					this.pHeaderColor = '#eee'
+					return 'secondary'
+				}
 				this.pHeaderColor = '#333'
 				return 'Default'
+			},
+			objName () {
+				if (this.content) {
+					if (this.content.parserObj) {
+						return this.content.parserObj.name
+					}
+					if (this.content.orgXmlObj) {
+						return this.content.orgXmlObj.name
+					}
+				}
+				return 'Root'
 			},
 		},
 		methods: {

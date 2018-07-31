@@ -15,8 +15,8 @@ const localFunctions = {
 		this.init()										// Immer dirket initialisieren
 	},
 	EditorObject: function (root, parents, parser, xml, isRoot) {
-		this.parserObj = parser || null			// Aktuelles Parser Objekt
-		this.orgXmlObj	= xml || null				// Original Xml Objekt
+		this.parserObj = parser || null		// Aktuelles Parser Objekt
+		this.orgXmlObj	= xml || null	// Original Xml Objekt
 		this.ready = false						// Ist das Objekt bereit?
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = []							// Liste der Fehler

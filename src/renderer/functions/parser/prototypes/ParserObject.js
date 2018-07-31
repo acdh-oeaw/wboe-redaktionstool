@@ -126,9 +126,11 @@ const localFunctions = {
 		}
 		return {'score': score, 'errors': errors, 'warnings': warnings, 'possible': possible}
 	},
-	checkAttributes: function (attrObj) {
+	checkAttributes: function (attrObjX) {
 		let errors = []
+		let attrObj = ((Object.keys(attrObjX).length > 0) ? attrObjX : null)
 		let aParAttrObj = this.options.get('attributes')
+		aParAttrObj = ((aParAttrObj && Object.keys(aParAttrObj).length > 0) ? aParAttrObj : null)
 		if (attrObj && aParAttrObj) {		// Attribute testen
 			// Überprüfen ob Attribute fehlen
 			Object.keys(aParAttrObj).some(function (aKey) {
