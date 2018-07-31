@@ -14,7 +14,7 @@ const localFunctions = {
 		this.orgXmlObj = xmlObj || null			// Original von xmlObj
 		this.init()										// Immer dirket initialisieren
 	},
-	EditorObject: function (root, parents, parser, xml) {
+	EditorObject: function (root, parents, parser, xml, isRoot) {
 		this.parserObj = parser || null			// Aktuelles Parser Objekt
 		this.orgXmlObj	= xml || null				// Original Xml Objekt
 		this.ready = false						// Ist das Objekt bereit?
@@ -25,6 +25,7 @@ const localFunctions = {
 		this.childs = []							// Enthaltene "EditorObject" Kinder
 		this.parents = parents || []	// Liste der Eltern
 		this.root = root							// Enthält die "EditorBase"
+		this.isRoot = isRoot || false
 		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : [this])		// Geschwister
 		this.init()										// Immer dirket initialisieren
 		// this.add(pos, parser)			// Kind hinzufügen

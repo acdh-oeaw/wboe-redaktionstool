@@ -7,7 +7,7 @@ const localFunctions = {
 			this.addError('Es wurde kein "parserObject" übergeben!')
 			return false
 		}
-		this.contentObj = new Editor.EditorObject(this, null, this.parserObj, this.orgXmlObj)
+		this.contentObj = new Editor.EditorObject(this, null, this.parserObj, this.orgXmlObj, true)
 		if (!this.contentObj) {
 			this.addError('Kein "contentObj" vorhanden!')
 		}
