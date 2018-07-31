@@ -105,14 +105,21 @@ const localFunctions = {
 		return true
 	},
 	match: function (orgXmlObj) {
-		// ToDo!
 		let errors = []
 		let warnings = []
 		let score = 0
 		let possible = true
-		if (this.name === orgXmlObj.name) {
+		if (this.name === orgXmlObj.name) {		// Stimmt der Name überein?
+			score += 1
+			// Attribute prüfen
 			let aErr = this.checkAttributes(orgXmlObj.attributes)
-			if (aErr.length > 0) { errors.push(aErr) }
+			if (aErr.length > 0) {
+				errors.push(aErr)
+			} else {
+				score += 1
+			}
+			// ToDo: Value prüfen
+			// ToDo: Position prüfen
 		} else {
 			errors.push({'err': 'Tag Name stimmt nicht überein!'})
 			possible = false
