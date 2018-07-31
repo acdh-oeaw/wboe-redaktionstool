@@ -20,7 +20,7 @@ const localFunctions = {
 			aParserChilds.forEach(function (aParObj) {
 				aParList.push({'pObj': aParObj, 'match': aParObj.match(aXmlObj)})
 			}, this)
-			console.log(aParList)
+			console.log('aParList', aParList)
 		}, this)
 		console.log('---------------------------------------------')
 		// console.log(this.parserObj.matchXML(this.orgXmlObj))

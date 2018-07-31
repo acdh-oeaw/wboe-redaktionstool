@@ -111,12 +111,64 @@ const localFunctions = {
 		let score = 0
 		let possible = true
 		if (this.name === orgXmlObj.name) {
+			let aErr = this.checkAttributes(orgXmlObj.attributes)
+			if (aErr.length > 0) { errors.push(aErr) }
 		} else {
 			errors.push({'err': 'Tag Name stimmt nicht überein!'})
 			possible = false
 		}
 		return {'score': score, 'errors': errors, 'warnings': warnings, 'possible': possible}
-	}
+	},
+	checkAttributes: function (attrObj) {
+		let errors = []
+		let aParAttrObj = this.options.get('attributes')
+		if (attrObj && aParAttrObj) {		// Attribute testen
+			// Überprüfen ob Attribute fehlen
+			Object.keys(aParAttrObj).some(function (aKey) {
+				// ToDo: Eventuelle If-Abfrage verarbeiten
+				if (!(aParAttrObj[aKey].canBeEmpty && aParAttrObj[aKey].canBeEmpty.use)
+				&& !attrObj.hasOwnProperty(aKey)) {
+					errors.push({'err': 'Attribut "' + aKey + '" fehlt!'})
+				}
+			}, this)
+			// Vorhandene Attribute überprüfen
+			Object.keys(attrObj).forEach(function (aKey) {
+				let aErr = this.checkAttribute(aKey, attrObj[aKey])
+				if (aErr) { errors.push(aErr) }
+			}, this)
+		} else if (attrObj && !aParAttrObj) {		// Keine Attribute
+			errors.push({'err': 'Keine Attribute erwartet!'})
+		} else if (!attrObj && aParAttrObj) {		// Überprüfen ob alle Attribute optional sind
+			Object.keys(aParAttrObj).some(function (aKey) {
+				// ToDo: Eventuelle If-Abfrage verarbeiten
+				if (!(aParAttrObj[aKey].canBeEmpty && aParAttrObj[aKey].canBeEmpty.use)) {
+					errors.push({'err': 'Attribute erwartet!'})
+					return true
+				}
+			}, this)
+		}
+		return errors
+	},
+	checkAttribute: function (attr, val) {
+		let aParAttrObj = this.options.get('attributes.' + attr)
+		if (!aParAttrObj) {
+			return 'Attribut "' + attr + '" nicht erwartet'
+		}
+		// ToDo: Eventuelle If-Abfrage verarbeiten
+		if (aParAttrObj.type === 'fixed' && val !== aParAttrObj.value) {
+			return 'Attribut "' + attr + '" hat nicht den erwateten Wert!'
+		}
+		if (!aParAttrObj.canBeEmpty && (val === undefined || val.length === 0)) {
+			return 'Wert von Attribut "' + attr + '" darf nicht leer sein!'
+		}
+		if (aParAttrObj.type === 'variable') {
+			if (aParAttrObj.possibleValues && aParAttrObj.possibleValues.use) {
+				if (val && aParAttrObj.possibleValues.indexOf(val) < 0) {
+					return 'Wert "' + val + '" von Attribut "' + attr + '" nicht in der Liste möglicher Werte!'
+				}
+			}
+		}
+	},
 }
 
 export default localFunctions

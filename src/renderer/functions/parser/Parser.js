@@ -38,6 +38,8 @@ const localFunctions = {
 		this.init()										// Immer dirket initialisieren
 		// this.hasToBeHere(EditorObject)		// Ermitteln ob es sich um ein notwendiges Kind des "EditorObject"s handelt
 		// this.match(XmlObject)					// Ermittelt die Übereinstimmung zwischen "ParserObjekt" und "XmlObjekt"
+		// this.checkAttributes(attributes)	// Überprüft Attribute [{'attribut': 'value'}] -> gibt Array mit Fehlern zurück
+		// this.checkAttribute(attribute, value)		// Überprüft Attribut	-> gibt Fehler zurück
 	},
 	ParserOptions: function () {
 		this.ready = false						// Ist die Option bereit?
@@ -63,6 +65,8 @@ localFunctions.ParserObject.prototype.init = prototypeParserObject.init
 localFunctions.ParserObject.prototype.makeCopy = prototypeParserObject.makeCopy
 localFunctions.ParserObject.prototype.hasToBeHere = prototypeParserObject.hasToBeHere
 localFunctions.ParserObject.prototype.match = prototypeParserObject.match
+localFunctions.ParserObject.prototype.checkAttributes = prototypeParserObject.checkAttributes
+localFunctions.ParserObject.prototype.checkAttribute = prototypeParserObject.checkAttribute
 
 // ParserOptions Prototypen
 localFunctions.ParserOptions.prototype.addError = prototypeParserMultible.addError
