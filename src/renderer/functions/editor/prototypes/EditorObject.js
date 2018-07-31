@@ -3,6 +3,7 @@
 
 const localFunctions = {
 	init: function () {
+		return true
 	},
 }
 

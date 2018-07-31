@@ -38,7 +38,7 @@
 				<div class="viewxml scroll p20" v-if="aTab === 3 && Options.show.professional">
 				</div>
 			</b-tab>
-			<b-tab title="Parser2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (testParser && testParser.errors && Object.keys(testParser.errors).length > 0)}">
+			<b-tab title="Parser 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (testParser && testParser.errors && Object.keys(testParser.errors).length > 0)}">
 				<div class="viewparser scroll p20" v-if="aTab === 4 && Options.show.develope">
 					<ViewParser2 :parser="testParser" v-if="testParser && testParser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
@@ -47,7 +47,7 @@
 			<b-tab title="XML Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
 				<div class="viewxmlobject scroll p20" v-if="aTab === 5 && Options.show.develope">
 					<ViewXmlObject2 :object="testXml" v-if="testXml && testXml.content.length > 0"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>fileObject</b> vorhanden!</div>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Parser" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (Parser.parser && Parser.parser.errors && Parser.parser.errors.length > 0)}">
@@ -146,6 +146,7 @@
 			console.log('testXml - ' + Math.ceil(performance.now() - t0) + ' ms.')
 			console.log(this.testXml)
 			t0 = performance.now()
+			// this.testEditor.init(this.testParser, this.testXml)
 			this.testEditor = new EditorObject.EditorBase(this.testParser, this.testXml)
 			console.log('testEditor - ' + Math.ceil(performance.now() - t0) + ' ms.')
 			console.log(this.testEditor)
