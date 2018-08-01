@@ -62,34 +62,25 @@ const localFunctions = {
 		}
 		return true
 	},
-	getValueByOption: function (parOptVal, asArray, flat) {
+	getValueByOption: function (parOptVal, asArray = true, flat = true) {
 		if (parOptVal && parOptVal.innerXML && parOptVal.innerXML.use === true) {
 			// return this.getXML(false, false, asArray, flat)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
 		} else {
 			return this.getValue(asArray, flat)
 		}
 	},
-	getValue: function (asArray, flat) {
+	getValue: function (asArray = true, flat = true) {
 		let aValue = []
-		if (this.childs.length > 0) {
+		if (this.type === 'TEXT') {
+			aValue.push(this.value)
+		} else if (this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {
-				if (aChild.type === 'TEXT') {
-					aValue.push(aChild.value)
-				}
-				if (aChild.childs.length > 0) {
-					let aChildValue = []
-					aChild.childs.forEach(function (aChildSub) {
-						let aCSgetVal = aChildSub.getValue(true, flat)
-						if (aCSgetVal.length > 0) {
-							if (flat) {
-								aValue = [...aValue, ...aCSgetVal]
-							} else {
-								aChildValue.push(aCSgetVal)
-							}
-						}
-					}, this)
-					if (!flat && aChildValue.length > 0) {
-						aValue.push(aChildValue)
+				let aCSgetVal = aChild.getValue(true, flat)
+				if (aCSgetVal.length > 0) {
+					if (flat) {
+						aValue = [...aValue, ...aCSgetVal]
+					} else {
+						aValue.push(aCSgetVal)
 					}
 				}
 			}, this)
@@ -101,6 +92,18 @@ const localFunctions = {
 			return aValue.toString()
 		}
 	},
+	getChildsOfType: function (types, ready = true, useable = true) {
+		let aChilds = []
+		if (this.childs.length > 0) {
+			this.childs.forEach(function (aChild) {
+				if ((aChild.ready || !ready) && (aChild.useable || !useable)
+				&& types.indexOf(aChild.type) > -1) {
+					aChilds.push(aChild)
+				}
+			}, this)
+		}
+		return aChilds
+	}
 }
 
 export default localFunctions

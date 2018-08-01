@@ -53,6 +53,7 @@ const localFunctions = {
 					aErrors.push('Es wurde kein Parser übergeben!')
 				}
 			}
+			// ToDo: ignoreChilds
 			if (useParser) {
 				this.add(aParList[0].pObj, null, aXmlObj, aErrors, aWarnings)
 			} else {

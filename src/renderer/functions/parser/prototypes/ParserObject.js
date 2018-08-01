@@ -139,7 +139,9 @@ const localFunctions = {
 	checkValue: function (xmlObj) {
 		let errors = []
 		let ignoreChilds = false		// ToDo!
-		console.log('>>>> checkValue', xmlObj.getValueByOption(this.options.get('value'), true, true))
+		let aValOption = this.options.get('value')
+		console.log('>>>> checkValue', aValOption, xmlObj.getValueByOption(aValOption))
+		console.log('>>>>>>> getChildsOfType', xmlObj.getChildsOfType(['text']))
 		return {'err': errors, 'ignoreChilds': ignoreChilds}
 	},
 	checkAttributes: function (attrObjX) {

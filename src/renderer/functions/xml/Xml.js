@@ -46,5 +46,6 @@ localFunctions.XmlObject.prototype.addError = prototypeXmlMultible.addError
 localFunctions.XmlObject.prototype.init = prototypeXmlObject.init
 localFunctions.XmlObject.prototype.getValue = prototypeXmlObject.getValue
 localFunctions.XmlObject.prototype.getValueByOption = prototypeXmlObject.getValueByOption
+localFunctions.XmlObject.prototype.getChildsOfType = prototypeXmlObject.getChildsOfType
 
 export default localFunctions
