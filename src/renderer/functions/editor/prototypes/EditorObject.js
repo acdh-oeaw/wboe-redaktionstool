@@ -13,54 +13,54 @@ const localFunctions = {
 			aParserChilds = stdFunctions.getValOfSubProp(this.parserObj, 'content') || []
 			aXmlChilds = stdFunctions.getValOfSubProp(this.orgXmlObj, 'content') || []
 		}
-		// ToDo: Parser mit XML Objekt vergleichen
-		console.log('--- Finde Parser der zu XML Objekt passt! ---')
-		aXmlChilds.forEach(function (aXmlObj) {
-			let aParList = []
-			let useParser = false
-			let aErrors = []
-			let aWarnings = []
-			if (aXmlObj.ready && aXmlObj.useable) {
-				if (aParserChilds.length > 0) {
-					useParser = true
-					aParserChilds.forEach(function (aParObjChild) {
-						if (aParObjChild.ready && aParObjChild.useable) {
-							aParList.push({'pObj': aParObjChild, 'match': aParObjChild.match(aXmlObj)})
+		// Parser mit XML Objekt vergleichen
+		if (!this.ignoreChilds) {
+			console.log('--- Finde Parser der zu XML Objekt passt! ---')
+			aXmlChilds.forEach(function (aXmlObj) {
+				let aParList = []
+				let useParser = false
+				let aErrors = []
+				let aWarnings = []
+				if (aXmlObj.ready && aXmlObj.useable) {
+					if (aParserChilds.length > 0) {
+						useParser = true
+						aParserChilds.forEach(function (aParObjChild) {
+							if (aParObjChild.ready && aParObjChild.useable) {
+								aParList.push({'pObj': aParObjChild, 'match': aParObjChild.match(aXmlObj)})
+							}
+						}, this)
+						aParList = aParList.slice().sort(pMatchSort)		// Sortieren: "possible" nach oben, Fehler nach unten, höherer Score nach oben)
+						console.log('aParList - "' + aParList[0].pObj.name + '":', aParList, this)
+						if (aParList.length === 0) {
+							// this.addError('Kein Parser für Tag "' + aXmlObj.name + '" übergeben!')
+							aErrors.push('Kein Parser für Tag "' + aXmlObj.name + '" übergeben!')
+							useParser = false
+						} else if (!aParList[0].match.possible) {
+							// this.addError('Parser konnte Tag "' + aXmlObj.name + '" nicht zugeordnet werden!')
+							aErrors.push('Parser konnte Tag "' + aXmlObj.name + '" nicht zugeordnet werden!')
+							useParser = false
+						} else if (aParList.length > 1 && aParList[0].match.score === aParList[1].match.score) {
+							// this.addError('Parser konnte Tag "' + aXmlObj.name + '" nicht eindeutig zugeordnet werden!')
+							aErrors.push('Parser konnte Tag "' + aXmlObj.name + '" nicht eindeutig zugeordnet werden!')
+							useParser = false
 						}
-					}, this)
-					console.log('aParList', aParList)
-					aParList = aParList.slice().sort(pMatchSort)		// Sortieren: "possible" nach oben, Fehler nach unten, höherer Score nach oben)
-					console.log('aParList', aParList, 'sorted')
-					if (aParList.length === 0) {
-						// this.addError('Kein Parser für Tag "' + aXmlObj.name + '" übergeben!')
-						aErrors.push('Kein Parser für Tag "' + aXmlObj.name + '" übergeben!')
-						useParser = false
-					} else if (!aParList[0].match.possible) {
-						// this.addError('Parser konnte Tag "' + aXmlObj.name + '" nicht zugeordnet werden!')
-						aErrors.push('Parser konnte Tag "' + aXmlObj.name + '" nicht zugeordnet werden!')
-						useParser = false
-					} else if (aParList.length > 1 && aParList[0].match.score === aParList[1].match.score) {
-						// this.addError('Parser konnte Tag "' + aXmlObj.name + '" nicht eindeutig zugeordnet werden!')
-						aErrors.push('Parser konnte Tag "' + aXmlObj.name + '" nicht eindeutig zugeordnet werden!')
-						useParser = false
+						if (useParser && aParList[0].match.errors.length > 0) {
+							// this.addError({'txt': 'Tag "' + aXmlObj.name + '" enthält Fehler!', 'err': aParList[0].match.errors})
+							aErrors.push({'txt': 'Tag "' + aXmlObj.name + '" enthält Fehler!', 'err': aParList[0].match.errors})
+							useParser = false
+						}
+					} else {
+						aErrors.push('Es wurde kein Parser übergeben!')
 					}
-					if (useParser && aParList[0].match.errors.length > 0) {
-						// this.addError({'txt': 'Tag "' + aXmlObj.name + '" enthält Fehler!', 'err': aParList[0].match.errors})
-						aErrors.push({'txt': 'Tag "' + aXmlObj.name + '" enthält Fehler!', 'err': aParList[0].match.errors})
-						useParser = false
-					}
-				} else {
-					aErrors.push('Es wurde kein Parser übergeben!')
 				}
-			}
-			// ToDo: ignoreChilds
-			if (useParser) {
-				this.add(aParList[0].pObj, null, aXmlObj, aErrors, aWarnings)
-			} else {
-				this.add(null, null, aXmlObj, aErrors, aWarnings)
-			}
-		}, this)
-		console.log('---------------------------------------------')
+				if (useParser) {
+					this.add(aParList[0].pObj, null, aXmlObj, aErrors, aWarnings, aParList[0].match.ignoreChilds)
+				} else {
+					this.add(null, null, aXmlObj, aErrors, aWarnings)
+				}
+			}, this)
+			console.log('---------------------------------------------')
+		}
 		this.ready = true
 		// ToDo: Fehlende Kinder aus Parser ergänzen
 		// aParserChilds.forEach(function (aPar) {
@@ -74,12 +74,12 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	add: function (aPar, pos, orgXml, aErrors, aWarnings) {
+	add: function (aPar, pos, orgXml, aErrors, aWarnings, ignoreChilds = false) {
 		// console.log('EditorObject.add', aPar, pos, orgXml)
 		if (pos || pos === 0) {
 			// ToDo: An einer bestimmten Stelle einfügen
 		} else {
-			let aKey = this.childs.push(new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml)) - 1
+			let aKey = this.childs.push(new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds)) - 1
 			aErrors.forEach(function (aErr) {
 				this.childs[aKey].addError(aErr)
 			}, this)

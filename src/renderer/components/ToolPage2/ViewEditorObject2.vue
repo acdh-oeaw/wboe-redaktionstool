@@ -24,6 +24,7 @@
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
 					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
 					<span><b>{{ objName }}</b></span>
+					<span class="val" v-if="aValue"> = <i>{{ tranculatedValue }}</i></span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="length(content.errors) > 0"/>
 				</button>
@@ -35,21 +36,21 @@
 						{{ content.errors }}
 					</div>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
-						<!-- <b-button-group size="sm" class="mr-1">
+						<b-button-group size="sm" class="mr-1">
 							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
-							<b-button @click="setInfoOpen('value')" v-if="content.value" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
-							<b-button @click="setInfoOpen('comment')" v-if="content.comments.length > 0" :pressed="infoOpen === 'comment'" variant="outline-secondary"><b>Comments</b></b-button>
-						</b-button-group> -->
+							<b-button @click="setInfoOpen('value')" v-if="aValue" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
+							<!-- <b-button @click="setInfoOpen('comment')" v-if="content.comments.length > 0" :pressed="infoOpen === 'comment'" variant="outline-secondary"><b>Comments</b></b-button> -->
+						</b-button-group>
 						<b-input-group size="sm" class="mx-1" v-if="content.childs.length > 0">
 							<b-input-group-prepend is-text><b>Kinder:</b>&nbsp;({{ content.childs.length }})</b-input-group-prepend>
 							<b-button @click="showChilds(true)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye" class="fa-icon"/></b-button>
 							<b-button @click="showChilds(false)" class="form-control" variant="outline-secondary"><font-awesome-icon icon="eye-slash" class="fa-icon"/></b-button>
 						</b-input-group>
 					</b-button-toolbar>
-					<!-- <div>
-						<code class="lb val" v-if="infoOpen === 'value'">{{ content.value }}</code>
-						<code class="lb" v-if="infoOpen === 'comment'"><ul><li v-for="comment in content.comments">{{ comment }}</li></ul></code>
-					</div> -->
+					<div>
+						<code class="lb val" v-if="infoOpen === 'value'">{{ aValue }}</code>
+						<!-- <code class="lb" v-if="infoOpen === 'comment'"><ul><li v-for="comment in content.comments">{{ comment }}</li></ul></code> -->
+					</div>
 					<div v-if="content.childs.length > 0">
 						<b>Kinder:</b><br>
 						<ViewEditorObject2 ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"/>
@@ -95,6 +96,26 @@
 				this.pHeaderColor = '#333'
 				return 'Default'
 			},
+			aValue () {
+				if (this.content) {
+					if (this.content.orgXmlObj) {
+						if (this.content.ignoreChilds) {
+							return this.content.orgXmlObj.getValue(false)
+						}
+						if (['TEXT', 'COMMENT'].indexOf(this.content.orgXmlObj.type) > -1) {
+							return this.content.orgXmlObj.value
+						}
+					}
+				}
+				return null
+			},
+			tranculatedValue () {
+				if (this.aValue !== undefined) {
+					return this.aValue.length > 25 ? this.aValue.slice(0, 25) + '...' : this.aValue
+				} else {
+					return ''
+				}
+			},
 			objName () {
 				if (this.content) {
 					if (this.content.parserObj) {
@@ -104,7 +125,7 @@
 						return this.content.orgXmlObj.name
 					}
 				}
-				return 'Root'
+				return '???'
 			},
 		},
 		methods: {
@@ -129,7 +150,7 @@
 		},
 		created: function () {
 			if (this.content !== undefined) {
-				if (this.content.useable) {
+				if (this.content.useable && this.content.childs.length > 0) {
 					this.isOpen = true
 				}
 			}
