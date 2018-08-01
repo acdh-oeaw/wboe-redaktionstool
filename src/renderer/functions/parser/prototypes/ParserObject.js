@@ -104,27 +104,43 @@ const localFunctions = {
 		// ToDo!
 		return true
 	},
-	match: function (orgXmlObj) {
+	match: function (orgXmlObj, checkChilds = true) {
 		let errors = []
 		let warnings = []
 		let score = 0
 		let possible = true
+		let ignoreChilds = false
 		if (this.name === orgXmlObj.name) {		// Stimmt der Name überein?
+			let aErr
 			score += 1
 			// Attribute prüfen
-			let aErr = this.checkAttributes(orgXmlObj.attributes)
+			aErr = this.checkAttributes(orgXmlObj.attributes)
 			if (aErr.length > 0) {
 				errors.push(aErr)
 			} else {
 				score += 1
 			}
-			// ToDo: Value prüfen
+			// Value prüfen
+			let aCheckVal = this.checkValue(orgXmlObj)
+			ignoreChilds = ignoreChilds || aCheckVal.ignoreChilds
+			if (aCheckVal.err.length > 0) {
+				errors.push(aCheckVal.err)
+			} else {
+				score += 1
+			}
 			// ToDo: Position prüfen
+			// ToDo: Kinder prüfen
 		} else {
 			errors.push({'err': 'Tag Name stimmt nicht überein!'})
 			possible = false
 		}
-		return {'score': score, 'errors': errors, 'warnings': warnings, 'possible': possible}
+		return {'score': score, 'errors': errors, 'warnings': warnings, 'possible': possible, 'ignoreChilds': ignoreChilds}
+	},
+	checkValue: function (xmlObj) {
+		let errors = []
+		let ignoreChilds = false		// ToDo!
+		console.log('>>>> checkValue', xmlObj.getValueByOption(this.options.get('value'), true, true))
+		return {'err': errors, 'ignoreChilds': ignoreChilds}
 	},
 	checkAttributes: function (attrObjX) {
 		let errors = []

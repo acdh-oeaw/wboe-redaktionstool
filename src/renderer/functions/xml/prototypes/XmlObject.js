@@ -40,6 +40,7 @@ const localFunctions = {
 		} else if (this.orgDOM.nodeType === this.orgDOM.TEXT_NODE) {		// Ist es ein Text
 			this.type = 'TEXT'
 			this.name = '#text'
+			// ToDo: Trim verbessern!
 			this.value = this.orgDOM.nodeValue.trim()
 			this.useable = true
 			this.ready = true
@@ -60,6 +61,45 @@ const localFunctions = {
 			return false
 		}
 		return true
+	},
+	getValueByOption: function (parOptVal, asArray, flat) {
+		if (parOptVal && parOptVal.innerXML && parOptVal.innerXML.use === true) {
+			// return this.getXML(false, false, asArray, flat)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
+		} else {
+			return this.getValue(asArray, flat)
+		}
+	},
+	getValue: function (asArray, flat) {
+		let aValue = []
+		if (this.childs.length > 0) {
+			this.childs.forEach(function (aChild) {
+				if (aChild.type === 'TEXT') {
+					aValue.push(aChild.value)
+				}
+				if (aChild.childs.length > 0) {
+					let aChildValue = []
+					aChild.childs.forEach(function (aChildSub) {
+						let aCSgetVal = aChildSub.getValue(true, flat)
+						if (aCSgetVal.length > 0) {
+							if (flat) {
+								aValue = [...aValue, ...aCSgetVal]
+							} else {
+								aChildValue.push(aCSgetVal)
+							}
+						}
+					}, this)
+					if (!flat && aChildValue.length > 0) {
+						aValue.push(aChildValue)
+					}
+				}
+			}, this)
+		}
+		// console.log('>>>> aValue', aValue)
+		if (asArray) {
+			return aValue
+		} else {
+			return aValue.toString()
+		}
 	},
 }
 
