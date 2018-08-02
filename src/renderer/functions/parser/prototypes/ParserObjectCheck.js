@@ -18,7 +18,14 @@ const localFunctions = {
 							}
 						}
 					}, this)
-				} else {
+				} else if (editorPrev.length === 0 && parserPrev.length > 0) {		// Wenn an erster Stelle aber Parser nicht
+					parserPrev.some(function (aParser) {
+						if (!(aParser.options.get('tag.anywhere.use') || aParser.options.get('tag.possibleTag.use'))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
+							errors.push('Position: Tag "' + aParser.name + '" sollte vorher stehen!')
+							return true
+						}
+					}, this)
+				} else {		// Vorherige Parser- und Editorobjekte vergleichen
 					// errors.push('Position: test')
 					console.log('parserPrev >>>', parserPrev, this.name)
 					console.log('editorObj >>>', editorPrev, xmlObj.name)
