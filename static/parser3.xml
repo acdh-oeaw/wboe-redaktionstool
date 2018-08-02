@@ -92,7 +92,8 @@
 								<?options {
 														"title": "Name",
 														"attributes": [{"xml:id": {"type": "variable"}}],
-														"value": ["variable", "required"]
+														"value": ["variable", "required"],
+														"tag": ["multiple"]
 													} ?>
 							</name>
 						</respStmt>

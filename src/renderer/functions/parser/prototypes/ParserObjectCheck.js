@@ -26,9 +26,31 @@ const localFunctions = {
 						}
 					}, this)
 				} else {		// Vorherige Parser- und Editorobjekte vergleichen
-					// errors.push('Position: test')
-					console.log('parserPrev >>>', parserPrev, this.name)
-					console.log('editorObj >>>', editorPrev, xmlObj.name)
+					if (!(aTagOption && aTagOption.anywhere && aTagOption.anywhere.use)) {		// Wenn Tag ist nicht "anywhere", weiter prüfen
+						if (editorPrev[0].parserObj !== parserPrev[0]) {		// Wenn die vorgänger Objekte nicht übereinstimmen, weiter prüfen
+							if (!(aTagOption && aTagOption.multiple && aTagOption.multiple.use && this === editorPrev[0].parserObj)) {		// Wenn aktuelles Tag ist nicht multiple oder parser stimmt nicht mit vorherigen überein, weiter prüfen
+								let nextParserPrev = null
+								parserPrev.some(function (aParser) {
+									if (!(aParser.options.get('tag.anywhere.use') || aParser.options.get('tag.possibleTag.use'))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
+										nextParserPrev = aParser
+										return true
+									}
+								}, this)
+								editorPrev.some(function (aEditor) {
+									if (!(aEditor.parserObj && (aEditor.parserObj.options.get('tag.anywhere.use') || aEditor.parserObj.options.get('tag.possibleTag.use')))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
+										if (aEditor.parserObj !== nextParserPrev) {
+											if (nextParserPrev) {
+												errors.push('Position: Tag "' + nextParserPrev.name + '" sollte vorher stehen! (vpe)')
+											} else {
+												errors.push('Position: Tag sollte am Anfang stehen!')
+											}
+											return true
+										}
+									}
+								}, this)
+							}
+						}
+					}
 				}
 			}
 		}
