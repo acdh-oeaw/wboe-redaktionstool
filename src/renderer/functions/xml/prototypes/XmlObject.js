@@ -64,7 +64,8 @@ const localFunctions = {
 	},
 	getValueByOption: function (parOptVal, asArray = true, flat = true) {
 		if (parOptVal && parOptVal.innerXML && parOptVal.innerXML.use === true) {
-			// return this.getXML(false, false, asArray, flat)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
+			// ToDo!!
+			// return this.getXML(false, false, asArray, flat)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. u. 3. Formatiert
 		} else {
 			return this.getValue(asArray, flat)
 		}

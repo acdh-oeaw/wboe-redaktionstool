@@ -26,12 +26,6 @@
 				</test>
 				<test>
 					<test1>
-						<!-- <?text {
-							"options": {
-								"title": "Test Text:",
-								"value": ["edit", "required"]
-							}
-						} ?> -->
 					</test1>
 				</test>
 				<test>
@@ -120,12 +114,12 @@
 					</titleStmt>
 					<publicationStmt>
 						<?options {
-												"value": ["edit", "innerText"]
+												"value": ["edit", "canBeEmpty", "innerXML"]
 											} ?>
 					</publicationStmt>
 					<sourceDesc>
 						<?options {
-												"value": ["edit", "innerText"]
+												"value": ["edit", "canBeEmpty", "innerXML"]
 											} ?>
 					</sourceDesc>
 				</fileDesc>
@@ -419,9 +413,22 @@
 				<ref type="form">
 					<?options {
 											"title": "Ref Form",
-											"value": ["edit", "innerText"],
 											"tag": ["possibleTag"]
 										} ?>
+					<?text {
+						"options": {
+							"title": "Text:",
+							"value": ["edit", "required"]
+						}
+					} ?>
+					<oRef target="#Färzel">
+						<?options {
+							"attributes": [{
+								"target": {"type": "variable", "canBeEmpty": {"use": true}}
+							}],
+							"tag": ["possibleTag"]
+						} ?>
+					</oRef>
 				</ref><!-- Formatting rule: if target (/form[@type='variant' and @subtype='diminutive] print "(Dim.)");-->
 				<def>
 					<?options {

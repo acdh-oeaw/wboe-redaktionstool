@@ -101,10 +101,35 @@ const localFunctions = {
 		let aValOption = this.options.get('value')
 		if (aValOption) {
 			ignoreChilds = true
-			// ToDo!
-			console.log('>>>> checkValue', aValOption, xmlObj.getValueByOption(aValOption))
-			console.log('>>>>>>> getChildsOfType', xmlObj.getChildsOfType(['text']))
+			let aVal = xmlObj.getValueByOption(aValOption, false)
+			if (!(aValOption && (aValOption.innerXML))		// Wenn nicht "innerXML"
+			&& xmlObj.getChildsOfType(['ELEMENT']).length > 0) {		// und enthält "ELEMENT"e dann Warnung heraus geben
+				errors.push('Wert enthält "ELEMENT"e!' + JSON.stringify(aValOption))
+			}
+			if ((aValOption && ((aValOption.edit && aValOption.edit.use) || (aValOption.variable && aValOption.variable.use)))) {
+				// ToDo: min, max ... usw.
+				if ((aVal === undefined || aVal.length === 0) && !aValOption.canBeEmpty) {
+					errors.push({'e': 'Wert darf nicht leer sein!'})
+				} else {
+					if (aValOption.is && Array.isArray(aValOption.is.possibleValues)) {
+						if (aValOption.is.possibleValues.indexOf(aVal) < 0) {
+							errors.push({'e': 'Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!'})
+						}
+					}
+				}
+			} else {
+				if (aValOption && aValOption.is && aValOption.is.use) {
+					if (Array.isArray(aValOption.is.possibleValues)) {
+						if (aVal === undefined || aValOption.is.possibleValues.indexOf(aVal) < 0) {
+							errors.push('Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!')
+						}
+					} else if (aValOption.is.value !== aVal) {
+						errors.push('Tag Wert "' + aVal + '" stimmt nicht mit Vorlage "' + aValOption.is.value + '" überein!')
+					}
+				}
+			}
 		}
+		// ToDo: if-Abfrage ...
 		return {'err': errors, 'ignoreChilds': ignoreChilds}
 	},
 	checkAttributes: function (attrObjX) {
