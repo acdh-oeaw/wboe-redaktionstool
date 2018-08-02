@@ -144,16 +144,13 @@ const localFunctions = {
 	},
 	checkPosition: function (xmlObj, editorObj) {
 		let errors = []
-		let test = []
-		editorObj.childs.forEach(function (js) {
-			test.push(js.orgXmlObj.name)
-		}, this)
 		console.log('editorObj >>>', editorObj.getSiblings('prev', true), xmlObj.name)
+		console.log('ParserObject >>>', this.getSiblings('prev', true), this.name)
 		return errors
 	},
 	checkValue: function (xmlObj) {
 		let errors = []
-		let ignoreChilds = false		// ToDo!
+		let ignoreChilds = false
 		let aValOption = this.options.get('value')
 		if (aValOption) {
 			ignoreChilds = true
@@ -214,6 +211,24 @@ const localFunctions = {
 				}
 			}
 		}
+	},
+	getSiblings: function (mode = 'all', useable = false, inclSelf = false) {
+		let rObj = []
+		let hit = false
+		if (this.siblings.length > 0) {
+			this.siblings.some(function (aObj) {
+				if (aObj === this) {
+					hit = true
+				}
+				if ((!useable || aObj.useable)		// Nur "useable", falls vorhanden
+				&& ((!hit && (mode === 'all' || mode === 'prev'))	// Nur vorherige
+					|| (hit && (mode === 'all' || mode === 'next')))		// Nur nachfolgende
+				&& (inclSelf || aObj !== this)) {		// Auch dieses Objekt
+					rObj.push(aObj)
+				}
+			}, this)
+		}
+		return rObj
 	},
 }
 

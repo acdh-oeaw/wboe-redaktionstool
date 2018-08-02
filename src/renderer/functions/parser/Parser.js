@@ -69,6 +69,7 @@ localFunctions.ParserObject.prototype.checkAttributes = prototypeParserObject.ch
 localFunctions.ParserObject.prototype.checkAttribute = prototypeParserObject.checkAttribute
 localFunctions.ParserObject.prototype.checkValue = prototypeParserObject.checkValue
 localFunctions.ParserObject.prototype.checkPosition = prototypeParserObject.checkPosition
+localFunctions.ParserObject.prototype.getSiblings = prototypeParserObject.getSiblings
 
 // ParserOptions Prototypen
 localFunctions.ParserOptions.prototype.addError = prototypeParserMultible.addError

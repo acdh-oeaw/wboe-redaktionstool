@@ -88,21 +88,21 @@ const localFunctions = {
 	getSiblings: function (mode = 'all', useable = false, inclSelf = false) {
 		let rObj = []
 		let hit = false
-		if (this.childs.length > 0) {
-			this.childs.some(function (aObj) {
+		if (this.siblings.length > 0) {
+			this.siblings.some(function (aObj) {
 				if (aObj === this) {
 					hit = true
 				}
 				if ((!useable || aObj.useable)		// Nur "useable", falls vorhanden
-				&& (!hit || (mode === 'all' || mode === 'prev'))	// Nur vorherige
-				&& (hit || (mode === 'all' || mode === 'next'))		// Nur nachfolgende
-				&& (!inclSelf || aObj !== this)) {		// Auch dieses Objekt
+				&& ((!hit && (mode === 'all' || mode === 'prev'))	// Nur vorherige
+					|| (hit && (mode === 'all' || mode === 'next')))		// Nur nachfolgende
+				&& (inclSelf || aObj !== this)) {		// Auch dieses Objekt
 					rObj.push(aObj)
 				}
 			}, this)
 		}
 		return rObj
-	}
+	},
 }
 
 export default localFunctions
