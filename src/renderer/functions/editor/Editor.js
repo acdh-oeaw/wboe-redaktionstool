@@ -32,8 +32,7 @@ const localFunctions = {
 		this.init()										// Immer dirket initialisieren
 		// this.add(parser, pos, xml)			// Kind hinzufügen (XML hinzufügen falls nicht vorhanden!)
 		// this.delete(pos)						// Kind löschen (Rekursion beachten)	(XML entfernen!)
-		// this.allPrevSiblings(useable)	//	Alle vorherigen Geschwister
-		// this.allAfterSiblings(useable)	//	Alle nachfolgende Geschwister
+		// this.getSiblings(mode, useable)		// Alle Geschwister
 	},
 }
 
@@ -45,6 +44,7 @@ localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 localFunctions.EditorObject.prototype.addError = prototypeEditorMultible.addError
 localFunctions.EditorObject.prototype.init = prototypeEditorObject.init
 localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
+localFunctions.EditorObject.prototype.getSiblings = prototypeEditorObject.getSiblings
 // localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
 // localFunctions.EditorObject.prototype.allPrevSiblings = prototypeEditorObject.allPrevSiblings
 // localFunctions.EditorObject.prototype.allAfterSiblings = prototypeEditorObject.delete

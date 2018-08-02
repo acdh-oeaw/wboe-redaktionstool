@@ -104,7 +104,7 @@ const localFunctions = {
 		// ToDo!
 		return true
 	},
-	match: function (orgXmlObj, checkChilds = true) {
+	match: function (orgXmlObj, editorObj, checkChilds = true) {
 		let errors = []
 		let warnings = []
 		let score = 0
@@ -129,6 +129,12 @@ const localFunctions = {
 				score += 1
 			}
 			// ToDo: Position prüfen
+			aErr = this.checkPosition(orgXmlObj, editorObj)
+			if (aErr.length > 0) {
+				errors.push(aErr)
+			} else {
+				score += 1
+			}
 			// ToDo: Kinder prüfen
 		} else {
 			errors.push({'err': 'Tag Name stimmt nicht überein!'})
@@ -136,12 +142,22 @@ const localFunctions = {
 		}
 		return {'score': score, 'errors': errors, 'warnings': warnings, 'possible': possible, 'ignoreChilds': ignoreChilds}
 	},
+	checkPosition: function (xmlObj, editorObj) {
+		let errors = []
+		let test = []
+		editorObj.childs.forEach(function (js) {
+			test.push(js.orgXmlObj.name)
+		}, this)
+		console.log('editorObj >>>', editorObj.getSiblings('prev', true), xmlObj.name)
+		return errors
+	},
 	checkValue: function (xmlObj) {
 		let errors = []
 		let ignoreChilds = false		// ToDo!
 		let aValOption = this.options.get('value')
 		if (aValOption) {
 			ignoreChilds = true
+			// ToDo!
 			console.log('>>>> checkValue', aValOption, xmlObj.getValueByOption(aValOption))
 			console.log('>>>>>>> getChildsOfType', xmlObj.getChildsOfType(['text']))
 		}
