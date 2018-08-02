@@ -1,6 +1,29 @@
 // import xmlFunctions from '@/functions/XmlFunctions'
 
 const localFunctions = {
+	checkChilds: function (xmlObj) {		// Kinder überprüfen (simpel: nur Tagnamen)
+		let errors = []
+		let aParserChilds = this.getChilds('all', true)
+		if (xmlObj.childs.length > 0) {		// Kinder vergleichen
+			if (aParserChilds.length === 0) {
+				console.log('<<<< checkChilds', this)
+				errors.push('Kinder: Es wurden keine Kinder erwartet!')
+			} else {
+				console.log('<<<< checkChilds xxx')
+			}
+		} else {
+			let aParserChildsFilter = []
+			aParserChilds.forEach(function (aPC) {
+				if (!(aPC.options.get('tag.anywhere.use') || aPC.options.get('tag.possibleTag.use'))) {
+					aParserChildsFilter.push(aPC)
+				}
+			})
+			if (aParserChildsFilter.length > 0) {
+				errors.push('Kinder: Es wurden mindestens ' + aParserChilds.length + ' Kinder erwartet!')
+			}
+		}
+		return errors
+	},
 	checkPosition: function (xmlObj, editorObj) {
 		let errors = []
 		let aTagOption = this.options.get('tag')

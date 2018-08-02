@@ -100,10 +100,6 @@ const localFunctions = {
 			}
 		}
 	},
-	hasToBeHere: function (orgEditorObj) {
-		// ToDo!
-		return true
-	},
 	match: function (orgXmlObj, editorObj, checkChilds = true) {
 		let errors = []
 		let warnings = []
@@ -128,14 +124,26 @@ const localFunctions = {
 			} else {
 				score += 1
 			}
-			// ToDo: Position prüfen
+			// Position prüfen
 			aErr = this.checkPosition(orgXmlObj, editorObj)
 			if (aErr.length > 0) {
 				errors.push(aErr)
 			} else {
 				score += 1
 			}
-			// ToDo: Kinder prüfen
+			// Kinder prüfen
+			if (checkChilds) {
+				if (ignoreChilds) {
+					score += 1
+				} else {
+					aErr = this.checkChilds(orgXmlObj)
+					if (aErr.length > 0) {
+						errors.push(aErr)
+					} else {
+						score += 1
+					}
+				}
+			}
 		} else {
 			errors.push({'err': 'Tag Name stimmt nicht überein!'})
 			possible = false
@@ -154,6 +162,25 @@ const localFunctions = {
 				&& ((!hit && (mode === 'all' || mode === 'prev'))	// Nur vorherige
 					|| (hit && (mode === 'all' || mode === 'next')))		// Nur nachfolgende
 				&& (inclSelf || aObj !== this)) {		// Auch dieses Objekt
+					rObj.push(aObj)
+				}
+			}, this)
+		}
+		if (mode === 'prev') { rObj.reverse() }
+		return rObj
+	},
+	getChilds: function (mode = 'all', useable = false, inclAChild = false) {
+		let rObj = []
+		let hit = false
+		if (this.childs.length > 0) {
+			this.childs.some(function (aObj) {
+				if (aObj === this) {
+					hit = true
+				}
+				if ((!useable || aObj.useable)		// Nur "useable", falls vorhanden
+				&& ((!hit && (mode === 'all' || mode === 'prev'))	// Nur vorherige
+					|| (hit && (mode === 'all' || mode === 'next')))		// Nur nachfolgende
+				&& (inclAChild || aObj !== this)) {		// Auch dieses Objekt
 					rObj.push(aObj)
 				}
 			}, this)

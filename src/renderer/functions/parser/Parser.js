@@ -64,13 +64,14 @@ localFunctions.ParserBase.prototype.init = prototypeParserBase.init
 localFunctions.ParserObject.prototype.addError = prototypeParserMultible.addError
 localFunctions.ParserObject.prototype.init = prototypeParserObject.init
 localFunctions.ParserObject.prototype.makeCopy = prototypeParserObject.makeCopy
-localFunctions.ParserObject.prototype.hasToBeHere = prototypeParserObject.hasToBeHere
 localFunctions.ParserObject.prototype.match = prototypeParserObject.match
 localFunctions.ParserObject.prototype.getSiblings = prototypeParserObject.getSiblings
+localFunctions.ParserObject.prototype.getChilds = prototypeParserObject.getChilds
 localFunctions.ParserObject.prototype.checkAttributes = prototypeParserObjectCheck.checkAttributes
 localFunctions.ParserObject.prototype.checkAttribute = prototypeParserObjectCheck.checkAttribute
 localFunctions.ParserObject.prototype.checkValue = prototypeParserObjectCheck.checkValue
 localFunctions.ParserObject.prototype.checkPosition = prototypeParserObjectCheck.checkPosition
+localFunctions.ParserObject.prototype.checkChilds = prototypeParserObjectCheck.checkChilds
 
 // ParserOptions Prototypen
 localFunctions.ParserOptions.prototype.addError = prototypeParserMultible.addError
