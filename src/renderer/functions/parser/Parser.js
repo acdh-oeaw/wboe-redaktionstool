@@ -1,6 +1,7 @@
 import prototypeParserMultible from './prototypes/ParserMultible'
 import prototypeParserBase from './prototypes/ParserBase'
 import prototypeParserObject from './prototypes/ParserObject'
+import prototypeParserObjectCheck from './prototypes/ParserObjectCheck'
 import prototypeParserOptions from './prototypes/ParserOptions'
 
 const localFunctions = {
@@ -65,11 +66,11 @@ localFunctions.ParserObject.prototype.init = prototypeParserObject.init
 localFunctions.ParserObject.prototype.makeCopy = prototypeParserObject.makeCopy
 localFunctions.ParserObject.prototype.hasToBeHere = prototypeParserObject.hasToBeHere
 localFunctions.ParserObject.prototype.match = prototypeParserObject.match
-localFunctions.ParserObject.prototype.checkAttributes = prototypeParserObject.checkAttributes
-localFunctions.ParserObject.prototype.checkAttribute = prototypeParserObject.checkAttribute
-localFunctions.ParserObject.prototype.checkValue = prototypeParserObject.checkValue
-localFunctions.ParserObject.prototype.checkPosition = prototypeParserObject.checkPosition
 localFunctions.ParserObject.prototype.getSiblings = prototypeParserObject.getSiblings
+localFunctions.ParserObject.prototype.checkAttributes = prototypeParserObjectCheck.checkAttributes
+localFunctions.ParserObject.prototype.checkAttribute = prototypeParserObjectCheck.checkAttribute
+localFunctions.ParserObject.prototype.checkValue = prototypeParserObjectCheck.checkValue
+localFunctions.ParserObject.prototype.checkPosition = prototypeParserObjectCheck.checkPosition
 
 // ParserOptions Prototypen
 localFunctions.ParserOptions.prototype.addError = prototypeParserMultible.addError
