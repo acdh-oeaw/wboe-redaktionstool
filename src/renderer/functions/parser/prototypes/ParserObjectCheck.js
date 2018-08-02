@@ -6,15 +6,30 @@ const localFunctions = {
 		let aParserChilds = this.getChilds('all', true)
 		if (xmlObj.childs.length > 0) {		// Kinder vergleichen
 			if (aParserChilds.length === 0) {
-				console.log('<<<< checkChilds', this)
 				errors.push('Kinder: Es wurden keine Kinder erwartet!')
 			} else {
+				aParserChilds.some(function (aPC) {		// Fehlende Tags ermitteln
+					if (!(aPC.options.get('tag.possibleTag.use'))) {
+						if (xmlObj.getChildsByName(aPC.name).length === 0) {
+							errors.push('Kinder: Tag "' + aPC.name + '" fehlt!')
+							return true
+						}
+					}
+				}, this)
+				if (errors.length === 0) {
+					xmlObj.childs.some(function (xmlO) {		// Vorhandene Tags überprüfen
+						if (xmlO.useable && this.getChildsByName(xmlO.name).length === 0) {
+							errors.push('Kinder: Tag "' + xmlO.name + '" nicht erwartet!')
+							return true
+						}
+					}, this)
+				}
 				console.log('<<<< checkChilds xxx')
 			}
 		} else {
 			let aParserChildsFilter = []
 			aParserChilds.forEach(function (aPC) {
-				if (!(aPC.options.get('tag.anywhere.use') || aPC.options.get('tag.possibleTag.use'))) {
+				if (!(aPC.options.get('tag.possibleTag.use'))) {
 					aParserChildsFilter.push(aPC)
 				}
 			})

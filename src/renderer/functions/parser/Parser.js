@@ -67,6 +67,7 @@ localFunctions.ParserObject.prototype.makeCopy = prototypeParserObject.makeCopy
 localFunctions.ParserObject.prototype.match = prototypeParserObject.match
 localFunctions.ParserObject.prototype.getSiblings = prototypeParserObject.getSiblings
 localFunctions.ParserObject.prototype.getChilds = prototypeParserObject.getChilds
+localFunctions.ParserObject.prototype.getChildsByName = prototypeParserObject.getChildsByName
 localFunctions.ParserObject.prototype.checkAttributes = prototypeParserObjectCheck.checkAttributes
 localFunctions.ParserObject.prototype.checkAttribute = prototypeParserObjectCheck.checkAttribute
 localFunctions.ParserObject.prototype.checkValue = prototypeParserObjectCheck.checkValue

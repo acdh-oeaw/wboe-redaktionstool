@@ -188,6 +188,18 @@ const localFunctions = {
 		if (mode === 'prev') { rObj.reverse() }
 		return rObj
 	},
+	getChildsByName: function (name, ready = true, useable = true) {
+		let aChilds = []
+		if (this.childs.length > 0) {
+			this.childs.forEach(function (aChild) {
+				if ((aChild.ready || !ready) && (aChild.useable || !useable)
+				&& aChild.name === name) {
+					aChilds.push(aChild)
+				}
+			}, this)
+		}
+		return aChilds
+	},
 }
 
 export default localFunctions
