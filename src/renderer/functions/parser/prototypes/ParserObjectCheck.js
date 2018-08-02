@@ -78,12 +78,12 @@ const localFunctions = {
 									if (!(aEditor.parserObj && (aEditor.parserObj.options.get('tag.anywhere.use') || aEditor.parserObj.options.get('tag.possibleTag.use')))) {		// Wenn vorhergehender Parser weder "anywhere" noch "possibleTag" ist
 										if (aEditor.parserObj !== nextParserPrev) {
 											if (nextParserPrev) {
-												errors.push('Position: Tag "' + nextParserPrev.name + '" sollte vorher stehen! (vpe)')
+												errors.push('Position: Tag "' + nextParserPrev.name + '" sollte statt "' + ((aEditor.parserObj) ? aEditor.parserObj.name : aEditor.orgXmlObj.name) + '" vorher stehen! (vpe) ')
 											} else {
 												errors.push('Position: Tag sollte am Anfang stehen!')
 											}
-											return true
 										}
+										return true
 									}
 								}, this)
 							}
