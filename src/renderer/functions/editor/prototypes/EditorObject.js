@@ -71,6 +71,9 @@ const localFunctions = {
 		if (Object.keys(this.errors).length > 0) {
 			return false
 		}
+		if (this.orgXmlObj && !this.orgXmlObj.useable) {
+			return false
+		}
 		this.useable = true
 		return true
 	},
@@ -101,6 +104,26 @@ const localFunctions = {
 				}
 			}, this)
 		}
+		if (mode === 'prev') { rObj.reverse() }
+		return rObj
+	},
+	getChilds: function (mode = 'all', useable = false, aChild = null, inclAChild = false) {
+		let rObj = []
+		let hit = false
+		if (this.childs.length > 0) {
+			this.childs.some(function (aObj) {
+				if (aObj === aChild) {
+					hit = true
+				}
+				if ((!useable || aObj.useable)		// Nur "useable", falls vorhanden
+				&& ((!hit && (mode === 'all' || mode === 'prev'))	// Nur vorherige
+					|| (hit && (mode === 'all' || mode === 'next')))		// Nur nachfolgende
+				&& (inclAChild || aObj !== aChild)) {		// Auch dieses Objekt
+					rObj.push(aObj)
+				}
+			}, this)
+		}
+		if (mode === 'prev') { rObj.reverse() }
 		return rObj
 	},
 }

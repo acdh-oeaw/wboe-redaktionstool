@@ -45,6 +45,7 @@ localFunctions.EditorObject.prototype.addError = prototypeEditorMultible.addErro
 localFunctions.EditorObject.prototype.init = prototypeEditorObject.init
 localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
 localFunctions.EditorObject.prototype.getSiblings = prototypeEditorObject.getSiblings
+localFunctions.EditorObject.prototype.getChilds = prototypeEditorObject.getChilds
 // localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
 // localFunctions.EditorObject.prototype.allPrevSiblings = prototypeEditorObject.allPrevSiblings
 // localFunctions.EditorObject.prototype.allAfterSiblings = prototypeEditorObject.delete

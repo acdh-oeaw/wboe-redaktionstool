@@ -144,8 +144,29 @@ const localFunctions = {
 	},
 	checkPosition: function (xmlObj, editorObj) {
 		let errors = []
-		console.log('editorObj >>>', editorObj.getSiblings('prev', true), xmlObj.name)
-		console.log('ParserObject >>>', this.getSiblings('prev', true), this.name)
+		let aTagOption = this.options.get('tag')
+		console.log(aTagOption)
+		if (!aTagOption || !(aTagOption.anywhere && aTagOption.anywhere.use)) {		// Feste Position
+			let parserPrev = this.getSiblings('prev', true)
+			let editorPrev = editorObj.getChilds('prev', true)		// ToDo: Wenn nachkontrolliert wird?!? Aktuelles EditorObj.getSiblings(...)
+			if (parserPrev.length > 0 || editorPrev.length > 0) {		// Wenn einer von beide nicht an erster Position
+				if (editorPrev.length > 0 && parserPrev.length === 0) {		// Wenn eigentlich an erster Stelle
+					editorPrev.some(function (aEditor) {
+						if (!aEditor.parserObj || !aEditor.parserObj.options.get('tag.anywhere.use')) {		// Wenn nicht "anywhere" weiter kontrollieren
+							if (!aEditor.parserObj || !(aEditor.parserObj === this && aTagOption && aTagOption.multiple && aTagOption.multiple.use)) {		// Wenn kein "multiple" ...
+								errors.push('Sollte an erster Stelle stehen!')
+								return true
+							}
+						}
+					}, this)
+				} else {
+					// errors.push('test')
+					console.log('parserPrev >>>', parserPrev, this.name)
+					console.log('editorObj >>>', editorPrev, xmlObj.name)
+				}
+			}
+		}
+		// ToDo: if-Abfrage!
 		return errors
 	},
 	checkValue: function (xmlObj) {
@@ -228,6 +249,7 @@ const localFunctions = {
 				}
 			}, this)
 		}
+		if (mode === 'prev') { rObj.reverse() }
 		return rObj
 	},
 }
