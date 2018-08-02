@@ -40,7 +40,6 @@ const localFunctions = {
 							aErrors.push('Parser konnte Tag "' + aXmlObj.name + '" nicht zugeordnet werden!')
 							useParser = false
 						} else if (aParList.length > 1 && aParList[0].match.score === aParList[1].match.score) {
-							// this.addError('Parser konnte Tag "' + aXmlObj.name + '" nicht eindeutig zugeordnet werden!')
 							aErrors.push('Parser konnte Tag "' + aXmlObj.name + '" nicht eindeutig zugeordnet werden!')
 							useParser = false
 						}
@@ -54,9 +53,9 @@ const localFunctions = {
 					}
 				}
 				if (useParser) {
-					this.add(aParList[0].pObj, null, aXmlObj, aErrors, aWarnings, aParList[0].match.ignoreChilds)
+					this.add(aParList[0].pObj, null, aXmlObj, aErrors, aWarnings, aParList[0].match.ignoreChilds, aParList)
 				} else {
-					this.add(null, null, aXmlObj, aErrors, aWarnings)
+					this.add(null, null, aXmlObj, aErrors, aWarnings, null, aParList)
 				}
 			}, this)
 			console.log('---------------------------------------------')
@@ -77,12 +76,15 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	add: function (aPar, pos, orgXml, aErrors, aWarnings, ignoreChilds = false) {
+	add: function (aPar, pos, orgXml, aErrors, aWarnings, ignoreChilds = false, aParList) {
 		// console.log('EditorObject.add', aPar, pos, orgXml)
 		if (pos || pos === 0) {
 			// ToDo: An einer bestimmten Stelle einfügen
 		} else {
 			let aKey = this.childs.push(new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds)) - 1
+			if (aParList) {
+				this.childs[aKey].parserMatches = aParList
+			}
 			aErrors.forEach(function (aErr) {
 				this.childs[aKey].addError(aErr)
 			}, this)

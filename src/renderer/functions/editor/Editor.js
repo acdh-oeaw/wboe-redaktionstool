@@ -25,6 +25,7 @@ const localFunctions = {
 		this.childs = []							// Enthaltene "EditorObject" Kinder
 		this.ignoreChilds = ignoreChilds || false		// Sollen die Kinder ignoriert werden?
 		this.parserUsed = {}					// Wie oft wurde jeder Parser bereits verwendet? { [uId] : [EditorObject, ...] }
+		this.parserMatches = []				// Die "match"es
 		this.parents = parents || []	// Liste der Eltern
 		this.root = root							// Enthält die "EditorBase"
 		this.isRoot = isRoot || false

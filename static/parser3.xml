@@ -284,7 +284,7 @@
 						<sense>
 							<?options {
 													"title": "Sense > Sense",
-													"tag": ["multiple"]
+													"tag": ["multiple", "possibleTag"]
 												} ?>
 							<?copy { "fromId": "sense" } ?>
 						</sense>

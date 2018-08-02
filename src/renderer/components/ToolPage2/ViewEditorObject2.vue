@@ -39,6 +39,7 @@
 						<b-button-group size="sm" class="mr-1">
 							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 							<b-button @click="setInfoOpen('value')" v-if="aValue" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
+							<b-button @click="setInfoOpen('matches')" v-if="content.parserMatches.length > 0" :pressed="infoOpen === 'matches'" variant="outline-secondary"><b>Matches</b></b-button>
 							<!-- <b-button @click="setInfoOpen('comment')" v-if="content.comments.length > 0" :pressed="infoOpen === 'comment'" variant="outline-secondary"><b>Comments</b></b-button> -->
 						</b-button-group>
 						<b-input-group size="sm" class="mx-1" v-if="content.childs.length > 0">
@@ -49,6 +50,7 @@
 					</b-button-toolbar>
 					<div>
 						<code class="lb val" v-if="infoOpen === 'value'">{{ aValue }}</code>
+						<code class="lb" v-if="infoOpen === 'matches'">{{ matches }}</code>
 						<!-- <code class="lb" v-if="infoOpen === 'comment'"><ul><li v-for="comment in content.comments">{{ comment }}</li></ul></code> -->
 					</div>
 					<div v-if="content.childs.length > 0">
@@ -115,6 +117,18 @@
 				} else {
 					return ''
 				}
+			},
+			matches () {
+				let aM = []
+				if (this.content) {
+					if (this.content.parserMatches.length > 0) {
+						this.content.parserMatches.forEach(function (pM) {
+							console.log(pM)
+							aM.push({'tag': pM.pObj.name, 'uId': pM.pObj.uId, ...pM.match})
+						}, this)
+					}
+				}
+				return aM
 			},
 			objName () {
 				if (this.content) {
