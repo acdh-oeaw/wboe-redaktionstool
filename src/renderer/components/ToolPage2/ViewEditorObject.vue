@@ -11,7 +11,7 @@
 			</b-collapse>
 		</b-card>
 		<div v-if="object.contentObj">
-			<ViewEditorObject2 :content="object.contentObj"/>
+			<ViewEditorObject :content="object.contentObj"/>
 		</div>
 		<div v-else>
 			Keine Content-Daten vorhanden
@@ -55,7 +55,9 @@
 					</div>
 					<div v-if="content.childs.length > 0">
 						<b>Kinder:</b><br>
-						<ViewEditorObject2 ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"/>
+						<ViewEditorObject ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"
+							v-if="!(aContent.errors.length === 0 && !aContent.parserObj) || Options.show.editorObjectWithoutParser"
+						/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -68,9 +70,10 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	import cError from './cError'
 	export default {
-		name: 'ViewEditorObject2',
+		name: 'ViewEditorObject',
 		props: {
 			object: Object,
 			content: Object,
@@ -87,10 +90,16 @@
 			}
 		},
 		computed: {
+			...mapState(['Options']),
 			headerVariante () {
 				if (this.content.errors.length > 0) {
 					this.pHeaderColor = '#eee'
 					return 'danger'
+				}
+				if ((this.content.descendantsWithErrors && !this.isOpen)
+				|| (this.content.childsWithErrors)) {
+					this.pHeaderColor = '#eee'
+					return 'warning'
 				}
 				if (!this.content.parserObj) {
 					this.pHeaderColor = '#eee'
@@ -303,7 +312,7 @@
 	div.g-errors {
 		max-height: calc( 70vh - 200px );
 		overflow: auto;
-		padding: 8px 10px;	
+		padding: 8px 10px;
 		margin: -8px;
 	}
 </style>

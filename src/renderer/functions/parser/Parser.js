@@ -19,6 +19,7 @@ const localFunctions = {
 		this.orgDOM = undefined				// Original DOM über init generiert
 		if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
 			this.init(xmlString)
+			this.updateFamilyErrors()
 		}
 	},
 	ParserObject: function (root, parents, dom) {
@@ -26,6 +27,8 @@ const localFunctions = {
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = []							// Liste der Fehler
 		this.warnings = []						// Liste der Warnungen
+		this.childsWithErrors = false		// Gibt es Kinder mit Fehlern
+		this.descendantsWithErrors = false		// Gibt es Nachfahren mit Fehlern
 		this.uId = undefined					// Individuelle Nummer des ParserObjects
 		this.name = undefined					// Tagname
 		this.attributes = {}					// Attribute des Tags
@@ -59,6 +62,7 @@ const localFunctions = {
 // ParserBase Prototypen
 localFunctions.ParserBase.prototype.addError = prototypeParserMultible.addError
 localFunctions.ParserBase.prototype.init = prototypeParserBase.init
+localFunctions.ParserBase.prototype.updateFamilyErrors = prototypeParserMultible.updateFamilyErrors
 
 // ParserObject Prototypen
 localFunctions.ParserObject.prototype.addError = prototypeParserMultible.addError

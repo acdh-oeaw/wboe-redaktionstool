@@ -31,7 +31,7 @@
 			}
 		},
 		mounted: function () {
-			console.log(this.error, this.aError)
+			// console.log(this.error, this.aError)
 		}
 	}
 </script>

@@ -13,6 +13,7 @@ const localFunctions = {
 		this.parserObj = parserObj || null	// parserObj
 		this.orgXmlObj = xmlObj || null			// Original von xmlObj
 		this.init()										// Immer dirket initialisieren
+		this.updateFamilyErrors()
 	},
 	EditorObject: function (root, parents, parser, xml, isRoot, ignoreChilds) {
 		this.parserObj = parser || null		// Aktuelles Parser Objekt
@@ -21,6 +22,8 @@ const localFunctions = {
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = []							// Liste der Fehler
 		this.warnings = []						// Liste der Warnungen
+		this.childsWithErrors = false		// Gibt es Kinder mit Fehlern
+		this.descendantsWithErrors = false		// Gibt es Nachfahren mit Fehlern
 		this.uId = undefined					// Individuelle Nummer des EditorObjects
 		this.childs = []							// Enthaltene "EditorObject" Kinder
 		this.ignoreChilds = ignoreChilds || false		// Sollen die Kinder ignoriert werden?
@@ -40,6 +43,7 @@ const localFunctions = {
 // EditorBase Prototypen
 localFunctions.EditorBase.prototype.addError = prototypeEditorMultible.addError
 localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
+localFunctions.EditorBase.prototype.updateFamilyErrors = prototypeEditorMultible.updateFamilyErrors
 
 // EditorObject Prototypen
 localFunctions.EditorObject.prototype.addError = prototypeEditorMultible.addError

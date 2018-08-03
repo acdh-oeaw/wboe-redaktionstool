@@ -64,6 +64,14 @@
 				<li class="nav-item extra">
 					<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
 					<div class="vis-dropdown" v-if="showTabView">
+						<template v-if="aTab === 6">
+							<button @click="$store.dispatch('TOGGLE_SHOW', 'editorObjectWithoutParser')"><font-awesome-icon :icon="((Options.show.editorObjectWithoutParser) ? 'eye' : 'eye-slash')"/> Ohne Parser</button>
+							<hr>
+						</template>
+						<template v-if="aTab === 5">
+							<button @click="$store.dispatch('TOGGLE_SHOW', 'xmlObjectUselessTypes')"><font-awesome-icon :icon="((Options.show.xmlObjectUselessTypes) ? 'eye' : 'eye-slash')"/> Unbrauchbare Nodes</button>
+							<hr>
+						</template>
 						<button @click="$store.dispatch('TOGGLE_SHOW', 'professional')"><font-awesome-icon :icon="((Options.show.professional) ? 'eye' : 'eye-slash')"/> Professional</button>
 						<button @click="$store.dispatch('TOGGLE_SHOW', 'develope')"><font-awesome-icon :icon="((Options.show.develope) ? 'eye' : 'eye-slash')"/> Developer</button>
 					</div>

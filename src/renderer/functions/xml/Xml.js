@@ -14,6 +14,7 @@ const localFunctions = {
 		this.orgDOM = undefined				// Original DOM über init generiert
 		if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
 			this.init(xmlString)
+			this.updateFamilyErrors()
 		}
 	},
 	XmlObject: function (root, parents, dom) {
@@ -22,6 +23,8 @@ const localFunctions = {
 		this.parserIgnore = true			// Objekt beim parsen ignorieren! (comments, usw.)
 		this.errors = []							// Liste der Fehler
 		this.warnings = []						// Liste der Warnungen
+		this.childsWithErrors = false		// Gibt es Kinder mit Fehlern
+		this.descendantsWithErrors = false		// Gibt es Nachfahren mit Fehlern
 		this.uId = undefined					// Individuelle Nummer des XmlObjects
 		this.name = undefined					// Tagname
 		this.type = undefined					// Node Type
@@ -40,6 +43,7 @@ const localFunctions = {
 // XmlBase Prototypen
 localFunctions.XmlBase.prototype.addError = prototypeXmlMultible.addError
 localFunctions.XmlBase.prototype.init = prototypeXmlBase.init
+localFunctions.XmlBase.prototype.updateFamilyErrors = prototypeXmlMultible.updateFamilyErrors
 
 // XmlObject Prototypen
 localFunctions.XmlObject.prototype.addError = prototypeXmlMultible.addError

@@ -11,7 +11,7 @@
 			</b-collapse>
 		</b-card>
 		<div v-if="object.content">
-			<ViewXmlObject2 :content="aContent" :key="aKey" v-for="(aContent, aKey) in object.content"/>
+			<ViewXmlObject :content="aContent" :key="aKey" v-for="(aContent, aKey) in object.content"/>
 		</div>
 		<div v-else>
 			Keine Content-Daten vorhanden
@@ -60,7 +60,9 @@
 					</div>
 					<div v-if="content.childs.length > 0">
 						<b>Kinder:</b><br>
-						<ViewXmlObject2 ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"/>
+						<ViewXmlObject ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"
+							v-if="!(aContent.type === 'UNKNOWN' || aContent.type === 'COMMENT' || aContent.type === 'PROCESSING_INSTRUCTION') || Options.show.xmlObjectUselessTypes"
+						/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -73,9 +75,10 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	import cError from './cError'
 	export default {
-		name: 'ViewXmlObject2',
+		name: 'ViewXmlObject',
 		props: {
 			object: Object,
 			content: Object,
@@ -92,6 +95,7 @@
 			}
 		},
 		computed: {
+			...mapState(['Options']),
 			headerVariante () {
 				if (this.content.errors.length > 0) {
 					this.pHeaderColor = '#eee'
@@ -139,7 +143,8 @@
 		},
 		created: function () {
 			if (this.content !== undefined) {
-				if (!this.content.parserIgnore) {
+				if (!this.content.parserIgnore
+				&& this.content.type !== 'TEXT') {
 					this.isOpen = true
 				}
 			}
