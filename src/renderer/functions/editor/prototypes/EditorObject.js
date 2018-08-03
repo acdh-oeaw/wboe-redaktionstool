@@ -15,7 +15,7 @@ const localFunctions = {
 		}
 		// Parser mit XML Objekt vergleichen
 		if (!this.ignoreChilds) {
-			console.log('--- Finde Parser der zu XML Objekt passt! ---')
+			// console.log('--- Finde Parser der zu XML Objekt passt! ---')
 			aXmlChilds.forEach(function (aXmlObj) {
 				let aParList = []
 				let useParser = false
@@ -30,13 +30,11 @@ const localFunctions = {
 							}
 						}, this)
 						aParList = aParList.slice().sort(pMatchSort)		// Sortieren: "possible" nach oben, Fehler nach unten, höherer Score nach oben)
-						console.log('aParList - "' + aParList[0].pObj.name + '":', aParList, this)
+						// console.log('aParList - "' + aParList[0].pObj.name + '":', aParList, this)
 						if (aParList.length === 0) {
-							// this.addError('Kein Parser für Tag "' + aXmlObj.name + '" übergeben!')
 							aErrors.push('Kein Parser für Tag "' + aXmlObj.name + '" übergeben!')
 							useParser = false
 						} else if (!aParList[0].match.possible) {
-							// this.addError('Parser konnte Tag "' + aXmlObj.name + '" nicht zugeordnet werden!')
 							aErrors.push('Parser konnte Tag "' + aXmlObj.name + '" nicht zugeordnet werden!')
 							useParser = false
 						} else if (aParList.length > 1 && aParList[0].match.score === aParList[1].match.score) {
@@ -44,7 +42,6 @@ const localFunctions = {
 							useParser = false
 						}
 						if (useParser && aParList[0].match.errors.length > 0) {
-							// this.addError({'txt': 'Tag "' + aXmlObj.name + '" enthält Fehler!', 'err': aParList[0].match.errors})
 							aErrors.push({'txt': 'Tag "' + aXmlObj.name + '" enthält Fehler!', 'err': aParList[0].match.errors})
 							useParser = false
 						}
@@ -58,7 +55,7 @@ const localFunctions = {
 					this.add(null, null, aXmlObj, aErrors, aWarnings, null, aParList)
 				}
 			}, this)
-			console.log('---------------------------------------------')
+			// console.log('---------------------------------------------')
 		}
 		this.ready = true
 		// ToDo: Fehlende Kinder aus Parser ergänzen

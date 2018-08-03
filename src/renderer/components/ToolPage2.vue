@@ -4,8 +4,8 @@
 			<b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
 				<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
 				<b-dropdown-divider></b-dropdown-divider>
-				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : (aFile.errors && aFile.errors.length > 0), 'warning': (aFile.warnings && aFile.warnings.length > 0)}" :key="aKey" v-for="(aFile, aKey) in devFiles">
-					{{ aFile.file + ((aFile.errors || aFile.warnings || aFile.unknown) ? ' (Fehler: ' + ((aFile.errors) ? aFile.errors.length : '0') + ', Warnungen: ' + ((aFile.warnings) ? aFile.warnings.length : '0') + ', Unbekannte: ' + aFile.unknown + ')' : '') }}
+				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : aFile.errors, 'warning': aFile.warnings}" :key="aKey" v-for="(aFile, aKey) in devFiles">
+					{{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ')' : '') }}
 				</b-dropdown-item>
 			</b-dropdown>
 			<b-button-group size="sm" class="mx-1" v-if="devMode">
@@ -38,40 +38,22 @@
 				<div class="viewxml scroll p20" v-if="aTab === 3 && Options.show.professional">
 				</div>
 			</b-tab>
-			<b-tab title="Parser Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (testParser && testParser.errors && Object.keys(testParser.errors).length > 0)}">
+			<b-tab title="Parser Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (this.Parser.parser && this.Parser.parser.errors && Object.keys(this.Parser.parser.errors).length > 0)}">
 				<div class="viewparser scroll p20" v-if="aTab === 4 && Options.show.develope">
-					<ViewParser2 :parser="testParser" v-if="testParser && testParser.content.length > 0"/>
+					<ViewParser2 :parser="this.Parser.parser" v-if="this.Parser.parser && this.Parser.parser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="XML Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
 				<div class="viewxmlobject scroll p20" v-if="aTab === 5 && Options.show.develope">
-					<ViewXmlObject2 :object="testXml" v-if="testXml && testXml.content.length > 0"/>
+					<ViewXmlObject2 :object="xmlObject" v-if="xmlObject && xmlObject.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Editor Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
 				<div class="vieweditorobject scroll p20" v-if="aTab === 6 && Options.show.develope">
-					<ViewEditorObject2 :object="testEditor" v-if="testEditor && testEditor.contentObj"/>
+					<ViewEditorObject2 :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
-				</div>
-			</b-tab>
-			<b-tab title="Parser" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (Parser.parser && Parser.parser.errors && Parser.parser.errors.length > 0)}">
-				<div class="viewparser scroll p20" v-if="Options.show.develope">
-					<ViewParser :parser="Parser.parser" v-if="aTab === 7 && Parser.parser && Parser.parser.content"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
-				</div>
-			</b-tab>
-			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
-				<div class="viewxmlobject scroll p20" v-if="aTab === 8 && Options.show.develope">
-					<ViewXmlObject :object="Files.fileObject" v-if="Files.fileObject"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>fileObject</b> vorhanden!</div>
-				</div>
-			</b-tab>
-			<b-tab title="Match" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
-				<div class="viewmatch scroll p20" v-if="aTab === 9 && Options.show.develope">
-					<ViewMatch :object="parsedXmlObject" v-if="parsedXmlObject && parsedXmlObject.content"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>parsedXmlObject</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<template slot="tabs">
@@ -90,17 +72,10 @@
 <script>
 	import { mapState } from 'vuex'
 	import ViewEditor from './ToolPage2/ViewEditor'
-	import ViewParser from './ToolPage2/ViewParser'
 	import ViewParser2 from './ToolPage2/ViewParser2'
-	import ViewXmlObject from './ToolPage2/ViewXmlObject'
 	import ViewXmlObject2 from './ToolPage2/ViewXmlObject2'
 	import ViewEditorObject2 from './ToolPage2/ViewEditorObject2'
-	import ViewMatch from './ToolPage2/ViewMatch'
-	import functionParser from './ToolPage2/functionParser'
 	import { remote, shell } from 'electron'
-	import xmlFunctions from '@/functions/XmlFunctions'
-	import FilesFunctionsObject from '@/store/modules/functions/FilesFunctionsObject'
-	import ParserObject from '@/functions/parser/Parser'
 	import XmlObject from '@/functions/xml/Xml'
 	import EditorObject from '@/functions/editor/Editor'
 	import fPath from 'path'
@@ -111,11 +86,10 @@
 		data () {
 			return {
 				aTab: 6,
+				aTabCach: [],
 				showTabView: false,
-				parsedXmlObject: undefined,
-				testParser: new ParserObject.ParserBase(),
-				testXml: new XmlObject.XmlBase(),
-				testEditor: null,
+				xmlObject: null,
+				editorObject: null,
 				updateTimer: performance.now(),
 				devMode: (process.env.NODE_ENV === 'development'),
 				devFiles: undefined,
@@ -134,29 +108,13 @@
 		mounted: function () {
 			var t0 = performance.now()
 			if (this.Parser.parser === undefined) {
-				this.$store.dispatch('LOAD_PARSER_FILE')
+				this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
 			}
-			if (this.Files.fileObject === undefined) {
-				this.$store.dispatch('LOAD_FILE')
+			if (this.Files.fileContent === undefined) {		// ToDo: Leere Datei erstellen
+				this.$store.dispatch('LOAD_FILE')		// Datei laden
 			}
-			this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
-			if (this.devMode) {
-				this.devFiles = this.devFileList()
-			}
+			this.loadData()
 			console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
-			t0 = performance.now()
-			this.testParser.init(this.Parser.fileContent)
-			console.log('testParser - ' + Math.ceil(performance.now() - t0) + ' ms.')
-			console.log(this.testParser)
-			t0 = performance.now()
-			this.testXml.init(this.Files.fileContent)
-			console.log('testXml - ' + Math.ceil(performance.now() - t0) + ' ms.')
-			console.log(this.testXml)
-			t0 = performance.now()
-			// this.testEditor.init(this.testParser, this.testXml)
-			this.testEditor = new EditorObject.EditorBase(this.testParser, this.testXml)
-			console.log('testEditor - ' + Math.ceil(performance.now() - t0) + ' ms.')
-			console.log(this.testEditor)
 		},
 		methods: {
 			showFile () {		// Ordner in Explorer öffnen
@@ -166,7 +124,9 @@
 				var t0 = performance.now()
 				var aFiles = []
 				if (this.devMode) {
-					aFiles.push({'file': 'demo2.xml', 'fullFileName': fPath.join(__static, '/demo2.xml')})
+					var xmlObjD = new XmlObject.XmlBase(fs.readFileSync(fPath.join(__static, '/demo2.xml'), 'utf8'))
+					var editorObjD = new EditorObject.EditorBase(this.Parser.parser, xmlObjD)
+					aFiles.push({ 'file': 'demo2.xml', 'fullFileName': fPath.join(__static, '/demo2.xml'), 'errors': Object.keys(editorObjD.errors).length, 'warnings': Object.keys(editorObjD.warnings).length })
 					var aPath = 'D:\\OEAW\\Redaktionstool\\Vorlagen\\2018-06-18\\wboe_articles-master\\102_derived_tei'
 					var aPathRead = fs.readdirSync(aPath)
 					aPathRead.forEach(function (file) {
@@ -176,12 +136,9 @@
 							let aExt = file.split('.').pop()
 							if (aExt === 'xml') {
 								var fileContent = fs.readFileSync(aFullFileName, 'utf8')
-								var xmlDomObj = xmlFunctions.string2xmlDom(fileContent)
-								var xmlObj = undefined
-								if (xmlDomObj.xmlDom !== undefined && !xmlDomObj.errors) {
-									xmlObj = functionParser.parseXmlObject(this.Parser.parser, FilesFunctionsObject.xml2Obj(xmlDomObj.xmlDom))
-								}
-								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': xmlObj.errors, 'warnings': xmlObj.warnings, 'unknown': xmlObj.unknown })
+								var xmlObj = new XmlObject.XmlBase(fileContent)
+								var editorObj = new EditorObject.EditorBase(this.Parser.parser, xmlObj)
+								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length })
 							}
 						}
 					}, this)
@@ -194,20 +151,12 @@
 					var aList = ((next) ? this.devFiles : this.devFiles.slice().reverse())
 					var aPos = -1
 					aList.some(function (aVal, aKey) {
-						// console.log(aVal.fullFileName, this.Files.file, aVal.fullFileName === this.Files.file)
 						if (aVal.fullFileName === this.Files.file) {
 							aPos = aKey
 							return true
 						}
 					}, this)
-					console.log(aPos)
-					if (aPos >= 0 && aPos < aList.length - 1) {
-						aPos += 1
-					} else {
-						aPos = 0
-					}
-					console.log(aPos)
-					console.log(aList[aPos])
+					aPos = ((aPos >= 0 && aPos < aList.length - 1) ? aPos + 1 : 0)
 					this.devSelectFile(aList[aPos].fullFileName)
 				}
 			},
@@ -215,17 +164,22 @@
 				if (this.devMode && file !== undefined) {
 					var t0 = performance.now()
 					this.$store.dispatch('LOAD_FILE', file)
-					this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
+					this.loadData()
 					console.log('devSelectFile - ' + Math.ceil(performance.now() - t0) + ' ms.')
 				}
+			},
+			loadData () {
+				this.xmlObject = new XmlObject.XmlBase(this.Files.fileContent)		// XML Objekt erstellen
+				this.editorObject = new EditorObject.EditorBase(this.Parser.parser, this.xmlObject)		// Editor Objekt erstellen
+				if (this.devMode) {
+					this.devFiles = this.devFileList()
+				}
+				this.aTabCach = [this.aTag]
 			},
 			updateData () {
 				this.$store.dispatch('RELOAD_PARSER_FILE')
 				this.$store.dispatch('RELOAD_FILE')
-				this.parsedXmlObject = functionParser.parseXmlObject(this.Parser.parser, this.Files.fileObject)
-				if (this.devMode) {
-					this.devFiles = this.devFileList()
-				}
+				this.loadData()
 			},
 			mousedown (e) {
 				if (this.showTabView && !(e.target.closest('.vis-dropdown') || e.target.closest('.vis-dropdown-button'))) {
@@ -247,12 +201,9 @@
 		},
 		components: {
 			ViewEditor,
-			ViewParser,
 			ViewParser2,
-			ViewXmlObject,
 			ViewXmlObject2,
 			ViewEditorObject2,
-			ViewMatch,
 		}
 	}
 </script>

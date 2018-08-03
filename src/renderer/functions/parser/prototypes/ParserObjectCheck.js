@@ -24,7 +24,6 @@ const localFunctions = {
 						}
 					}, this)
 				}
-				console.log('<<<< checkChilds xxx')
 			}
 		} else {
 			let aParserChildsFilter = []
@@ -42,7 +41,7 @@ const localFunctions = {
 	checkPosition: function (xmlObj, editorObj) {
 		let errors = []
 		let aTagOption = this.options.get('tag')
-		console.log(aTagOption)
+		// console.log(aTagOption)
 		if (!aTagOption || !(aTagOption.anywhere && aTagOption.anywhere.use)) {		// Feste Position
 			let parserPrev = this.getSiblings('prev', true)
 			let editorPrev = editorObj.getChilds('prev', true)		// ToDo: Wenn nachkontrolliert wird?!? Aktuelles EditorObj.getSiblings(...)

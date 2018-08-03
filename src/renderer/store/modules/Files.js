@@ -1,15 +1,12 @@
 import Vue from 'vue'
 import { remote } from 'electron'
-import xmlFunctions from '@/functions/XmlFunctions'
-import FilesFunctionsObject from './functions/FilesFunctionsObject'
 import fPath from 'path'
 const fs = remote.require('fs')
 
 const state = {
 	paths: {},		// Cach für Verzeichnissstruktur
 	file: undefined,
-	fileContent: undefined,
-	fileObject: undefined
+	fileContent: undefined
 }
 
 const mutations = {
@@ -25,10 +22,6 @@ const mutations = {
 	SET_FILE: (state, { file, content }) => {		// Aktuelle Datei laden
 		state.file = file
 		state.fileContent = content
-		state.fileObject = undefined
-	},
-	SET_FILE_OBJECT: (state, { object }) => {		// Aktuelles Datei Objekt setzen und cachen
-		state.fileObject = object
 	},
 }
 
@@ -58,22 +51,11 @@ const actions = {
 		}
 		console.log('SET_FILE', aFile)
 		commit('SET_FILE', { file: aFile, content: fileContent })
-		dispatch('MAKE_FILE_OBJECT')
 	},
 	RELOAD_FILE: function ({ commit, dispatch }) {
 		var aFile = state.file
 		var fileContent = fs.readFileSync(aFile, 'utf8')
 		commit('SET_FILE', { file: aFile, content: fileContent })
-		dispatch('MAKE_FILE_OBJECT')
-	},
-	MAKE_FILE_OBJECT: function ({ commit, dispatch }) {
-		// XML-Datei in DOM umwandeln:
-		var xmlDomObj = xmlFunctions.string2xmlDom(state.fileContent)
-		if (xmlDomObj.xmlDom === undefined || xmlDomObj.errors) {
-			commit('SET_FILE_OBJECT', { 'object': undefined })
-		} else {
-			commit('SET_FILE_OBJECT', { 'object': FilesFunctionsObject.xml2Obj(xmlDomObj.xmlDom) })
-		}
 	},
 	CLEAN_PATH: function ({ commit }) {		// Cache für Verzeichnissstruktur löschen
 		commit('CLEAN_CONTENT')
