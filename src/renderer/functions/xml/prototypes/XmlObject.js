@@ -100,7 +100,7 @@ const localFunctions = {
 		} else if (this.type === 'COMMENT' && all) {
 			aXML += '\n' + '	'.repeat(deep) + '<!-- ' + this.value + ' -->'
 		} else if (this.type === 'PROCESSING_INSTRUCTION' && all) {
-			aXML += '\n' + '	'.repeat(deep) + '<?' + this.name + ' ' + this.value + ' ?>'
+			aXML += '\n' + '	'.repeat(deep) + '<?' + this.name + ' ' + this.value + '?>'
 		} else if (this.type === 'UNKNOWN' && all) {
 			aXML += this.value
 		} else if (this.type === 'ELEMENT') {
@@ -110,7 +110,7 @@ const localFunctions = {
 			let aChildCont = ''
 			if (this.comments.length > 0) {
 				this.comments.forEach(function (aComment) {
-					aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment + ' ?>'
+					aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment + '?>'
 				}, this)
 			}
 			if (this.childs.length > 0) {
