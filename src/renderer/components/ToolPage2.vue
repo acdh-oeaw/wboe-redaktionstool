@@ -40,6 +40,8 @@
 			</b-tab>
 			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
 				<div class="viewxml scroll p20" v-if="aTabCach.indexOf(3) > -1">
+					<code v-if="editorObject" style="white-space: pre;">{{ editorObject.getXML() }}</code>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}">
@@ -97,7 +99,7 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 6,
+				aTab: 3,
 				aTabCach: [],
 				showTabView: false,
 				xmlObject: null,

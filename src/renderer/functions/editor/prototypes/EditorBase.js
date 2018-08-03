@@ -18,6 +18,9 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
+	getXML: function () {
+		return (this.parserObj.header || '') + this.orgXmlObj.getXML()
+	}
 }
 
 export default localFunctions

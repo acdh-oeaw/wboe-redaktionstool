@@ -64,8 +64,7 @@ const localFunctions = {
 	},
 	getValueByOption: function (parOptVal, asArray = true, flat = true) {
 		if (parOptVal && parOptVal.innerXML && parOptVal.innerXML.use === true) {
-			// ToDo!!
-			// return this.getXML(false, false, asArray, flat)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. u. 3. Formatiert
+			return this.getXML(false, false)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
 		} else {
 			return this.getValue(asArray, flat)
 		}
@@ -92,6 +91,50 @@ const localFunctions = {
 		} else {
 			return aValue.toString()
 		}
+	},
+	getXML: function (all = true, lb = true, short = false, deep = 0, prvXmlObj) {
+		let aXML = ''
+		if (this.type === 'TEXT') {
+			if (prvXmlObj && prvXmlObj.type === 'COMMENT') { aXML += '\n' + '	'.repeat(deep) }
+			aXML += this.value
+		} else if (this.type === 'COMMENT' && all) {
+			aXML += '\n' + '	'.repeat(deep) + '<!-- ' + this.value + ' -->'
+		} else if (this.type === 'PROCESSING_INSTRUCTION' && all) {
+			aXML += '\n' + '	'.repeat(deep) + '<?' + this.name + ' ' + this.value + ' ?>'
+		} else if (this.type === 'UNKNOWN' && all) {
+			aXML += this.value
+		} else if (this.type === 'ELEMENT') {
+			aXML += '\n' + '	'.repeat(deep) + '<' + this.name
+			// ToDo: Attribute
+			if (!short) { aXML += '>' }
+			let aChildCont = ''
+			if (this.comments.length > 0) {
+				this.comments.forEach(function (aComment) {
+					aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment + ' ?>'
+				}, this)
+			}
+			if (this.childs.length > 0) {
+				let lChild = undefined
+				this.childs.forEach(function (aChild) {
+					aChildCont += aChild.getXML(all, lb, short, deep + 1, lChild)
+					lChild = aChild
+				}, this)
+			}
+			if (short && aChildCont.length === 0) {
+				aXML += '/>'
+			} else {
+				if (short && aChildCont.length > 0) { aXML += '>' }
+				if (aChildCont.length > 0) {
+					if (this.getChildsOfType(['ELEMENT', 'COMMENT'], false, false).length > 0) {
+						aXML += aChildCont + '\n' + '	'.repeat(deep)
+					} else {
+						aXML += aChildCont
+					}
+				}
+				aXML += '</' + this.name + '>'
+			}
+		}
+		return aXML
 	},
 	getChildsOfType: function (types, ready = true, useable = true) {
 		let aChilds = []

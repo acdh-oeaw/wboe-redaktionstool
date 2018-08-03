@@ -42,13 +42,15 @@ const localFunctions = {
 
 // XmlBase Prototypen
 localFunctions.XmlBase.prototype.addError = prototypeXmlMultible.addError
-localFunctions.XmlBase.prototype.init = prototypeXmlBase.init
 localFunctions.XmlBase.prototype.updateFamilyErrors = prototypeXmlMultible.updateFamilyErrors
+localFunctions.XmlBase.prototype.init = prototypeXmlBase.init
+localFunctions.XmlBase.prototype.getXML = prototypeXmlBase.getXML
 
 // XmlObject Prototypen
 localFunctions.XmlObject.prototype.addError = prototypeXmlMultible.addError
 localFunctions.XmlObject.prototype.init = prototypeXmlObject.init
 localFunctions.XmlObject.prototype.getValue = prototypeXmlObject.getValue
+localFunctions.XmlObject.prototype.getXML = prototypeXmlObject.getXML
 localFunctions.XmlObject.prototype.getValueByOption = prototypeXmlObject.getValueByOption
 localFunctions.XmlObject.prototype.getChildsOfType = prototypeXmlObject.getChildsOfType
 localFunctions.XmlObject.prototype.getChildsByName = prototypeXmlObject.getChildsByName

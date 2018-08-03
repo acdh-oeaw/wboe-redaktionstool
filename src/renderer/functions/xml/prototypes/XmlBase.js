@@ -44,6 +44,13 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
+	getXML: function () {
+		let aXML = ''
+		this.content.forEach(function (aCont) {
+			aXML += aCont.getXML()
+		}, this)
+		return aXML
+	}
 }
 
 export default localFunctions
