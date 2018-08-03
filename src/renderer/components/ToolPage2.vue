@@ -34,25 +34,25 @@
 			</b-tab>
 			<b-tab title="Objekt">
 			</b-tab>
-			<b-tab title="XML" :title-item-class="{'professional': true, 'hidden': !Options.show.professional}">
+			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional}">
 				<div class="viewxml scroll p20" v-if="aTab === 3 && Options.show.professional">
 				</div>
 			</b-tab>
-			<b-tab title="Parser Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (this.Parser.parser && this.Parser.parser.errors && Object.keys(this.Parser.parser.errors).length > 0)}">
+			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (this.Parser.parser && this.Parser.parser.errors && Object.keys(this.Parser.parser.errors).length > 0)}">
 				<div class="viewparser scroll p20" v-if="aTab === 4 && Options.show.develope">
-					<ViewParser2 :parser="this.Parser.parser" v-if="this.Parser.parser && this.Parser.parser.content.length > 0"/>
+					<ViewParser :parser="this.Parser.parser" v-if="this.Parser.parser && this.Parser.parser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
-			<b-tab title="XML Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
+			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
 				<div class="viewxmlobject scroll p20" v-if="aTab === 5 && Options.show.develope">
-					<ViewXmlObject2 :object="xmlObject" v-if="xmlObject && xmlObject.content.length > 0"/>
+					<ViewXmlObject :object="xmlObject" v-if="xmlObject && xmlObject.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
-			<b-tab title="Editor Object 2" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
+			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
 				<div class="vieweditorobject scroll p20" v-if="aTab === 6 && Options.show.develope">
-					<ViewEditorObject2 :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+					<ViewEditorObject :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -72,9 +72,9 @@
 <script>
 	import { mapState } from 'vuex'
 	import ViewEditor from './ToolPage2/ViewEditor'
-	import ViewParser2 from './ToolPage2/ViewParser2'
-	import ViewXmlObject2 from './ToolPage2/ViewXmlObject2'
-	import ViewEditorObject2 from './ToolPage2/ViewEditorObject2'
+	import ViewParser from './ToolPage2/ViewParser'
+	import ViewXmlObject from './ToolPage2/ViewXmlObject'
+	import ViewEditorObject from './ToolPage2/ViewEditorObject'
 	import { remote, shell } from 'electron'
 	import XmlObject from '@/functions/xml/Xml'
 	import EditorObject from '@/functions/editor/Editor'
@@ -201,9 +201,9 @@
 		},
 		components: {
 			ViewEditor,
-			ViewParser2,
-			ViewXmlObject2,
-			ViewEditorObject2,
+			ViewParser,
+			ViewXmlObject,
+			ViewEditorObject,
 		}
 	}
 </script>
