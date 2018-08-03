@@ -34,27 +34,27 @@
 				<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1">
 				</div>
 			</b-tab>
-			<b-tab title="Objekt">
+			<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
 				<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1">
 				</div>
 			</b-tab>
-			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional}">
+			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
 				<div class="viewxml scroll p20" v-if="aTabCach.indexOf(3) > -1">
 				</div>
 			</b-tab>
-			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (this.Parser.parser && this.Parser.parser.errors && Object.keys(this.Parser.parser.errors).length > 0)}">
+			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}">
 				<div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1">
 					<ViewParser :parser="this.Parser.parser" v-if="this.Parser.parser && this.Parser.parser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
-			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
+			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
 				<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1">
 					<ViewXmlObject :object="xmlObject" v-if="xmlObject && xmlObject.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
-			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
+			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
 				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(6) > -1">
 					<ViewEditorObject :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
@@ -253,7 +253,7 @@
 		border: none !important;
 	}
 
-	li.nav-item.develope > a, li.nav-item.professional > a {
+	li.nav-item > a {
 		position: relative;
 	}
 	li.nav-item.develope > a {

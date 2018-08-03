@@ -108,11 +108,11 @@ const localFunctions = {
 			if ((aValOption && ((aValOption.edit && aValOption.edit.use) || (aValOption.variable && aValOption.variable.use)))) {
 				// ToDo: min, max ... usw.
 				if ((aVal === undefined || aVal.length === 0) && !aValOption.canBeEmpty) {
-					errors.push({'e': 'Wert darf nicht leer sein!'})
+					errors.push('Wert darf nicht leer sein!')
 				} else {
 					if (aValOption.is && Array.isArray(aValOption.is.possibleValues)) {
 						if (aValOption.is.possibleValues.indexOf(aVal) < 0) {
-							errors.push({'e': 'Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!'})
+							errors.push('Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!')
 						}
 					}
 				}

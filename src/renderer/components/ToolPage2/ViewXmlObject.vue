@@ -5,7 +5,7 @@
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
 					<div class="g-errors">
-						<!-- {{ object.errors }} -->
+						<cError :error="object.errors" base=true class="mi0 pl20"/>
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -73,6 +73,7 @@
 </template>
 
 <script>
+	import cError from './cError'
 	export default {
 		name: 'ViewXmlObject2',
 		props: {
@@ -142,7 +143,10 @@
 					this.isOpen = true
 				}
 			}
-		}
+		},
+		components: {
+			cError
+		},
 	}
 </script>
 
@@ -269,5 +273,11 @@
 		color: #444;
 		padding: 1px 5px;
 		margin-right: 3px;
+	}
+	div.g-errors {
+		max-height: calc( 70vh - 200px );
+		overflow: auto;
+		padding: 8px 10px;
+		margin: -8px;
 	}
 </style>
