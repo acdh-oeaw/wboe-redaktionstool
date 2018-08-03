@@ -25,33 +25,37 @@
 		</b-button-toolbar>
 		<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
 			<b-tab title="Editor">
-				<div class="vieweditor scroll p20" v-if="aTab === 0">
+				<div class="vieweditor scroll p20" v-if="aTabCach.indexOf(0) > -1">
 					<ViewEditor :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Vorschau">
+				<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1">
+				</div>
 			</b-tab>
 			<b-tab title="Objekt">
+				<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1">
+				</div>
 			</b-tab>
 			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional}">
-				<div class="viewxml scroll p20" v-if="aTab === 3 && Options.show.professional">
+				<div class="viewxml scroll p20" v-if="aTabCach.indexOf(3) > -1">
 				</div>
 			</b-tab>
 			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (this.Parser.parser && this.Parser.parser.errors && Object.keys(this.Parser.parser.errors).length > 0)}">
-				<div class="viewparser scroll p20" v-if="aTab === 4 && Options.show.develope">
+				<div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1">
 					<ViewParser :parser="this.Parser.parser" v-if="this.Parser.parser && this.Parser.parser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
-				<div class="viewxmlobject scroll p20" v-if="aTab === 5 && Options.show.develope">
+				<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1">
 					<ViewXmlObject :object="xmlObject" v-if="xmlObject && xmlObject.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope}">
-				<div class="vieweditorobject scroll p20" v-if="aTab === 6 && Options.show.develope">
+				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(6) > -1">
 					<ViewEditorObject :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
@@ -102,11 +106,14 @@
 		},
 		watch: {
 			aTab: function (nVal) {
-				// ToDo: Caching!
+				if (this.aTabCach.indexOf(nVal) < 0) {
+					this.aTabCach.push(nVal)
+				}
 			}
 		},
 		mounted: function () {
 			var t0 = performance.now()
+			this.aTabCach = [this.aTab]
 			if (this.Parser.parser === undefined) {
 				this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
 			}
@@ -174,7 +181,7 @@
 				if (this.devMode) {
 					this.devFiles = this.devFileList()
 				}
-				this.aTabCach = [this.aTag]
+				this.aTabCach = [this.aTab]
 			},
 			updateData () {
 				this.$store.dispatch('RELOAD_PARSER_FILE')
