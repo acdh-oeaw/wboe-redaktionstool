@@ -35,6 +35,10 @@
 					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
 					<span><b>{{ objName }}</b></span>
 					<span class="val" v-if="aValue"> = <i>{{ tranculatedValue }}</i></span>
+					<span class="attribut" v-for="(attrOpt, attr) in content.orgXmlObj.attributes">
+						{{ attr + ((attrOpt) ? ':' : '') }}
+						<span v-if="attrOpt">{{ attrOpt }}</span>
+					</span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="length(content.errors) > 0"/>
 				</button>
@@ -188,11 +192,11 @@
 		},
 		created: function () {
 			if (this.content !== undefined) {
-				if (this.content.parents.length === 0) {
+				if (this.content.parents.length === 0) {		// Oberstes Element immer offen!
 					this.isOpen = true
 				}
-				if (this.content.useable && this.content.childs.length > 0
-				&& this.content.parserMatches.length > 0) {
+				if (this.content.useable && this.content.childs.length > 0		// Brauchbare Elemente mit Kindern aufklappen
+				&& this.content.parserMatches.length > 0) {		// Sofern ein Parser vergleich durchgeführt wurde.
 					this.isOpen = true
 				}
 			}

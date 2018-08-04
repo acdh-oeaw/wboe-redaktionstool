@@ -104,9 +104,11 @@
 												"attributes": [{"n": {"type": "edit", "valueType": "num+", "canBeEmpty": {"use": true}}}]
 											} ?>
 						<?copy { "fromId": "note", "options": { "tag": ["multiple", "anywhere", "possibleTag"] } } ?>
-						<form>
+						<form type="lemma">
 							<?options {
-													"attributes": [{"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variant"]}}],
+													"attributes": [{
+														"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+													}],
 													"tag": ["multiple"]
 												} ?>
 							<pron>
@@ -116,7 +118,23 @@
 														"tag": ["possibleTag"]
 													} ?>
 							</pron>
-							<?copy { "fromId": "orth", "options": { "tag": ["multiple"] } } ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
+            </form>
+						<form type="variant">
+							<?options {
+													"attributes": [{
+														"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+													}],
+													"tag": ["multiple", "possibleTag", "anywhere"]
+												} ?>
+							<pron>
+								<?options {
+														"title": "Pron",
+														"value": ["edit", "required"],
+														"tag": ["possibleTag"]
+													} ?>
+							</pron>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
             </form>
 						<gramGrp>
 							<?options {
@@ -156,19 +174,23 @@
 
 						<form type="lautung">
 							<?options {
-													"id": "form-lautung",
 													"title": "Form Lautung",
-													"tag": ["multiple", "possibleTag"]
+													"attributes": [{
+														"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+													}],
+													"tag": ["multiple", "possibleTag", "anywhere"]
 												} ?>
+							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
 							<?copy { "fromId": "form-variant" } ?>
 						</form>
 
-						<form type="variant">
+						<form>
 							<?options {
 													"id": "form-variant",
 													"title": "Form Variant",
 													"attributes": [{
 														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
+														"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["variant", "dialect"]},
 														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
 													}],
 													"tag": ["multiple"]
@@ -245,7 +267,7 @@
 						<re>
 							<?options {
 													"title": "Re",
-													"tag": ["multiple"]
+													"tag": ["multiple", "possibleTag"]
 												} ?>
 							<form type="lemma">
 								<?options {
@@ -258,7 +280,8 @@
 							</form>
 							<sense>
 								<?options {
-														"title": "Form Lemma",
+														"id": "re-sense",
+														"title": "Sense",
 														"tag": ["possibleTag"]
 													} ?>
 								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
@@ -272,6 +295,9 @@
 															"tag": ["possibleTag"]
 														} ?>
 								</usg>
+								<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
+								<?copy { "fromId": "re-sense" } ?>
 							</sense>
 							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
@@ -326,7 +352,10 @@
 					<?options {
 											"title": "Place Name",
 											"value": ["variable", "required"],
-											"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]}}],
+											"attributes": [{
+												"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
+												"cert": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["low"]}
+											}],
 											"tag": ["multiple"]
 										} ?>
 				</placeName>
@@ -343,6 +372,7 @@
 											"value": ["edit", "required"]
 										} ?>
 				 </quote>
+				 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "usg-geo" } ?>
 			</cit>
