@@ -188,7 +188,11 @@
 		},
 		created: function () {
 			if (this.content !== undefined) {
-				if (this.content.useable && this.content.childs.length > 0) {
+				if (this.content.parents.length === 0) {
+					this.isOpen = true
+				}
+				if (this.content.useable && this.content.childs.length > 0
+				&& this.content.parserMatches.length > 0) {
 					this.isOpen = true
 				}
 			}
