@@ -148,7 +148,6 @@
 				if (this.content) {
 					if (this.content.parserMatches.length > 0) {
 						this.content.parserMatches.forEach(function (pM) {
-							console.log(pM)
 							aM.push({'tag': pM.pObj.name, 'uId': pM.pObj.uId, ...pM.match})
 						}, this)
 					}

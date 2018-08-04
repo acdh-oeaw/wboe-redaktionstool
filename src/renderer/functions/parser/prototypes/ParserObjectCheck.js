@@ -104,7 +104,7 @@ const localFunctions = {
 			let aVal = xmlObj.getValueByOption(aValOption, false)
 			if (!(aValOption && (aValOption.innerXML))		// Wenn nicht "innerXML"
 			&& xmlObj.getChildsOfType(['ELEMENT']).length > 0) {		// und enthält "ELEMENT"e dann Warnung heraus geben
-				errors.push('Wert enthält "ELEMENT"e!' + JSON.stringify(aValOption))
+				errors.push('Wert enthält "ELEMENT"e!')
 			}
 			if ((aValOption && ((aValOption.edit && aValOption.edit.use) || (aValOption.variable && aValOption.variable.use)))) {
 				// ToDo: min, max ... usw.

@@ -24,7 +24,7 @@ const actions = {
 			fileContent = fs.readFileSync(aFile, 'utf8')
 		} catch (e) {
 			try {
-				aFile = fPath.join(__static, '/parser3.xml')
+				aFile = fPath.join(__static, '/parser4.xml')
 				fileContent = fs.readFileSync(aFile, 'utf8')
 			} catch (e) {
 				console.log(e)
