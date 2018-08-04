@@ -10,6 +10,16 @@
 				</b-card-body>
 			</b-collapse>
 		</b-card>
+		<b-card header="Warnings" no-body class="mib20 paneldecent" border-variant="warning" header-bg-variant="warning" v-if="object.warnings && length(object.warnings) > 0">
+			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Warnings ({{ length(object.warnings) }})</b><font-awesome-icon :icon="((warningsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="warningsOpen" id="collapse-error">
+				<b-card-body>
+					<div class="g-errors">
+						<cError :error="object.warnings" base=true class="mi0 pl20"/>
+					</div>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
 		<div v-if="object.contentObj">
 			<ViewEditorObject :content="object.contentObj"/>
 		</div>
@@ -34,6 +44,10 @@
 					<b-alert show variant="danger" v-if="length(content.errors)">
 						<b class="alert-heading">Fehler:</b><br>
 						<cError :error="content.errors"/>
+					</b-alert>
+					<b-alert show variant="warning" v-if="length(content.warnings)">
+						<b class="alert-heading">Warnung:</b><br>
+						<cError :error="content.warnings"/>
 					</b-alert>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
 						<b-button-group size="sm" class="mr-1">
@@ -82,6 +96,7 @@
 			return {
 				'isOpen': false,
 				'errorsOpen': true,
+				'warningsOpen': true,
 				'processOpen': false,
 				'valueOpen': false,
 				'xmlOpen': false,

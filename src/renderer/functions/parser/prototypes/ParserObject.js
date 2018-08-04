@@ -119,10 +119,13 @@ const localFunctions = {
 			// Value prüfen
 			let aCheckVal = this.checkValue(orgXmlObj)
 			ignoreChilds = ignoreChilds || aCheckVal.ignoreChilds
+			if (aCheckVal.warn.length > 0) {
+				warnings.push(aCheckVal.warn)
+			}
 			if (aCheckVal.err.length > 0) {
 				errors.push(aCheckVal.err)
 			} else {
-				score += 1
+				score += 1 + ((aCheckVal.warn.length === 0) ? 0.1 : 0)
 			}
 			// Position prüfen
 			aErr = this.checkPosition(orgXmlObj, editorObj)

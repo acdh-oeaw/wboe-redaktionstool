@@ -96,6 +96,7 @@ const localFunctions = {
 	},
 	checkValue: function (xmlObj) {
 		let errors = []
+		let warnings = []
 		let ignoreChilds = false
 		let aValOption = this.options.get('value')
 		if (aValOption) {
@@ -108,11 +109,11 @@ const localFunctions = {
 			if ((aValOption && ((aValOption.edit && aValOption.edit.use) || (aValOption.variable && aValOption.variable.use)))) {
 				// ToDo: min, max ... usw.
 				if ((aVal === undefined || aVal.length === 0) && !aValOption.canBeEmpty) {
-					errors.push('Wert darf nicht leer sein!')
+					warnings.push('Wert darf nicht leer sein!')
 				} else {
 					if (aValOption.is && Array.isArray(aValOption.is.possibleValues)) {
 						if (aValOption.is.possibleValues.indexOf(aVal) < 0) {
-							errors.push('Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!')
+							warnings.push('Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein! (v/e)')
 						}
 					}
 				}
@@ -129,7 +130,7 @@ const localFunctions = {
 			}
 		}
 		// ToDo: if-Abfrage ...
-		return {'err': errors, 'ignoreChilds': ignoreChilds}
+		return {'err': errors, 'warn': warnings, 'ignoreChilds': ignoreChilds}
 	},
 	checkAttributes: function (attrObjX) {
 		let errors = []

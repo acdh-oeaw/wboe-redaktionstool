@@ -16,6 +16,21 @@ const localFunctions = {
 		}
 		root.errors[aNr].push({'obj': this, 'err': error})
 	},
+	addWarning: function (warning) {
+		var aNr = -1
+		var root = this
+		if (this.uId || this.uId === 0) {		// Handelt es sich um ein "ParserObject"?
+			aNr = this.uId
+			if (Array.isArray(this.warnings)) {
+				this.warnings.push({'err': warning})
+			}
+			root = this.root
+		}
+		if (!Array.isArray(root.warnings[aNr])) {
+			root.warnings[aNr] = []
+		}
+		root.warnings[aNr].push({'obj': this, 'err': warning})
+	},
 	getCompressedBaseError: function () {
 		let cErrors = {}
 		if (Object.keys(this.errors).length > 0) {

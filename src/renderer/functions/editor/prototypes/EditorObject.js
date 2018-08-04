@@ -45,6 +45,9 @@ const localFunctions = {
 							aErrors.push({'txt': 'Tag "' + aXmlObj.name + '" enthält Fehler!', 'err': aParList[0].match.errors})
 							useParser = false
 						}
+						if (useParser && aParList[0].match.warnings.length > 0) {
+							aWarnings.push({'txt': 'Tag "' + aXmlObj.name + '" enthält Warnungen!', 'err': aParList[0].match.warnings})
+						}
 					} else {
 						aErrors.push('Es wurde kein Parser übergeben!')
 					}
@@ -84,6 +87,9 @@ const localFunctions = {
 			}
 			aErrors.forEach(function (aErr) {
 				this.childs[aKey].addError(aErr)
+			}, this)
+			aWarnings.forEach(function (aWarn) {
+				this.childs[aKey].addWarning(aWarn)
 			}, this)
 		}
 	},
