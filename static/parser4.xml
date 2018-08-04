@@ -57,7 +57,7 @@
 							<name>
 								<?options {
 														"title": "Name",
-														"attributes": [{"xml:id": {"type": "variable"}}],
+														"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
 														"value": ["variable", "required"],
 														"tag": ["multiple"]
 													} ?>
@@ -136,26 +136,7 @@
 							</pron>
 							<?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
             </form>
-						<gramGrp>
-							<?options {
-													"title": "Gram Guppe"
-												} ?>
-							<iType>
-								<?options {
-  													"title": "iType",
-  													"value": ["variable", "required"],
-														"tag": ["possibleTag"]
-  												} ?>
-							</iType>
-              <gram type="pos">
-								<?options {
-  													"title": "Gram Pos",
-  													"value": ["variable", "required"],
-														"tag": ["possibleTag"]
-  												} ?>
-							</gram>
-              <?copy {"fromId": "gram-gender"} ?>
-            </gramGrp>
+						<?copy { "fromId": "gramGrp" } ?>
 						<form type="variant" subtype="diminutive">
 							<?options {
 													"title": "Form Variant Diminutive",
@@ -213,9 +194,12 @@
 							<desc>
 								<?options {
 														"title": "Desc",
-														"value": ["edit", "required"],
-														"tag": ["possibleTag"]
+														"tag": ["possibleTag", "multible", "anywhere"]
 													} ?>
+								<?copy { "fromId": "text" } ?>
+								<?copy { "fromId": "date" } ?>
+								<?copy { "fromId": "ref-sense" } ?>
+								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 							</desc>
               <cit type="etymon">
 								<?options {
@@ -227,7 +211,7 @@
 													} ?>
 								<oRef>
 									<?options {
-															"title": "Desc",
+															"title": "oRef",
 															"value": ["edit", "required"],
 															"tag": ["possibleTag"]
 														} ?>
@@ -242,17 +226,24 @@
               	<form>
 									<?options {
 															"title": "Form",
+															"attributes": [{
+																"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
+															}],
 															"tag": ["possibleTag"]
 														} ?>
 									 <?copy { "fromId": "orth", "options": { "tag": ["multiple"] } } ?>
               	</form>
+								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
               </cit>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+							<?copy { "fromId": "xr" } ?>
             </etym>
 						<sense>
 							<?options {
 													"title": "Sense > Sense",
+													"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
 													"tag": ["multiple", "possibleTag", "anywhere"]
 												} ?>
 							<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
@@ -312,6 +303,15 @@
 										"value": ["variable", "required", "innerXML"]
 									} ?>
 			</note>
+			<xr>		<!-- ToDo!? -->
+				<?options {
+				 						"id": "xr",
+										"title": "XR",
+										"value": ["variable", "required", "innerXML"],
+										"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}}}],
+										"tag": ["possibleTag"]
+									} ?>
+			</xr>
 			<?text {
 				"options": {
 					"id": "text",
@@ -332,6 +332,7 @@
 				<?options {
 										"id": "def",
 										"title": "Def",
+										"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
 										"value": ["edit", "required"]
 									} ?>
 			</def>
@@ -350,7 +351,8 @@
 				<?options {
 										"id": "gram-gender",
 										"title": "Gram Pos",
-										"value": ["variable", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum", "Femininum"]}}]
+										"value": ["variable", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum", "Femininum"]}}],
+										"tag": ["multiple"]
 									} ?>
 			</gram>
 			<usg type="geo">
@@ -387,6 +389,18 @@
 				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "usg-geo" } ?>
 			</cit>
+			<sense>
+				<?options {
+										"id": "sense",
+										"title": "Sense",
+										"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
+										"tag": ["multiple"]
+									} ?>
+				<?copy { "fromId": "ref-form" } ?>
+				<?copy { "fromId": "def" } ?>
+				<?copy { "fromId": "usg-geo" } ?>
+				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
+			</sense>
 			<ref type="bibl">
 				<?options {
 										"id": "ref-bibl",
@@ -395,6 +409,7 @@
 											"target": {"type": "variable", "canBeEmpty": {"use": true}}
 										}]
 									} ?>
+				<?copy { "fromId": "text" } ?>
 				<citedRange>
 					<?options {
 											"title": "Cited Range",
@@ -402,36 +417,54 @@
 										} ?>
 				</citedRange>
 			</ref>
-			<sense>
+			<ref type="form">
 				<?options {
-										"id": "sense",
-										"title": "Sense",
-										"tag": ["multiple"]
+										"id": "ref-form",
+										"title": "Ref Form",
+										"tag": ["possibleTag"]
 									} ?>
-				<ref type="form">
+				<?copy { "fromId": "text" } ?>
+				<oRef>
 					<?options {
-											"title": "Ref Form",
+						"id": "oRef",
+						"attributes": [{
+							"target": {"type": "variable", "canBeEmpty": {"use": true}}
+						}],
+						"tag": ["possibleTag"]
+					} ?>
+				</oRef>
+			</ref>
+			<ref type="sense">
+				<?options {
+										"id": "ref-sense",
+										"title": "Ref Sense",
+										"attributes": [{
+											"target": {"type": "variable", "canBeEmpty": {"use": true}}
+										}],
+										"tag": ["possibleTag"]
+									} ?>
+			</ref>
+			<gramGrp>
+				<?options {
+										"id": "gramGrp",
+										"title": "Gram Guppe"
+									} ?>
+				<iType>
+					<?options {
+											"title": "iType",
+											"value": ["variable", "required"],
 											"tag": ["possibleTag"]
 										} ?>
-					<?text {
-						"options": {
-							"title": "Text:",
-							"value": ["edit", "required"]
-						}
-					} ?>
-					<oRef target="#Färzel">
-						<?options {
-							"attributes": [{
-								"target": {"type": "variable", "canBeEmpty": {"use": true}}
-							}],
-							"tag": ["possibleTag"]
-						} ?>
-					</oRef>
-				</ref>
-				<?copy { "fromId": "def" } ?>
-				<?copy { "fromId": "usg-geo" } ?>
-				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
-			</sense>
+				</iType>
+				<gram type="pos">
+					<?options {
+											"title": "Gram Pos",
+											"value": ["variable", "required"],
+											"tag": ["possibleTag"]
+										} ?>
+				</gram>
+				<?copy {"fromId": "gram-gender"} ?>
+			</gramGrp>
 		</tags>
 	</objParserSystem>
 </objParser>
