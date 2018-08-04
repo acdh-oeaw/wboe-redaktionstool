@@ -194,12 +194,16 @@
 							<desc>
 								<?options {
 														"title": "Desc",
+														"attributes": [{
+															"part": {"type": "edit", "canBeEmpty": {"use": true}}
+														}],
 														"tag": ["possibleTag", "multible", "anywhere"]
 													} ?>
 								<?copy { "fromId": "text" } ?>
 								<?copy { "fromId": "date" } ?>
 								<?copy { "fromId": "ref-sense" } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "lang" } ?>
 							</desc>
               <cit type="etymon">
 								<?options {
@@ -207,15 +211,10 @@
 														"attributes": [{
 															"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
 														}],
-														"tag": ["multiple"]
+														"tag": ["multiple", "possibleTag"]
 													} ?>
-								<oRef>
-									<?options {
-															"title": "oRef",
-															"value": ["edit", "required"],
-															"tag": ["possibleTag"]
-														} ?>
-								</oRef>
+								<?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
+								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
               	<lang>
 									<?options {
   														"title": "Lang",
@@ -223,6 +222,7 @@
 															"tag": ["possibleTag"]
   													} ?>
 								</lang>
+								<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
               	<form>
 									<?options {
 															"title": "Form",
@@ -231,62 +231,38 @@
 															}],
 															"tag": ["possibleTag"]
 														} ?>
-									 <?copy { "fromId": "orth", "options": { "tag": ["multiple"] } } ?>
+									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
+									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
               	</form>
 								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
               </cit>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+							<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "xr" } ?>
             </etym>
-						<sense>
-							<?options {
-													"title": "Sense > Sense",
-													"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
-													"tag": ["multiple", "possibleTag", "anywhere"]
-												} ?>
-							<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-							<?copy { "fromId": "sense" } ?>
-						</sense>
 						<?copy { "fromId": "sense" } ?>
 						<re>
 							<?options {
 													"title": "Re",
 													"tag": ["multiple", "possibleTag"]
 												} ?>
-							<form type="lemma">
+							<form>
 								<?options {
-														"title": "Form Lemma",
+														"title": "Form Lemma/Variable",
 														"attributes": [{
+															"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variable"]},
 															"subtype": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["compound", "MWE"]}
-														}]
+														}],
+														"tag": ["multiple"]
 													} ?>
 								<?copy { "fromId": "orth" } ?>
+								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
 							</form>
-							<sense>
-								<?options {
-														"id": "re-sense",
-														"title": "Sense",
-														"tag": ["possibleTag"]
-													} ?>
-								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-								<usg>
-									<?options {
-															"title": "Usg Dom",
-															"attributes": [{
-																"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg"]}
-															}],
-															"value": ["edit", "required"],
-															"tag": ["possibleTag"]
-														} ?>
-								</usg>
-								<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
-								<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
-								<?copy { "fromId": "re-sense" } ?>
-							</sense>
+							<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
-							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
+							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multible"] } } ?>
 						</re>
 					</entry>
 				</body>
@@ -294,8 +270,11 @@
 		</TEI>
 	</objParserContent>
 
+
+	<!-- Element Vorlagen: -->
 	<objParserSystem>
 		<tags>
+
 			<note>		<!-- ToDo!? -->
 				<?options {
 				 						"id": "note",
@@ -303,6 +282,7 @@
 										"value": ["variable", "required", "innerXML"]
 									} ?>
 			</note>
+
 			<xr>		<!-- ToDo!? -->
 				<?options {
 				 						"id": "xr",
@@ -312,6 +292,44 @@
 										"tag": ["possibleTag"]
 									} ?>
 			</xr>
+
+			<lang>		<!-- ToDo!? -->
+				<?options {
+				 						"id": "lang",
+										"title": "Lang",
+										"value": ["variable", "required", "innerXML"],
+										"tag": ["possibleTag"]
+									} ?>
+			</lang>
+
+			<pos>		<!-- ToDo!? -->
+				<?options {
+				 						"id": "pos",
+										"title": "Pos",
+										"value": ["variable", "required", "innerXML"],
+										"tag": ["possibleTag"]
+									} ?>
+			</pos>
+
+			<bibl>		<!-- ToDo!? Zusätzlich zu "ref-bibl" ? -->
+				<?options {
+				 						"id": "bibl",
+										"title": "Bibl",
+										"value": ["variable", "required", "innerXML"],
+										"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}}}],
+										"tag": ["possibleTag"]
+									} ?>
+			</bibl>
+
+			<lbl>		<!-- ToDo!? -->
+				<?options {
+										"id": "lbl",
+										"title": "lbl",
+										"value": ["variable", "required", "innerXML"],
+										"tag": ["possibleTag"]
+									} ?>
+			</lbl>
+
 			<?text {
 				"options": {
 					"id": "text",
@@ -320,6 +338,7 @@
 					"tag": ["possibleTag", "multiple", "anywhere"]
 				}
 			} ?>
+
 			<date>
 				<?options {
 										"id": "date",
@@ -328,6 +347,7 @@
 										"tag": ["possibleTag", "multible", "anywhere"]
 									} ?>
 			</date>
+
 			<def>
 				<?options {
 										"id": "def",
@@ -336,6 +356,7 @@
 										"value": ["edit", "required"]
 									} ?>
 			</def>
+
 			<orth>
 				<?options {
 				 						"id": "orth",
@@ -347,6 +368,7 @@
 										}]
 									} ?>
 			</orth>
+
 			<gram type="gender">
 				<?options {
 										"id": "gram-gender",
@@ -355,6 +377,16 @@
 										"tag": ["multiple"]
 									} ?>
 			</gram>
+
+			<gram type="number">
+				<?options {
+										"id": "gram-number",
+										"title": "Gram Number",
+										"value": ["variable", "required", {"is": {"value": "Plural", "possibleValues": ["Plural"]}}],
+										"value": ["edit", "required"]
+									} ?>
+			</gram>
+
 			<usg type="geo">
 				<?options {
 			 							"id": "usg-geo",
@@ -367,28 +399,50 @@
 											"value": ["variable", "required"],
 											"attributes": [{
 												"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
-												"cert": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["low"]}
+												"cert": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
 											"tag": ["multiple"]
 										} ?>
 				</placeName>
 			</usg>
+
+			<usg>
+				<?options {
+										"id": "usg-drg",
+										"title": "Usg (dom, reg, gram / cert)",
+										"attributes": [{
+											"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg", "gram"]},
+											"cert": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+										}],
+										"value": ["edit", "required"]
+									} ?>
+			</usg>
+
 			<cit type="example">
 				<?options {
 										"id": "cit-example",
 										"title": "Cit Example",
+										"attributes": [{
+											"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
+											"cert": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+										}],
 										"tag": ["multiple", "possibleTag"]
 									} ?>
-				 <quote xml:lang="bar-AT">
+				 <quote>
 					 <?options {
 											"title": "Quote",
+											"attributes": [{
+												"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+											}],
 											"value": ["edit", "required"]
 										} ?>
 				 </quote>
 				 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
-				 <?copy { "fromId": "usg-geo" } ?>
+				 <?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
+				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
 			</cit>
+
 			<sense>
 				<?options {
 										"id": "sense",
@@ -397,26 +451,33 @@
 										"tag": ["multiple"]
 									} ?>
 				<?copy { "fromId": "ref-form" } ?>
-				<?copy { "fromId": "def" } ?>
-				<?copy { "fromId": "usg-geo" } ?>
+				<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
+				<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
 			</sense>
+
 			<ref type="bibl">
 				<?options {
 										"id": "ref-bibl",
-										"title": "Bibl",
+										"title": "Ref Bibl",
 										"attributes": [{
 											"target": {"type": "variable", "canBeEmpty": {"use": true}}
 										}]
 									} ?>
-				<?copy { "fromId": "text" } ?>
+				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "text", "options": { "tag": ["possibleTag"] } } ?>
 				<citedRange>
 					<?options {
 											"title": "Cited Range",
-											"value": ["variable", "required"]
+											"value": ["variable", "required"],
+											"tag": ["possibleTag"]
 										} ?>
 				</citedRange>
 			</ref>
+
 			<ref type="form">
 				<?options {
 										"id": "ref-form",
@@ -430,10 +491,12 @@
 						"attributes": [{
 							"target": {"type": "variable", "canBeEmpty": {"use": true}}
 						}],
+						"value": ["edit", "canBeEmpty"],
 						"tag": ["possibleTag"]
 					} ?>
 				</oRef>
 			</ref>
+
 			<ref type="sense">
 				<?options {
 										"id": "ref-sense",
@@ -444,6 +507,7 @@
 										"tag": ["possibleTag"]
 									} ?>
 			</ref>
+
 			<gramGrp>
 				<?options {
 										"id": "gramGrp",
@@ -453,7 +517,7 @@
 					<?options {
 											"title": "iType",
 											"value": ["variable", "required"],
-											"tag": ["possibleTag"]
+											"tag": ["possibleTag", "anywhere"]
 										} ?>
 				</iType>
 				<gram type="pos">
@@ -463,8 +527,12 @@
 											"tag": ["possibleTag"]
 										} ?>
 				</gram>
-				<?copy {"fromId": "gram-gender"} ?>
+				<?copy {"fromId": "pos", "options": { "tag": ["possibleTag"] }} ?>
+				<?copy {"fromId": "gram-gender", "options": { "tag": ["possibleTag"] }} ?>
+				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "gram-number", "options": { "tag": ["possibleTag"] } } ?>
 			</gramGrp>
+
 		</tags>
 	</objParserSystem>
 </objParser>
