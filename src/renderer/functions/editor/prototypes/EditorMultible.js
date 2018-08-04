@@ -16,6 +16,30 @@ const localFunctions = {
 		}
 		root.errors[aNr].push({'obj': this, 'err': error})
 	},
+	getCompressedBaseError: function () {
+		let cErrors = {}
+		if (Object.keys(this.errors).length > 0) {
+			let lErr = undefined
+			let cErrKey = []
+			Object.keys(this.errors).forEach(function (aErrKey) {
+				if (lErr) {
+					if (this.errors[aErrKey].length !== 1
+						|| lErr[0].err !== this.errors[aErrKey][0].err) {
+						cErrors[cErrKey[0] + '-' + cErrKey[cErrKey.length - 1]] = lErr
+						cErrKey = []
+					}
+				}
+				lErr = this.errors[aErrKey]
+				cErrKey.push(aErrKey)
+			}, this)
+			if (lErr) {
+				cErrors[cErrKey[0] + '-' + cErrKey[cErrKey.length - 1]] = lErr
+				cErrKey = []
+			}
+		}
+		console.log(cErrors)
+		return cErrors
+	},
 	updateFamilyErrors: function () {
 		if (this.family.length > 0) {
 			this.family.forEach(function (aObj) {

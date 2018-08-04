@@ -5,7 +5,7 @@
 			<b-collapse v-model="errorsOpen" id="collapse-error">
 				<b-card-body>
 					<div class="g-errors">
-						<cError :error="object.errors" base=true class="mi0 pl20"/>
+						<cError :error="object.getCompressedBaseError()" base=true class="mi0 pl20"/>
 					</div>
 				</b-card-body>
 			</b-collapse>

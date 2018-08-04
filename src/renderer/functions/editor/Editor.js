@@ -42,6 +42,7 @@ const localFunctions = {
 
 // EditorBase Prototypen
 localFunctions.EditorBase.prototype.addError = prototypeEditorMultible.addError
+localFunctions.EditorBase.prototype.getCompressedBaseError = prototypeEditorMultible.getCompressedBaseError
 localFunctions.EditorBase.prototype.updateFamilyErrors = prototypeEditorMultible.updateFamilyErrors
 localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 localFunctions.EditorBase.prototype.getXML = prototypeEditorBase.getXML

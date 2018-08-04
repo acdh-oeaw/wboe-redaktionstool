@@ -1,12 +1,12 @@
 <template>
 	<ul v-if="base || Array.isArray(aError)">
 		<li v-for="(errorObj, errKey) in aError">
-			<cError :error="errorObj"/>
+			<b v-if="fxUseErrKey(errKey)">{{ fxErrKey(errKey) }}</b><cError :error="errorObj" :noObj="fxUseErrKey(errKey)"/>
 		</li>
 	</ul>
 	<span v-else-if="typeof aError === 'string'">{{ aError }}<br></span>
 	<span v-else>
-		<b v-if="aError.obj">{{ aError.obj.uId }} - </b>
+		<b v-if="aError.obj && !noObj">{{ aError.obj.uId }} - </b>
 		<cError :error="aError.txt" v-if="aError.txt"/>
 		<div v-if="Array.isArray(aError.err)" class="subArray"><cError :error="aError.err"/></div>
 		<cError :error="aError.err" v-else-if="aError.err"/>
@@ -16,7 +16,7 @@
 <script>
 	export default {
 		name: 'cError',
-		props: ['error', 'base'],
+		props: ['error', 'base', 'noObj'],
 		data () {
 			return {
 			}
@@ -28,6 +28,19 @@
 				} else {
 					return this.error
 				}
+			}
+		},
+		methods: {
+			fxUseErrKey: function (key) {
+				if (typeof key === 'string' && key.indexOf('-') > -1 && key.split('-')[0] !== key.split('-')[1]) {
+					return true
+				}
+			},
+			fxErrKey: function (key) {
+				if (typeof key === 'string' && key.indexOf('-') > -1 && key.split('-')[0] !== key.split('-')[1]) {
+					return key + ' - '
+				}
+				return ''
 			}
 		},
 		mounted: function () {

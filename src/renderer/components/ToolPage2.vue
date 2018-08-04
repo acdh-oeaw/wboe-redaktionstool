@@ -99,7 +99,7 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 3,
+				aTab: 6,
 				aTabCach: [],
 				showTabView: false,
 				xmlObject: null,
