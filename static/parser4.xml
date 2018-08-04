@@ -193,7 +193,7 @@
 														"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["variant", "dialect"]},
 														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
 													}],
-													"tag": ["multiple"]
+													"tag": ["multiple", "possibleTag"]
 												} ?>
 							 <pron xml:lang="bar-AT">
 								 <?options {
@@ -208,13 +208,8 @@
 						</form>
 
 						<etym>
-							<date>
-								<?options {
-														"title": "Desc",
-														"value": ["edit", "required"],
-														"tag": ["possibleTag"]
-													} ?>
-							</date>
+							<?copy { "fromId": "text" } ?>
+							<?copy { "fromId": "date" } ?>
 							<desc>
 								<?options {
 														"title": "Desc",
@@ -310,13 +305,29 @@
 
 	<objParserSystem>
 		<tags>
-			<note>		<!-- ToDo! -->
+			<note>		<!-- ToDo!? -->
 				<?options {
 				 						"id": "note",
 										"title": "Note",
 										"value": ["variable", "required", "innerXML"]
 									} ?>
 			</note>
+			<?text {
+				"options": {
+					"id": "text",
+					"title": "Text:",
+					"value": ["edit", "required"],
+					"tag": ["possibleTag", "multiple", "anywhere"]
+				}
+			} ?>
+			<date>
+				<?options {
+										"id": "date",
+										"title": "Desc",
+										"value": ["edit", "required"],
+										"tag": ["possibleTag", "multible", "anywhere"]
+									} ?>
+			</date>
 			<def>
 				<?options {
 										"id": "def",

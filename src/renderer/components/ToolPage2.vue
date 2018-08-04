@@ -14,7 +14,7 @@
 				<b-btn @click="devNextFile()" title="Nächste Datei"><font-awesome-icon icon="angle-right"/></b-btn>
 			</b-button-group>
 			<b-input-group size="sm" class="w-25 mx-1" prepend="Datei">
-				<p class="form-control file-name">{{ Files.file }}</p>
+				<p class="form-control file-name" :title="Files.file">{{ Files.file }}</p>
 				<b-input-group-append>
 					<b-btn @click="showFile()" variant="outline-secondary" title="Ordner in Explorer öffnen"><font-awesome-icon icon="external-link-alt"/></b-btn>
 				</b-input-group-append>

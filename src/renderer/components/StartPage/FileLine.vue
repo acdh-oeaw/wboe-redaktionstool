@@ -49,9 +49,9 @@
 				this.debouncedLoadFile()
 			},
 			debouncedLoadFile: _.debounce(function () {		// Verzögert öffnen damit "Laden ..." angezeigt wird
-				this.$store.dispatch('SET_USE_FILE', this.file.fullFileName)		// Datei laden
+				this.$store.dispatch('LOAD_FILE', this.file.fullFileName)		// Datei laden
 				// Nur Tool öffnen wenn Datei lesbar!
-				this.$router.push('/tool')		// Tool öffnen
+				this.$router.push('/tool2')		// Tool öffnen
 			}, 50),
 		}
 	}

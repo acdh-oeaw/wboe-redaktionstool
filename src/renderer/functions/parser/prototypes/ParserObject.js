@@ -68,6 +68,14 @@ const localFunctions = {
 				if (aTextOptions.options) {
 					this.options.extendJSON(JSON.stringify(aTextOptions.options))
 				}
+				if (this.options.get('id')) {
+					let aIid = this.options.get('id')
+					if (!this.root.idList[aIid]) {
+						this.root.idList[aIid] = this
+					} else {
+						this.addError('Id "' + aIid + '" doppelt vorhanden! (t)')
+					}
+				}
 				if (this.errors.length === 0) {
 					this.useable = true
 				}
