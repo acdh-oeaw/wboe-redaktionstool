@@ -52,7 +52,7 @@ const localFunctions = {
 		} else if (this.orgDOM.nodeType === this.orgDOM.COMMENT_NODE) {		// Ist es Kommentar
 			this.type = 'COMMENT'
 			this.name = '#comment'
-			this.value = this.orgDOM.nodeValue
+			this.value = this.orgDOM.nodeValue.trim()
 		} else {
 			this.type = 'UNKNOWN'
 			this.name = this.orgDOM.nodeName
@@ -105,7 +105,14 @@ const localFunctions = {
 			aXML += this.value
 		} else if (this.type === 'ELEMENT') {
 			aXML += '\n' + '	'.repeat(deep) + '<' + this.name
-			// ToDo: Attribute
+			if (Object.keys(this.attributes).length > 0) {
+				Object.keys(this.attributes).forEach(function (aKey) {
+					aXML += ' ' + aKey
+					if (this.attributes[aKey] !== undefined && this.attributes[aKey] !== null) {
+						aXML += '="' + this.attributes[aKey] + '"'
+					}
+				}, this)
+			}
 			if (!short) { aXML += '>' }
 			let aChildCont = ''
 			if (this.comments.length > 0) {
