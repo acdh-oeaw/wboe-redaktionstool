@@ -26,8 +26,21 @@ const localFunctions = {
 		}
 		return true
 	},
-	extendJSON: function (jsonString) {
-		return this.extendObj(this.decompressOptions(JSON.parse(jsonString)))
+	extendJSON: function (jsonString, errObj) {
+		try {
+			return this.extendObj(this.decompressOptions(JSON.parse(jsonString)))
+		} catch (err) {
+			console.log(err)
+			if (errObj) {
+				let errArr = [err.toString()]
+				let errRange = errArr[0].match(/position (\d+)/mi)
+				if (errRange.length > 1) {
+					errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + jsonString.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
+				}
+				errObj.addError({'txt': 'Fehler im JSON-String! (extendJSON)', 'err': errArr})
+			}
+			return undefined
+		}
 	},
 	extendObj: function (optionObj) {
 		this.options = this.combineObj(this.options, optionObj)

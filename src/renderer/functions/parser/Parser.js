@@ -53,7 +53,7 @@ const localFunctions = {
 		this.options = {}							// Aktuelle Optionen
 		this.init()										// Immer dirket initialisieren
 		// this.initFromParserObject(ParserObject)	// Startwerte von "ParserObject" ermitteln
-		// this.extendJSON(jsonString)		// Optionen erweitern durch JSON String
+		// this.extendJSON(jsonString, errObj)		// Optionen erweitern durch JSON String
 		// this.extendObj(optionObj)			// Optionen erweitern durch Objekt
 		// this.get('x.y')								// Option nach Pfad ermitteln x -> y -> ...
 	},

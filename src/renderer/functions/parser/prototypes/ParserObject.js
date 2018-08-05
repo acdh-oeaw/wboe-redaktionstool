@@ -21,7 +21,7 @@ const localFunctions = {
 				// Optionen auswerten
 				this.orgDOM.childNodes.forEach(function (child) {
 					if (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'options') {
-						this.options.extendJSON(child.nodeValue)
+						this.options.extendJSON(child.nodeValue, this)
 					}
 				}, this)
 				// Handelt es sich bei den Childs um einen "innerTest"?
@@ -64,9 +64,20 @@ const localFunctions = {
 				this.isCopy = true
 			} else if (this.orgDOM.nodeName === 'text') {		// Textobjekt verarbeiten
 				this.name = '#text'
-				let aTextOptions = JSON.parse(this.orgDOM.nodeValue)
+				let aTextOptions = {}
+				try {
+					aTextOptions = JSON.parse(this.orgDOM.nodeValue)
+				} catch (err) {
+					console.log(err)
+					let errArr = [err.toString()]
+					let errRange = errArr[0].match(/position (\d+)/mi)
+					if (errRange.length > 1) {
+						errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
+					}
+					this.addError({'txt': 'Fehler im JSON-String! (text)', 'err': errArr})
+				}
 				if (aTextOptions.options) {
-					this.options.extendJSON(JSON.stringify(aTextOptions.options))
+					this.options.extendJSON(JSON.stringify(aTextOptions.options), this)
 				}
 				if (this.options.get('id')) {
 					let aIid = this.options.get('id')
@@ -92,19 +103,32 @@ const localFunctions = {
 	},
 	makeCopy: function () {
 		if (this.isCopy) {
-			let aCopyOptions = JSON.parse(this.orgDOM.nodeValue)
-			if (this.root.idList[aCopyOptions.fromId]) {
-				this.name = this.root.idList[aCopyOptions.fromId].name
-				this.attributes = this.root.idList[aCopyOptions.fromId].attributes
-				this.childs = this.root.idList[aCopyOptions.fromId].childs
-				this.options.extendJSON(JSON.stringify(this.root.idList[aCopyOptions.fromId].options.options))
-				if (aCopyOptions.options) {
-					this.options.extendJSON(JSON.stringify(aCopyOptions.options))
+			let aCopyOptions = undefined
+			try {
+				aCopyOptions = JSON.parse(this.orgDOM.nodeValue)
+			} catch (err) {
+				console.log(err)
+				let errArr = [err.toString()]
+				let errRange = errArr[0].match(/position (\d+)/mi)
+				if (errRange.length > 1) {
+					errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
 				}
-				this.ready = true
-				this.useable = true
-			} else {
-				this.addError('Original Objekt mit ID "' + aCopyOptions.fromId + '" existiert nicht!')
+				this.addError({'txt': 'Fehler im JSON-String! (copy)', 'err': errArr})
+			}
+			if (aCopyOptions) {
+				if (this.root.idList[aCopyOptions.fromId]) {
+					this.name = this.root.idList[aCopyOptions.fromId].name
+					this.attributes = this.root.idList[aCopyOptions.fromId].attributes
+					this.childs = this.root.idList[aCopyOptions.fromId].childs
+					this.options.extendJSON(JSON.stringify(this.root.idList[aCopyOptions.fromId].options.options), this)
+					if (aCopyOptions.options) {
+						this.options.extendJSON(JSON.stringify(aCopyOptions.options), this)
+					}
+					this.ready = true
+					this.useable = true
+				} else {
+					this.addError('Original Objekt mit ID "' + aCopyOptions.fromId + '" existiert nicht!')
+				}
 			}
 		}
 	},
