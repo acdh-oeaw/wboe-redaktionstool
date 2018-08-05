@@ -39,8 +39,8 @@
 				</div>
 			</b-tab>
 			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
-				<div class="viewxml scroll p20" v-if="aTabCach.indexOf(3) > -1">
-					<code v-if="editorObject" style="white-space: pre;">{{ editorObject.getXML() }}</code>
+				<div class="viewxml lh76vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3">
+					<ViewXML :xmlString="editorObject.getXML()" v-if="editorObject"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -85,6 +85,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+	import ViewXML from './ToolPage2/ViewXML'
 	import ViewEditor from './ToolPage2/ViewEditor'
 	import ViewParser from './ToolPage2/ViewParser'
 	import ViewXmlObject from './ToolPage2/ViewXmlObject'
@@ -99,7 +100,7 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 4,
+				aTab: 3,
 				aTabCach: [],
 				showTabView: false,
 				xmlObject: null,
@@ -218,6 +219,7 @@
 		},
 		components: {
 			ViewEditor,
+			ViewXML,
 			ViewParser,
 			ViewXmlObject,
 			ViewEditorObject,

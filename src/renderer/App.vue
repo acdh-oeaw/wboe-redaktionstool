@@ -91,6 +91,12 @@
 	.ohidden {
 		overflow: hidden;
 	}
+	.w100 {
+		width: 100%;
+	}
+	.h100 {
+		height: 100%;
+	}
 	.p0 {
 		padding: 0px;
 	}
