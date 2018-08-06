@@ -1,15 +1,7 @@
 <template>
 	<div class="start" v-if="parser !== undefined && content === undefined">
-		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="parser.errors && Object.keys(parser.errors).length > 0">
-			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ parser.errors.length }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
-			<b-collapse v-model="errorsOpen" id="collapse-error">
-				<b-card-body>
-					<div class="g-errors">
-						<cError :error="parser.errors" base=true class="mi0 pl20"/>
-					</div>
-				</b-card-body>
-			</b-collapse>
-		</b-card>
+		<ErrorCard :error="parser.errors" title="Fehler" variant="danger"/>
+		<ErrorCard :error="parser.warnings" title="Warnung" variant="warning"/>
 		<b-card header="Header" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
 			<div slot="header"><button v-b-toggle="'collapse-header'" class="header-btn-toggle" style="color: #fff;"><b>Header</b><font-awesome-icon :icon="((headerOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="headerOpen" id="collapse-header">
@@ -116,7 +108,9 @@
 </template>
 
 <script>
-	import cError from './cError'
+	import ErrorContent from './general/ErrorContent'
+	import ErrorCard from './general/ErrorCard'
+
 	export default {
 		name: 'ViewParser2',
 		props: {
@@ -180,7 +174,8 @@
 			this.isOpen = !(this.content && this.content.isCopy)
 		},
 		components: {
-			cError
+			ErrorContent,
+			ErrorCard
 		}
 	}
 </script>
@@ -201,25 +196,8 @@
 	.invert > .card-header .val > i {
 		color: #ccf;
 	}
-	.header-btn-toggle {
-		margin: 0px;
-		padding: 0px;
-		border: none;
-		background: none;
-		width: 100%;
-		text-align: left;
-	}
-	.header-btn-toggle > .fa-icon {
-		font-size: 23px;
-	}
 	.icmd {
 		font-size: 16px !important;
-	}
-	.paneldecent > .card-header {
-		padding: 0.1rem 0.5rem;
-	}
-	.paneldecent > .card-body, .paneldecent > .collapse > .card-body, .paneldecent > .card-body, .paneldecent > .collapsing > .card-body {
-		padding: 0.5rem;
 	}
 	.obj > .obj {
 		margin-left: 23px;

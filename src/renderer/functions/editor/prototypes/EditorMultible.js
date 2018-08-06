@@ -52,7 +52,7 @@ const localFunctions = {
 				cErrKey = []
 			}
 		}
-		console.log(cErrors)
+		// console.log(cErrors)
 		return cErrors
 	},
 	updateFamilyErrors: function () {

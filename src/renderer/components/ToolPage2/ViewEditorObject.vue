@@ -1,25 +1,7 @@
 <template>
 	<div class="start" v-if="content === undefined && object !== undefined">
-		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="object.errors && length(object.errors) > 0">
-			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ length(object.errors) }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
-			<b-collapse v-model="errorsOpen" id="collapse-error">
-				<b-card-body>
-					<div class="g-errors">
-						<cError :error="object.getCompressedBaseError()" base=true class="mi0 pl20"/>
-					</div>
-				</b-card-body>
-			</b-collapse>
-		</b-card>
-		<b-card header="Warnings" no-body class="mib20 paneldecent" border-variant="warning" header-bg-variant="warning" v-if="object.warnings && length(object.warnings) > 0">
-			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Warnings ({{ length(object.warnings) }})</b><font-awesome-icon :icon="((warningsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
-			<b-collapse v-model="warningsOpen" id="collapse-error">
-				<b-card-body>
-					<div class="g-errors">
-						<cError :error="object.warnings" base=true class="mi0 pl20"/>
-					</div>
-				</b-card-body>
-			</b-collapse>
-		</b-card>
+		<ErrorCard :error="object.getCompressedBaseError()" title="Fehler" variant="danger"/>
+		<ErrorCard :error="object.warnings" title="Warnung" variant="warning"/>
 		<div v-if="object.contentObj">
 			<ViewEditorObject :content="object.contentObj"/>
 		</div>
@@ -47,11 +29,11 @@
 				<b-card-body>
 					<b-alert show variant="danger" v-if="length(content.errors)">
 						<b class="alert-heading">Fehler:</b><br>
-						<cError :error="content.errors"/>
+						<ErrorContent :error="content.errors"/>
 					</b-alert>
 					<b-alert show variant="warning" v-if="length(content.warnings)">
 						<b class="alert-heading">Warnung:</b><br>
-						<cError :error="content.warnings"/>
+						<ErrorContent :error="content.warnings"/>
 					</b-alert>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
 						<b-button-group size="sm" class="mr-1">
@@ -89,7 +71,9 @@
 
 <script>
 	import { mapState } from 'vuex'
-	import cError from './cError'
+	import ErrorContent from './general/ErrorContent'
+	import ErrorCard from './general/ErrorCard'
+
 	export default {
 		name: 'ViewEditorObject',
 		props: {
@@ -202,7 +186,8 @@
 			}
 		},
 		components: {
-			cError
+			ErrorContent,
+			ErrorCard
 		},
 	}
 </script>
@@ -223,25 +208,8 @@
 	.invert > .card-header .val > i {
 		color: #ccf;
 	}
-	.header-btn-toggle {
-		margin: 0px;
-		padding: 0px;
-		border: none;
-		background: none;
-		width: 100%;
-		text-align: left;
-	}
-	.header-btn-toggle > .fa-icon {
-		font-size: 23px;
-	}
 	.icmd {
 		font-size: 16px !important;
-	}
-	.paneldecent > .card-header {
-		padding: 0.1rem 0.5rem;
-	}
-	.paneldecent > .card-body, .paneldecent > .collapse > .card-body, .paneldecent > .card-body, .paneldecent > .collapsing > .card-body {
-		padding: 0.5rem;
 	}
 	.obj > .obj {
 		margin-left: 23px;
@@ -330,11 +298,5 @@
 		color: #444;
 		padding: 1px 5px;
 		margin-right: 3px;
-	}
-	div.g-errors {
-		max-height: calc( 70vh - 200px );
-		overflow: auto;
-		padding: 8px 10px;
-		margin: -8px;
 	}
 </style>

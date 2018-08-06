@@ -1,21 +1,21 @@
 <template>
 	<ul v-if="base || Array.isArray(aError)">
 		<li v-for="(errorObj, errKey) in aError">
-			<b v-if="fxUseErrKey(errKey)">{{ fxErrKey(errKey) }}</b><cError :error="errorObj" :noObj="fxUseErrKey(errKey)"/>
+			<b v-if="fxUseErrKey(errKey)">{{ fxErrKey(errKey) }}</b><ErrorContent :error="errorObj" :noObj="fxUseErrKey(errKey)"/>
 		</li>
 	</ul>
 	<span v-else-if="typeof aError === 'string'">{{ aError }}<br></span>
 	<span v-else>
 		<b v-if="aError.obj && !noObj">{{ aError.obj.uId }} - </b>
-		<cError :error="aError.txt" v-if="aError.txt"/>
-		<div v-if="Array.isArray(aError.err)" class="subArray"><cError :error="aError.err"/></div>
-		<cError :error="aError.err" v-else-if="aError.err"/>
+		<ErrorContent :error="aError.txt" v-if="aError.txt"/>
+		<div v-if="Array.isArray(aError.err)" class="subArray"><ErrorContent :error="aError.err"/></div>
+		<ErrorContent :error="aError.err" v-else-if="aError.err"/>
 	</span>
 </template>
 
 <script>
 	export default {
-		name: 'cError',
+		name: 'ErrorContent',
 		props: ['error', 'base', 'noObj'],
 		data () {
 			return {

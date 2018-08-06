@@ -197,4 +197,21 @@
 		max-height: 95vh;
 		overflow-y: auto;
 	}
+	.paneldecent > .card-header {
+		padding: 0.1rem 0.5rem;
+	}
+	.paneldecent > .card-body, .paneldecent > .collapse > .card-body, .paneldecent > .card-body, .paneldecent > .collapsing > .card-body {
+		padding: 0.5rem;
+	}
+	.header-btn-toggle {
+		margin: 0px;
+		padding: 0px;
+		border: none;
+		background: none;
+		width: 100%;
+		text-align: left;
+	}
+	.header-btn-toggle > .fa-icon {
+		font-size: 23px;
+	}
 </style>

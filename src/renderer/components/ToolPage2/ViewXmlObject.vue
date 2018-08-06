@@ -1,15 +1,7 @@
 <template>
 	<div class="start" v-if="content === undefined && object !== undefined">
-		<b-card header="Errors" no-body class="mib20 paneldecent" border-variant="danger" header-bg-variant="danger" v-if="object.errors && length(object.errors) > 0">
-			<div slot="header"><button v-b-toggle="'collapse-error'" class="header-btn-toggle" style="color: #fff;"><b>Errors ({{ length(object.errors) }})</b><font-awesome-icon :icon="((errorsOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
-			<b-collapse v-model="errorsOpen" id="collapse-error">
-				<b-card-body>
-					<div class="g-errors">
-						<cError :error="object.errors" base=true class="mi0 pl20"/>
-					</div>
-				</b-card-body>
-			</b-collapse>
-		</b-card>
+		<ErrorCard :error="object.errors" title="Fehler" variant="danger"/>
+		<ErrorCard :error="object.warnings" title="Warnung" variant="warning"/>
 		<div v-if="object.content">
 			<ViewXmlObject :content="aContent" :key="aKey" v-for="(aContent, aKey) in object.content"/>
 		</div>
@@ -76,7 +68,9 @@
 
 <script>
 	import { mapState } from 'vuex'
-	import cError from './cError'
+	import ErrorContent from './general/ErrorContent'
+	import ErrorCard from './general/ErrorCard'
+
 	export default {
 		name: 'ViewXmlObject',
 		props: {
@@ -150,7 +144,8 @@
 			}
 		},
 		components: {
-			cError
+			ErrorContent,
+			ErrorCard
 		},
 	}
 </script>
@@ -171,25 +166,8 @@
 	.invert > .card-header .val > i {
 		color: #ccf;
 	}
-	.header-btn-toggle {
-		margin: 0px;
-		padding: 0px;
-		border: none;
-		background: none;
-		width: 100%;
-		text-align: left;
-	}
-	.header-btn-toggle > .fa-icon {
-		font-size: 23px;
-	}
 	.icmd {
 		font-size: 16px !important;
-	}
-	.paneldecent > .card-header {
-		padding: 0.1rem 0.5rem;
-	}
-	.paneldecent > .card-body, .paneldecent > .collapse > .card-body, .paneldecent > .card-body, .paneldecent > .collapsing > .card-body {
-		padding: 0.5rem;
 	}
 	.obj > .obj {
 		margin-left: 23px;
