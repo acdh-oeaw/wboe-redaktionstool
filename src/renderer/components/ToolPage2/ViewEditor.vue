@@ -12,7 +12,7 @@
 
 	<EditorObjFrame :content="content" v-else-if="content">
 		<span v-if="valueType === 'fix'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
-		<span v-else-if="valueType === 'editable'">ZZZZZZZZZZZ</span>
+		<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 		<template slot="childs" v-if="content.childs.length > 0">
 			<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 		</template>
@@ -31,6 +31,7 @@
 	import ErrorContent from './general/ErrorContent'
 	import ErrorCard from './general/ErrorCard'
 	import EditorObjFrame from './ViewEditor/EditorObjFrame'
+	import EditableValue from './ViewEditor/EditableValue'
 
 	export default {
 		name: 'ViewEditor',
@@ -70,7 +71,8 @@
 		components: {
 			ErrorContent,
 			ErrorCard,
-			EditorObjFrame
+			EditorObjFrame,
+			EditableValue
 		},
 	}
 </script>
