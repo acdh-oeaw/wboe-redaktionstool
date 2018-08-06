@@ -7,18 +7,23 @@
 	</xmlParserHeader>
 	<objParserContent>
 		<TEI xmlns="http://www.tei-c.org/ns/1.0">
+			<?options {	"layout": { "frame": "justChilds" } } ?>
 			<teiHeader>
 				<?options { "title": "Kopfzeile" } ?>
 				<fileDesc>
+					<?options {	"layout": { "frame": "justChilds" } } ?>
 					<titleStmt>
+						<?options {	"layout": { "frame": "justChilds" } } ?>
 						<title>
 							<?options {
 													"id": "title",
 													"title": "Titel",
-													"value": ["edit", {"required": {"use": true}}]
+													"value": ["edit", {"required": {"use": true}}],
+													"layout": { "frame": "line" }
 												} ?>
 						</title>
 						<respStmt>
+							<?options {	"layout": { "frame": "justChilds" } } ?>
 							<resp>
 								<?options {
 									"value": {
@@ -27,16 +32,20 @@
 											"use": true,
 											"possibleValues": ["Editor", "article editor"]
 										}
-									}
+									},
+									"layout": ["hidden"]
 								} ?>
 							</resp>
 							<name>
 								<?options {
-														"value": ["edit", "required"]
+														"title": "Editor",
+														"value": ["edit", "required"],
+														"layout": { "frame": "line" }
 													} ?>
 							</name>
 						</respStmt>
 						<respStmt>
+							<?options { "title": "Encoding Scheme" } ?>
 							<resp>
 								<?options {
 									"value": {
@@ -45,25 +54,29 @@
 											"use": true,
 											"possibleValues": ["Encoding Scheme", "encoding"]
 										}
-									}
+									},
+									"layout": ["hidden"]
 								} ?>
 							</resp>
-							<name>Jack Bowers</name>
-							<name>Daniel Schopper</name>
-							<name>Omar Siam</name>
+							<name><?options {	"layout": { "frame": "line" } } ?>Jack Bowers</name>
+							<name><?options {	"layout": { "frame": "line" } } ?>Daniel Schopper</name>
+							<name><?options {	"layout": { "frame": "line" } } ?>Omar Siam</name>
 						</respStmt>
 						<respStmt>
-							<resp>DBOE Team</resp>
+							<?options { "title": "DBOE Team" } ?>
+							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
 							<name>
 								<?options {
 														"title": "Name",
 														"attributes": [{"xml:id": {"type": "variable"}}],
 														"value": ["variable", "required"],
-														"tag": ["multiple"]
+														"tag": ["multiple"],
+														"layout": { "frame": "line" }
 													} ?>
 							</name>
 						</respStmt>
 						<respStmt>
+							<?options { "title": "Student assistants" } ?>
 							<resp>
 								<?options {
 									"value": {
@@ -72,14 +85,16 @@
 											"use": true,
 											"possibleValues": ["Student assistants", "student assistants"]
 										}
-									}
+									},
+									"layout": ["hidden"]
 								} ?>
 							</resp>
 							<name>
 								<?options {
 														"title": "Name",
 														"value": ["variable", "required"],
-														"tag": ["multiple"]
+														"tag": ["multiple"],
+														"layout": { "frame": "line" }
 													} ?>
 							</name>
 						</respStmt>
@@ -97,7 +112,9 @@
 				</fileDesc>
 			</teiHeader>
 			<text>
+				<?options {	"layout": { "frame": "justChilds" } } ?>
 				<body>
+					<?options {	"layout": { "frame": "justChilds" } } ?>
 					<entry>
 						<?options {
 												"title": "Eintrag",
@@ -372,9 +389,10 @@
 			<gram type="gender">
 				<?options {
 										"id": "gram-gender",
-										"title": "Gram Pos",
+										"title": "Gram Gender",
 										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum", "Femininum"]}}],
-										"tag": ["multiple"]
+										"tag": ["multiple"],
+										"layout": { "frame": "line" }
 									} ?>
 			</gram>
 
@@ -388,6 +406,7 @@
 			</gram>
 
 			<usg type="geo">
+				<?options {	"layout": { "frame": "line" } } ?>
 				<?options {
 			 							"id": "usg-geo",
 										"title": "Usg Geo",
@@ -401,7 +420,8 @@
 												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
 												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
-											"tag": ["multiple"]
+											"tag": ["multiple"],
+											"layout": { "frame": "inline" }
 										} ?>
 				</placeName>
 			</usg>
@@ -473,7 +493,8 @@
 					<?options {
 											"title": "Cited Range",
 											"value": ["edit", "required"],
-											"tag": ["possibleTag"]
+											"tag": ["possibleTag"],
+											"layout": { "frame": "line" }
 										} ?>
 				</citedRange>
 			</ref>
@@ -524,7 +545,8 @@
 					<?options {
 											"title": "Gram Pos",
 											"value": ["edit", "required"],
-											"tag": ["possibleTag"]
+											"tag": ["possibleTag"],
+											"layout": { "frame": "line" }
 										} ?>
 				</gram>
 				<?copy {"fromId": "pos", "options": { "tag": ["possibleTag"] }} ?>

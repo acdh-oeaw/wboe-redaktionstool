@@ -1,9 +1,12 @@
 <template>
-	<span v-if="editType === 'selectPossibleValues'">
+	<span class="val-obj" v-if="editType === 'selectPossibleValues'">
 		<SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.get('value.is.possibleValues')"/>
 	</span>
 
-	<span v-else><b>Editable Value ({{ editType }}):</b> {{ content.orgXmlObj.getValueByOption(content.parserObj.options.get('value'), false) }}</span>
+	<span class="val-obj val-txt" v-else>
+		{{ content.orgXmlObj.getValueByOption(content.parserObj.options.get('value'), false) }}
+		<font-awesome-icon icon="edit" class="fa-icon" :title="editType"/>
+	</span>
 </template>
 
 <script>
@@ -49,4 +52,12 @@
 </script>
 
 <style scoped>
+	.val-txt {
+		padding: 0px 3px;
+		padding-bottom: 3px;
+    border-radius: 2px;
+	}
+	.val-txt:hover {
+		background: #eef;
+	}
 </style>

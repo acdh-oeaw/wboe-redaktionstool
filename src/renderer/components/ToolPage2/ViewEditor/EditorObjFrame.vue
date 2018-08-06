@@ -19,8 +19,8 @@
 		<slot name="childs"/>
 	</div>
 
-	<div class="obj" v-else>
-		<b v-if="title">{{ title }}:</b>
+	<div :class="'obj lb-' + layoutBase" v-else>
+		<b v-if="title">{{ title }}:</b><br v-if="layoutBase === 'box'"/>
 		<slot/>
 		<slot name="childs"/>
 	</div>
@@ -40,6 +40,9 @@
 		computed: {
 			layoutBase () {		// Mögliche Rückgabewerte: 'panel', 'justChilds', 'box', 'line' und 'inline'
 				if (this.content.isRoot) { return 'justChilds' }
+				if (this.content.parserObj.options && this.content.parserObj.options.get('layout.frame')) {
+					return this.content.parserObj.options.get('layout.frame')
+				}
 				return 'panel'
 				// return 'unknown'
 			},
@@ -60,4 +63,11 @@
 </script>
 
 <style scoped>
+	.obj.lb-inline {
+		display: inline-block;
+		padding: 0px 3px;
+	}
+	.obj.lb-inline:hover {
+		background: #eee;
+	}
 </style>

@@ -3,7 +3,8 @@
 		<ErrorCard :error="object.getCompressedBaseError()" title="Fehler" variant="danger"/>
 		<ErrorCard :error="object.warnings" title="Warnung" variant="warning"/>
 		<div v-if="object.contentObj">
-			<ViewEditor :content="object.contentObj"/>
+			<div v-if="object.errors && length(object.errors) > 0">Datei enthält Fehler!</div>
+			<ViewEditor :content="object.contentObj" v-else/>
 		</div>
 		<div v-else>
 			Keine Content-Daten vorhanden
@@ -62,11 +63,19 @@
 			showObj (obj) {		// Soll das Element angezeigt werden?
 				if (obj && obj.orgXmlObj
 				&& (obj.parserObj && obj.parserObj.ready && obj.parserObj.useable)
-				&& (obj.orgXmlObj.type === 'TEXT' || obj.orgXmlObj.type === 'ELEMENT')) {
+				&& (obj.orgXmlObj.type === 'TEXT' || obj.orgXmlObj.type === 'ELEMENT')
+				&& !(obj.parserObj.options && obj.parserObj.options.get('layout.hidden'))) {
 					return true
 				}
 				return false
-			}
+			},
+			length (val) {
+				if (Array.isArray(val)) {
+					return val.length
+				} else {
+					return Object.keys(val).length
+				}
+			},
 		},
 		components: {
 			ErrorContent,
