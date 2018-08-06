@@ -87,5 +87,6 @@ localFunctions.ParserOptions.prototype.extendJSON = prototypeParserOptions.exten
 localFunctions.ParserOptions.prototype.extendObj = prototypeParserOptions.extendObj
 localFunctions.ParserOptions.prototype.combineObj = prototypeParserOptions.combineObj
 localFunctions.ParserOptions.prototype.get = prototypeParserOptions.get
+localFunctions.ParserOptions.prototype.getResult = prototypeParserOptions.getResult
 
 export default localFunctions

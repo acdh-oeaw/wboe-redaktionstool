@@ -15,6 +15,24 @@ const localFunctions = {
 	get: function (opt) {
 		return stdFunctions.getValOfSubProp(this.options, opt)
 	},
+	getResult: function (opt) {
+		let aOpt = stdFunctions.getValOfSubProp(this.options, opt)
+		let optName = opt.split('.')
+		optName = optName[optName.length - 1]
+		if (aOpt && typeof aOpt !== 'string') {
+			if (optName === 'title') {
+				if (!aOpt.use) {
+					return null
+				} else {
+					return aOpt.value
+				}
+			} else {
+				console.log('getResult', 'Unbekannte Option!', optName, aOpt)
+				return JSON.stringify(aOpt)
+			}
+		}
+		return aOpt
+	},
 	decompressOptions: xmlFunctions.decompressProcessingOptions,
 	initFromParserObject: function (pObj) {
 		// Atribute auswerten
