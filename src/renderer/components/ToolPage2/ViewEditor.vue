@@ -12,7 +12,7 @@
 
 	<EditorObjFrame :content="content" v-else-if="content">
 		<span v-if="valueType === 'fix'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
-		<span v-else-if="valueType === 'complex'">ZZZZZZZZZZZ</span>
+		<span v-else-if="valueType === 'editable'">ZZZZZZZZZZZ</span>
 		<template slot="childs" v-if="content.childs.length > 0">
 			<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 		</template>
@@ -25,9 +25,8 @@
 
 <script>
 	// ToDo:
-	// - Rahmen um obj per Komponente
-	// - Mögliche AddKnöpfe an Rahmen übergeben
-	// - Mögliche Contextmenüpunkte an Rahmen übergeben
+	// - Mögliche AddKnöpfe an Rahmen als Array übergeben
+	// - Contextmenüpunkte im Rahmen behandeln?
 	import { mapState } from 'vuex'
 	import ErrorContent from './general/ErrorContent'
 	import ErrorCard from './general/ErrorCard'
@@ -48,22 +47,18 @@
 		},
 		computed: {
 			...mapState(['Options']),
-			valueType () {
+			valueType () {		// Ist der aktuelle Wert 'fix', 'editable' oder 'none'?
 				if (this.content.parserObj.options && this.content.parserObj.options.get('value')) {
-					if (this.content.parserObj.options
-					&& this.content.parserObj.options.get('value.is.use')
-					&& !this.content.parserObj.options.get('value.variable.use')
-					&& !this.content.parserObj.options.get('value.edit.use')) {
-						// console.log(this.content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false))
+					if (!this.content.parserObj.options.get('value.edit.use')) {
 						return 'fix'
 					}
-					return 'complex'
+					return 'editable'
 				}
 				return 'none'
 			}
 		},
 		methods: {
-			showObj (obj) {
+			showObj (obj) {		// Soll das Element angezeigt werden?
 				if (obj && obj.orgXmlObj
 				&& (obj.parserObj && obj.parserObj.ready && obj.parserObj.useable)
 				&& (obj.orgXmlObj.type === 'TEXT' || obj.orgXmlObj.type === 'ELEMENT')) {

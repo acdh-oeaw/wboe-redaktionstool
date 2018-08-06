@@ -32,7 +32,7 @@
 							</resp>
 							<name>
 								<?options {
-														"value": ["variable", "required"]
+														"value": ["edit", "required"]
 													} ?>
 							</name>
 						</respStmt>
@@ -57,7 +57,7 @@
 							<name>
 								<?options {
 														"title": "Name",
-														"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
+														"attributes": [{"xml:id": {"type": "variable"}}],
 														"value": ["variable", "required"],
 														"tag": ["multiple"]
 													} ?>
@@ -107,7 +107,7 @@
 						<form type="lemma">
 							<?options {
 													"attributes": [{
-														"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
 													"tag": ["multiple"]
 												} ?>
@@ -123,7 +123,7 @@
 						<form type="variant">
 							<?options {
 													"attributes": [{
-														"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
 													"tag": ["multiple", "possibleTag", "anywhere"]
 												} ?>
@@ -141,7 +141,7 @@
 							<?options {
 													"title": "Form Variant Diminutive",
 													"attributes": [{
-														"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}
 													}],
 													"tag": ["multiple", "possibleTag"]
 												} ?>
@@ -157,7 +157,7 @@
 							<?options {
 													"title": "Form Lautung",
 													"attributes": [{
-														"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
 													"tag": ["multiple", "possibleTag", "anywhere"]
 												} ?>
@@ -171,7 +171,7 @@
 													"title": "Form Variant",
 													"attributes": [{
 														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
-														"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["variant", "dialect"]},
+														"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["variant", "dialect"]},
 														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
 													}],
 													"tag": ["multiple", "possibleTag"]
@@ -182,7 +182,7 @@
 														"attributes": [{
 															"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
 														}],
- 														"value": ["variable", "required"]
+ 														"value": ["edit", "required"]
  													} ?>
 							 </pron>
 							 <?copy { "fromId": "usg-geo" } ?>
@@ -209,7 +209,7 @@
 								<?options {
 														"title": "Cit Etymon",
 														"attributes": [{
-															"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
+															"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
 														}],
 														"tag": ["multiple", "possibleTag"]
 													} ?>
@@ -218,7 +218,7 @@
               	<lang>
 									<?options {
   														"title": "Lang",
-  														"value": ["variable", "required"],
+  														"value": ["edit", "required"],
 															"tag": ["possibleTag"]
   													} ?>
 								</lang>
@@ -227,7 +227,7 @@
 									<?options {
 															"title": "Form",
 															"attributes": [{
-																"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
+																"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
 															}],
 															"tag": ["possibleTag"]
 														} ?>
@@ -252,8 +252,8 @@
 								<?options {
 														"title": "Form Lemma/Variable",
 														"attributes": [{
-															"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variable"]},
-															"subtype": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["compound", "MWE"]}
+															"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variable"]},
+															"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["compound", "MWE"]}
 														}],
 														"tag": ["multiple"]
 													} ?>
@@ -279,7 +279,7 @@
 				<?options {
 				 						"id": "note",
 										"title": "Note",
-										"value": ["variable", "required", "innerXML"]
+										"value": ["edit", "required", "innerXML"]
 									} ?>
 			</note>
 
@@ -287,8 +287,8 @@
 				<?options {
 				 						"id": "xr",
 										"title": "XR",
-										"value": ["variable", "required", "innerXML"],
-										"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}}}],
+										"value": ["edit", "required", "innerXML"],
+										"attributes": [{"type": {"type": "edit", "canBeEmpty": {"use": true}}}],
 										"tag": ["possibleTag"]
 									} ?>
 			</xr>
@@ -297,7 +297,7 @@
 				<?options {
 				 						"id": "lang",
 										"title": "Lang",
-										"value": ["variable", "required", "innerXML"],
+										"value": ["edit", "required", "innerXML"],
 										"tag": ["possibleTag"]
 									} ?>
 			</lang>
@@ -306,7 +306,7 @@
 				<?options {
 				 						"id": "pos",
 										"title": "Pos",
-										"value": ["variable", "required", "innerXML"],
+										"value": ["edit", "required", "innerXML"],
 										"tag": ["possibleTag"]
 									} ?>
 			</pos>
@@ -315,8 +315,8 @@
 				<?options {
 				 						"id": "bibl",
 										"title": "Bibl",
-										"value": ["variable", "required", "innerXML"],
-										"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}}}],
+										"value": ["edit", "required", "innerXML"],
+										"attributes": [{"type": {"type": "edit", "canBeEmpty": {"use": true}}}],
 										"tag": ["possibleTag"]
 									} ?>
 			</bibl>
@@ -325,7 +325,7 @@
 				<?options {
 										"id": "lbl",
 										"title": "lbl",
-										"value": ["variable", "required", "innerXML"],
+										"value": ["edit", "required", "innerXML"],
 										"tag": ["possibleTag"]
 									} ?>
 			</lbl>
@@ -352,7 +352,7 @@
 				<?options {
 										"id": "def",
 										"title": "Def",
-										"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
+										"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
 										"value": ["edit", "required"]
 									} ?>
 			</def>
@@ -361,10 +361,10 @@
 				<?options {
 				 						"id": "orth",
 										"title": "Orth",
-										"value": ["variable", "required"],
+										"value": ["edit", "required"],
 										"attributes": [{
-											"extent": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]},
-											"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
+											"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]},
+											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
 										}]
 									} ?>
 			</orth>
@@ -373,7 +373,7 @@
 				<?options {
 										"id": "gram-gender",
 										"title": "Gram Pos",
-										"value": ["variable", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum", "Femininum"]}}],
+										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum", "Femininum"]}}],
 										"tag": ["multiple"]
 									} ?>
 			</gram>
@@ -382,7 +382,7 @@
 				<?options {
 										"id": "gram-number",
 										"title": "Gram Number",
-										"value": ["variable", "required", {"is": {"value": "Plural", "possibleValues": ["Plural"]}}],
+										"value": ["edit", "required", {"is": {"value": "Plural", "possibleValues": ["Plural"]}}],
 										"value": ["edit", "required"]
 									} ?>
 			</gram>
@@ -396,10 +396,10 @@
 				<placeName>
 					<?options {
 											"title": "Place Name",
-											"value": ["variable", "required"],
+											"value": ["edit", "required"],
 											"attributes": [{
-												"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
-												"cert": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
+												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
 											"tag": ["multiple"]
 										} ?>
@@ -411,8 +411,8 @@
 										"id": "usg-drg",
 										"title": "Usg (dom, reg, gram / cert)",
 										"attributes": [{
-											"type": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg", "gram"]},
-											"cert": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+											"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg", "gram"]},
+											"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 										}],
 										"value": ["edit", "required"]
 									} ?>
@@ -423,8 +423,8 @@
 										"id": "cit-example",
 										"title": "Cit Example",
 										"attributes": [{
-											"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
-											"cert": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
+											"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 										}],
 										"tag": ["multiple", "possibleTag"]
 									} ?>
@@ -432,7 +432,7 @@
 					 <?options {
 											"title": "Quote",
 											"attributes": [{
-												"xml:lang": {"type": "variable", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+												"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 											}],
 											"value": ["edit", "required"]
 										} ?>
@@ -447,7 +447,7 @@
 				<?options {
 										"id": "sense",
 										"title": "Sense",
-										"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
+										"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
 										"tag": ["multiple"]
 									} ?>
 				<?copy { "fromId": "ref-form" } ?>
@@ -464,7 +464,7 @@
 										"id": "ref-bibl",
 										"title": "Ref Bibl",
 										"attributes": [{
-											"target": {"type": "variable", "canBeEmpty": {"use": true}}
+											"target": {"type": "edit", "canBeEmpty": {"use": true}}
 										}]
 									} ?>
 				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"] } } ?>
@@ -472,7 +472,7 @@
 				<citedRange>
 					<?options {
 											"title": "Cited Range",
-											"value": ["variable", "required"],
+											"value": ["edit", "required"],
 											"tag": ["possibleTag"]
 										} ?>
 				</citedRange>
@@ -489,7 +489,7 @@
 					<?options {
 						"id": "oRef",
 						"attributes": [{
-							"target": {"type": "variable", "canBeEmpty": {"use": true}}
+							"target": {"type": "edit", "canBeEmpty": {"use": true}}
 						}],
 						"value": ["edit", "canBeEmpty"],
 						"tag": ["possibleTag"]
@@ -502,7 +502,7 @@
 										"id": "ref-sense",
 										"title": "Ref Sense",
 										"attributes": [{
-											"target": {"type": "variable", "canBeEmpty": {"use": true}}
+											"target": {"type": "edit", "canBeEmpty": {"use": true}}
 										}],
 										"tag": ["possibleTag"]
 									} ?>
@@ -516,14 +516,14 @@
 				<iType>
 					<?options {
 											"title": "iType",
-											"value": ["variable", "required"],
+											"value": ["edit", "required"],
 											"tag": ["possibleTag", "anywhere"]
 										} ?>
 				</iType>
 				<gram type="pos">
 					<?options {
 											"title": "Gram Pos",
-											"value": ["variable", "required"],
+											"value": ["edit", "required"],
 											"tag": ["possibleTag"]
 										} ?>
 				</gram>
