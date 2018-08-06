@@ -10,10 +10,10 @@
 		</div>
 	</div>
 
-	<div class="obj" v-else-if="content !== undefined">
+	<EditorObjFrame v-else-if="content !== undefined">
 		{{ content.orgXmlObj.name }}
 		<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"  v-if="content.childs.length > 0 && showObj(aContent)"/>
-	</div>
+	</EditorObjFrame>
 
 	<div class="error" v-else>
 		Kein "object" übergeben !!!!
@@ -21,9 +21,14 @@
 </template>
 
 <script>
+	// ToDo:
+	// - Rahmen um obj per Komponente
+	// - Mögliche AddKnöpfe an Rahmen übergeben
+	// - Mögliche Contextmenüpunkte an Rahmen übergeben
 	import { mapState } from 'vuex'
 	import ErrorContent from './general/ErrorContent'
 	import ErrorCard from './general/ErrorCard'
+	import EditorObjFrame from './ViewEditor/EditorObjFrame'
 
 	export default {
 		name: 'ViewEditor',
@@ -52,7 +57,8 @@
 		},
 		components: {
 			ErrorContent,
-			ErrorCard
+			ErrorCard,
+			EditorObjFrame
 		},
 	}
 </script>
