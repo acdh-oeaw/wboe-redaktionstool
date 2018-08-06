@@ -10,16 +10,19 @@
 		<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
 			<b-card-body>
 				<slot/>
+				<slot name="childs"/>
 			</b-card-body>
 		</b-collapse>
 	</b-card>
 
-	<div class="obj just-content" v-else-if="layoutBase === 'justContent'">
-		<slot/>
+	<div class="obj just-childs" v-else-if="layoutBase === 'justChilds'">
+		<slot name="childs"/>
 	</div>
 
 	<div class="obj" v-else>
+		<b v-if="title">{{ title }}:</b>
 		<slot/>
+		<slot name="childs"/>
 	</div>
 </template>
 
@@ -35,9 +38,10 @@
 			}
 		},
 		computed: {
-			layoutBase () {		// Mögliche Rückgabewerte: 'panel', 'justContent', 'box', 'line' und 'inline'
-				if (this.content.isRoot) { return 'justContent' }
+			layoutBase () {		// Mögliche Rückgabewerte: 'panel', 'justChilds', 'box', 'line' und 'inline'
+				if (this.content.isRoot) { return 'justChilds' }
 				return 'panel'
+				// return 'unknown'
 			},
 			title () {
 				if (this.content.parserObj.options) {
@@ -46,7 +50,7 @@
 					} else if (this.content.parserObj.options.get('tagAsTitle') || this.layoutBase === 'panel') {
 						return this.content.orgXmlObj.name
 					}
-					return undefined
+					return null
 				}
 			}
 		},

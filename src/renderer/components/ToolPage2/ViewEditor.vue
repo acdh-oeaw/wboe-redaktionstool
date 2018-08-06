@@ -11,8 +11,11 @@
 	</div>
 
 	<EditorObjFrame :content="content" v-else-if="content">
-		{{ content.orgXmlObj.name }}
-		<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"  v-if="content.childs.length > 0 && showObj(aContent)"/>
+		<span v-if="valueType === 'fix'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
+		<span v-else-if="valueType === 'complex'">ZZZZZZZZZZZ</span>
+		<template slot="childs" v-if="content.childs.length > 0">
+			<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+		</template>
 	</EditorObjFrame>
 
 	<div class="error" v-else>
@@ -45,6 +48,19 @@
 		},
 		computed: {
 			...mapState(['Options']),
+			valueType () {
+				if (this.content.parserObj.options && this.content.parserObj.options.get('value')) {
+					if (this.content.parserObj.options
+					&& this.content.parserObj.options.get('value.is.use')
+					&& !this.content.parserObj.options.get('value.variable.use')
+					&& !this.content.parserObj.options.get('value.edit.use')) {
+						// console.log(this.content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false))
+						return 'fix'
+					}
+					return 'complex'
+				}
+				return 'none'
+			}
 		},
 		methods: {
 			showObj (obj) {
