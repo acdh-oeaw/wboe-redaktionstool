@@ -12,7 +12,7 @@
 	</div>
 
 	<EditorObjFrame :content="content" v-else-if="content">
-		<span v-if="valueType === 'fix'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
+		<span class="val-fix" v-if="valueType === 'fix'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
 		<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 		<template slot="childs" v-if="content.childs.length > 0">
 			<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
@@ -87,4 +87,12 @@
 </script>
 
 <style scoped>
+	.val-fix {
+		padding: 0px 3px;
+		padding-bottom: 3px;
+    border-radius: 2px;
+	}
+	.val-fix:hover {
+		background: #eee;
+	}
 </style>

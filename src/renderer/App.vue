@@ -158,7 +158,7 @@
 		text-align: left !important;
 	}
 
-	.btn-none, .btn-ve-select {
+	.btn-none, .btn-ve-select, .btn-val-focus {
 		background: none !important;
 		border: none !important;
 		border-radius: 0 !important;

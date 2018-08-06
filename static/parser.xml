@@ -45,7 +45,7 @@
 							</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "Encoding Scheme" } ?>
+							<?options { "title": "Encoding Scheme", "layout": { "frame": "panelClosed" } } ?>
 							<resp>
 								<?options {
 									"value": {
@@ -63,7 +63,7 @@
 							<name><?options {	"layout": { "frame": "line" } } ?>Omar Siam</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "DBOE Team" } ?>
+							<?options { "title": "DBOE Team", "layout": { "frame": "panelClosed" } } ?>
 							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
 							<name>
 								<?options {
@@ -76,7 +76,7 @@
 							</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "Student assistants" } ?>
+							<?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>
 							<resp>
 								<?options {
 									"value": {

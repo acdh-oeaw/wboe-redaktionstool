@@ -54,13 +54,16 @@
 			}
 		},
 		computed: {
-			layoutBase () {		// Mögliche Rückgabewerte: 'panel', 'justChilds', 'box', 'line' und 'inline'
+			layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
 				if (this.content.isRoot) { return 'justChilds' }
 				if (this.content.parserObj.options && this.content.parserObj.options.get('layout.frame')) {
+					if (this.content.parserObj.options.get('layout.frame') === 'panelClosed') {
+						this.isOpen = false
+						return 'panel'
+					}
 					return this.content.parserObj.options.get('layout.frame')
 				}
 				return 'panel'
-				// return 'unknown'
 			},
 			title () {
 				if (this.content.parserObj.options) {

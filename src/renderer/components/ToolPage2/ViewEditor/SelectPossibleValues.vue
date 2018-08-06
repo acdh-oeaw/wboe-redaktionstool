@@ -1,5 +1,5 @@
 <template>
-	<b-dropdown variant="none" no-caret>
+	<b-dropdown variant="val-focus" no-caret>
 		<template slot="button-content">
 			<span class="select">{{ selectedText }} <font-awesome-icon icon="caret-down" class="fa-icon"/></span>
 		</template>
