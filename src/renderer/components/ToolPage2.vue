@@ -25,9 +25,9 @@
 		</b-button-toolbar>
 		<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
 			<b-tab title="Editor">
-				<div class="vieweditor scroll p20" v-if="aTabCach.indexOf(0) > -1">
-					<ViewEditor :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
+				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1">
+					<ViewEditor :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Vorschau">
@@ -100,7 +100,7 @@
 		name: 'tool-page-2',
 		data () {
 			return {
-				aTab: 3,
+				aTab: 0,
 				aTabCach: [],
 				showTabView: false,
 				xmlObject: null,
