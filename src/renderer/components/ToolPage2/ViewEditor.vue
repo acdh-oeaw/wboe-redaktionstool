@@ -1,5 +1,5 @@
 <template>
-	<div class="start" v-if="content === undefined && object !== undefined">
+	<div class="start" v-if="!content && object">
 		<ErrorCard :error="object.getCompressedBaseError()" title="Fehler" variant="danger"/>
 		<ErrorCard :error="object.warnings" title="Warnung" variant="warning"/>
 		<div v-if="object.contentObj">
@@ -10,7 +10,7 @@
 		</div>
 	</div>
 
-	<EditorObjFrame v-else-if="content !== undefined">
+	<EditorObjFrame :content="content" v-else-if="content">
 		{{ content.orgXmlObj.name }}
 		<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"  v-if="content.childs.length > 0 && showObj(aContent)"/>
 	</EditorObjFrame>
@@ -49,6 +49,7 @@
 		methods: {
 			showObj (obj) {
 				if (obj && obj.orgXmlObj
+				&& (obj.parserObj && obj.parserObj.ready && obj.parserObj.useable)
 				&& (obj.orgXmlObj.type === 'TEXT' || obj.orgXmlObj.type === 'ELEMENT')) {
 					return true
 				}
