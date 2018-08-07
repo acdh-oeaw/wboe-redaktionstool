@@ -3,6 +3,7 @@
 		<template slot="button-content">
 			<span class="select">{{ selectedText }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
 		</template>
+		<!-- ToDo: canBeEmpty !?! -->
 		<b-dropdown-item @click="select(aKey)" :active="aKey === selected" :key="aKey" v-for="(aVal, aKey) in aValues">
 			<font-awesome-icon icon="check" class="fa-icon" v-if="aKey === selected"/></span> {{ aVal }}
 		</b-dropdown-item>

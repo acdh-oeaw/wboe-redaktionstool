@@ -39,6 +39,7 @@
 							<name>
 								<?options {
 														"title": "Editor",
+														"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
 														"value": ["edit", "required", {"is": {
 															"possibleValues": [
 																{"value": "Alexandra N. Lenz", "attribute": {"xml:id": "AL"}},
@@ -76,14 +77,14 @@
 						<respStmt>
 							<?options { "title": "DBOE Team", "layout": { "frame": "panelClosed" } } ?>
 							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
-							<name xml:id="AL">Alexandra N. Lenz</name>
-							<name xml:id="PhS">Philip Stöckle</name>
-							<name xml:id="AG">Andreas Gellan</name>
-							<name xml:id="PZ">Patrick Zeithuber</name>
-							<name xml:id="SW">Sabine Wahl</name>
-							<name xml:id="SS">Sonja Schwaiger</name>
-							<name xml:id="JD">Jan Braun</name>
-							<name xml:id="AB">Angela Bergmayer</name>
+							<name xml:id="AL"><?options { "layout": { "frame": "line" } } ?>Alexandra N. Lenz</name>
+							<name xml:id="PhS"><?options { "layout": { "frame": "line" } } ?>Philip Stöckle</name>
+							<name xml:id="AG"><?options { "layout": { "frame": "line" } } ?>Andreas Gellan</name>
+							<name xml:id="PZ"><?options { "layout": { "frame": "line" } } ?>Patrick Zeithuber</name>
+							<name xml:id="SW"><?options { "layout": { "frame": "line" } } ?>Sabine Wahl</name>
+							<name xml:id="SS"><?options { "layout": { "frame": "line" } } ?>Sonja Schwaiger</name>
+							<name xml:id="JD"><?options { "layout": { "frame": "line" } } ?>Jan Braun</name>
+							<name xml:id="AB"><?options { "layout": { "frame": "line" } } ?>Angela Bergmayer</name>
 						</respStmt>
 						<respStmt>
 							<?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>
@@ -111,12 +112,12 @@
 					</titleStmt>
 					<publicationStmt>
 						<?options {
-												"value": ["edit", "canBeEmpty", "innerXML"]
+												"value": ["variable", "canBeEmpty", "innerXML"]
 											} ?>
 					</publicationStmt>
 					<sourceDesc>
 						<?options {
-												"value": ["edit", "canBeEmpty", "innerXML"]
+												"value": ["variable", "canBeEmpty", "innerXML"]
 											} ?>
 					</sourceDesc>
 				</fileDesc>
@@ -306,7 +307,7 @@
 				<?options {
 				 						"id": "note",
 										"title": "Note",
-										"value": ["edit", "required", "innerXML"]
+										"value": ["variable", "required", "innerXML"]
 									} ?>
 			</note>
 
@@ -314,8 +315,8 @@
 				<?options {
 				 						"id": "xr",
 										"title": "XR",
-										"value": ["edit", "required", "innerXML"],
-										"attributes": [{"type": {"type": "edit", "canBeEmpty": {"use": true}}}],
+										"value": ["variable", "required", "innerXML"],
+										"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}}}],
 										"tag": ["possibleTag"]
 									} ?>
 			</xr>
@@ -324,7 +325,7 @@
 				<?options {
 				 						"id": "lang",
 										"title": "Lang",
-										"value": ["edit", "required", "innerXML"],
+										"value": ["variable", "required", "innerXML"],
 										"tag": ["possibleTag"]
 									} ?>
 			</lang>
@@ -333,7 +334,7 @@
 				<?options {
 				 						"id": "pos",
 										"title": "Pos",
-										"value": ["edit", "required", "innerXML"],
+										"value": ["variable", "required", "innerXML"],
 										"tag": ["possibleTag"]
 									} ?>
 			</pos>
@@ -342,7 +343,7 @@
 				<?options {
 				 						"id": "bibl",
 										"title": "Bibl",
-										"value": ["edit", "required", "innerXML"],
+										"value": ["variable", "required", "innerXML"],
 										"attributes": [{"type": {"type": "edit", "canBeEmpty": {"use": true}}}],
 										"tag": ["possibleTag"]
 									} ?>
@@ -352,7 +353,7 @@
 				<?options {
 										"id": "lbl",
 										"title": "lbl",
-										"value": ["edit", "required", "innerXML"],
+										"value": ["variable", "required", "innerXML"],
 										"tag": ["possibleTag"]
 									} ?>
 			</lbl>

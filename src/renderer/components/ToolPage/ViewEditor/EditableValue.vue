@@ -45,7 +45,17 @@
 				return oKey
 			},
 			setSelected: function (val) {
-				console.log('setSelected', val)
+				if (val >= 0) {
+					let aVal = this.content.parserObj.options.get('value.is.possibleValues')[val]
+					this.content.orgXmlObj.setValue(aVal.value || aVal)
+					if (aVal.attribute && Object.keys(aVal.attribute).length > 0) {
+						Object.keys(aVal.attribute).forEach(function (aKey) {
+							this.content.orgXmlObj.setAttribute(aKey, aVal.attribute[aKey])
+						}, this)
+					}
+				} else {
+					this.content.orgXmlObj.setValue(null)
+				}
 			},
 			valEditUpdate: _.debounce(function (e) {
 				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
@@ -53,7 +63,7 @@
 				restoreCaretPosition()
 			}, 20),
 			valEditUpdateValue: function (e) {
-				console.log('valEditUpdateValue', e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
+				this.content.orgXmlObj.setValue(e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
 			},
 		},
 		components: {
