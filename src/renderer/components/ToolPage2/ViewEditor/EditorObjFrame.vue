@@ -1,10 +1,10 @@
 <template>
-	<div class="obj just-childs" v-if="layoutBase === 'justChilds'">
+	<div :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
 		<slot name="childs"/>
 	</div>
 
 	<div class="inline" v-else>
-		<b-card class="obj paneldecent mib10" v-if="layoutBase === 'panel'"
+		<b-card :class="{'obj': true, 'paneldecent': true, 'mib10': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'panel'"
 						:header="title" no-body>
 			<div @contextmenu.prevent="contextMenue" slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
@@ -22,7 +22,7 @@
 			</b-collapse>
 		</b-card>
 
-		<div :class="'obj lb-' + layoutBase" v-else>
+		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
 			<div @contextmenu.prevent="contextMenue" class="context">
 				<b v-if="title">{{ title }}:</b><br v-if="layoutBase === 'box'"/>
 				<slot/>
@@ -97,5 +97,8 @@
 	}
 	.obj.lb-inline:hover {
 		background: #eee;
+	}
+	.obj.warnings {
+		background: #fff4b9;
 	}
 </style>

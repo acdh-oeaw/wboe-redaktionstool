@@ -11,7 +11,6 @@
 					<font-awesome-icon :icon="((aVal.editable) ? 'edit' : 'lock')" class="fa-icon right"/>
 					<span>{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}</span>
 					<div class="subContext" :ref="'subContext'" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="aVal.editable && subShow === aKey">
-						<!-- <SelectPossibleValues @select="" :selected="aVal.selected" :selectedText="aVal.value" :values="aVal.options.possibleValues" v-if="aVal.editType === 'select'"/> -->
 						<div class="sel-attribut" v-if="aVal.editType === 'select'">
 							<button @click="selectAttr(aKey, -1)" class="sel-obj">
 								<font-awesome-icon icon="check" class="fa-icon" v-if="!aVal.value"/>
@@ -158,7 +157,7 @@
 	.editorcontextmenu {
 		width: 250px;
 		background: #eee;
-		border: 1px solid #ccc;
+		border: 1px solid #6ba1dc;
 		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
 		display: block;
 		margin: 0;
@@ -187,7 +186,8 @@
 	}
 	.context-menu-title {
 		padding: 2px 10px;
-		background: #eee;
+		background: #307ed2;
+		color: #fff;
 	}
 	.context-menu-subtitle {
 		background: #fff;
@@ -219,7 +219,7 @@
 		top: 0;
 		color: #333;
 		background: #eee;
-		border: 1px solid #ddd;
+		border: 1px solid #6ba1dc;
 		min-width: 250px;
 		min-height: 100%;
 		box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
