@@ -11,9 +11,9 @@ export default new Router({
 			component: require('@/components/StartPage').default
 		},
 		{
-			path: '/tool2',
-			name: 'tool-page-2',
-			component: require('@/components/ToolPage2').default
+			path: '/tool',
+			name: 'tool-page',
+			component: require('@/components/ToolPage').default
 		},
 		{
 			path: '*',

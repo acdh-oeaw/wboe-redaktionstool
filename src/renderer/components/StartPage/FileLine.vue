@@ -51,7 +51,7 @@
 			debouncedLoadFile: _.debounce(function () {		// Verzögert öffnen damit "Laden ..." angezeigt wird
 				this.$store.dispatch('LOAD_FILE', this.file.fullFileName)		// Datei laden
 				// Nur Tool öffnen wenn Datei lesbar!
-				this.$router.push('/tool2')		// Tool öffnen
+				this.$router.push('/tool')		// Tool öffnen
 			}, 50),
 		}
 	}

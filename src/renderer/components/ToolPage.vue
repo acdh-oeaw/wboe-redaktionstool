@@ -85,11 +85,11 @@
 
 <script>
 	import { mapState } from 'vuex'
-	import ViewXML from './ToolPage2/ViewXML'
-	import ViewEditor from './ToolPage2/ViewEditor'
-	import ViewParser from './ToolPage2/ViewParser'
-	import ViewXmlObject from './ToolPage2/ViewXmlObject'
-	import ViewEditorObject from './ToolPage2/ViewEditorObject'
+	import ViewXML from './ToolPage/ViewXML'
+	import ViewEditor from './ToolPage/ViewEditor'
+	import ViewParser from './ToolPage/ViewParser'
+	import ViewXmlObject from './ToolPage/ViewXmlObject'
+	import ViewEditorObject from './ToolPage/ViewEditorObject'
 	import { remote, shell } from 'electron'
 	import XmlObject from '@/functions/xml/Xml'
 	import EditorObject from '@/functions/editor/Editor'
@@ -97,7 +97,7 @@
 	const fs = remote.require('fs')
 
 	export default {
-		name: 'tool-page-2',
+		name: 'tool-page',
 		data () {
 			return {
 				aTab: 0,
