@@ -23,7 +23,7 @@
 						</div>
 						<div class="txt-attribut" v-else>
 							<font-awesome-icon @click="$refs.attrEdit[0].focus()" icon="edit" class="fa-icon right" :title="aVal.editType"/>
-							<span class="attr-edit" ref="attrEdit" @input="valAttrUpdate" @focus="valAttrUpdate" @blur="valAttrUpdateValue" @keyup.enter="valAttrUpdateValue" @keydown.enter.prevent contenteditable>{{ aVal.value }}</span>
+							<span class="attr-edit" ref="attrEdit" @input="valAttrUpdate" @focus="valAttrUpdate" @blur="valAttrUpdateValue(aKey, $event)" @keyup.enter="valAttrUpdateValue(aKey, $event)" @keydown.enter.prevent contenteditable>{{ aVal.value }}</span>
 						</div>
 					</div>
 				</li>
@@ -92,16 +92,16 @@
 		},
 		methods: {
 			selectAttr: function (aAttr, key) {
-				console.log('selectAttr', key, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key])
+				this.content.orgXmlObj.setAttribute(aAttr, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key])
+			},
+			valAttrUpdateValue: function (aAttr, e) {
+				this.content.orgXmlObj.setAttribute(aAttr, e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
 			},
 			valAttrUpdate: _.debounce(function (e) {
 				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
 				e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
 				restoreCaretPosition()
 			}, 20),
-			valAttrUpdateValue: function (e) {
-				console.log('valEditUpdateValue', e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
-			},
 			close: function () {
 				this.top = null
 				this.left = null
