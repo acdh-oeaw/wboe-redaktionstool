@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import axios from 'axios'
 import BootstrapVue from 'bootstrap-vue'
-import VueCodemirror from 'vue-codemirror'
-
-import 'codemirror/lib/codemirror.css'
 
 import App from './App'
 import router from './router'
@@ -25,7 +22,6 @@ Vue.http = Vue.prototype.$http = axios
 Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
-Vue.use(VueCodemirror)
 
 Vue.mixin({		// Global verfügbare Funktionen
 	methods: {
