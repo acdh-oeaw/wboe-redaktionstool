@@ -3,33 +3,30 @@
 		<slot name="childs"/>
 	</div>
 
-	<div class="inline" v-else>
-		<b-card :class="{'obj': true, 'paneldecent': true, 'mitb5': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'panel'"
-						:header="title" no-body>
-			<div @contextmenu.prevent="contextMenue" slot="header">
-				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
-					<span><b>{{ title }}</b></span>
-					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
-				</button>
-			</div>
-			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
-				<b-card-body>
-					<div @contextmenu.prevent="contextMenue" class="context">
-						<slot/>
-					</div>
-					<slot name="childs"/>
-				</b-card-body>
-			</b-collapse>
-		</b-card>
-
-		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
-			<div @contextmenu.prevent="contextMenue" class="context">
-				<b v-if="title">{{ title }}:</b><br v-if="layoutBase === 'box'"/>
-				<slot/>
-			</div>
-			<slot name="childs"/>
+	<b-card :class="{'obj': true, 'paneldecent': true, 'mitb5': true, 'warnings': content.warnings.length > 0}" v-else-if="layoutBase === 'panel'" :header="title" no-body>
+		<div @contextmenu.prevent="contextMenue" slot="header">
+			<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
+				<span><b>{{ title }}</b></span>
+				<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
+			</button>
 		</div>
+		<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
+			<b-card-body>
+				<div @contextmenu.prevent="contextMenue" class="context">
+					<slot/>
+				</div>
+				<slot name="childs"/>
+			</b-card-body>
+		</b-collapse>
+		<EditorContextMenu :content="content" ref="contextMenuEditor" v-if="contextMenuCached"/>
+	</b-card>
 
+	<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
+		<div @contextmenu.prevent="contextMenue" class="context">
+			<b v-if="title">{{ title }}:</b><br v-if="layoutBase === 'box'"/>
+			<slot/>
+		</div>
+		<slot name="childs"/>
 		<EditorContextMenu :content="content" ref="contextMenuEditor" v-if="contextMenuCached"/>
 	</div>
 </template>
@@ -67,8 +64,8 @@
 					} else if (this.content.parserObj.options.get('tagAsTitle') || this.layoutBase === 'panel') {
 						return this.content.orgXmlObj.name
 					}
-					return null
 				}
+				return null
 			},
 		},
 		methods: {
