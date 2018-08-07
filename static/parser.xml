@@ -39,7 +39,18 @@
 							<name>
 								<?options {
 														"title": "Editor",
-														"value": ["edit", "required"],
+														"value": ["edit", "required", {"is": {
+															"possibleValues": [
+																{"value": "Alexandra N. Lenz", "attribute": {"xml:id": "AL"}},
+																{"value": "Philip Stöckle", "attribute": {"xml:id": "PhS"}},
+																{"value": "Andreas Gellan", "attribute": {"xml:id": "AG"}},
+																{"value": "Patrick Zeithuber", "attribute": {"xml:id": "PZ"}},
+																{"value": "Sabine Wahl", "attribute": {"xml:id": "SW"}},
+																{"value": "Sonja Schwaiger", "attribute": {"xml:id": "SS"}},
+																{"value": "Jan Braun", "attribute": {"xml:id": "JD"}},
+																{"value": "Angela Bergmayer", "attribute": {"xml:id": "AB"}}
+															]
+														}}],
 														"layout": { "frame": "line" }
 													} ?>
 							</name>
@@ -65,15 +76,14 @@
 						<respStmt>
 							<?options { "title": "DBOE Team", "layout": { "frame": "panelClosed" } } ?>
 							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
-							<name>
-								<?options {
-														"title": "Name",
-														"attributes": [{"xml:id": {"type": "variable"}}],
-														"value": ["variable", "required"],
-														"tag": ["multiple"],
-														"layout": { "frame": "line" }
-													} ?>
-							</name>
+							<name xml:id="AL">Alexandra N. Lenz</name>
+							<name xml:id="PhS">Philip Stöckle</name>
+							<name xml:id="AG">Andreas Gellan</name>
+							<name xml:id="PZ">Patrick Zeithuber</name>
+							<name xml:id="SW">Sabine Wahl</name>
+							<name xml:id="SS">Sonja Schwaiger</name>
+							<name xml:id="JD">Jan Braun</name>
+							<name xml:id="AB">Angela Bergmayer</name>
 						</respStmt>
 						<respStmt>
 							<?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>

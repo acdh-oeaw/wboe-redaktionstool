@@ -4,7 +4,7 @@
 	</div>
 
 	<div class="inline" v-else>
-		<b-card :class="{'obj': true, 'paneldecent': true, 'mib10': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'panel'"
+		<b-card :class="{'obj': true, 'paneldecent': true, 'mitb5': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'panel'"
 						:header="title" no-body>
 			<div @contextmenu.prevent="contextMenue" slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">

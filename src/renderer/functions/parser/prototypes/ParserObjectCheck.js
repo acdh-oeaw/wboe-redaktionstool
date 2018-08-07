@@ -112,7 +112,14 @@ const localFunctions = {
 					warnings.push('Wert darf nicht leer sein!')
 				} else {
 					if (aValOption.is && Array.isArray(aValOption.is.possibleValues)) {
-						if (aValOption.is.possibleValues.indexOf(aVal) < 0) {
+						let fPV = false
+						aValOption.is.possibleValues.some(function (aPV) {
+							if ((aPV.title || aPV.value || aPV) === aVal) {
+								fPV = true
+								return true
+							}
+						}, this)
+						if (!fPV) {
 							warnings.push('Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein! (v/e)')
 						}
 					}

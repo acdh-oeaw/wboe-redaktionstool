@@ -139,6 +139,10 @@
 	.mib20 {
 		margin-bottom: 20px;
 	}
+	.mitb5 {
+		margin-top: 5px;
+		margin-bottom: 5px;
+	}
 	.navbar-brand > img {
 		width: 100px;
 		margin-top: -13px;
