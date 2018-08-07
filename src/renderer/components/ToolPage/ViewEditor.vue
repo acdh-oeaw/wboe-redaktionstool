@@ -27,7 +27,7 @@
 			<button :title="xmlObjError" v-b-tooltip.hover.html v-if="Array.isArray(xmlObj.e)" class="error"><font-awesome-icon icon="exclamation-triangle"/></button>
 			<button :title="getComments" v-b-tooltip.hover.html v-if="showComment && xmlObj.commented"><font-awesome-icon icon="comment"/></button>
 		</div>
-		<vue-context ref="contextMenuEditor" v-if="showContextMenuEditor">
+		<!-- <vue-context ref="contextMenuEditor" v-if="showContextMenuEditor">
 			<div class="context-menu-editor-title">Tag: {{ xmlObj.n }}</div>
 			<ul>
 				<li v-if="xmlObj.o && xmlObj.add" @click="addSibling">
@@ -40,7 +40,7 @@
 					<span><b> "{{ xmlObj.n }}" löschen</b></span>
 				</li>
 			</ul>
-		</vue-context>
+		</vue-context> -->
 		<ViewEditor :xmlObj="xmlObjItem" :xmlObjParent="xmlObj" :showComment="showComment" :showAdd="showAdd" v-for="(xmlObjItem, xmlObjKey) in xmlObj.c" :key="xmlObjKey" v-if="isOpen" @childUpdate="childUpdate"/>
 	</ViewEditorLayout>
 	</div>
@@ -48,7 +48,7 @@
 </template>
 
 <script>
-	import { VueContext } from 'vue-context'
+	// import { VueContext } from 'vue-context'
 	import ViewEditorFunctions from './ViewEditorFunctions'
 	import ViewEditorLayout from './ViewEditorLayout'
 	import _ from 'lodash'
@@ -175,7 +175,7 @@
 			},
 			rightClickValue: function (e) {		// Kontextmenü anzeigen
 				this.showContextMenuEditor = true
-				this.$nextTick(() => { this.$refs.contextMenuEditor.open(e) })
+				// this.$nextTick(() => { this.$refs.contextMenuEditor.open(e) })
 			},
 			childUpdate: function (childData, childKey, updateType) {		// Daten update weiterleiten
 				console.log('childUpdate', childData, childKey, updateType)
@@ -234,7 +234,7 @@
 		},
 		components: {
 			ViewEditorLayout,
-			VueContext
+			// VueContext
 		}
 	}
 </script>

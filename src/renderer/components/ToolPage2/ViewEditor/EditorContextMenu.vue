@@ -1,0 +1,243 @@
+<template>
+	<div :class="{'editorcontextmenu': true, 'left': subContextMenuLeft}" :id="'ecm-' + _uid" v-show="show"
+			:style="{ top: this.top + 'px', left: this.left + 'px' }" tabindex="-1"
+			@contextmenu.capture.prevent> <!-- @blur="close"	@click="close" -->
+		<div class="context-menu-title"><b>Tag:</b> {{ this.content.orgXmlObj.name }}</div>
+		<template v-if="attributes">
+			<div class="context-menu-subtitle"><b>Attribute:</b></div>
+			<ul>
+				<li v-for="(aVal, aKey) in attributes" @mouseover="subShow = aKey" @mouseleave="subShow = null">
+					<font-awesome-icon :icon="aVal.icon" class="fa-icon" v-if="aVal.icon"/>
+					<font-awesome-icon :icon="((aVal.editable) ? 'edit' : 'lock')" class="fa-icon right"/>
+					<span>{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}</span>
+					<div class="subContext" :ref="'subContext'" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="aVal.editable && subShow === aKey">
+						<!-- <SelectPossibleValues @select="" :selected="aVal.selected" :selectedText="aVal.value" :values="aVal.options.possibleValues" v-if="aVal.editType === 'select'"/> -->
+						<div class="sel-attribut" v-if="aVal.editType === 'select'">
+							<button @click="selectAttr(-1)" class="sel-obj">
+								<font-awesome-icon icon="check" class="fa-icon" v-if="!aVal.value"/>
+								Kein Wert!
+							</button>
+							<button @click="selectAttr(attrKey)" class="sel-obj" v-for="(attrVal, attrKey) in aVal.options.possibleValues">
+								<font-awesome-icon icon="check" class="fa-icon" v-if="attrVal === aVal.value"/>
+								{{ attrVal }}
+							</button>
+						</div>
+						<div v-else>
+							value = <b>{{ aVal.value }}</b><br>
+							editType = <b>{{ aVal.editType }}</b><br>
+							{{ aVal.options }}
+						</div>
+					</div>
+				</li>
+			</ul>
+		</template>
+	</div>
+</template>
+
+<script>
+	import _ from 'lodash'
+	import SelectPossibleValues from './SelectPossibleValues'
+
+	export default {
+		name: 'EditorContextMenu',
+		props: {
+			content: Object,
+		},
+		data () {
+			return {
+				'top': null,
+				'left': null,
+				'subContextMenuLeft': false,
+				'subContextMenuTopPx': false,
+				'subShow': null,
+				'show': false,
+				'ready': false,
+			}
+		},
+		computed: {
+			attributes () {
+				if (this.content.parserObj.options && this.content.parserObj.options.get('attributes')) {
+					let oAttr = {}
+					let aAttributes = this.content.parserObj.options.get('attributes')
+					Object.keys(aAttributes).forEach(function (aAttr) {
+						let aIcon
+						let aVal = this.content.orgXmlObj.attributes[aAttr]
+						if (aVal) {
+							// ToDo: weitere Prüfung?!
+							aIcon = 'check'
+						} else if (!aAttributes[aAttr].canBeEmpty || !aAttributes[aAttr].canBeEmpty.use) {
+							aIcon = 'exclamation-triangle'
+						}
+						oAttr[aAttr] = {'value': aVal, 'options': aAttributes[aAttr], 'icon': aIcon, 'editable': (aAttributes[aAttr].type === 'edit'), 'editType': ((aAttributes[aAttr].possibleValues) ? 'select' : 'text')}
+					}, this)
+					// console.log(oAttr)
+					return oAttr
+				}
+				return null
+			},
+		},
+		watch: {
+			subShow: function (nVal, oVal) {
+				if (nVal) {
+					this.subContextMenuTopPx = 0
+					this.$nextTick(() => {
+						if (this.$refs.subContext && this.$refs.subContext.length > 0) {
+							let aOverBottom = this.$refs.subContext[0].getBoundingClientRect().bottom - window.innerHeight + 25
+							if (aOverBottom > 0) {
+								this.subContextMenuTopPx = -aOverBottom
+							}
+						}
+					})
+				}
+			}
+		},
+		methods: {
+			selectAttr: function (key) {
+				console.log('selectAttr', key)
+			},
+			close: function () {
+				this.top = null
+				this.left = null
+				this.removeEventListeners()
+				this.show = false
+				this.ready = false
+			},
+			open: function (e) {
+				this.ready = false
+				this.addEventListeners()
+				this.show = true
+				this.$nextTick(() => {
+					const largestHeight = window.innerHeight - this.$el.offsetHeight - 25
+					const largestWidth = window.innerWidth - this.$el.offsetWidth - 25
+					this.top = (e.clientY > largestHeight) ? largestHeight : e.clientY
+					this.left = (e.clientX > largestWidth) ? largestWidth : e.clientX
+					this.subContextMenuLeft = (((window.innerWidth - this.$el.offsetWidth) / 2) < this.left)
+					this.$el.focus()
+					this.ready = true
+				})
+			},
+			addEventListeners: function () {
+				if (!this.show) {
+					document.addEventListener('focus', this.focusChanged, true)
+					document.addEventListener('blur', this.focusChanged, true)
+				}
+			},
+			removeEventListeners: function () {
+				if (this.show) {
+					document.removeEventListener('focus', this.focusChanged, true)
+					document.removeEventListener('blur', this.focusChanged, true)
+				}
+			},
+			focusChanged: _.debounce(function (e) {
+				if (this.show && this.ready) {
+					if (!document.activeElement.closest('#ecm-' + this._uid)) {
+						// console.log(document.activeElement, document.activeElement.closest('#ecm-' + this._uid))
+						this.close()
+					}
+				}
+			}, 50),
+		},
+		beforeDestroy: function () {
+			this.removeEventListeners()
+		},
+		components: {
+			SelectPossibleValues,
+		},
+	}
+</script>
+
+<style scoped>
+	.editorcontextmenu {
+		width: 250px;
+		background: #eee;
+		border: 1px solid #ccc;
+		box-shadow: 0 2px 2px 0 rgba(0, 0, 0, 0.14), 0 3px 1px -2px rgba(0, 0, 0, 0.2), 0 1px 5px 0 rgba(0, 0, 0, 0.12);
+		display: block;
+		margin: 0;
+		padding: 0;
+		position: fixed;
+		z-index: 99999;
+	}
+	.editorcontextmenu ul {
+		list-style: none;
+		padding: 0;
+		margin: 0;
+		font-size: 12px;
+		font-weight: 600;
+	}
+	.editorcontextmenu ul li {
+		position: relative;
+		margin: 0;
+		padding: 2px 25px;
+		font-size: 14px;
+		line-height: 1.4;
+		cursor: pointer;
+	}
+	.editorcontextmenu ul li:hover {
+		background: #18e;
+		color: #eee;
+	}
+	.context-menu-title {
+		padding: 2px 10px;
+		background: #eee;
+	}
+	.context-menu-subtitle {
+		background: #fff;
+		padding: 1px 10px;
+		font-size: 14px;
+	}
+	.editorcontextmenu ul li > span {
+		display: block;
+		max-width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.editorcontextmenu ul li > .fa-icon {
+		position: absolute;
+		margin-top: 4px;
+		left: 7px;
+	}
+	.editorcontextmenu ul li > .fa-icon.right {
+		left: auto;
+		right: 7px;
+	}
+	.editorcontextmenu ul li > .subContext {
+		display: block;
+		position: absolute;
+		max-height: 60vh;
+		overflow-y: auto;
+		left: 100%;
+		top: 0;
+		color: #333;
+		background: #eee;
+		border: 1px solid #ddd;
+		min-width: 250px;
+		min-height: 100%;
+		box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+	}
+	.editorcontextmenu.left ul li > .subContext {
+		left: auto;
+		right: 100%;
+	}
+
+	button.sel-obj {
+		position: relative;
+		margin: 0;
+		padding: 2px 25px;
+		background: #eee;
+		border: none;
+		display: block;
+		width: 100%;
+		text-align: left;
+	}
+	button.sel-obj:hover {
+		background: #18e;
+		color: #eee;
+	}
+	button.sel-obj > .fa-icon {
+		position: absolute;
+		margin-top: 4px;
+		left: 7px;
+	}
+</style>

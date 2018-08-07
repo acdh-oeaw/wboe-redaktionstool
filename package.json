@@ -1,6 +1,6 @@
 {
   "name": "redaktionstool-electron-vue",
-  "version": "0.2.01",
+  "version": "0.2.02",
   "author": "",
   "description": "Redaktionstool",
   "license": null,
@@ -68,7 +68,6 @@
     "monaco-editor": "^0.13.1",
     "vue": "^2.3.3",
     "vue-codemirror": "^4.0.5",
-    "vue-context": "^3.1.1",
     "vue-electron": "^1.0.6",
     "vue-router": "^2.5.3",
     "vuex": "^2.3.1"
