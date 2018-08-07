@@ -13,19 +13,18 @@
 					<div class="subContext" :ref="'subContext'" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="aVal.editable && subShow === aKey">
 						<!-- <SelectPossibleValues @select="" :selected="aVal.selected" :selectedText="aVal.value" :values="aVal.options.possibleValues" v-if="aVal.editType === 'select'"/> -->
 						<div class="sel-attribut" v-if="aVal.editType === 'select'">
-							<button @click="selectAttr(-1)" class="sel-obj">
+							<button @click="selectAttr(aKey, -1)" class="sel-obj">
 								<font-awesome-icon icon="check" class="fa-icon" v-if="!aVal.value"/>
 								Kein Wert!
 							</button>
-							<button @click="selectAttr(attrKey)" class="sel-obj" v-for="(attrVal, attrKey) in aVal.options.possibleValues">
+							<button @click="selectAttr(aKey, attrKey)" class="sel-obj" v-for="(attrVal, attrKey) in aVal.options.possibleValues">
 								<font-awesome-icon icon="check" class="fa-icon" v-if="attrVal === aVal.value"/>
 								{{ attrVal }}
 							</button>
 						</div>
-						<div v-else>
-							value = <b>{{ aVal.value }}</b><br>
-							editType = <b>{{ aVal.editType }}</b><br>
-							{{ aVal.options }}
+						<div class="txt-attribut" v-else>
+							<font-awesome-icon @click="$refs.attrEdit[0].focus()" icon="edit" class="fa-icon right" :title="aVal.editType"/>
+							<span class="attr-edit" ref="attrEdit" @input="valAttrUpdate" @focus="valAttrUpdate" @blur="valAttrUpdateValue" @keyup.enter="valAttrUpdateValue" @keydown.enter.prevent contenteditable>{{ aVal.value }}</span>
 						</div>
 					</div>
 				</li>
@@ -37,6 +36,7 @@
 <script>
 	import _ from 'lodash'
 	import SelectPossibleValues from './SelectPossibleValues'
+	import veFunctions from './functions'
 
 	export default {
 		name: 'EditorContextMenu',
@@ -92,8 +92,16 @@
 			}
 		},
 		methods: {
-			selectAttr: function (key) {
-				console.log('selectAttr', key)
+			selectAttr: function (aAttr, key) {
+				console.log('selectAttr', key, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key])
+			},
+			valAttrUpdate: _.debounce(function (e) {
+				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
+				e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
+				restoreCaretPosition()
+			}, 20),
+			valAttrUpdateValue: function (e) {
+				console.log('valEditUpdateValue', e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
 			},
 			close: function () {
 				this.top = null
@@ -239,5 +247,25 @@
 		position: absolute;
 		margin-top: 4px;
 		left: 7px;
+	}
+	.txt-attribut {
+		position: relative;
+	}
+	.txt-attribut .attr-edit {
+		display: block;
+		width: 100%;
+		padding: 2px 25px
+	}
+	.txt-attribut .attr-edit:focus {
+		background: #fff;
+	}
+	.txt-attribut > .fa-icon {
+		position: absolute;
+		margin-top: 4px;
+		left: 7px;
+	}
+	.txt-attribut > .fa-icon.right {
+		left: auto;
+		right: 7px;
 	}
 </style>

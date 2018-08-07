@@ -4,13 +4,16 @@
 	</span>
 
 	<span class="val-obj val-txt" v-else>
-		<span class="val-edit val-focus" ref="valEdit" @input="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="" contenteditable>{{ content.orgXmlObj.getValueByOption(content.parserObj.options.get('value'), false) }}</span>
+		<span class="val-edit val-focus" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ content.orgXmlObj.getValueByOption(content.parserObj.options.get('value'), false) }}</span>
 		<font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
 	</span>
 </template>
 
 <script>
+	import _ from 'lodash'
 	import SelectPossibleValues from './SelectPossibleValues'
+	import veFunctions from './functions'
+
 	export default {
 		name: 'EditableValue',
 		props: {
@@ -44,11 +47,11 @@
 			setSelected: function (val) {
 				console.log('setSelected', val)
 			},
-			valEditUpdate: function (e) {
-				var restoreCaretPosition = saveCaretPosition(e.target)
+			valEditUpdate: _.debounce(function (e) {
+				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
 				e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
 				restoreCaretPosition()
-			},
+			}, 20),
 			valEditUpdateValue: function (e) {
 				console.log('valEditUpdateValue', e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
 			},
@@ -56,34 +59,6 @@
 		components: {
 			SelectPossibleValues
 		},
-	}
-
-	function saveCaretPosition (context) {
-		var selection = window.getSelection()
-		var range = selection.getRangeAt(0)
-		range.setStart(context, 0)
-		var len = range.toString().length
-		return function restore () {
-			var pos = getTextNodeAtPosition(context, len)
-			selection.removeAllRanges()
-			var range = new Range()
-			range.setStart(pos.node, pos.position)
-			selection.addRange(range)
-		}
-	}
-	function getTextNodeAtPosition (root, index) {
-		var treeWalker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, function next (elem) {
-			if (index > elem.textContent.length) {
-				index -= elem.textContent.length
-				return NodeFilter.FILTER_REJECT
-			}
-			return NodeFilter.FILTER_ACCEPT
-		})
-		var c = treeWalker.nextNode()
-		return {
-			node: c || root,
-			position: c ? index : 0
-		}
 	}
 </script>
 
