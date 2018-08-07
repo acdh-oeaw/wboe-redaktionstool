@@ -35,10 +35,13 @@
 			<template v-if="attributes">
 				<div class="context-menu-subtitle"><b>Attribute:</b></div>
 				<ul>
-					<li v-for="(aVal, aKey) in attributes">
+					<li v-for="(aVal, aKey) in attributes" @mouseover="subShow = aKey" @mouseleave="subShow = null">
 						<font-awesome-icon :icon="aVal.icon" class="fa-icon" v-if="aVal.icon"/>
-						{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}
 						<font-awesome-icon :icon="((aVal.editable) ? 'edit' : 'lock')" class="fa-icon right"/>
+						<span>{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}</span>
+						<div :class="{'subContext': true, 'left': subContextMenuLeft}" :ref="'subContext'" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="aVal.editable && subShow === aKey">
+							xxx
+						</div>
 					</li>
 				</ul>
 		</template>
@@ -57,7 +60,25 @@
 		data () {
 			return {
 				'isOpen': true,
-				contextMenuCached: false,
+				'contextMenuCached': false,
+				'subContextMenuLeft': false,
+				'subContextMenuTopPx': false,
+				'subShow': null,
+			}
+		},
+		watch: {
+			subShow: function (nVal, oVal) {
+				if (nVal) {
+					this.subContextMenuTopPx = 0
+					this.$nextTick(() => {
+						if (this.$refs.subContext && this.$refs.subContext.length > 0) {
+							let aOverBottom = this.$refs.subContext[0].getBoundingClientRect().bottom - window.innerHeight + 30
+							if (aOverBottom > 0) {
+								this.subContextMenuTopPx = -aOverBottom
+							}
+						}
+					})
+				}
 			}
 		},
 		computed: {
@@ -106,8 +127,11 @@
 		methods: {
 			contextMenue: function (e) {
 				this.contextMenuCached = true
-				this.$nextTick(() => { this.$refs.contextMenuEditor.open(e) })
-			}
+				this.$nextTick(() => {
+					this.subContextMenuLeft = (window.innerWidth / 2) < e.clientX
+					this.$refs.contextMenuEditor.open(e)
+				})
+			},
 		},
 		components: {
 			VueContext
@@ -143,6 +167,10 @@
 		padding: 2px 20px;
 		font-size: 14px;
 		line-height: 1.4;
+	}
+	.v-context ul li > span {
+		display: block;
+		max-width: 100%;
 		white-space: nowrap;
 		overflow: hidden;
 		text-overflow: ellipsis;
@@ -155,6 +183,24 @@
 	.v-context ul li > .fa-icon.right {
 		left: auto;
 		right: 12px;
+	}
+	.v-context ul li > .subContext {
+		display: block;
+		position: absolute;
+		max-height: 60vh;
+		overflow-y: auto;
+		left: 100%;
+		top: 0;
+		color: #333;
+		background: #fff;
+		border: 1px solid #ddd;
+		min-width: 250px;
+		min-height: 100%;
+		box-shadow: 0 2px 2px 0 rgba(0,0,0,.14), 0 3px 1px -2px rgba(0,0,0,.2), 0 1px 5px 0 rgba(0,0,0,.12);
+	}
+	.v-context ul li > .subContext.left {
+		left: auto;
+		right: 100%;
 	}
 	.v-context ul {
 		padding: 0 !important;
