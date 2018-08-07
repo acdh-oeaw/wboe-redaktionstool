@@ -64,7 +64,7 @@ const localFunctions = {
 	},
 	getValueByOption: function (parOptVal, asArray = true, flat = true) {
 		if (parOptVal && parOptVal.innerXML && parOptVal.innerXML.use === true) {
-			return this.getXML(false, false)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
+			return this.getXML(false, false, false, true)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
 		} else {
 			return this.getValue(asArray, flat)
 		}
@@ -92,7 +92,7 @@ const localFunctions = {
 			return aValue.toString()
 		}
 	},
-	getXML: function (all = true, lb = true, short = false, deep = 0, prvXmlObj) {
+	getXML: function (all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {
 		let aXML = ''
 		if (this.type === 'TEXT') {
 			if (prvXmlObj && prvXmlObj.type === 'COMMENT') { aXML += '\n' + '	'.repeat(deep) }
@@ -104,33 +104,35 @@ const localFunctions = {
 		} else if (this.type === 'UNKNOWN' && all) {
 			aXML += this.value
 		} else if (this.type === 'ELEMENT') {
-			aXML += '\n' + '	'.repeat(deep) + '<' + this.name
-			if (Object.keys(this.attributes).length > 0) {
-				Object.keys(this.attributes).forEach(function (aKey) {
-					aXML += ' ' + aKey
-					if (this.attributes[aKey] !== undefined && this.attributes[aKey] !== null) {
-						aXML += '="' + this.attributes[aKey] + '"'
-					}
-				}, this)
-			}
-			if (!short) { aXML += '>' }
 			let aChildCont = ''
-			if (this.comments.length > 0) {
-				this.comments.forEach(function (aComment) {
-					aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment + '?>'
-				}, this)
+			if (!inner) {
+				aXML += '\n' + '	'.repeat(deep) + '<' + this.name
+				if (Object.keys(this.attributes).length > 0) {
+					Object.keys(this.attributes).forEach(function (aKey) {
+						aXML += ' ' + aKey
+						if (this.attributes[aKey] !== undefined && this.attributes[aKey] !== null) {
+							aXML += '="' + this.attributes[aKey] + '"'
+						}
+					}, this)
+				}
+				if (!short) { aXML += '>' }
+				if (this.comments.length > 0) {
+					this.comments.forEach(function (aComment) {
+						aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment + '?>'
+					}, this)
+				}
 			}
 			if (this.childs.length > 0) {
 				let lChild = undefined
 				this.childs.forEach(function (aChild) {
-					aChildCont += aChild.getXML(all, lb, short, deep + 1, lChild)
+					aChildCont += aChild.getXML(all, lb, short, false, deep + 1, lChild)
 					lChild = aChild
 				}, this)
 			}
-			if (short && aChildCont.length === 0) {
+			if (!inner && short && aChildCont.length === 0) {
 				aXML += '/>'
 			} else {
-				if (short && aChildCont.length > 0) { aXML += '>' }
+				if (!inner && short && aChildCont.length > 0) { aXML += '>' }
 				if (aChildCont.length > 0) {
 					if (this.getChildsOfType(['ELEMENT', 'COMMENT'], false, false).length > 0) {
 						aXML += aChildCont + '\n' + '	'.repeat(deep)
@@ -138,7 +140,9 @@ const localFunctions = {
 						aXML += aChildCont
 					}
 				}
-				aXML += '</' + this.name + '>'
+				if (!inner) {
+					aXML += '</' + this.name + '>'
+				}
 			}
 		}
 		return aXML

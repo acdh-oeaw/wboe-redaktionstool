@@ -31,10 +31,17 @@
 		</div>
 
 		<vue-context ref="contextMenuEditor" v-if="contextMenuCached">
-			<div class="context-menu-editor-title"><b>Tag:</b> {{ this.content.orgXmlObj.name }}</div>
-			<ul>
-				<li>test ...</li>
-			</ul>
+			<div class="context-menu-title"><b>Tag:</b> {{ this.content.orgXmlObj.name }}</div>
+			<template v-if="attributes">
+				<div class="context-menu-subtitle"><b>Attribute:</b></div>
+				<ul>
+					<li v-for="(aVal, aKey) in attributes">
+						<font-awesome-icon :icon="aVal.icon" class="fa-icon" v-if="aVal.icon"/>
+						{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}
+						<font-awesome-icon :icon="((aVal.editable) ? 'edit' : 'lock')" class="fa-icon right"/>
+					</li>
+				</ul>
+		</template>
 		</vue-context>
 	</div>
 </template>
@@ -74,6 +81,26 @@
 					}
 					return null
 				}
+			},
+			attributes () {
+				if (this.content.parserObj.options && this.content.parserObj.options.get('attributes')) {
+					let oAttr = {}
+					let aAttributes = this.content.parserObj.options.get('attributes')
+					Object.keys(aAttributes).forEach(function (aAttr) {
+						let aIcon
+						let aVal = this.content.orgXmlObj.attributes[aAttr]
+						if (aVal) {
+							// ToDo: weitere Prüfung?!
+							aIcon = 'check'
+						} else if (!aAttributes[aAttr].canBeEmpty || !aAttributes[aAttr].canBeEmpty.use) {
+							aIcon = 'exclamation-triangle'
+						}
+						oAttr[aAttr] = {'value': aVal, 'options': aAttributes[aAttr], 'icon': aIcon, 'editable': (aAttributes[aAttr].type === 'edit')}
+					}, this)
+					console.log(oAttr)
+					return oAttr
+				}
+				return null
 			}
 		},
 		methods: {
@@ -102,9 +129,32 @@
 		background: #eee;
 	}
 
-	.context-menu-editor-title {
+	.context-menu-title {
 		padding: 2px 10px;
 		background: #eee;
+	}
+	.context-menu-subtitle {
+		background: #fff;
+		padding: 1px 10px;
+		font-size: 14px;
+	}
+	.v-context ul li {
+		position: relative;
+		padding: 2px 20px;
+		font-size: 14px;
+		line-height: 1.4;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.v-context ul li > .fa-icon {
+		position: absolute;
+    margin-top: 4px;
+    left: 12px;
+	}
+	.v-context ul li > .fa-icon.right {
+		left: auto;
+		right: 12px;
 	}
 	.v-context ul {
 		padding: 0 !important;
