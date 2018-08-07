@@ -4,7 +4,7 @@
 	</span>
 
 	<span class="val-obj val-txt" v-else>
-		<span class="val-edit val-focus" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ content.orgXmlObj.getValueByOption(content.parserObj.options.get('value'), false) }}</span>
+		<span class="val-edit val-focus" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
 		<font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
 	</span>
 </template>
@@ -25,6 +25,9 @@
 			}
 		},
 		computed: {
+			aValue () {
+				return this.content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false)
+			},
 			editType () {		// Art der Wert bearbeitung
 				if (this.content.parserObj.options.get('value.is.possibleValues')) {
 					return 'selectPossibleValues'

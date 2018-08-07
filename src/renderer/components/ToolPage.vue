@@ -25,39 +25,39 @@
 		</b-button-toolbar>
 		<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
 			<b-tab title="Editor">
-				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1">
+				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1 && !update">
 					<ViewEditor :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Vorschau">
-				<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1">
+				<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
 				</div>
 			</b-tab>
 			<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
-				<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1">
+				<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1 && !update">
 				</div>
 			</b-tab>
 			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
-				<div class="viewxml lh76vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3">
+				<div class="viewxml lh76vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3 && !update">
 					<ViewXML :xmlString="editorObject.getXML()" v-if="editorObject"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}">
-				<div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1">
+				<div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1 && !update">
 					<ViewParser :parser="this.Parser.parser" v-if="this.Parser.parser && this.Parser.parser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
-				<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1">
+				<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1 && !update">
 					<ViewXmlObject :object="xmlObject" v-if="xmlObject && xmlObject.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
-				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(6) > -1">
+				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(6) > -1 && !update">
 					<ViewEditorObject :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
@@ -108,6 +108,7 @@
 				updateTimer: performance.now(),
 				devMode: (process.env.NODE_ENV === 'development'),
 				devFiles: undefined,
+				update: false,
 			}
 		},
 		computed: {
@@ -120,11 +121,19 @@
 				if (this.aTabCach.indexOf(nVal) < 0) {
 					this.aTabCach.push(nVal)
 				}
-			}
+			},
+			update: function (nVal) {
+				if (nVal) {
+					this.$nextTick(() => {
+						this.update = false
+						this.aTabCach = [this.aTab]
+					})
+				}
+			},
 		},
 		mounted: function () {
 			var t0 = performance.now()
-			this.aTabCach = [this.aTab]
+			this.update = true
 			if (this.Parser.parser === undefined) {
 				this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
 			}
@@ -192,7 +201,7 @@
 				if (this.devMode) {
 					this.devFiles = this.devFileList()
 				}
-				this.aTabCach = [this.aTab]
+				this.update = true
 			},
 			updateData () {
 				this.$store.dispatch('RELOAD_PARSER_FILE')
