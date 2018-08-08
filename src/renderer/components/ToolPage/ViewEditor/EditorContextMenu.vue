@@ -29,6 +29,15 @@
 				</li>
 			</ul>
 		</template>
+		<template v-if="this.content.addableAfter.length > 0">
+			<div class="context-menu-subtitle"><b>Hinzufügen:</b></div>
+			<ul>
+				<li v-for="(aVal, aKey) in this.content.addableAfter">
+					<font-awesome-icon icon="plus" class="fa-icon"/>
+					{{ aVal.title }}
+				</li>
+			</ul>
+		</template>
 	</div>
 </template>
 

@@ -18,6 +18,12 @@
 				<slot name="childs"/>
 			</b-card-body>
 		</b-collapse>
+		<div slot="footer" style="margin: -8px -9px;" v-if="this.content.addableAfter.length > 0">
+			<b-button size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in this.content.addableAfter">
+				<font-awesome-icon icon="plus" class="fa-icon"/>
+				{{ aVal.title }}
+			</b-button>
+		</div>
 		<EditorContextMenu :content="content" ref="contextMenuEditor" v-if="contextMenuCached"/>
 	</b-card>
 
