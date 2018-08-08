@@ -33,8 +33,15 @@ const localFunctions = {
 		this.root = root							// Enthält die "EditorBase"
 		this.isRoot = isRoot || false
 		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : [this])		// Geschwister
+		this.isMultiple = false				// Kann dieses Objekt öfter hinter einander vor kommen?
+		// Werte die nach dem Setzen alller "EditorObject"e gesetzt werden. (updateData)
+		this.count = 0								// Das wievielte Elment?
+		this.countParser = 0					// Das wievielte Objekt mit diesem Parser innerhalb dieser Generation ist es?
+		this.multipleNr = 0						// Position in der aktuellen "multiple"-Gruppe
+		this.multipleLast = true			// Letzter der aktuellen "multiple"-Gruppe
 		this.addableAfter = []				// Welche Objekte können nach diesem hinzugefügt werden?
-		this.init()										// Immer dirket initialisieren
+		// Immer dirket initialisieren
+		this.init()
 		// this.add(parser, pos, xml)			// Kind hinzufügen (XML hinzufügen falls nicht vorhanden!)
 		// this.delete(pos)						// Kind löschen (Rekursion beachten)	(XML entfernen!)
 		// this.getSiblings(mode, useable)		// Alle Geschwister
@@ -60,8 +67,7 @@ localFunctions.EditorObject.prototype.getSiblings = prototypeEditorObject.getSib
 localFunctions.EditorObject.prototype.getChilds = prototypeEditorObject.getChilds
 localFunctions.EditorObject.prototype.checkParser = prototypeEditorObject.checkParser
 localFunctions.EditorObject.prototype.updateAddableAfter = prototypeEditorObject.updateAddableAfter
-// localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
-// localFunctions.EditorObject.prototype.allPrevSiblings = prototypeEditorObject.allPrevSiblings
-// localFunctions.EditorObject.prototype.allAfterSiblings = prototypeEditorObject.delete
+localFunctions.EditorObject.prototype.updateData = prototypeEditorObject.updateData
+// localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete		// ToDo !!!
 
 export default localFunctions

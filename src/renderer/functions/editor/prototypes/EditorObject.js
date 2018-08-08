@@ -73,10 +73,13 @@ const localFunctions = {
 		if (this.orgXmlObj && !this.orgXmlObj.useable) {
 			return false
 		}
+		if (this.parserObj && !this.isRoot) {
+			this.isMultiple = (this.parserObj.options.get('tag.multiple.use'))		// Ist aktuelles Objekt "multiple"?
+		}
 		this.useable = true
 		return true
 	},
-	add: function (aPar, pos, orgXml, aErrors, aWarnings, ignoreChilds = false, aParList) {
+	add: function (aPar, pos, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {
 		// console.log('EditorObject.add', aPar, pos, orgXml)
 		if (pos || pos === 0) {
 			// ToDo: An einer bestimmten Stelle einfügen
@@ -91,7 +94,39 @@ const localFunctions = {
 			aWarnings.forEach(function (aWarn) {
 				this.childs[aKey].addWarning(aWarn)
 			}, this)
-			this.childs[aKey].updateAddableAfter()
+			if (this.root.ready) {
+				this.childs.forEach(function (aChild, cKey) {
+					aChild.updateData((cKey === aKey))
+				})
+			}
+		}
+	},
+	updateData: function (withChilds = false) {
+		this.count = 0
+		this.countParser = 0
+		this.multipleNr = 0
+		this.multipleLast = false
+		let aPrevSibs = this.getSiblings('prev', true, false, true)
+		if (aPrevSibs.length > 0) {
+			aPrevSibs.forEach(function (aPSib) {
+				this.count += 1
+				if (aPSib.parserObj === this.parserObj) {
+					this.countParser += 1
+				}
+			}, this)
+			if (this.isMultiple && aPrevSibs[0].parserObj === this.parserObj) {
+				this.multipleNr = aPrevSibs[0].multipleNr + 1
+			}
+		}
+		if (this.isMultiple) {
+			let aNextSibs = this.getSiblings('next', true, false, true)
+			this.multipleLast = !(aNextSibs.length > 0 && aNextSibs[0].parserObj === this.parserObj)
+		}
+		this.updateAddableAfter()
+		if (withChilds && this.childs.length > 0) {
+			this.childs.forEach(function (aChild) {
+				aChild.updateData(withChilds)
+			}, this)
 		}
 	},
 	updateAddableAfter: function (withChilds = false) {
@@ -115,7 +150,7 @@ const localFunctions = {
 		}
 	},
 	checkParser: function () {
-		if (this.orgXmlObj) {
+		if (this.orgXmlObj && this.parserObj) {
 			this.deleteErrors()
 			this.deleteWarnings()
 			let aAttrCheck = this.parserObj.checkAttributes(this.orgXmlObj.attributes)
@@ -128,7 +163,7 @@ const localFunctions = {
 			}, this)
 		}
 	},
-	getSiblings: function (mode = 'all', useable = false, inclSelf = false) {
+	getSiblings: function (mode = 'all', useable = false, inclSelf = false, withParser = false) {
 		let rObj = []
 		let hit = false
 		if (this.siblings.length > 0) {
@@ -139,6 +174,7 @@ const localFunctions = {
 				if ((!useable || aObj.useable)		// Nur "useable", falls vorhanden
 				&& ((!hit && (mode === 'all' || mode === 'prev'))	// Nur vorherige
 					|| (hit && (mode === 'all' || mode === 'next')))		// Nur nachfolgende
+				&& (!withParser || aObj.parserObj)		// Nur mit "parser"
 				&& (inclSelf || aObj !== this)) {		// Auch dieses Objekt
 					rObj.push(aObj)
 				}

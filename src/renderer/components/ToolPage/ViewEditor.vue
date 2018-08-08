@@ -11,13 +11,24 @@
 		</div>
 	</div>
 
-	<EditorObjFrame :content="content" v-else-if="content">
-		<span class="val-fix" v-if="valueType === 'fix'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
-		<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
-		<template slot="childs" v-if="content.childs.length > 0">
-			<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+	<div class="inline" v-else-if="content">
+		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
+			<h3 v-if="content.parserObj.options.get('layout.multiple.header')">{{ content.parserObj.options.get('layout.multiple.header') }}</h3>
 		</template>
-	</EditorObjFrame>
+		<EditorObjFrame :content="content">
+			<span class="val-fix" v-if="valueType === 'fix'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
+			<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
+			<template slot="childs" v-if="content.childs.length > 0">
+				<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+			</template>
+		</EditorObjFrame>
+		<template v-if="content.isMultiple && !content.multipleLast && content.parserObj.options && content.parserObj.options.get('layout.multiple.use') && content.parserObj.options.get('layout.multiple.join')">
+			{{ content.parserObj.options.get('layout.multiple.join') }}
+		</template>
+		<template v-if="content.isMultiple && content.multipleLast && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
+			<h3 v-if="content.parserObj.options.get('layout.multiple.footer')">{{ content.parserObj.options.get('layout.multiple.footer') }}</h3>
+		</template>
+	</div>
 
 	<div class="error" v-else>
 		Kein "object" übergeben !!!!
@@ -87,6 +98,10 @@
 </script>
 
 <style scoped>
+	.inline {
+		display: inline;
+		cursor: default;
+	}
 	.val-fix {
 		padding: 0px 3px;
 		padding-bottom: 3px;

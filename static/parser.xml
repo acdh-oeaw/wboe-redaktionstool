@@ -190,8 +190,14 @@
 							</gramGrp>
 						</form>
 
-						<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-
+						<?copy { "fromId": "usg-geo", "options": {
+																											"tag": ["possibleTag", "multiple"],
+																											"layout": {
+																												"multiple": {
+																													"header": "Verbreitung"
+																												}
+																											}
+																										} } ?>
 						<form type="lautung">
 							<?options {
 													"title": "Form Lautung",
@@ -224,7 +230,7 @@
  														"value": ["edit", "required"]
  													} ?>
 							 </pron>
-							 <?copy { "fromId": "usg-geo" } ?>
+							 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 						</form>
 
 						<etym>
@@ -300,7 +306,7 @@
 								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
 							</form>
 							<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
-							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
+							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 						</re>
 					</entry>
@@ -428,22 +434,33 @@
 			</gram>
 
 			<usg type="geo">
-				<?options {	"layout": { "frame": "line" } } ?>
 				<?options {
 			 							"id": "usg-geo",
-										"title": "Usg Geo",
-										"tag": ["multiple"]
+										"tagAsTitle": false,
+										"layout": {
+											"frame": "inline",
+											"multiple": {
+												"use": true,
+												"join": ";"
+											}
+										}
 									} ?>
 				<placeName>
 					<?options {
-											"title": "Place Name",
+											"tagAsTitle": false,
 											"value": ["edit", "required"],
 											"attributes": [{
 												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
 												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
 											"tag": ["multiple"],
-											"layout": { "frame": "inline" }
+											"layout": {
+												"frame": "inline",
+												"multiple": {
+													"use": true,
+													"join": ", "
+												}
+											}
 										} ?>
 				</placeName>
 			</usg>
@@ -482,7 +499,7 @@
 				 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
-				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
+				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 			</cit>
 
 			<sense>
@@ -495,7 +512,7 @@
 				<?copy { "fromId": "ref-form" } ?>
 				<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
@@ -554,7 +571,7 @@
 			<gramGrp>
 				<?options {
 										"id": "gramGrp",
-										"title": "Gram Guppe"
+										"title": "Gram Gruppe"
 									} ?>
 				<iType>
 					<?options {
