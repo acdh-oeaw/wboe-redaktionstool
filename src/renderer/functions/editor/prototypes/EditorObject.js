@@ -93,6 +93,26 @@ const localFunctions = {
 			}, this)
 		}
 	},
+	updateAddableAfter: function (withChilds = false) {
+		this.addableAfter = []
+		if (this.parserObj && !this.isRoot) {
+			if (this.parserObj.options.get('tag.multible.use')) {
+				this.addableAfter.push({ 'uId': this.parserObj.uId, 'title': this.parserObj.options.get('addButton') || this.parserObj.options.get('title') || this.parserObj.name })
+			}
+			let aSibs = this.parserObj.getSiblings('all', true)
+			aSibs.forEach(function (aSib) {
+				if (aSib.checkPosition(this, true).length === 0) {
+					this.addableAfter.push({ 'uId': aSib.uId, 'title': aSib.options.get('addButton') || aSib.options.get('title') || aSib.name })
+				}
+			}, this)
+			// ToDo: Sort!
+		}
+		if (withChilds && this.childs.length > 0) {
+			this.childs.forEach(function (aChild) {
+				aChild.updateAddableAfter(withChilds)
+			}, this)
+		}
+	},
 	checkParser: function () {
 		if (this.orgXmlObj) {
 			this.deleteErrors()

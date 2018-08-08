@@ -144,6 +144,7 @@
 						<?copy { "fromId": "note", "options": { "tag": ["multiple", "anywhere", "possibleTag"] } } ?>
 						<form type="lemma">
 							<?options {
+													"title": "Lemma",
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
@@ -189,7 +190,7 @@
 							</gramGrp>
 						</form>
 
-						<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
+						<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multible"] } } ?>
 
 						<form type="lautung">
 							<?options {
@@ -495,7 +496,7 @@
 				<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multibleSiblings"] } } ?>
+				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
 			</sense>

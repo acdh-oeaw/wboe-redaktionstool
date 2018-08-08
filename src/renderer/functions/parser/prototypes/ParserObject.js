@@ -163,7 +163,7 @@ const localFunctions = {
 				score += 1 + ((aCheckVal.warn.length === 0) ? 0.1 : 0)
 			}
 			// Position prüfen
-			aErr = this.checkPosition(orgXmlObj, editorObj)
+			aErr = this.checkPosition(editorObj)
 			if (aErr.length > 0) {
 				errors.push(aErr)
 			} else {

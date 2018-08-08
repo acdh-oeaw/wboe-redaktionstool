@@ -38,13 +38,14 @@ const localFunctions = {
 		}
 		return errors
 	},
-	checkPosition: function (xmlObj, editorObj) {
+	checkPosition: function (editorObj, eoDirekt = false) {
 		let errors = []
 		let aTagOption = this.options.get('tag')
+		// ToDo: Anzahl püfen! Darf nur einmal?
 		// console.log(aTagOption)
 		if (!aTagOption || !(aTagOption.anywhere && aTagOption.anywhere.use)) {		// Feste Position
 			let parserPrev = this.getSiblings('prev', true)
-			let editorPrev = editorObj.getChilds('prev', true)		// ToDo: Wenn nachkontrolliert wird?!? Aktuelles EditorObj.getSiblings(...)
+			let editorPrev = ((eoDirekt) ? editorObj.getSiblings('prev', true) : editorObj.getChilds('prev', true))
 			if (parserPrev.length > 0 || editorPrev.length > 0) {		// Wenn einer von beide nicht an erster Position
 				if (editorPrev.length > 0 && parserPrev.length === 0) {		// Wenn eigentlich an erster Stelle
 					editorPrev.some(function (aEditor) {

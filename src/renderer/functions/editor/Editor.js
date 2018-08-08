@@ -33,6 +33,7 @@ const localFunctions = {
 		this.root = root							// Enthält die "EditorBase"
 		this.isRoot = isRoot || false
 		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : [this])		// Geschwister
+		this.addableAfter = []				// Welche Objekte können nach diesem hinzugefügt werden?
 		this.init()										// Immer dirket initialisieren
 		// this.add(parser, pos, xml)			// Kind hinzufügen (XML hinzufügen falls nicht vorhanden!)
 		// this.delete(pos)						// Kind löschen (Rekursion beachten)	(XML entfernen!)
@@ -58,6 +59,7 @@ localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
 localFunctions.EditorObject.prototype.getSiblings = prototypeEditorObject.getSiblings
 localFunctions.EditorObject.prototype.getChilds = prototypeEditorObject.getChilds
 localFunctions.EditorObject.prototype.checkParser = prototypeEditorObject.checkParser
+localFunctions.EditorObject.prototype.updateAddableAfter = prototypeEditorObject.updateAddableAfter
 // localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
 // localFunctions.EditorObject.prototype.allPrevSiblings = prototypeEditorObject.allPrevSiblings
 // localFunctions.EditorObject.prototype.allAfterSiblings = prototypeEditorObject.delete

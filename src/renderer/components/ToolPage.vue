@@ -100,7 +100,7 @@
 		name: 'tool-page',
 		data () {
 			return {
-				aTab: 0,
+				aTab: ((process.env.NODE_ENV === 'development') ? 0 : 0),
 				aTabCach: [],
 				showTabView: false,
 				xmlObject: null,

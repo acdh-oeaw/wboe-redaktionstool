@@ -40,6 +40,7 @@
 							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 							<b-button @click="setInfoOpen('value')" v-if="aValue" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('matches')" v-if="content.parserMatches.length > 0" :pressed="infoOpen === 'matches'" variant="outline-secondary"><b>Matches</b></b-button>
+							<b-button @click="setInfoOpen('addableAfter')" v-if="content.addableAfter.length > 0" :pressed="infoOpen === 'addableAfter'" variant="outline-secondary"><b>addableAfter</b></b-button>
 							<!-- <b-button @click="setInfoOpen('comment')" v-if="content.comments.length > 0" :pressed="infoOpen === 'comment'" variant="outline-secondary"><b>Comments</b></b-button> -->
 						</b-button-group>
 						<b-input-group size="sm" class="mx-1" v-if="content.childs.length > 0">
@@ -51,6 +52,7 @@
 					<div>
 						<code class="lb val" v-if="infoOpen === 'value'">{{ aValue }}</code>
 						<code class="lb" v-if="infoOpen === 'matches'">{{ matches }}</code>
+						<code class="lb" v-if="infoOpen === 'addableAfter'">{{ content.addableAfter }}</code>
 						<!-- <code class="lb" v-if="infoOpen === 'comment'"><ul><li v-for="comment in content.comments">{{ comment }}</li></ul></code> -->
 					</div>
 					<div v-if="content.childs.length > 0">
