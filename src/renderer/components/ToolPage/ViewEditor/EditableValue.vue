@@ -56,6 +56,7 @@
 							this.content.orgXmlObj.setAttribute(aKey, aVal.attribute[aKey])
 						}, this)
 					}
+					this.content.checkParser()
 				} else {
 					this.content.orgXmlObj.setValue(null)
 				}
@@ -67,6 +68,7 @@
 			}, 20),
 			valEditUpdateValue: function (e) {
 				this.content.orgXmlObj.setValue(e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
+				this.content.checkParser()
 			},
 		},
 		components: {

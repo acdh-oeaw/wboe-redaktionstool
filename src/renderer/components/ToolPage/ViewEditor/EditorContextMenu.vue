@@ -93,9 +93,11 @@
 		methods: {
 			selectAttr: function (aAttr, key) {
 				this.content.orgXmlObj.setAttribute(aAttr, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key])
+				this.content.checkParser()
 			},
 			valAttrUpdateValue: function (aAttr, e) {
 				this.content.orgXmlObj.setAttribute(aAttr, e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
+				this.content.checkParser()
 			},
 			valAttrUpdate: _.debounce(function (e) {
 				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)

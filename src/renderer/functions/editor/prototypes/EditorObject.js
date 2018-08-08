@@ -93,6 +93,20 @@ const localFunctions = {
 			}, this)
 		}
 	},
+	checkParser: function () {
+		if (this.orgXmlObj) {
+			this.deleteErrors()
+			this.deleteWarnings()
+			let aAttrCheck = this.parserObj.checkAttributes(this.orgXmlObj.attributes)
+			let aValCheck = this.parserObj.checkValue(this.orgXmlObj)
+			aAttrCheck.err.concat(aValCheck.err).forEach(function (aErr) {
+				this.addError(aErr)
+			}, this)
+			aAttrCheck.warn.concat(aValCheck.warn).forEach(function (aWarn) {
+				this.addWarning(aWarn)
+			}, this)
+		}
+	},
 	getSiblings: function (mode = 'all', useable = false, inclSelf = false) {
 		let rObj = []
 		let hit = false
