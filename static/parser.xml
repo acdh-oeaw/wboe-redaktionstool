@@ -190,7 +190,7 @@
 							</gramGrp>
 						</form>
 
-						<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multible"] } } ?>
+						<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 
 						<form type="lautung">
 							<?options {
@@ -236,7 +236,7 @@
 														"attributes": [{
 															"part": {"type": "edit", "canBeEmpty": {"use": true}}
 														}],
-														"tag": ["possibleTag", "multible", "anywhere"]
+														"tag": ["possibleTag", "multiple", "anywhere"]
 													} ?>
 								<?copy { "fromId": "text" } ?>
 								<?copy { "fromId": "date" } ?>
@@ -301,7 +301,7 @@
 							</form>
 							<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag"] } } ?>
-							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multible"] } } ?>
+							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 						</re>
 					</entry>
 				</body>
@@ -383,7 +383,7 @@
 										"id": "date",
 										"title": "Desc",
 										"value": ["edit", "required"],
-										"tag": ["possibleTag", "multible", "anywhere"]
+										"tag": ["possibleTag", "multiple", "anywhere"]
 									} ?>
 			</date>
 

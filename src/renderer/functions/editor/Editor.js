@@ -1,4 +1,4 @@
-import prototypeMultible from '../aPrototypes/Multible'
+import prototypeMultiple from '../aPrototypes/Multiple'
 import prototypeEditorBase from './prototypes/EditorBase'
 import prototypeEditorObject from './prototypes/EditorObject'
 
@@ -42,18 +42,18 @@ const localFunctions = {
 }
 
 // EditorBase Prototypen
-localFunctions.EditorBase.prototype.addError = prototypeMultible.addError
-localFunctions.EditorBase.prototype.addWarning = prototypeMultible.addWarning
-localFunctions.EditorBase.prototype.getCompressedBaseError = prototypeMultible.getCompressedBaseError
-localFunctions.EditorBase.prototype.updateFamilyErrors = prototypeMultible.updateFamilyErrors
+localFunctions.EditorBase.prototype.addError = prototypeMultiple.addError
+localFunctions.EditorBase.prototype.addWarning = prototypeMultiple.addWarning
+localFunctions.EditorBase.prototype.getCompressedBaseError = prototypeMultiple.getCompressedBaseError
+localFunctions.EditorBase.prototype.updateFamilyErrors = prototypeMultiple.updateFamilyErrors
 localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 localFunctions.EditorBase.prototype.getXML = prototypeEditorBase.getXML
 
 // EditorObject Prototypen
-localFunctions.EditorObject.prototype.addError = prototypeMultible.addError
-localFunctions.EditorObject.prototype.addWarning = prototypeMultible.addWarning
-localFunctions.EditorObject.prototype.deleteErrors = prototypeMultible.deleteErrors
-localFunctions.EditorObject.prototype.deleteWarnings = prototypeMultible.deleteWarnings
+localFunctions.EditorObject.prototype.addError = prototypeMultiple.addError
+localFunctions.EditorObject.prototype.addWarning = prototypeMultiple.addWarning
+localFunctions.EditorObject.prototype.deleteErrors = prototypeMultiple.deleteErrors
+localFunctions.EditorObject.prototype.deleteWarnings = prototypeMultiple.deleteWarnings
 localFunctions.EditorObject.prototype.init = prototypeEditorObject.init
 localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
 localFunctions.EditorObject.prototype.getSiblings = prototypeEditorObject.getSiblings

@@ -91,18 +91,19 @@ const localFunctions = {
 			aWarnings.forEach(function (aWarn) {
 				this.childs[aKey].addWarning(aWarn)
 			}, this)
+			this.childs[aKey].updateAddableAfter()
 		}
 	},
 	updateAddableAfter: function (withChilds = false) {
 		this.addableAfter = []
 		if (this.parserObj && !this.isRoot) {
-			if (this.parserObj.options.get('tag.multible.use')) {
-				this.addableAfter.push({ 'uId': this.parserObj.uId, 'title': this.parserObj.options.get('addButton') || this.parserObj.options.get('title') || this.parserObj.name })
+			if (this.parserObj.options.get('tag.multiple.use')) {
+				this.addableAfter.push({ 'uId': this.parserObj.uId, 'type': 'self', 'title': this.parserObj.options.get('addButton') || this.parserObj.options.get('title.value') || this.parserObj.name })
 			}
 			let aSibs = this.parserObj.getSiblings('all', true)
 			aSibs.forEach(function (aSib) {
 				if (aSib.checkPosition(this, true).length === 0) {
-					this.addableAfter.push({ 'uId': aSib.uId, 'title': aSib.options.get('addButton') || aSib.options.get('title') || aSib.name })
+					this.addableAfter.push({ 'uId': aSib.uId, 'type': (aSib.options.get('tag.anywhere') ? 'anywhere' : 'ect'), 'title': aSib.options.get('addButton') || aSib.options.get('title.value') || aSib.name })
 				}
 			}, this)
 			// ToDo: Sort!

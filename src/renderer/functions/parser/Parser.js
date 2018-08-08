@@ -1,4 +1,4 @@
-import prototypeMultible from '../aPrototypes/Multible'
+import prototypeMultiple from '../aPrototypes/Multiple'
 import prototypeParserBase from './prototypes/ParserBase'
 import prototypeParserObject from './prototypes/ParserObject'
 import prototypeParserObjectCheck from './prototypes/ParserObjectCheck'
@@ -60,12 +60,12 @@ const localFunctions = {
 }
 
 // ParserBase Prototypen
-localFunctions.ParserBase.prototype.addError = prototypeMultible.addError
+localFunctions.ParserBase.prototype.addError = prototypeMultiple.addError
 localFunctions.ParserBase.prototype.init = prototypeParserBase.init
-localFunctions.ParserBase.prototype.updateFamilyErrors = prototypeMultible.updateFamilyErrors
+localFunctions.ParserBase.prototype.updateFamilyErrors = prototypeMultiple.updateFamilyErrors
 
 // ParserObject Prototypen
-localFunctions.ParserObject.prototype.addError = prototypeMultible.addError
+localFunctions.ParserObject.prototype.addError = prototypeMultiple.addError
 localFunctions.ParserObject.prototype.init = prototypeParserObject.init
 localFunctions.ParserObject.prototype.makeCopy = prototypeParserObject.makeCopy
 localFunctions.ParserObject.prototype.match = prototypeParserObject.match
@@ -79,7 +79,7 @@ localFunctions.ParserObject.prototype.checkPosition = prototypeParserObjectCheck
 localFunctions.ParserObject.prototype.checkChilds = prototypeParserObjectCheck.checkChilds
 
 // ParserOptions Prototypen
-localFunctions.ParserOptions.prototype.addError = prototypeMultible.addError
+localFunctions.ParserOptions.prototype.addError = prototypeMultiple.addError
 localFunctions.ParserOptions.prototype.init = prototypeParserOptions.init
 localFunctions.ParserOptions.prototype.initFromParserObject = prototypeParserOptions.initFromParserObject
 localFunctions.ParserOptions.prototype.decompressOptions = prototypeParserOptions.decompressOptions
