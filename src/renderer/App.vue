@@ -217,4 +217,10 @@
 	.header-btn-toggle > .fa-icon {
 		font-size: 23px;
 	}
+	.btn-xs, .btn-group-xs > .btn {
+		padding: 0.0rem 0.25rem !important;
+		font-size: 0.80rem !important;
+		line-height: 1.4 !important;
+		border-radius: 0.1rem !important;
+	}
 </style>
