@@ -1,4 +1,4 @@
-import prototypeXmlMultible from './prototypes/XmlMultible'
+import prototypeMultible from '../aPrototypes/Multible'
 import prototypeXmlBase from './prototypes/XmlBase'
 import prototypeXmlObject from './prototypes/XmlObject'
 
@@ -41,13 +41,13 @@ const localFunctions = {
 }
 
 // XmlBase Prototypen
-localFunctions.XmlBase.prototype.addError = prototypeXmlMultible.addError
-localFunctions.XmlBase.prototype.updateFamilyErrors = prototypeXmlMultible.updateFamilyErrors
+localFunctions.XmlBase.prototype.addError = prototypeMultible.addError
+localFunctions.XmlBase.prototype.updateFamilyErrors = prototypeMultible.updateFamilyErrors
 localFunctions.XmlBase.prototype.init = prototypeXmlBase.init
 localFunctions.XmlBase.prototype.getXML = prototypeXmlBase.getXML
 
 // XmlObject Prototypen
-localFunctions.XmlObject.prototype.addError = prototypeXmlMultible.addError
+localFunctions.XmlObject.prototype.addError = prototypeMultible.addError
 localFunctions.XmlObject.prototype.init = prototypeXmlObject.init
 localFunctions.XmlObject.prototype.getValue = prototypeXmlObject.getValue
 localFunctions.XmlObject.prototype.setValue = prototypeXmlObject.setValue

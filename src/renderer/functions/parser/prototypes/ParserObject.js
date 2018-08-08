@@ -142,9 +142,12 @@ const localFunctions = {
 			let aErr
 			score += 1
 			// Attribute prüfen
-			aErr = this.checkAttributes(orgXmlObj.attributes)
-			if (aErr.length > 0) {
-				errors.push(aErr)
+			let aCheckAttr = this.checkAttributes(orgXmlObj.attributes)
+			if (aCheckAttr.warn.length > 0) {
+				warnings.push(aCheckAttr.warn)
+			}
+			if (aCheckAttr.err.length > 0) {
+				errors.push(aCheckAttr.err)
 			} else {
 				score += 1
 			}

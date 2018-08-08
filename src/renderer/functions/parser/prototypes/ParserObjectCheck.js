@@ -141,6 +141,7 @@ const localFunctions = {
 	},
 	checkAttributes: function (attrObjX) {
 		let errors = []
+		let warnings = []
 		let attrObj = ((Object.keys(attrObjX).length > 0) ? attrObjX : null)
 		let aParAttrObj = this.options.get('attributes')
 		aParAttrObj = ((aParAttrObj && Object.keys(aParAttrObj).length > 0) ? aParAttrObj : null)
@@ -156,6 +157,7 @@ const localFunctions = {
 			// Vorhandene Attribute überprüfen
 			Object.keys(attrObj).forEach(function (aKey) {
 				let aErr = this.checkAttribute(aKey, attrObj[aKey])
+				// ToDo: Warnungen ...
 				if (aErr) { errors.push(aErr) }
 			}, this)
 		} else if (attrObj && !aParAttrObj) {		// Keine Attribute
@@ -169,7 +171,7 @@ const localFunctions = {
 				}
 			}, this)
 		}
-		return errors
+		return {'err': errors, 'warn': warnings}
 	},
 	checkAttribute: function (attr, val) {
 		let aParAttrObj = this.options.get('attributes.' + attr)
@@ -181,12 +183,12 @@ const localFunctions = {
 			return 'Attribut "' + attr + '" hat nicht den erwateten Wert!'
 		}
 		if (!aParAttrObj.canBeEmpty && (val === undefined || val.length === 0)) {
-			return 'Wert von Attribut "' + attr + '" darf nicht leer sein!'
+			return 'Wert von Attribut "' + attr + '" darf nicht leer sein!'		// ToDo: Warnungen ...
 		}
 		if (aParAttrObj.type === 'variable') {
 			if (aParAttrObj.possibleValues && aParAttrObj.possibleValues.use) {
 				if (val && aParAttrObj.possibleValues.indexOf(val) < 0) {
-					return 'Wert "' + val + '" von Attribut "' + attr + '" nicht in der Liste möglicher Werte!'
+					return 'Wert "' + val + '" von Attribut "' + attr + '" nicht in der Liste möglicher Werte!'		// ToDo: Warnungen ...
 				}
 			}
 		}

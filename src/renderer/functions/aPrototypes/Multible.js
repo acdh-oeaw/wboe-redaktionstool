@@ -1,35 +1,39 @@
 // import xmlFunctions from '@/functions/XmlFunctions'
+import Vue from 'vue'
 
 const localFunctions = {
-	addError: function (error) {
+	addError: function (error, field = 'errors') {
 		var aNr = -1
 		var root = this
 		if (this.uId || this.uId === 0) {		// Handelt es sich um ein "ParserObject"?
 			aNr = this.uId
-			if (Array.isArray(this.errors)) {
-				this.errors.push({'err': error})
+			if (Array.isArray(this[field])) {
+				this[field].push({'err': error})
 			}
 			root = this.root
 		}
-		if (!Array.isArray(root.errors[aNr])) {
-			root.errors[aNr] = []
+		if (!Array.isArray(root[field][aNr])) {
+			Vue.set(root[field], aNr, [])
 		}
-		root.errors[aNr].push({'obj': this, 'err': error})
+		root[field][aNr].push({'obj': this, 'err': error})
+	},
+	deleteErrors: function (field = 'errors') {
+		var aNr = -1
+		var root = this
+		if (this.uId || this.uId === 0) {		// Handelt es sich um ein "ParserObject"?
+			aNr = this.uId
+			if (Array.isArray(this[field])) {
+				this[field] = []
+			}
+			root = this.root
+		}
+		Vue.delete(root[field], aNr)
 	},
 	addWarning: function (warning) {
-		var aNr = -1
-		var root = this
-		if (this.uId || this.uId === 0) {		// Handelt es sich um ein "ParserObject"?
-			aNr = this.uId
-			if (Array.isArray(this.warnings)) {
-				this.warnings.push({'err': warning})
-			}
-			root = this.root
-		}
-		if (!Array.isArray(root.warnings[aNr])) {
-			root.warnings[aNr] = []
-		}
-		root.warnings[aNr].push({'obj': this, 'err': warning})
+		localFunctions.addError.call(this, warning, 'warnings')
+	},
+	deleteWarnings: function () {
+		localFunctions.deleteErrors.call(this, 'warnings')
 	},
 	getCompressedBaseError: function () {
 		let cErrors = {}

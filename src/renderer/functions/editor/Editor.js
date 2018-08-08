@@ -1,4 +1,4 @@
-import prototypeEditorMultible from './prototypes/EditorMultible'
+import prototypeMultible from '../aPrototypes/Multible'
 import prototypeEditorBase from './prototypes/EditorBase'
 import prototypeEditorObject from './prototypes/EditorObject'
 
@@ -41,20 +41,23 @@ const localFunctions = {
 }
 
 // EditorBase Prototypen
-localFunctions.EditorBase.prototype.addError = prototypeEditorMultible.addError
-localFunctions.EditorBase.prototype.addWarning = prototypeEditorMultible.addWarning
-localFunctions.EditorBase.prototype.getCompressedBaseError = prototypeEditorMultible.getCompressedBaseError
-localFunctions.EditorBase.prototype.updateFamilyErrors = prototypeEditorMultible.updateFamilyErrors
+localFunctions.EditorBase.prototype.addError = prototypeMultible.addError
+localFunctions.EditorBase.prototype.addWarning = prototypeMultible.addWarning
+localFunctions.EditorBase.prototype.getCompressedBaseError = prototypeMultible.getCompressedBaseError
+localFunctions.EditorBase.prototype.updateFamilyErrors = prototypeMultible.updateFamilyErrors
 localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 localFunctions.EditorBase.prototype.getXML = prototypeEditorBase.getXML
 
 // EditorObject Prototypen
-localFunctions.EditorObject.prototype.addError = prototypeEditorMultible.addError
-localFunctions.EditorObject.prototype.addWarning = prototypeEditorMultible.addWarning
+localFunctions.EditorObject.prototype.addError = prototypeMultible.addError
+localFunctions.EditorObject.prototype.addWarning = prototypeMultible.addWarning
+localFunctions.EditorObject.prototype.deleteErrors = prototypeMultible.deleteErrors
+localFunctions.EditorObject.prototype.deleteWarnings = prototypeMultible.deleteWarnings
 localFunctions.EditorObject.prototype.init = prototypeEditorObject.init
 localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
 localFunctions.EditorObject.prototype.getSiblings = prototypeEditorObject.getSiblings
 localFunctions.EditorObject.prototype.getChilds = prototypeEditorObject.getChilds
+localFunctions.EditorObject.prototype.checkParser = prototypeEditorObject.checkParser
 // localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
 // localFunctions.EditorObject.prototype.allPrevSiblings = prototypeEditorObject.allPrevSiblings
 // localFunctions.EditorObject.prototype.allAfterSiblings = prototypeEditorObject.delete
