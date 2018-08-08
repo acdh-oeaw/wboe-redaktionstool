@@ -111,14 +111,24 @@
 						</respStmt>
 					</titleStmt>
 					<publicationStmt>
-						<?options {
-												"value": ["variable", "canBeEmpty", "innerXML"]
-											} ?>
+						<?options { "title": "Publication Information" } ?>
+						<p>
+							<?options {
+								"value": ["edit", "canBeEmpty"],
+								"tagAsTitle": false,
+								"layout": { "frame": "box" }
+							} ?>
+						</p>
 					</publicationStmt>
 					<sourceDesc>
-						<?options {
-												"value": ["variable", "canBeEmpty", "innerXML"]
-											} ?>
+						<?options { "title": "Information about the source" } ?>
+						<p>
+							<?options {
+								"value": ["edit", "canBeEmpty"],
+								"tagAsTitle": false,
+								"layout": { "frame": "box" }
+							} ?>
+						</p>
 					</sourceDesc>
 				</fileDesc>
 			</teiHeader>

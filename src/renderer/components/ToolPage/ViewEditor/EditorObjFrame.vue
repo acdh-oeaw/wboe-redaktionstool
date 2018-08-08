@@ -23,7 +23,7 @@
 
 	<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
 		<div @contextmenu.prevent="contextMenue" class="context">
-			<b v-if="title">{{ title }}:</b><br v-if="layoutBase === 'box'"/>
+			<b v-if="title">{{ title }}:</b><br v-if="title && layoutBase === 'box'"/>
 			<slot/>
 		</div>
 		<slot name="childs"/>
