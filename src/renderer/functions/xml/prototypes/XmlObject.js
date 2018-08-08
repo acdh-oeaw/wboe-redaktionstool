@@ -128,8 +128,11 @@ const localFunctions = {
 	getXML: function (all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {
 		let aXML = ''
 		if (this.type === 'TEXT') {
-			if (prvXmlObj && prvXmlObj.type === 'COMMENT') { aXML += '\n' + '	'.repeat(deep) }
-			aXML += this.value
+			if (prvXmlObj && (['COMMENT', 'PROCESSING_INSTRUCTION', 'UNKNOWN'].indexOf(prvXmlObj.type) > -1)) {
+				aXML += '\n' + '	'.repeat(deep) + this.value + '\n' + '	'.repeat(deep - 1)
+			} else {
+				aXML += this.value
+			}
 		} else if (this.type === 'COMMENT' && all) {
 			aXML += '\n' + '	'.repeat(deep) + '<!-- ' + this.value + ' -->'
 		} else if (this.type === 'PROCESSING_INSTRUCTION' && all) {
@@ -138,6 +141,7 @@ const localFunctions = {
 			aXML += this.value
 		} else if (this.type === 'ELEMENT') {
 			let aChildCont = ''
+			let lChild = null
 			if (!inner) {
 				aXML += '\n' + '	'.repeat(deep) + '<' + this.name
 				if (Object.keys(this.attributes).length > 0) {
@@ -152,11 +156,11 @@ const localFunctions = {
 				if (this.comments.length > 0) {
 					this.comments.forEach(function (aComment) {
 						aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment + '?>'
+						lChild = { 'type': 'PROCESSING_INSTRUCTION' }
 					}, this)
 				}
 			}
 			if (this.childs.length > 0) {
-				let lChild = undefined
 				this.childs.forEach(function (aChild) {
 					aChildCont += aChild.getXML(all, lb, short, false, deep + 1, lChild)
 					lChild = aChild
