@@ -157,7 +157,7 @@
 														"tag": ["possibleTag"]
 													} ?>
 							</pron>
-							<?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
+							<?copy { "fromId": "orth" } ?>
             </form>
 						<form type="variant">
 							<?options {
@@ -410,7 +410,8 @@
 										"attributes": [{
 											"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]},
 											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
-										}]
+										}],
+										"layout": { "frame": "line" }
 									} ?>
 			</orth>
 
@@ -460,6 +461,9 @@
 													"use": true,
 													"join": ", "
 												}
+											},
+											"editor": {
+												"parentInContext": true
 											}
 										} ?>
 				</placeName>

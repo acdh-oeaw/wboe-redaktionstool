@@ -1,50 +1,15 @@
 <template>
 	<div :class="{'editorcontextmenu': true, 'left': subContextMenuLeft}" :id="'ecm-' + _uid" v-show="show"
 			:style="{ top: this.top + 'px', left: this.left + 'px' }" tabindex="-1"
-			@contextmenu.capture.prevent> <!-- @blur="close"	@click="close" -->
-		<div class="context-menu-title"><b>Tag:</b> {{ this.content.orgXmlObj.name }}</div>
-		<template v-if="attributes">
-			<div class="context-menu-subtitle"><b>Attribute:</b></div>
-			<ul>
-				<li v-for="(aVal, aKey) in attributes" @mouseover="subShow = aKey" @mouseleave="subShow = null">
-					<font-awesome-icon :icon="aVal.icon" class="fa-icon" v-if="aVal.icon"/>
-					<font-awesome-icon :icon="((aVal.editable) ? 'edit' : 'lock')" class="fa-icon right"/>
-					<span>{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}</span>
-					<div class="subContext" :ref="'subContext'" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="aVal.editable && subShow === aKey">
-						<div class="sel-attribut" v-if="aVal.editType === 'select'">
-							<button @click="selectAttr(aKey, -1)" class="sel-obj">
-								<font-awesome-icon icon="check" class="fa-icon" v-if="!aVal.value"/>
-								Kein Wert!
-							</button>
-							<button @click="selectAttr(aKey, attrKey)" class="sel-obj" v-for="(attrVal, attrKey) in aVal.options.possibleValues">
-								<font-awesome-icon icon="check" class="fa-icon" v-if="attrVal === aVal.value"/>
-								{{ attrVal }}
-							</button>
-						</div>
-						<div class="txt-attribut" v-else>
-							<font-awesome-icon @click="$refs.attrEdit[0].focus()" icon="edit" class="fa-icon right" :title="aVal.editType"/>
-							<span class="attr-edit" ref="attrEdit" @input="valAttrUpdate" @focus="valAttrUpdate" @blur="valAttrUpdateValue(aKey, $event)" @keyup.enter="valAttrUpdateValue(aKey, $event)" @keydown.enter.prevent contenteditable>{{ aVal.value }}</span>
-						</div>
-					</div>
-				</li>
-			</ul>
-		</template>
-		<template v-if="this.content.addableAfter.length > 0">
-			<div class="context-menu-subtitle"><b>Hinzufügen:</b></div>
-			<ul>
-				<li v-for="(aVal, aKey) in this.content.addableAfter">
-					<font-awesome-icon icon="plus" class="fa-icon"/>
-					{{ aVal.title }}
-				</li>
-			</ul>
-		</template>
+			@contextmenu.capture.prevent>
+		<EditorContextMenuContent :content="content" :subContextMenuLeft="subContextMenuLeft"/>
 	</div>
 </template>
 
 <script>
 	import _ from 'lodash'
 	import SelectPossibleValues from './SelectPossibleValues'
-	import veFunctions from './functions'
+	import EditorContextMenuContent from './EditorContextMenuContent'
 
 	export default {
 		name: 'EditorContextMenu',
@@ -56,63 +21,13 @@
 				'top': null,
 				'left': null,
 				'subContextMenuLeft': false,
-				'subContextMenuTopPx': false,
-				'subShow': null,
 				'show': false,
 				'ready': false,
 			}
 		},
-		computed: {
-			attributes () {
-				if (this.content.parserObj.options && this.content.parserObj.options.get('attributes')) {
-					let oAttr = {}
-					let aAttributes = this.content.parserObj.options.get('attributes')
-					Object.keys(aAttributes).forEach(function (aAttr) {
-						let aIcon
-						let aVal = this.content.orgXmlObj.attributes[aAttr]
-						if (aVal) {
-							// ToDo: weitere Prüfung?!
-							aIcon = 'check'
-						} else if (!aAttributes[aAttr].canBeEmpty || !aAttributes[aAttr].canBeEmpty.use) {
-							aIcon = 'exclamation-triangle'
-						}
-						oAttr[aAttr] = {'value': aVal, 'options': aAttributes[aAttr], 'icon': aIcon, 'editable': (aAttributes[aAttr].type === 'edit'), 'editType': ((aAttributes[aAttr].possibleValues) ? 'select' : 'text')}
-					}, this)
-					// console.log(oAttr)
-					return oAttr
-				}
-				return null
-			},
-		},
 		watch: {
-			subShow: function (nVal, oVal) {
-				if (nVal) {
-					this.subContextMenuTopPx = 0
-					this.$nextTick(() => {
-						if (this.$refs.subContext && this.$refs.subContext.length > 0) {
-							let aOverBottom = this.$refs.subContext[0].getBoundingClientRect().bottom - window.innerHeight + 25
-							if (aOverBottom > 0) {
-								this.subContextMenuTopPx = -aOverBottom
-							}
-						}
-					})
-				}
-			}
 		},
 		methods: {
-			selectAttr: function (aAttr, key) {
-				this.content.orgXmlObj.setAttribute(aAttr, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key])
-				this.content.checkParser()
-			},
-			valAttrUpdateValue: function (aAttr, e) {
-				this.content.orgXmlObj.setAttribute(aAttr, e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
-				this.content.checkParser()
-			},
-			valAttrUpdate: _.debounce(function (e) {
-				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
-				e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
-				restoreCaretPosition()
-			}, 20),
 			close: function () {
 				this.top = null
 				this.left = null
@@ -160,6 +75,7 @@
 		},
 		components: {
 			SelectPossibleValues,
+			EditorContextMenuContent
 		},
 	}
 </script>
