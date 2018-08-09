@@ -38,7 +38,7 @@ const localFunctions = {
 		}
 		return errors
 	},
-	checkPosition: function (editorObj, eoDirekt = false) {
+	checkPosition: function (editorObj, eoDirekt = false, exp = false) {
 		let errors = []
 		let aTagOption = this.options.get('tag')
 		// ToDo: Anzahl püfen! Darf nur einmal?
@@ -90,6 +90,14 @@ const localFunctions = {
 						}
 					}
 				}
+			}
+		}
+		if (exp) {
+			if (editorObj.countParser > 0 && !(aTagOption && aTagOption.multiple && aTagOption.multiple.use)) {
+				errors.push('Anzahl: Tag sollte nur einmal vorkommen!')
+			}
+			if (editorObj.isMultiple && !editorObj.multipleLast && !editorObj.parserObj.options.get('tag.anywhere.use') && editorObj.parserObj !== this) {
+				errors.push('Position: Tag unterbricht "multiple"')
 			}
 		}
 		// ToDo: if-Abfrage!

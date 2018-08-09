@@ -101,7 +101,7 @@ const localFunctions = {
 			}
 		}
 	},
-	updateData: function (withChilds = false) {
+	updateData: function (withChilds = false, posAsError = false) {
 		this.count = 0
 		this.countParser = 0
 		this.multipleNr = 0
@@ -123,12 +123,12 @@ const localFunctions = {
 			this.multipleLast = !(aNextSibs.length > 0 && aNextSibs[0].parserObj === this.parserObj)
 		}
 		if (this.parserObj && !this.isRoot) {
-			this.checkParser()
+			this.checkParser(posAsError)
 		}
 		this.updateAddableAfter()
 		if (withChilds && this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {
-				aChild.updateData(withChilds)
+				aChild.updateData(withChilds, posAsError)
 			}, this)
 		}
 	},
@@ -140,7 +140,7 @@ const localFunctions = {
 			}
 			let aSibs = this.parserObj.getSiblings('all', true)
 			aSibs.forEach(function (aSib) {
-				if (aSib.checkPosition(this, true).length === 0) {
+				if (aSib.checkPosition(this, true, true).length === 0) {
 					this.addableAfter.push({ 'uId': aSib.uId, 'type': (aSib.options.get('tag.anywhere') ? 'anywhere' : 'ect'), 'title': aSib.options.get('addButton') || aSib.options.get('title.value') || aSib.name })
 				}
 			}, this)
@@ -152,17 +152,17 @@ const localFunctions = {
 			}, this)
 		}
 	},
-	checkParser: function () {
-		if (this.orgXmlObj && this.parserObj && this.errors.length === 0) {
+	checkParser: function (posAsError = false) {
+		if (this.orgXmlObj && this.parserObj) {
 			this.deleteErrors()
 			this.deleteWarnings()
 			let aAttrCheck = this.parserObj.checkAttributes(this.orgXmlObj.attributes)
 			let aValCheck = this.parserObj.checkValue(this.orgXmlObj)
-			let aPosCheck = this.parserObj.checkPosition(this, true)
-			aAttrCheck.err.concat(aValCheck.err).forEach(function (aErr) {
+			let aPosCheck = this.parserObj.checkPosition(this, true, true)
+			aAttrCheck.err.concat(aValCheck.err, ((posAsError) ? aPosCheck : [])).forEach(function (aErr) {
 				this.addError(aErr)
 			}, this)
-			aAttrCheck.warn.concat(aValCheck.warn, aPosCheck).forEach(function (aWarn) {
+			aAttrCheck.warn.concat(aValCheck.warn, ((!posAsError) ? aPosCheck : [])).forEach(function (aWarn) {
 				this.addWarning(aWarn)
 			}, this)
 		}

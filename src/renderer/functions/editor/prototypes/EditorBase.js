@@ -11,7 +11,7 @@ const localFunctions = {
 		if (!this.contentObj) {
 			this.addError('Kein "contentObj" vorhanden!')
 		}
-		this.contentObj.updateData(true)
+		this.contentObj.updateData(true, true)
 		this.ready = true
 		if (Object.keys(this.errors).length > 0) {
 			return false

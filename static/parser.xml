@@ -144,7 +144,7 @@
 						<?copy { "fromId": "note", "options": { "tag": ["multiple", "anywhere", "possibleTag"] } } ?>
 						<form type="lemma">
 							<?options {
-													"title": "Lemma",
+													"title": "Lemma (base)",
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
@@ -274,7 +274,7 @@
 															"attributes": [{
 																"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
 															}],
-															"tag": ["possibleTag"]
+															"tag": ["possibleTag", "multiple"]
 														} ?>
 									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
 									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
@@ -283,7 +283,7 @@
 								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
               </cit>
-							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "xr" } ?>
             </etym>
