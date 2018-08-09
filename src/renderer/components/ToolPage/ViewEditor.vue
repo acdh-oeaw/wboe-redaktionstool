@@ -19,6 +19,8 @@
 		</template>
 		<div :style="'height: ' + content.parserObj.options.get('layout.spaceBefore') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceBefore')"></div>
 		<h3 v-if="content.parserObj.options && content.parserObj.options.get('layout.header')">{{ content.parserObj.options.get('layout.header') }}</h3>
+		<span class="enumeraterom" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerateRom')">{{ num2rom(content.multipleNr + 1) }}.&nbsp;</span>
+		<span class="enumerate" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerate')">{{ content.multipleNr + 1 }})&nbsp;</span>
 		<EditorObjFrame :content="content">
 			<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
 				{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
@@ -98,6 +100,20 @@
 					return Object.keys(val).length
 				}
 			},
+			num2rom: function (num) {
+				var rom = ''
+				var aRom = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
+				var aNum = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]
+				num = parseInt(num)
+				if (isNaN(num) || (num <= 0)) { return 'Fehler' }
+				for (var nr = 0; nr < aNum.length; nr++) {
+					while (num >= aNum[nr]) {
+						rom += aRom[nr]
+						num -= aNum[nr]
+					}
+				}
+				return rom
+			},
 		},
 		components: {
 			ErrorContent,
@@ -120,5 +136,8 @@
 	}
 	.val-fix:hover {
 		background: #eee;
+	}
+	.enumeraterom {
+		font-weight: bold;
 	}
 </style>

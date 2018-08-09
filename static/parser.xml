@@ -217,7 +217,8 @@
 																												"use": true,
 																												"header": "Bedeutung",
 																												"spaceBefore": 10,
-																												"spaceAfter": 25
+																												"spaceAfter": 25,
+																												"enumerateRom": true
 																											}
 																										},
 																										"editor": {
