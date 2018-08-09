@@ -144,13 +144,26 @@
 						<?copy { "fromId": "note", "options": { "tag": ["multiple", "anywhere", "possibleTag"] } } ?>
 						<form type="lemma">
 							<?options {
-													"title": "Lemma (base)",
+													"id": "lemma-base",
+													"tagAsTitle": false,
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
-													"tag": ["multiple"]
+													"tag": ["multiple"],
+													"layout": {
+														"frame": "inline",
+														"multiple": {
+															"use": true,
+															"join": ", ",
+															"lastBR": true
+														}
+													},
+													"editor": {
+														"onlyLastElementHasAddButton": true,
+														"addTitle": "Lemma"
+													}
 												} ?>
-							<?copy { "fromId": "orth" } ?>
+							<?copy { "fromId": "orth", "options": { "title": "", "tagAsTitle": false, "layout": { "frame": "inline", "bold": true }, "editor": { "addTitle": "Orth", "parentInContext": true } } } ?>
             </form>
 						<form type="variant">
 							<?options {
@@ -177,7 +190,7 @@
 													}],
 													"tag": ["multiple", "possibleTag"]
 												} ?>
-							<?copy { "fromId": "orth", "options": { "tag": ["multiple"] } } ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true } } } ?>
 							<gramGrp>
 								<?copy {"fromId": "gram-gender"} ?>
 							</gramGrp>
@@ -533,25 +546,29 @@
 			<gramGrp>
 				<?options {
 										"id": "gramGrp",
-										"title": "Gram Gruppe"
+										"title": "Gram Gruppe",
+										"layout": {
+															"frame": "line"
+										}
 									} ?>
-				<iType>
-					<?options {
-											"title": "iType",
-											"value": ["edit", "required"],
-											"tag": ["possibleTag", "anywhere"]
-										} ?>
-				</iType>
 				<gram type="pos">
 					<?options {
 											"title": "Gram Pos",
 											"value": ["edit", "required"],
 											"tag": ["possibleTag"],
-											"layout": { "frame": "line" }
+											"layout": { "frame": "inline" }
 										} ?>
 				</gram>
-				<?copy {"fromId": "pos", "options": { "tag": ["possibleTag"] }} ?>
-				<?copy {"fromId": "gram-gender", "options": { "tag": ["possibleTag"] }} ?>
+				<iType>
+					<?options {
+											"title": "iType",
+											"value": ["edit", "required", {"is": {"possibleValues": ["stark", "schwach", "gemischt"]}}],
+											"tag": ["possibleTag"],
+											"layout": { "frame": "inline" }
+										} ?>
+				</iType>
+				<?copy {"fromId": "pos", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+				<?copy {"fromId": "gram-gender", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "gram-number", "options": { "tag": ["possibleTag"] } } ?>
 			</gramGrp>

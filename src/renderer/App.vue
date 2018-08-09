@@ -80,6 +80,15 @@
 	body {
 		font-family: 'Lato' !important;
 	}
+	.bold {
+		font-weight: bold;
+	}
+	.italic {
+		font-style: italic;
+	}
+	.underline {
+		text-decoration: underline;
+	}
 	.hidden {
 		display: none;
 	}

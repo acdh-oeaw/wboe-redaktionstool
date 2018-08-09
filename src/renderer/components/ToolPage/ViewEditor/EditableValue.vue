@@ -1,9 +1,11 @@
 <template>
-	<span class="val-obj" v-if="editType === 'selectPossibleValues'">
+	<span :class="{ 'val-obj': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }"
+				v-if="editType === 'selectPossibleValues'">
 		<SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.get('value.is.possibleValues')"/>
 	</span>
 
-	<span class="val-obj val-txt" v-else>
+	<span :class="{ 'val-obj': true, 'val-txt': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }"
+				v-else>
 		<span class="val-edit val-focus" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
 		<font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
 	</span>

@@ -16,16 +16,19 @@
 			<h3 v-if="content.parserObj.options.get('layout.multiple.header')">{{ content.parserObj.options.get('layout.multiple.header') }}</h3>
 		</template>
 		<EditorObjFrame :content="content">
-			<span class="val-fix" v-if="valueType === 'fix'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
+			<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
+				{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
+			</span>
 			<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 			<template slot="childs" v-if="content.childs.length > 0">
 				<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 			</template>
 		</EditorObjFrame>
-		<template v-if="content.isMultiple && !content.multipleLast && content.parserObj.options && content.parserObj.options.get('layout.multiple.use') && content.parserObj.options.get('layout.multiple.join')">
+		<template v-if="content.isMultiple && !content.multipleLast && content.parserObj.options.get('layout.multiple.use') && content.parserObj.options.get('layout.multiple.join')">
 			{{ content.parserObj.options.get('layout.multiple.join') }}
 		</template>
-		<template v-if="content.isMultiple && content.multipleLast && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
+		<template v-if="content.isMultiple && content.multipleLast && content.parserObj.options.get('layout.multiple.use')">
+			<br v-if="content.parserObj.options.get('layout.multiple.lastBR')"/>
 			<h3 v-if="content.parserObj.options.get('layout.multiple.footer')">{{ content.parserObj.options.get('layout.multiple.footer') }}</h3>
 		</template>
 	</div>
