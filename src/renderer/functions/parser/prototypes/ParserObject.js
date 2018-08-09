@@ -16,7 +16,7 @@ const localFunctions = {
 				}
 			}
 			this.options.initFromParserObject(this)
-			// Kinder auswerten falls nicht vorhanden
+			// Kinder auswerten falls vorhanden
 			if (this.orgDOM.childNodes.length > 0) {
 				// Optionen auswerten
 				this.orgDOM.childNodes.forEach(function (child) {
@@ -24,7 +24,7 @@ const localFunctions = {
 						this.options.extendJSON(child.nodeValue, this)
 					}
 				}, this)
-				// Handelt es sich bei den Childs um einen "innerTest"?
+				// Handelt es sich bei den Childs um einen "innerText"?
 				if (this.options.get('value.innerText')) {
 					let iText = ''
 					if (this.orgDOM.childNodes.length > 0) {
@@ -188,16 +188,16 @@ const localFunctions = {
 		}
 		return {'score': score, 'errors': errors, 'warnings': warnings, 'possible': possible, 'ignoreChilds': ignoreChilds}
 	},
-	getSiblings: function (mode = 'all', useable = false, inclSelf = false) {
+	getSiblings: function (mode = 'all', useable = false, inclSelf = false, field = 'siblings') {
 		let rObj = []
 		let hit = false
-		if (this.siblings.length > 0) {
-			this.siblings.some(function (aObj) {
+		if (this[field].length > 0) {
+			this[field].some(function (aObj) {
 				if (aObj === this) {
 					hit = true
 				}
 				if ((!useable || aObj.useable)		// Nur "useable", falls vorhanden
-				&& ((!hit && (mode === 'all' || mode === 'prev'))	// Nur vorherige
+				&& ((!hit && (mode === 'all' || mode === 'prev'))		// Nur vorherige
 					|| (hit && (mode === 'all' || mode === 'next')))		// Nur nachfolgende
 				&& (inclSelf || aObj !== this)) {		// Auch dieses Objekt
 					rObj.push(aObj)
@@ -208,23 +208,7 @@ const localFunctions = {
 		return rObj
 	},
 	getChilds: function (mode = 'all', useable = false, inclAChild = false) {
-		let rObj = []
-		let hit = false
-		if (this.childs.length > 0) {
-			this.childs.some(function (aObj) {
-				if (aObj === this) {
-					hit = true
-				}
-				if ((!useable || aObj.useable)		// Nur "useable", falls vorhanden
-				&& ((!hit && (mode === 'all' || mode === 'prev'))	// Nur vorherige
-					|| (hit && (mode === 'all' || mode === 'next')))		// Nur nachfolgende
-				&& (inclAChild || aObj !== this)) {		// Auch dieses Objekt
-					rObj.push(aObj)
-				}
-			}, this)
-		}
-		if (mode === 'prev') { rObj.reverse() }
-		return rObj
+		return localFunctions.getSiblings.call(this, mode, useable, inclAChild, 'childs')
 	},
 	getChildsByName: function (name, ready = true, useable = true) {
 		let aChilds = []

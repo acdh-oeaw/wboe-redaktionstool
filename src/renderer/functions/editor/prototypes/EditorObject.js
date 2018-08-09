@@ -122,6 +122,9 @@ const localFunctions = {
 			let aNextSibs = this.getSiblings('next', true, false, true)
 			this.multipleLast = !(aNextSibs.length > 0 && aNextSibs[0].parserObj === this.parserObj)
 		}
+		if (this.parserObj && !this.isRoot) {
+			this.checkParser()
+		}
 		this.updateAddableAfter()
 		if (withChilds && this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {
@@ -150,15 +153,16 @@ const localFunctions = {
 		}
 	},
 	checkParser: function () {
-		if (this.orgXmlObj && this.parserObj) {
+		if (this.orgXmlObj && this.parserObj && this.errors.length === 0) {
 			this.deleteErrors()
 			this.deleteWarnings()
 			let aAttrCheck = this.parserObj.checkAttributes(this.orgXmlObj.attributes)
 			let aValCheck = this.parserObj.checkValue(this.orgXmlObj)
+			let aPosCheck = this.parserObj.checkPosition(this, true)
 			aAttrCheck.err.concat(aValCheck.err).forEach(function (aErr) {
 				this.addError(aErr)
 			}, this)
-			aAttrCheck.warn.concat(aValCheck.warn).forEach(function (aWarn) {
+			aAttrCheck.warn.concat(aValCheck.warn, aPosCheck).forEach(function (aWarn) {
 				this.addWarning(aWarn)
 			}, this)
 		}
