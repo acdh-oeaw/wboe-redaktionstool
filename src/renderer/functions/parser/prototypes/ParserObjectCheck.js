@@ -43,9 +43,9 @@ const localFunctions = {
 		let aTagOption = this.options.get('tag')
 		// ToDo: Anzahl püfen! Darf nur einmal?
 		// console.log(aTagOption)
+		let editorPrev = ((eoDirekt) ? editorObj.getSiblings('prev', true) : editorObj.getChilds('prev', true))
+		let parserPrev = this.getSiblings('prev', true)
 		if (!aTagOption || !(aTagOption.anywhere && aTagOption.anywhere.use)) {		// Feste Position
-			let parserPrev = this.getSiblings('prev', true)
-			let editorPrev = ((eoDirekt) ? editorObj.getSiblings('prev', true) : editorObj.getChilds('prev', true))
 			if (parserPrev.length > 0 || editorPrev.length > 0) {		// Wenn einer von beide nicht an erster Position
 				if (editorPrev.length > 0 && parserPrev.length === 0) {		// Wenn eigentlich an erster Stelle
 					editorPrev.some(function (aEditor) {
@@ -98,6 +98,9 @@ const localFunctions = {
 			}
 			if (editorObj.isMultiple && !editorObj.multipleLast && !editorObj.parserObj.options.get('tag.anywhere.use') && editorObj.parserObj !== this) {
 				errors.push('Position: Tag unterbricht "multiple"')
+			}
+			if (editorObj.parserObj !== this && this.options.get('tag.multiple.use') && !this.options.get('tag.anywhere.use') && editorPrev.length > 0 && editorPrev[0].parserObj === this) {
+				errors.push('Position: Tag wird von "multiple" umschlossen!')
 			}
 		}
 		// ToDo: if-Abfrage!
