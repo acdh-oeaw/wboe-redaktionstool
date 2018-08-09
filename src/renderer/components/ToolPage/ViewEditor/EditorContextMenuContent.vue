@@ -30,7 +30,7 @@
 		<template v-if="this.content.addableAfter.length > 0">
 			<div class="context-menu-subtitle"><b>Hinzufügen:</b></div>
 			<ul>
-				<li v-for="(aVal, aKey) in this.content.addableAfter">
+				<li v-for="(aVal, aKey) in this.content.addableAfter" v-if="aVal.cShow">
 					<font-awesome-icon icon="plus" class="fa-icon"/>
 					{{ aVal.title }}
 				</li>

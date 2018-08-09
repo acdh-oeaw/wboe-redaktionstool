@@ -136,12 +136,12 @@ const localFunctions = {
 		this.addableAfter = []
 		if (this.parserObj && !this.isRoot) {
 			if (this.parserObj.options.get('tag.multiple.use')) {
-				this.addableAfter.push({ 'uId': this.parserObj.uId, 'type': 'self', 'title': this.parserObj.options.get('addButton') || this.parserObj.options.get('title.value') || this.parserObj.name })
+				this.addableAfter.push({ 'uId': this.parserObj.uId, 'type': 'self', 'title': this.parserObj.options.get('addButton') || this.parserObj.options.get('title.value') || this.parserObj.name, 'cShow': true, 'bShow': !(this.isMultiple && !this.multipleLast && this.parserObj.options.get('editor.onlyLastElementHasAddButton')) })
 			}
 			let aSibs = this.parserObj.getSiblings('all', true)
 			aSibs.forEach(function (aSib) {
 				if (aSib.checkPosition(this, true, true).length === 0) {
-					this.addableAfter.push({ 'uId': aSib.uId, 'type': (aSib.options.get('tag.anywhere') ? 'anywhere' : 'ect'), 'title': aSib.options.get('addButton') || aSib.options.get('title.value') || aSib.name })
+					this.addableAfter.push({ 'uId': aSib.uId, 'type': (aSib.options.get('tag.anywhere') ? 'anywhere' : 'ect'), 'title': aSib.options.get('addButton') || aSib.options.get('title.value') || aSib.name, 'cShow': true, 'bShow': true })
 				}
 			}, this)
 			this.addableAfter = this.addableAfter.slice().sort(AddableAfterSort)

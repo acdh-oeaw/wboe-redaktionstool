@@ -434,41 +434,6 @@
 									} ?>
 			</gram>
 
-			<usg type="geo">
-				<?options {
-			 							"id": "usg-geo",
-										"tagAsTitle": false,
-										"layout": {
-											"frame": "inline",
-											"multiple": {
-												"use": true,
-												"join": ";"
-											}
-										}
-									} ?>
-				<placeName>
-					<?options {
-											"tagAsTitle": false,
-											"value": ["edit", "required"],
-											"attributes": [{
-												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
-												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
-											}],
-											"tag": ["multiple"],
-											"layout": {
-												"frame": "inline",
-												"multiple": {
-													"use": true,
-													"join": ", "
-												}
-											},
-											"editor": {
-												"parentInContext": true
-											}
-										} ?>
-				</placeName>
-			</usg>
-
 			<usg>
 				<?options {
 										"id": "usg-drg",
@@ -597,6 +562,44 @@
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "gram-number", "options": { "tag": ["possibleTag"] } } ?>
 			</gramGrp>
+
+			<usg type="geo">
+				<?options {
+			 							"id": "usg-geo",
+										"tagAsTitle": false,
+										"layout": {
+											"frame": "inline",
+											"multiple": {
+												"use": true,
+												"join": ";"
+											}
+										},
+										"editor": {
+											"onlyLastElementHasAddButton": true
+										}
+									} ?>
+				<placeName>
+					<?options {
+											"tagAsTitle": false,
+											"value": ["edit", "required"],
+											"attributes": [{
+												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
+												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+											}],
+											"tag": ["multiple"],
+											"layout": {
+												"frame": "inline",
+												"multiple": {
+													"use": true,
+													"join": ", "
+												}
+											},
+											"editor": {
+												"parentInContext": true
+											}
+										} ?>
+				</placeName>
+			</usg>
 
 		</tags>
 	</objParserSystem>
