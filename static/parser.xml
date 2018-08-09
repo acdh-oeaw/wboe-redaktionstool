@@ -43,11 +43,18 @@
             </form>
 						<form type="variant">
 							<?options {
-													"title": "Form Variant 1",
+													"tagAsTitle": false,
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
-													"tag": ["multiple", "possibleTag"]
+													"tag": ["possibleTag"],
+													"layout": {
+														"frame": "inline",
+														"before": ", "
+													},
+													"editor": {
+														"addTitle": "Form Variant 1"
+													}
 												} ?>
 							<pron>
 								<?options {
@@ -56,7 +63,7 @@
 														"tag": ["possibleTag"]
 													} ?>
 							</pron>
-							<?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
+							<?copy { "fromId": "orth", "options": { "title": "", "tagAsTitle": false, "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "addTitle": "Orth", "parentInContext": true } } } ?>
             </form>
 						<?copy { "fromId": "gramGrp" } ?>
 						<form type="variant" subtype="diminutive">
@@ -417,7 +424,22 @@
 				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "sense", "options": {
+																								"tagAsTitle": false,
+																								"title": "",
+																								"tag": ["possibleTag"],
+																								"layout": {
+																									"frame": "box",
+																									"multiple": {
+																										"use": true,
+																										"enumerate": true
+																									}
+																								},
+																								"editor": {
+																									"onlyLastElementHasAddButton": true,
+																									"addTitle": "Bedeutung Sub."
+																								}
+																							} } ?>
 			</sense>
 
 			<ref type="bibl">

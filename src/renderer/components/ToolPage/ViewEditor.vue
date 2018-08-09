@@ -19,6 +19,7 @@
 		</template>
 		<div :style="'height: ' + content.parserObj.options.get('layout.spaceBefore') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceBefore')"></div>
 		<h3 v-if="content.parserObj.options && content.parserObj.options.get('layout.header')">{{ content.parserObj.options.get('layout.header') }}</h3>
+		<template v-if="content.parserObj.options && content.parserObj.options.get('layout.before')">{{ content.parserObj.options.get('layout.before') }}</template>
 		<span class="enumeraterom" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerateRom')">{{ num2rom(content.multipleNr + 1) }}.&nbsp;</span>
 		<span class="enumerate" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerate')">{{ content.multipleNr + 1 }})&nbsp;</span>
 		<EditorObjFrame :content="content">
@@ -33,6 +34,7 @@
 		<template v-if="content.isMultiple && !content.multipleLast && content.parserObj.options.get('layout.multiple.use') && content.parserObj.options.get('layout.multiple.join')">
 			{{ content.parserObj.options.get('layout.multiple.join') }}
 		</template>
+		<template v-if="content.parserObj.options && content.parserObj.options.get('layout.after')">{{ content.parserObj.options.get('layout.after') }}</template>
 		<h4 v-if="content.parserObj.options && content.parserObj.options.get('layout.footer')">{{ content.parserObj.options.get('layout.footer') }}</h4>
 		<div :style="'height: ' + content.parserObj.options.get('layout.spaceAfter') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceAfter')"></div>
 		<template v-if="content.isMultiple && content.multipleLast && content.parserObj.options.get('layout.multiple.use')">
