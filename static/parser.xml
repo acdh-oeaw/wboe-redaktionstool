@@ -150,13 +150,6 @@
 													}],
 													"tag": ["multiple"]
 												} ?>
-							<pron>
-								<?options {
-														"title": "Pron",
-														"value": ["edit", "required"],
-														"tag": ["possibleTag"]
-													} ?>
-							</pron>
 							<?copy { "fromId": "orth" } ?>
             </form>
 						<form type="variant">
@@ -378,7 +371,7 @@
 			<?text {
 				"options": {
 					"id": "text",
-					"title": "Text:",
+					"title": "Text",
 					"value": ["edit", "required"],
 					"tag": ["possibleTag", "multiple", "anywhere"]
 				}

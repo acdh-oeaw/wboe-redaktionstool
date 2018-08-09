@@ -99,8 +99,23 @@ const localFunctions = {
 			if (editorObj.isMultiple && !editorObj.multipleLast && !editorObj.parserObj.options.get('tag.anywhere.use') && editorObj.parserObj !== this) {
 				errors.push('Position: Tag unterbricht "multiple"')
 			}
-			if (editorObj.parserObj !== this && this.options.get('tag.multiple.use') && !this.options.get('tag.anywhere.use') && editorPrev.length > 0 && editorPrev[0].parserObj === this) {
-				errors.push('Position: Tag wird von "multiple" umschlossen!')
+			if (editorObj.parserObj !== this) {
+				let editorParserPrev = editorObj.parserObj.getSiblings('prev', true)
+				if (this.options.get('tag.multiple.use') && !this.options.get('tag.anywhere.use') && editorPrev.length > 0 && editorPrev[0].parserObj === this) {
+					errors.push('Position: Tag wird von "multiple" umschlossen!')
+				}
+				if (editorParserPrev.indexOf(this) > -1) {
+					errors.push('Position: Kann hier nicht hin!')
+				}
+				if (!this.options.get('tag.multiple.use')) {
+					let editorNext = ((eoDirekt) ? editorObj.getSiblings('next', true) : editorObj.getChilds('next', true))
+					editorNext.some(function (eObj) {
+						if (eObj.parserObj === this) {
+							errors.push('Anzahl: Tag sollte nur einmal vorkommen! (a)')
+							return true
+						}
+					}, this)
+				}
 			}
 		}
 		// ToDo: if-Abfrage!
