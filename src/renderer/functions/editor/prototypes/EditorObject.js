@@ -144,7 +144,7 @@ const localFunctions = {
 					this.addableAfter.push({ 'uId': aSib.uId, 'type': (aSib.options.get('tag.anywhere') ? 'anywhere' : 'ect'), 'title': aSib.options.get('addButton') || aSib.options.get('title.value') || aSib.name })
 				}
 			}, this)
-			// ToDo: Sort!
+			this.addableAfter = this.addableAfter.slice().sort(AddableAfterSort)
 		}
 		if (withChilds && this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {
@@ -219,5 +219,15 @@ function pMatchSort (a, b) {		// Sortieren: "possible" nach oben, Fehler nach un
 	if (a.match.score > b.match.score) { return -1 }
 	if (a.match.warnings.length > b.match.warnings.length) { return 1 }
 	if (a.match.warnings.length < b.match.warnings.length) { return -1 }
+	return 0
+}
+
+function AddableAfterSort (a, b) {		// Sortieren:
+	if (a.type !== 'self' && b.type === 'self') { return 1 }
+	if (a.type === 'self' && b.type !== 'self') { return -1 }
+	if (a.type !== 'ect' && b.type === 'ect') { return 1 }
+	if (a.type === 'ect' && b.type !== 'ect') { return -1 }
+	if (a.type !== 'anywhere' && b.type === 'anywhere') { return 1 }
+	if (a.type === 'anywhere' && b.type !== 'anywhere') { return -1 }
 	return 0
 }
