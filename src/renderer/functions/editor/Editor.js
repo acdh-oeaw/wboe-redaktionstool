@@ -40,6 +40,7 @@ const localFunctions = {
 		this.multipleNr = 0						// Position in der aktuellen "multiple"-Gruppe
 		this.multipleLast = true			// Letzter der aktuellen "multiple"-Gruppe
 		this.addableAfter = []				// Welche Objekte können nach diesem hinzugefügt werden?
+		this.addableInner = []				// Welche Objekte können nach diesem hinzugefügt werden?
 		// Immer dirket initialisieren
 		this.init()
 		// this.add(parser, pos, xml)			// Kind hinzufügen (XML hinzufügen falls nicht vorhanden!)
@@ -66,7 +67,7 @@ localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
 localFunctions.EditorObject.prototype.getSiblings = prototypeEditorObject.getSiblings
 localFunctions.EditorObject.prototype.getChilds = prototypeEditorObject.getChilds
 localFunctions.EditorObject.prototype.checkParser = prototypeEditorObject.checkParser
-localFunctions.EditorObject.prototype.updateAddableAfter = prototypeEditorObject.updateAddableAfter
+localFunctions.EditorObject.prototype.updateAddable = prototypeEditorObject.updateAddable
 localFunctions.EditorObject.prototype.updateData = prototypeEditorObject.updateData
 // localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete		// ToDo !!!
 

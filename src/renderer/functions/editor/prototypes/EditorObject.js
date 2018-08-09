@@ -125,14 +125,15 @@ const localFunctions = {
 		if (this.parserObj && !this.isRoot) {
 			this.checkParser(posAsError)
 		}
-		this.updateAddableAfter()
+		this.updateAddable()
 		if (withChilds && this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {
 				aChild.updateData(withChilds, posAsError)
 			}, this)
 		}
 	},
-	updateAddableAfter: function (withChilds = false) {
+	updateAddable: function (withChilds = false) {
+		// Nach diesem Tag hinzufügbare Tags
 		this.addableAfter = []
 		if (this.parserObj && !this.isRoot) {
 			if (this.parserObj.options.get('tag.multiple.use')) {
@@ -141,11 +142,37 @@ const localFunctions = {
 			let aSibs = this.parserObj.getSiblings('all', true)
 			aSibs.forEach(function (aSib) {
 				if (aSib.checkPosition(this, true, true).length === 0) {
-					this.addableAfter.push({ 'uId': aSib.uId, 'type': (aSib.options.get('tag.anywhere') ? 'anywhere' : 'ect'), 'title': aSib.options.get('addButton') || aSib.options.get('title.value') || aSib.name, 'cShow': true, 'bShow': true })
+					this.addableAfter.push({ 'uId': aSib.uId, 'type': (aSib.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'), 'title': aSib.options.get('addButton') || aSib.options.get('title.value') || aSib.name, 'cShow': true, 'bShow': true })
 				}
 			}, this)
-			this.addableAfter = this.addableAfter.slice().sort(AddableAfterSort)
+			this.addableAfter = this.addableAfter.slice().sort(AddableSort)
 		}
+		// In diesem Tag am Start hinzufügbare Tags
+		this.addableInner = []
+		if (this.parserObj && !this.isRoot && this.parserObj.childs) {
+			let eChilds = this.getChilds('all', true)
+			let mHit = false
+			this.parserObj.childs.forEach(function (acParser) {
+				let addThis = true
+				if (!acParser.options.get('tag.anywhere.use')) {
+					if (mHit) {
+						addThis = false
+					} else {
+						eChilds.forEach(function (eChild) {
+							if (eChild.parserObj === acParser) {
+								addThis = false
+								mHit = true
+							}
+						}, this)
+					}
+				}
+				if (addThis) {
+					this.addableInner.push({ 'uId': acParser.uId, 'type': (acParser.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'), 'title': acParser.options.get('addButton') || acParser.options.get('title.value') || acParser.name, 'cShow': true, 'bShow': true })
+				}
+			}, this)
+			this.addableInner = this.addableInner.slice().sort(AddableSort)
+		}
+		// Kinder verarbeiten
 		if (withChilds && this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {
 				aChild.updateAddableAfter(withChilds)
@@ -222,7 +249,7 @@ function pMatchSort (a, b) {		// Sortieren: "possible" nach oben, Fehler nach un
 	return 0
 }
 
-function AddableAfterSort (a, b) {		// Sortieren:
+function AddableSort (a, b) {		// Sortieren:
 	if (a.type !== 'self' && b.type === 'self') { return 1 }
 	if (a.type === 'self' && b.type !== 'self') { return -1 }
 	if (a.type !== 'ect' && b.type === 'ect') { return 1 }

@@ -11,6 +11,16 @@
 			</button>
 		</div>
 		<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
+			<b-list-group flush v-if="content.addableInner.length > 0">
+				<b-list-group-item style="background: #eee;">
+					<div style="margin: -8px -9px;">
+						<b-button size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.bShow">
+							<font-awesome-icon icon="plus" class="fa-icon"/>
+							{{ aVal.title }}
+						</b-button>
+					</div>
+				</b-list-group-item>
+			</b-list-group>
 			<b-card-body>
 				<div @contextmenu.prevent="contextMenue" class="context">
 					<slot/>
@@ -28,6 +38,14 @@
 	</b-card>
 
 	<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
+		<div :class="{'inline': layoutBase !== 'box'}" v-if="content.addableInner.length > 0">
+			<b-button size="xs" variant="success" class="mir5" :title="content.addableInner[0].title" v-if="content.addableInner[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableInner[0].title }}</span></b-button>
+			<b-button @click="isOpenAdditionalAddInBtn = !isOpenAdditionalAddInBtn" size="xs" variant="secondary" class="mir5" title="Weitere mögliche Tags anzeigen." v-if="content.addableInner.length > 1"><font-awesome-icon :icon="((!isOpenAdditionalAddInBtn) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
+			<b-button size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aKey !== 0 && isOpenAdditionalAddInBtn">
+				<font-awesome-icon icon="plus" class="fa-icon"/>
+				{{ aVal.title }}
+			</b-button>
+		</div>
 		<div @contextmenu.prevent="contextMenue" class="context">
 			<b v-if="title">{{ title }}:</b><br v-if="title && layoutBase === 'box'"/>
 			<slot/>
@@ -58,6 +76,7 @@
 				'isOpen': true,
 				'contextMenuCached': false,
 				'isOpenAdditionalAddBtn': false,
+				'isOpenAdditionalAddInBtn': false,
 			}
 		},
 		computed: {

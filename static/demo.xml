@@ -63,7 +63,7 @@
                <gram type="pos">Substantiv</gram>
                <gram type="gender">Masculinum</gram><!-- Formatting Rule: wrap value of //gram[@type='gender'] in brackets -->
             </gramGrp>
-            
+
             <form type="variant" subtype="diminutive" xml:id="Färzel"><!-- ISSUE: THESE CAN'T BE NESTED IN "LEMMA" BECAUSE THERE ARE TWO LEMMAS,  AND THEY ARE NOT ADJECENT TO EACH OF THEIR RESPECTIVE FORMS -->
                <orth>Färzel</orth>
                <gramGrp>
@@ -79,14 +79,14 @@
                   <gram type="gender">Neutrum</gram><!-- Formatting Rule: wrap value of //gram[@type='gender'] in brackets -->
                </gramGrp>
             </form>
-         
-            
-            
+
+
+
 
             <!-- Formatting Rule: (Subheading)  "Verbreitung": before the first instance of: /entry/usg[@type = "geo"] -->
             <!-- Formatting Rule: insert semicolon ";" between each: /entry/usg[@type="geo"] -->
             <!-- Note: editor can replace <placeName type="grossregion"> with <placeName type="region"> if needed -->
-            
+
             <usg type="geo"><placeName type="grossregion">STir.</placeName></usg>
             <usg type="geo"><placeName type="grossregion">Tir.</placeName></usg>
             <usg type="geo"><placeName type="grossregion">Ktn.</placeName></usg>
@@ -102,7 +102,7 @@
 
             <!-- Formatting Rule: (Subheading)  "Datenbankbbeleg (exempl.)": before the first form[@type = "lautung"] -->
             <!-- Formatting Rule: surround /entry/form/usg[@type="geo"] contents with brackets "(" ")" -->
-                        
+
                <form type="variant">
                   <!-- Formatting Rule: /form/pron in italics -->
                   <pron xml:lang="bar-AT">fǫšts</pron>
@@ -111,61 +111,61 @@
                      <placeName type="grossregion">öSTir.</placeName>
                   </usg>
                </form>
-               
+
                <!-- Formatting Rule: semicolon between <form type="variant">'s -->
                <form type="variant">
                   <pron xml:lang="bar-AT">fǫrts</pron>
-                  
+
                   <usg type="geo">
                      <placeName>Lüsen</placeName>
                      <placeName type="grossregion">öSTir.</placeName>
                   </usg>
                </form>
-            
+
             <!-- Formatting Rule: if two consecutive //form contain the same value of /form/usg[@type='geo'], (rule 1)  Print "u." after /form[1] and (rule 2) only print /usg[@type='geo'][2]-->
             <!-- formatting rule: where //form[@type='variant'] has child  //form[@type='variant']/form[@type='variant' and @subtype] print "u." before the latter-->
             <form type="variant" subtype="diminutive">
                <pron xml:lang="bar-AT">fartsl</pron>
-               
+
                <usg type="geo">
                   <placeName>Lüsen</placeName>
                   <placeName type="grossregion">öSTir.</placeName>
                </usg>
             </form>
-               
+
                <form type="variant">
                   <pron xml:lang="bar-AT">lfǫχtß</pron><!-- NOTE: I coppied the word initial "l" but I think it's probably a typo!!! -->
                   <usg type="geo">
                      <placeName type="grossregion">Lung.</placeName>
                   </usg>
                </form>
-            
-            
+
+
             <!-- Formatting Rule: print "Etymologie" before <etym> -->
             <!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
             <!-- Formatting Rule:  enter comma after <def> where //cit/desc -->
-            <!--Formatting Rule:  add colon betweeen: (/date  or /edition>) and /citedRange within /bibl --> 
+            <!--Formatting Rule:  add colon betweeen: (/date  or /edition>) and /citedRange within /bibl -->
             <etym>
                <cit type="etymon">
                   <lang>mhd</lang>
                   <form>
                      <orth xml:lang="gmh">varz</orth>
                   </form>
-                  <def>Darmwind</def>    
+                  <def>Darmwind</def>
                </cit>
                <!-- Formatting Rule: print bibl title & year "Lexer 1878 III" in small caps with colon followed by page number (value of <citedRange>) all wrapped in brackets "(" ")"  -->
                <ref type="bibl" target="#Lexer1878III"><citedRange>27</citedRange></ref>
             </etym>
-            
+
             <!-- Formatting Rule: Print "Bedeutung" (project should only have one or the other!) -->
             <!-- Formatting Rule: where (2...n) <sense> for each print number in roman numerals with period -->
             <!-- Formatting Rule: where (2...n) <def> 's in <sense> before each print number in arabic numerals with period -->
             <!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
-            <!--Formatting Rule: letter spacing within def should be 1 pt --> 
+            <!--Formatting Rule: letter spacing within def should be 1 pt -->
             <!-- Formatting Rule: <cit type="example"><quote> in italics -->
-            <!-- Formatting Rule: surround <cit type="example"><usg type="geo"> contents with brackets "(" ")" -->         
+            <!-- Formatting Rule: surround <cit type="example"><usg type="geo"> contents with brackets "(" ")" -->
             <!-- Formatting Rule: add a long dash before each //cit[@type="example"]  -->
-            
+
             <sense>
                <!-- below is a preliminary attempt  -->
                <ref type="form">auch <oRef target="#Färzel"/><!-- Formatting rule: if target (/form[@type='variant' and @subtype='diminutive] print "(Dim.)");--> </ref>
@@ -179,20 +179,20 @@
                <usg type="geo"><placeName type="grossregion">Lung.</placeName></usg>
                <usg type="geo"><placeName type="grossregion">OÖ</placeName></usg>
                <usg type="geo"><placeName type="grossregion">Weinv.</placeName></usg>
-               <usg type="geo"><placeName type="grossregion">Wein.</placeName></usg> 
+               <usg type="geo"><placeName type="grossregion">Wein.</placeName></usg>
             </sense>
-               
+
             <sense>
                <def>Kleinigkeit; Nichtigkeit</def>
                <usg type="geo"><placeName type="grossregion">öSTir.</placeName></usg>
-               
+
                <cit type="example">
                   <quote xml:lang="bar-AT">pö̆gŋ an iǝdn fǫrts tsin dokχta špriŋ</quote>
                   <usg type="geo"><placeName>Lüsen</placeName><placeName type="grossregion">öSTir.</placeName></usg>
                </cit>
-               
+
             </sense>
-            
+
             <sense>
                <!-- below is a preliminary attempt  -->
                <ref type="form">auch <oRef target="#Pfarzel"/><!-- Formatting rule: if target (/form[@type='variant' and @subtype='diminutive] print "(Dim.)");--> </ref>
@@ -200,76 +200,76 @@
                <def>kleine Pfeife aus Weidenrinde</def>
                <usg type="geo"><placeName type="grossregion">Industriev.</placeName></usg>
             </sense>
-            
-               
+
+
                <!-- Formatting Rule: before variant in Wortbildung surround form with brackets and print 'auch' before form -->
                <!-- Formatting Rule: insert "Wortbildung" before first <re> (same label for: compound, derivations, suffixes  -->
                <!-- Formatting Rule: <cit type="example"><quote> in italics -->
-               <!-- Formatting Rule: surround <cit type="example"><usg type="geo"> contents with brackets "(" ")" -->         
-               <!-- Formatting Rule: add a long dash before each //cit[@type="example"]  --> 
+               <!-- Formatting Rule: surround <cit type="example"><usg type="geo"> contents with brackets "(" ")" -->
+               <!-- Formatting Rule: add a long dash before each //cit[@type="example"]  -->
             <!-- Formatting Rule: <re><orth> in italics -->
                <!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
-            <re> 
-               <form type="lemma" subtype="compound"><orth>Nonnenfarzel</orth></form>  
-               <sense> 
+            <re>
+               <form type="lemma" subtype="compound"><orth>Nonnenfarzel</orth></form>
+               <sense>
                   <def>kleines Lebkuchenstücklein</def>
                   <!-- formatting Rule: wrap /usg[@type="dom"] in brackets -->
                   <usg type="dom">Klosterspeise</usg>
                </sense>
                <usg type="geo"><placeName type="grossregion">Stmk.</placeName></usg>
             </re>
-            
-            <re> 
-               <form type="lemma" subtype="compound"><orth>Schneiderfarz</orth></form>  
-               <usg type="geo"><placeName type="grossregion">Industriev.</placeName></usg>        
+
+            <re>
+               <form type="lemma" subtype="compound"><orth>Schneiderfarz</orth></form>
+               <usg type="geo"><placeName type="grossregion">Industriev.</placeName></usg>
             </re>
-              
+
             <!-- Formatting Rule: before variant in Wortbildung surround form with brackets and print 'auch' before form -->
             <!-- Formatting Rule: insert "Redenwendung" before first //form[@type='MWE'] -->
-            
-            <re> 
-               <form type="lemma" subtype="MWE"><orth>der Farz ist des Bauches Arzt</orth></form>  
+
+            <re>
+               <form type="lemma" subtype="MWE"><orth>der Farz ist des Bauches Arzt</orth></form>
                <usg type="geo"><placeName type="grossregion">Ktn.</placeName></usg>
                <cit type="example">
-                  <quote xml:lang="bar-AT">dér Fàrz ist 's pauchis àrz</quote> 
+                  <quote xml:lang="bar-AT">dér Fàrz ist 's pauchis àrz</quote>
                   <!-- Formatting Rule: where //ref[@type='bibl'] followed by //usg[@type='geo'], retrieve bibl from pointer, print title, semi-colon ";" and place; wrap in brackets: (KÄRNTISCHES WB. 1862: 90, Ktn.) -->
                   <ref type="bibl" target="#KÄRNTISCHESWB1862"><citedRange>90</citedRange></ref>
                   <usg type="geo"><placeName type="grossregion">Ktn.</placeName></usg>
                </cit>
             </re>
-            
-            <re> 
-               <form type="lemma" subtype="MWE"><orth>Er lässt alle Farzen gehen</orth></form>  
-               <sense> 
+
+            <re>
+               <form type="lemma" subtype="MWE"><orth>Er lässt alle Farzen gehen</orth></form>
+               <sense>
                   <def>der Organist spielt mit allen gezogenen Registern</def>
                </sense>
                <cit type="example">
-                  <quote xml:lang="bar-AT">Jetz låsst r af n Kchor owen widEr ålle Fårzn giehn</quote> 
+                  <quote xml:lang="bar-AT">Jetz låsst r af n Kchor owen widEr ålle Fårzn giehn</quote>
                   <usg type="geo"><placeName>Matrei am Brenner</placeName><placeName type="grossregion">mNTir.</placeName></usg>
                </cit>
             </re>
-            
-            <re> 
+
+            <re>
                <form type="lemma" subtype="MWE"><orth>herumschießen wie der Farz in die/der/den Reite(rn)</orth></form>  <!-- format in source not finalized -->
-               <sense> 
+               <sense>
                   <def>geschäftig herumlaufen</def>
                   <usg type="reg">spöttisch</usg>
                </sense>
                <usg type="geo"><placeName type="grossregion">Mostv.</placeName></usg>
                <cit type="example">
-                  <quote xml:lang="bar-AT">u͂mǝdú͂m šiǝssn wiǝ dǝ pfåǝtts in dǝ raittǝ</quote> 
+                  <quote xml:lang="bar-AT">u͂mǝdú͂m šiǝssn wiǝ dǝ pfåǝtts in dǝ raittǝ</quote>
                   <usg type="geo"><placeName>Herzogenburg</placeName><placeName type="grossregion">Mostv.</placeName></usg>
                </cit>
             </re>
-            
-            <re> 
-               <form type="lemma" subtype="MWE"><orth>Man hat keinen Farz gehört</orth></form>  
-               <sense> 
+
+            <re>
+               <form type="lemma" subtype="MWE"><orth>Man hat keinen Farz gehört</orth></form>
+               <sense>
                   <def>es ist nichts von einer Angelegenheit bekannt geworden</def>
                </sense>
                <usg type="geo"><placeName type="grossregion">OTir.</placeName></usg>
                <cit type="example">
-                  <quote xml:lang="bar-AT">Man hat kan Få'z ghęat</quote> 
+                  <quote xml:lang="bar-AT">Man hat kan Få'z ghęat</quote>
                   <usg type="geo">
                      <placeName>uIselt.</placeName>
                      <!-- Formatting Rule: if /usg[@type='geo'/placeName[not(@)] print "u." between the values -->
@@ -277,16 +277,16 @@
                      <placeName type="grossregion">OTir.</placeName></usg>
                </cit>
             </re>
-            
-            <re> 
-               <form type="lemma" subtype="MWE"><orth>Schwarz und Weiß / Pfarz und Scheiß</orth></form>  
-               <sense> 
+
+            <re>
+               <form type="lemma" subtype="MWE"><orth>Schwarz und Weiß / Pfarz und Scheiß</orth></form>
+               <sense>
                   <!-- Formatting Rule: print value of /usg[@type='dom'] in brackets  -->
                   <usg type="dom">Kinderreim</usg>
                </sense>
                <usg type="geo"><placeName type="grossregion">Hausrv.</placeName></usg>
                <cit type="example">
-                  <quote xml:lang="bar-AT">schwoaz und weis / Bfoaz und Scheis</quote> 
+                  <quote xml:lang="bar-AT">schwoaz und weis / Bfoaz und Scheis</quote>
                   <usg type="geo"><placeName>Linz</placeName><placeName type="grossregion">Hausrv.</placeName></usg>
                </cit>
             </re>

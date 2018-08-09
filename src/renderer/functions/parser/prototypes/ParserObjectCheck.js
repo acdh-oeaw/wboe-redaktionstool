@@ -100,12 +100,8 @@ const localFunctions = {
 				errors.push('Position: Tag unterbricht "multiple"')
 			}
 			if (editorObj.parserObj !== this) {
-				let editorParserPrev = editorObj.parserObj.getSiblings('prev', true)
 				if (this.options.get('tag.multiple.use') && !this.options.get('tag.anywhere.use') && editorPrev.length > 0 && editorPrev[0].parserObj === this) {
 					errors.push('Position: Tag wird von "multiple" umschlossen!')
-				}
-				if (editorParserPrev.indexOf(this) > -1) {
-					errors.push('Position: Kann hier nicht hin!')
 				}
 				if (!this.options.get('tag.multiple.use')) {
 					let editorNext = ((eoDirekt) ? editorObj.getSiblings('next', true) : editorObj.getChilds('next', true))

@@ -27,8 +27,17 @@
 				</li>
 			</ul>
 		</template>
+		<template v-if="this.content.addableInner.length > 0">
+			<div class="context-menu-subtitle"><font-awesome-icon icon="angle-down" class="fa-icon"/> <b>Einfügen in Tag "{{ this.content.orgXmlObj.name }}":</b></div>
+			<ul>
+				<li v-for="(aVal, aKey) in this.content.addableInner" v-if="aVal.cShow">
+					<font-awesome-icon icon="plus" class="fa-icon"/>
+					{{ aVal.title }}
+				</li>
+			</ul>
+		</template>
 		<template v-if="this.content.addableAfter.length > 0">
-			<div class="context-menu-subtitle"><b>Hinzufügen:</b></div>
+			<div class="context-menu-subtitle"><font-awesome-icon icon="angle-right" class="fa-icon"/> <b>Einfügen nach Tag "{{ this.content.orgXmlObj.name }}":</b></div>
 			<ul>
 				<li v-for="(aVal, aKey) in this.content.addableAfter" v-if="aVal.cShow">
 					<font-awesome-icon icon="plus" class="fa-icon"/>
