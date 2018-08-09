@@ -8,130 +8,7 @@
 	<objParserContent>
 		<TEI xmlns="http://www.tei-c.org/ns/1.0">
 			<?options {	"layout": { "frame": "justChilds" } } ?>
-			<teiHeader>
-				<?options { "title": "Kopfzeile" } ?>
-				<fileDesc>
-					<?options {	"layout": { "frame": "justChilds" } } ?>
-					<titleStmt>
-						<?options {	"layout": { "frame": "justChilds" } } ?>
-						<title>
-							<?options {
-													"id": "title",
-													"title": "Titel",
-													"value": ["edit", {"required": {"use": true}}],
-													"layout": { "frame": "line" }
-												} ?>
-						</title>
-						<respStmt>
-							<?options {	"layout": { "frame": "justChilds" } } ?>
-							<resp>
-								<?options {
-									"value": {
-										"is": {
-											"value": "Editor",
-											"use": true,
-											"possibleValues": ["Editor", "article editor"]
-										}
-									},
-									"layout": ["hidden"]
-								} ?>
-							</resp>
-							<name>
-								<?options {
-														"title": "Editor",
-														"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
-														"value": ["edit", "required", {"is": {
-															"possibleValues": [
-																{"value": "Alexandra N. Lenz", "attribute": {"xml:id": "AL"}},
-																{"value": "Philip Stöckle", "attribute": {"xml:id": "PhS"}},
-																{"value": "Andreas Gellan", "attribute": {"xml:id": "AG"}},
-																{"value": "Patrick Zeithuber", "attribute": {"xml:id": "PZ"}},
-																{"value": "Sabine Wahl", "attribute": {"xml:id": "SW"}},
-																{"value": "Sonja Schwaiger", "attribute": {"xml:id": "SS"}},
-																{"value": "Jan Braun", "attribute": {"xml:id": "JD"}},
-																{"value": "Angela Bergmayer", "attribute": {"xml:id": "AB"}}
-															]
-														}}],
-														"layout": { "frame": "line" }
-													} ?>
-							</name>
-						</respStmt>
-						<respStmt>
-							<?options { "title": "Encoding Scheme", "layout": { "frame": "panelClosed" } } ?>
-							<resp>
-								<?options {
-									"value": {
-										"is": {
-											"value": "Encoding Scheme",
-											"use": true,
-											"possibleValues": ["Encoding Scheme", "encoding"]
-										}
-									},
-									"layout": ["hidden"]
-								} ?>
-							</resp>
-							<name><?options {	"layout": { "frame": "line" } } ?>Jack Bowers</name>
-							<name><?options {	"layout": { "frame": "line" } } ?>Daniel Schopper</name>
-							<name><?options {	"layout": { "frame": "line" } } ?>Omar Siam</name>
-						</respStmt>
-						<respStmt>
-							<?options { "title": "DBOE Team", "layout": { "frame": "panelClosed" } } ?>
-							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
-							<name xml:id="AL"><?options { "layout": { "frame": "line" } } ?>Alexandra N. Lenz</name>
-							<name xml:id="PhS"><?options { "layout": { "frame": "line" } } ?>Philip Stöckle</name>
-							<name xml:id="AG"><?options { "layout": { "frame": "line" } } ?>Andreas Gellan</name>
-							<name xml:id="PZ"><?options { "layout": { "frame": "line" } } ?>Patrick Zeithuber</name>
-							<name xml:id="SW"><?options { "layout": { "frame": "line" } } ?>Sabine Wahl</name>
-							<name xml:id="SS"><?options { "layout": { "frame": "line" } } ?>Sonja Schwaiger</name>
-							<name xml:id="JD"><?options { "layout": { "frame": "line" } } ?>Jan Braun</name>
-							<name xml:id="AB"><?options { "layout": { "frame": "line" } } ?>Angela Bergmayer</name>
-						</respStmt>
-						<respStmt>
-							<?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>
-							<resp>
-								<?options {
-									"value": {
-										"is": {
-											"value": "Editor",
-											"use": true,
-											"possibleValues": ["Student assistants", "student assistants"]
-										}
-									},
-									"layout": ["hidden"]
-								} ?>
-							</resp>
-							<name>
-								<?options {
-														"title": "Name",
-														"value": ["variable", "required"],
-														"tag": ["multiple"],
-														"layout": { "frame": "line" }
-													} ?>
-							</name>
-						</respStmt>
-					</titleStmt>
-					<publicationStmt>
-						<?options { "title": "Publication Information" } ?>
-						<p>
-							<?options {
-								"value": ["edit", "canBeEmpty"],
-								"tagAsTitle": false,
-								"layout": { "frame": "box" }
-							} ?>
-						</p>
-					</publicationStmt>
-					<sourceDesc>
-						<?options { "title": "Information about the source" } ?>
-						<p>
-							<?options {
-								"value": ["edit", "canBeEmpty"],
-								"tagAsTitle": false,
-								"layout": { "frame": "box" }
-							} ?>
-						</p>
-					</sourceDesc>
-				</fileDesc>
-			</teiHeader>
+			<?copy { "fromId": "teiHeader" } ?>
 			<text>
 				<?options {	"layout": { "frame": "justChilds" } } ?>
 				<body>
@@ -141,7 +18,6 @@
 												"title": "Eintrag",
 												"attributes": [{"n": {"type": "edit", "valueType": "num+", "canBeEmpty": {"use": true}}}]
 											} ?>
-						<?copy { "fromId": "note", "options": { "tag": ["multiple", "anywhere", "possibleTag"] } } ?>
 						<form type="lemma">
 							<?options {
 													"id": "lemma-base",
@@ -266,13 +142,7 @@
 													} ?>
 								<?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-              	<lang>
-									<?options {
-  														"title": "Lang",
-  														"value": ["edit", "required"],
-															"tag": ["possibleTag"]
-  													} ?>
-								</lang>
+								<?copy { "fromId": "lang" } ?>
 								<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
               	<form>
 									<?options {
@@ -326,14 +196,6 @@
 	<objParserSystem>
 		<tags>
 
-			<note>		<!-- ToDo!? -->
-				<?options {
-				 						"id": "note",
-										"title": "Note",
-										"value": ["variable", "required", "innerXML"]
-									} ?>
-			</note>
-
 			<xr>		<!-- ToDo!? -->
 				<?options {
 				 						"id": "xr",
@@ -344,11 +206,11 @@
 									} ?>
 			</xr>
 
-			<lang>		<!-- ToDo!? -->
+			<lang>		<!-- ToDo!!!! -->
 				<?options {
 				 						"id": "lang",
 										"title": "Lang",
-										"value": ["variable", "required", "innerXML"],
+										"value": ["variable", "required"],
 										"tag": ["possibleTag"]
 									} ?>
 			</lang>
@@ -357,8 +219,7 @@
 				<?options {
 				 						"id": "pos",
 										"title": "Pos",
-										"value": ["variable", "required", "innerXML"],
-										"tag": ["possibleTag"]
+										"value": ["variable", "required", "innerXML"]
 									} ?>
 			</pos>
 
@@ -427,7 +288,11 @@
 										"title": "Gram Gender",
 										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum", "Femininum"]}}],
 										"tag": ["multiple"],
-										"layout": { "frame": "line" }
+										"layout": { "frame": "line" },
+										"editor": {
+											"onlyLastElementHasAddButton": true,
+											"addTitle": "Gender"
+										}
 									} ?>
 			</gram>
 
@@ -568,7 +433,18 @@
 										} ?>
 				</iType>
 				<?copy {"fromId": "pos", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-				<?copy {"fromId": "gram-gender", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+				<?copy {"fromId": "gram-gender", "options": {
+				 																							"tag": ["possibleTag"],
+																											"layout": {
+																												"frame": "inline",
+																												"multiple": {
+																													"use": true,
+																													"join": ", ",
+																													"before": "(",
+																													"after": ")"
+																												}
+																											}
+																										} } ?>
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "gram-number", "options": { "tag": ["possibleTag"] } } ?>
 			</gramGrp>
@@ -611,6 +487,139 @@
 				</placeName>
 			</usg>
 
+
+
+
+
+
+			<!-- Kopfzeile -->
+			<teiHeader>
+				<?options {
+										"id": "teiHeader",
+										"title": "Kopfzeile"
+									} ?>
+				<fileDesc>
+					<?options {	"layout": { "frame": "justChilds" } } ?>
+					<titleStmt>
+						<?options {	"layout": { "frame": "justChilds" } } ?>
+						<title>
+							<?options {
+													"id": "title",
+													"title": "Titel",
+													"value": ["edit", {"required": {"use": true}}],
+													"layout": { "frame": "line" }
+												} ?>
+						</title>
+						<respStmt>
+							<?options {	"layout": { "frame": "justChilds" } } ?>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Editor",
+											"use": true,
+											"possibleValues": ["Editor", "article editor"]
+										}
+									},
+									"layout": ["hidden"]
+								} ?>
+							</resp>
+							<name>
+								<?options {
+														"title": "Editor",
+														"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
+														"value": ["edit", "required", {"is": {
+															"possibleValues": [
+																{"value": "Alexandra N. Lenz", "attribute": {"xml:id": "AL"}},
+																{"value": "Philip Stöckle", "attribute": {"xml:id": "PhS"}},
+																{"value": "Andreas Gellan", "attribute": {"xml:id": "AG"}},
+																{"value": "Patrick Zeithuber", "attribute": {"xml:id": "PZ"}},
+																{"value": "Sabine Wahl", "attribute": {"xml:id": "SW"}},
+																{"value": "Sonja Schwaiger", "attribute": {"xml:id": "SS"}},
+																{"value": "Jan Braun", "attribute": {"xml:id": "JD"}},
+																{"value": "Angela Bergmayer", "attribute": {"xml:id": "AB"}}
+															]
+														}}],
+														"layout": { "frame": "line" }
+													} ?>
+							</name>
+						</respStmt>
+						<respStmt>
+							<?options { "title": "Encoding Scheme", "layout": { "frame": "panelClosed" } } ?>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Encoding Scheme",
+											"use": true,
+											"possibleValues": ["Encoding Scheme", "encoding"]
+										}
+									},
+									"layout": ["hidden"]
+								} ?>
+							</resp>
+							<name><?options {	"layout": { "frame": "line" } } ?>Jack Bowers</name>
+							<name><?options {	"layout": { "frame": "line" } } ?>Daniel Schopper</name>
+							<name><?options {	"layout": { "frame": "line" } } ?>Omar Siam</name>
+						</respStmt>
+						<respStmt>
+							<?options { "title": "DBOE Team", "layout": { "frame": "panelClosed" } } ?>
+							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
+							<name xml:id="AL"><?options { "layout": { "frame": "line" } } ?>Alexandra N. Lenz</name>
+							<name xml:id="PhS"><?options { "layout": { "frame": "line" } } ?>Philip Stöckle</name>
+							<name xml:id="AG"><?options { "layout": { "frame": "line" } } ?>Andreas Gellan</name>
+							<name xml:id="PZ"><?options { "layout": { "frame": "line" } } ?>Patrick Zeithuber</name>
+							<name xml:id="SW"><?options { "layout": { "frame": "line" } } ?>Sabine Wahl</name>
+							<name xml:id="SS"><?options { "layout": { "frame": "line" } } ?>Sonja Schwaiger</name>
+							<name xml:id="JD"><?options { "layout": { "frame": "line" } } ?>Jan Braun</name>
+							<name xml:id="AB"><?options { "layout": { "frame": "line" } } ?>Angela Bergmayer</name>
+						</respStmt>
+						<respStmt>
+							<?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Editor",
+											"use": true,
+											"possibleValues": ["Student assistants", "student assistants"]
+										}
+									},
+									"layout": ["hidden"]
+								} ?>
+							</resp>
+							<name>
+								<?options {
+														"title": "Name",
+														"value": ["variable", "required"],
+														"tag": ["multiple"],
+														"layout": { "frame": "line" }
+													} ?>
+							</name>
+						</respStmt>
+					</titleStmt>
+					<publicationStmt>
+						<?options { "title": "Publication Information" } ?>
+						<p>
+							<?options {
+								"value": ["edit", "canBeEmpty"],
+								"tagAsTitle": false,
+								"layout": { "frame": "box" }
+							} ?>
+						</p>
+					</publicationStmt>
+					<sourceDesc>
+						<?options { "title": "Information about the source" } ?>
+						<p>
+							<?options {
+								"value": ["edit", "canBeEmpty"],
+								"tagAsTitle": false,
+								"layout": { "frame": "box" }
+							} ?>
+						</p>
+					</sourceDesc>
+				</fileDesc>
+			</teiHeader>
 		</tags>
 	</objParserSystem>
 </objParser>
