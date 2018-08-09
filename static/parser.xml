@@ -43,10 +43,11 @@
             </form>
 						<form type="variant">
 							<?options {
+													"title": "Form Variant 1",
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
-													"tag": ["multiple", "possibleTag", "anywhere"]
+													"tag": ["multiple", "possibleTag"]
 												} ?>
 							<pron>
 								<?options {
@@ -76,7 +77,9 @@
 																											"tag": ["possibleTag", "multiple"],
 																											"layout": {
 																												"multiple": {
-																													"header": "Verbreitung"
+																													"header": "Verbreitung",
+																													"spaceBefore": 10,
+																													"spaceAfter": 25
 																												}
 																											}
 																										} } ?>
@@ -95,28 +98,70 @@
 						<form>
 							<?options {
 													"id": "form-variant",
-													"title": "Form Variant",
+													"tagAsTitle": false,
 													"attributes": [{
 														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
-														"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["variant", "dialect"]},
+														"type": {"type": "edit", "possibleValues": ["variant", "dialect"]},
 														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
 													}],
-													"tag": ["multiple", "possibleTag"]
+													"tag": ["multiple", "possibleTag"],
+													"layout": {
+														"frame": "inline",
+														"multiple": {
+															"use": true,
+															"header": "Belegauswahl",
+															"spaceBefore": 10,
+															"spaceAfter": 25
+														}
+													},
+													"editor": {
+														"onlyLastElementHasAddButton": true,
+														"addTitle": "Form Variant 2"
+													}
 												} ?>
 							 <pron xml:lang="bar-AT">
 								 <?options {
- 														"title": "Pron bar-AT",
+ 														"tagAsTitle": false,
 														"attributes": [{
 															"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
 														}],
- 														"value": ["edit", "required"]
+ 														"value": ["edit", "required"],
+														"layout": {
+															"frame": "inline"
+														},
+														"editor": {
+															"parentInContext": true
+														}
  													} ?>
 							 </pron>
-							 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+							 <?copy { "fromId": "usg-geo", "options": {
+		 				 																							"tag": ["possibleTag", "multiple"],
+		 																											"layout": {
+		 																												"frame": "inline",
+		 																												"multiple": {
+		 																													"use": true,
+		 																													"join": ", ",
+		 																													"before": "(",
+		 																													"after": ")"
+		 																												}
+		 																											}
+		 																										} } ?>
 						</form>
 
 						<etym>
-							<?copy { "fromId": "text" } ?>
+							<?options {
+													"tagAsTitle": false,
+													"tag": ["multiple", "possibleTag"],
+													"layout": {
+														"frame": "box",
+														"header": "Etymologie",
+														"spaceBefore": 10,
+														"spaceAfter": 25
+													},
+													"editor": {
+														"addTitle": "Etym"
+													}
+												} ?>
 							<?copy { "fromId": "date" } ?>
 							<desc>
 								<?options {
@@ -163,7 +208,23 @@
 							<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "xr" } ?>
             </etym>
-						<?copy { "fromId": "sense" } ?>
+						<?copy { "fromId": "sense", "options": {
+																										"tagAsTitle": false,
+																										"title": "",
+																										"layout": {
+																											"frame": "box",
+																											"multiple": {
+																												"use": true,
+																												"header": "Bedeutung",
+																												"spaceBefore": 10,
+																												"spaceAfter": 25
+																											}
+																										},
+																										"editor": {
+																											"onlyLastElementHasAddButton": true,
+																											"addTitle": "Bedeutung 1"
+																										}
+																									} } ?>
 						<re>
 							<?options {
 													"title": "Re",
