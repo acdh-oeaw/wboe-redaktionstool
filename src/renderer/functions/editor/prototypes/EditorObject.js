@@ -1,5 +1,5 @@
+import Vue from 'vue'
 import stdFunctions from '@/functions/stdFunctions'
-// import xmlFunctions from '@/functions/XmlFunctions'
 import Editor from '../Editor'
 
 const localFunctions = {
@@ -95,6 +95,33 @@ const localFunctions = {
 					aChild.updateData((cKey === aKey))
 				})
 			}
+		}
+	},
+	delete: function (direct = false) {
+		if (this.siblings) {
+			if (direct || confirm('Soll der Tag "' + (this.parserObj && this.parserObj.name) + '" wirklich gelöscht werden?')) {
+				console.log('Editor - Löschen: ' + this.parserObj)
+				this.childs.forEach(function (aChild) {
+					aChild.delete(true)
+				}, this)
+				this.root.family[this.uId] = undefined
+				this.siblings.some(function (aSib, aSibKey) {
+					if (aSib === this) {
+						Vue.delete(this.siblings, aSibKey)
+						console.log('EditorObject gelöscht ...')
+						return true
+					}
+				}, this)
+				this.orgXmlObj.delete(true)
+				this.siblings.forEach(function (aChild, cKey) {
+					aChild.updateData()
+				})
+				if (this.parents.length > 0) {
+					this.parents[0].updateData()
+				}
+			}
+		} else {
+			console.log('Editor - Kann nicht gelöscht werden!', this)
 		}
 	},
 	updateData: function (withChilds = false, posAsError = false) {

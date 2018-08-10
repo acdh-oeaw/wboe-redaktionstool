@@ -1,4 +1,3 @@
-// import xmlFunctions from '@/functions/XmlFunctions'
 import Xml from '../Xml'
 import Vue from 'vue'
 
@@ -64,6 +63,26 @@ const localFunctions = {
 			}
 		}
 		return true
+	},
+	delete: function (direct = false) {
+		if (this.siblings) {
+			if (direct || confirm('Soll der Tag "' + this.name + '" wirklich gelöscht werden? (xml)')) {
+				console.log('XML - Löschen: ' + this.name)
+				this.childs.forEach(function (aChild) {
+					aChild.delete(true)
+				}, this)
+				this.root.family[this.uId] = undefined
+				this.siblings.some(function (aSib, aSibKey) {
+					if (aSib === this) {
+						Vue.delete(this.siblings, aSibKey)
+						console.log('XmlObject gelöscht ...')
+						return true
+					}
+				}, this)
+			}
+		} else {
+			console.log('XML - Kann nicht gelöscht werden!', this)
+		}
 	},
 	getValueByOption: function (parOptVal, asArray = true, flat = true) {
 		if (parOptVal && parOptVal.innerXML && parOptVal.innerXML.use === true) {

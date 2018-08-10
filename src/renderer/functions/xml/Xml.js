@@ -56,5 +56,6 @@ localFunctions.XmlObject.prototype.getXML = prototypeXmlObject.getXML
 localFunctions.XmlObject.prototype.getValueByOption = prototypeXmlObject.getValueByOption
 localFunctions.XmlObject.prototype.getChildsOfType = prototypeXmlObject.getChildsOfType
 localFunctions.XmlObject.prototype.getChildsByName = prototypeXmlObject.getChildsByName
+localFunctions.XmlObject.prototype.delete = prototypeXmlObject.delete
 
 export default localFunctions

@@ -10,7 +10,7 @@
 						<!-- add version in appropriate location-->
 						<respStmt>
 							 <resp>Editor</resp>
-							 <name></name>
+							 <name xml:id="AL">Alexandra N. Lenz</name>
 							 <!-- Author of each article should enter name -->
 						</respStmt>
 						<respStmt>

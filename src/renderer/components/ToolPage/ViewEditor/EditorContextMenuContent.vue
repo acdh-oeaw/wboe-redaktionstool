@@ -1,7 +1,13 @@
 <template>
 	<div>
 		<div class="context-menu-title"><b>Tag:</b> {{ this.content.orgXmlObj.name }}</div>
-
+		<div class="tools">
+			<b-button-group size="sm" class="btn-group-xs d-flex" v-if="moveableLeft || moveableRight || deleteAble">
+				<b-button @click="moveObj('left')" variant="primary" class="w-100" :disabled="!moveableLeft"><font-awesome-icon icon="angle-left" class="fa-icon"/></b-button>
+				<b-button @click="deleteObj()" variant="danger" class="w-100" :disabled="!deleteAble"><font-awesome-icon icon="trash-alt" class="fa-icon"/></b-button>
+				<b-button @click="moveObj('right')" variant="primary" class="w-100" :disabled="!moveableRight"><font-awesome-icon icon="angle-right" class="fa-icon"/></b-button>
+			</b-button-group>
+		</div>
 		<template v-if="attributes">
 			<div class="context-menu-subtitle"><b>Attribute:</b></div>
 			<ul>
@@ -48,7 +54,7 @@
 			</ul>
 		</template>
 
-		<EditorContextMenuContent :content="content.parents[0]" :subContextMenuLeft="subContextMenuLeft" v-if="content.parents.length > 0 && content.parserObj.options && content.parents.length > 0 && content.parserObj.options.get('editor.parentInContext')"/>
+		<EditorContextMenuContent :content="content.parents[0]" :subContextMenuLeft="subContextMenuLeft" @close="close" v-if="content.parents.length > 0 && content.parserObj.options && content.parents.length > 0 && content.parserObj.options.get('editor.parentInContext')"/>
 	</div>
 </template>
 
@@ -89,6 +95,18 @@
 				}
 				return null
 			},
+			deleteAble () {
+				return (this.content.parserObj.options && this.content.parserObj.options.get('tag.possibleTag'))
+				|| (this.content.isMultiple && !(this.content.multipleNr === 0 && this.content.multipleLast))
+			},
+			moveableLeft () {
+				// ToDo: Komplexere Abfrage!
+				return this.content.isMultiple && this.content.multipleNr > 0
+			},
+			moveableRight () {
+				// ToDo: Komplexere Abfrage!
+				return this.content.isMultiple && !this.content.multipleLast
+			},
 		},
 		watch: {
 			subShow: function (nVal, oVal) {
@@ -103,7 +121,7 @@
 						}
 					})
 				}
-			}
+			},
 		},
 		methods: {
 			selectAttr: function (aAttr, key) {
@@ -119,6 +137,16 @@
 				e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
 				restoreCaretPosition()
 			}, 20),
+			deleteObj () {		// Objekt löschen!
+				this.$emit('close')
+				this.content.delete()
+			},
+			moveObj (dir = 'right') {		// Objekt bewegen!
+				console.log('Bewegen', dir)
+			},
+			close () {
+				this.$emit('close')
+			}
 		},
 		components: {
 			SelectPossibleValues,

@@ -59,7 +59,8 @@
 								<?options {
 														"title": "Pron",
 														"value": ["edit", "required"],
-														"tag": ["possibleTag"]
+														"tag": ["possibleTag"],
+														"layout": { "italic": true }
 													} ?>
 							</pron>
 							<?copy { "fromId": "orth", "options": { "title": "", "tagAsTitle": false, "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "addTitle": "Orth", "parentInContext": true } } } ?>
@@ -133,7 +134,8 @@
 														}],
  														"value": ["edit", "required"],
 														"layout": {
-															"frame": "inline"
+															"frame": "inline",
+															"italic": true
 														},
 														"editor": {
 															"parentInContext": true
@@ -628,7 +630,7 @@
 							</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "Encoding Scheme", "layout": { "frame": "panelClosed" } } ?>
+							<?options { "title": "Encoding Scheme", "layout": { "frame": "line" } } ?>
 							<resp>
 								<?options {
 									"value": {
@@ -641,24 +643,24 @@
 									"layout": ["hidden"]
 								} ?>
 							</resp>
-							<name><?options {	"layout": { "frame": "line" } } ?>Jack Bowers</name>
-							<name><?options {	"layout": { "frame": "line" } } ?>Daniel Schopper</name>
-							<name><?options {	"layout": { "frame": "line" } } ?>Omar Siam</name>
+							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Jack Bowers</name>
+							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Daniel Schopper</name>
+							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline" } } ?>Omar Siam</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "DBOE Team", "layout": { "frame": "panelClosed" } } ?>
+							<?options { "title": "DBOE Team", "layout": { "frame": "line" } } ?>
 							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
-							<name xml:id="AL"><?options { "layout": { "frame": "line" } } ?>Alexandra N. Lenz</name>
-							<name xml:id="PhS"><?options { "layout": { "frame": "line" } } ?>Philip Stöckle</name>
-							<name xml:id="AG"><?options { "layout": { "frame": "line" } } ?>Andreas Gellan</name>
-							<name xml:id="PZ"><?options { "layout": { "frame": "line" } } ?>Patrick Zeithuber</name>
-							<name xml:id="SW"><?options { "layout": { "frame": "line" } } ?>Sabine Wahl</name>
-							<name xml:id="SS"><?options { "layout": { "frame": "line" } } ?>Sonja Schwaiger</name>
-							<name xml:id="JD"><?options { "layout": { "frame": "line" } } ?>Jan Braun</name>
-							<name xml:id="AB"><?options { "layout": { "frame": "line" } } ?>Angela Bergmayer</name>
+							<name xml:id="AL"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Alexandra N. Lenz</name>
+							<name xml:id="PhS"><?options {"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Philip Stöckle</name>
+							<name xml:id="AG"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Andreas Gellan</name>
+							<name xml:id="PZ"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Patrick Zeithuber</name>
+							<name xml:id="SW"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Sabine Wahl</name>
+							<name xml:id="SS"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Sonja Schwaiger</name>
+							<name xml:id="JD"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Jan Braun</name>
+							<name xml:id="AB"><?options {	"tagAsTitle": false, "layout": { "frame": "inline" } } ?>Angela Bergmayer</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>
+							<?options { "title": "Student assistants", "layout": { "frame": "line" } } ?>
 							<resp>
 								<?options {
 									"value": {
@@ -671,18 +673,14 @@
 									"layout": ["hidden"]
 								} ?>
 							</resp>
-							<name>
-								<?options {
-														"title": "Name",
-														"value": ["variable", "required"],
-														"tag": ["multiple"],
-														"layout": { "frame": "line" }
-													} ?>
-							</name>
+							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Eva Wahlmüller</name>
+							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Susanna Muhr</name>
+							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Alexandra Grohe</name>
+							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline" } } ?>Klemens Wagner</name>
 						</respStmt>
 					</titleStmt>
 					<publicationStmt>
-						<?options { "title": "Publication Information" } ?>
+						<?options { "title": "Publication Information", "layout": { "frame": "panelClosed" } } ?>
 						<p>
 							<?options {
 								"value": ["edit", "canBeEmpty"],
@@ -692,7 +690,7 @@
 						</p>
 					</publicationStmt>
 					<sourceDesc>
-						<?options { "title": "Information about the source" } ?>
+						<?options { "title": "Information about the source", "layout": { "frame": "panelClosed" } } ?>
 						<p>
 							<?options {
 								"value": ["edit", "canBeEmpty"],
