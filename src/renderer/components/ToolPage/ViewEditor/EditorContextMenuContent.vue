@@ -15,7 +15,7 @@
 					<font-awesome-icon :icon="aVal.icon" class="fa-icon" v-if="aVal.icon"/>
 					<font-awesome-icon :icon="((aVal.editable) ? 'edit' : 'lock')" class="fa-icon right"/>
 					<span>{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}</span>
-					<div class="subContext" :ref="'subContext'" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="aVal.editable && subShow === aKey">
+					<div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="aVal.editable && subShow === aKey">
 						<div class="sel-attribut" v-if="aVal.editType === 'select'">
 							<button @click="selectAttr(aKey, -1)" class="sel-obj">
 								<font-awesome-icon icon="check" class="fa-icon" v-if="!aVal.value"/>
@@ -35,21 +35,40 @@
 			</ul>
 		</template>
 
+		<template v-if="this.content.addableInner.length > 0 || this.content.addableAfter.length > 0">
+			<div class="context-menu-subtitle"><b>Einfügen:</b></div>
+		</template>
+
 		<template v-if="this.content.addableInner.length > 0">
-			<div class="context-menu-subtitle"><font-awesome-icon icon="circle-notch" class="fa-icon"/> <b>Einfügen in Tag "{{ this.content.orgXmlObj.name }}":</b></div>
 			<ul>
-				<li v-for="(aVal, aKey) in this.content.addableInner" v-if="aVal.cShow">
-					<font-awesome-icon icon="plus" class="fa-icon"/>
-					{{ aVal.title }}
+				<li @mouseover="subShow = 'addInner'" @mouseleave="subShow = null">
+					<font-awesome-icon icon="circle-notch" class="fa-icon"/>
+					<span>Einfügen in Tag "{{ this.content.orgXmlObj.name }}"</span>
+					<div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="subShow === 'addInner'">
+						<ul>
+							<li v-for="(aVal, aKey) in this.content.addableInner" v-if="aVal.cShow">
+								<font-awesome-icon icon="plus" class="fa-icon"/>
+								{{ aVal.title }}
+							</li>
+						</ul>
+					</div>
 				</li>
 			</ul>
 		</template>
+
 		<template v-if="this.content.addableAfter.length > 0">
-			<div class="context-menu-subtitle"><font-awesome-icon icon="angle-right" class="fa-icon"/> <b>Einfügen nach Tag "{{ this.content.orgXmlObj.name }}":</b></div>
 			<ul>
-				<li v-for="(aVal, aKey) in this.content.addableAfter" v-if="aVal.cShow">
-					<font-awesome-icon icon="plus" class="fa-icon"/>
-					{{ aVal.title }}
+				<li @mouseover="subShow = 'addAfter'" @mouseleave="subShow = null">
+					<font-awesome-icon icon="angle-right" class="fa-icon"/>
+					<span>Einfügen nach Tag "{{ this.content.orgXmlObj.name }}"</span>
+					<div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="subShow === 'addAfter'">
+						<ul>
+							<li v-for="(aVal, aKey) in this.content.addableAfter" v-if="aVal.cShow">
+								<font-awesome-icon icon="plus" class="fa-icon"/>
+								{{ aVal.title }}
+							</li>
+						</ul>
+					</div>
 				</li>
 			</ul>
 		</template>

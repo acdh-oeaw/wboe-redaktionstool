@@ -159,7 +159,6 @@
 						<etym>
 							<?options {
 													"tagAsTitle": false,
-													"tag": ["multiple", "possibleTag"],
 													"layout": {
 														"frame": "box",
 														"header": "Etymologie",
