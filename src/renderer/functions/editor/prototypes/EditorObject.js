@@ -15,7 +15,6 @@ const localFunctions = {
 		}
 		// Parser mit XML Objekt vergleichen
 		if (!this.ignoreChilds) {
-			// console.log('--- Finde Parser der zu XML Objekt passt! ---')
 			aXmlChilds.forEach(function (aXmlObj) {
 				let aParList = []
 				let useParser = false
@@ -30,7 +29,6 @@ const localFunctions = {
 							}
 						}, this)
 						aParList = aParList.slice().sort(pMatchSort)		// Sortieren: "possible" nach oben, Fehler nach unten, höherer Score nach oben)
-						// console.log('aParList - "' + aParList[0].pObj.name + '":', aParList, this)
 						if (aParList.length === 0) {
 							aErrors.push('Kein Parser für Tag "' + aXmlObj.name + '" übergeben!')
 							useParser = false
@@ -58,7 +56,6 @@ const localFunctions = {
 					this.add(null, null, aXmlObj, aErrors, aWarnings, null, aParList)
 				}
 			}, this)
-			// console.log('---------------------------------------------')
 		}
 		this.ready = true
 		// ToDo: Fehlende Kinder aus Parser ergänzen
@@ -80,7 +77,6 @@ const localFunctions = {
 		return true
 	},
 	add: function (aPar, pos, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {
-		// console.log('EditorObject.add', aPar, pos, orgXml)
 		if (pos || pos === 0) {
 			// ToDo: An einer bestimmten Stelle einfügen
 		} else {

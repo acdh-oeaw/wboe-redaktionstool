@@ -30,8 +30,7 @@
 														"frame": "inline",
 														"multiple": {
 															"use": true,
-															"join": ", ",
-															"lastBR": true
+															"join": ", "
 														}
 													},
 													"editor": {

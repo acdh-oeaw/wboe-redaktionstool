@@ -1,6 +1,6 @@
 <template>
 	<div :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
-		<slot name="childs"/>
+		<slot name="childs"/>		<!-- Kinder -->
 	</div>
 
 	<b-card :class="{'obj': true, 'paneldecent': true, 'mitb5': true, 'warnings': content.warnings.length > 0}" v-else-if="layoutBase === 'panel'" :header="title" no-body>
@@ -23,9 +23,9 @@
 			</b-list-group>
 			<b-card-body>
 				<div @contextmenu.prevent="contextMenue" class="context">
-					<slot/>
+					<slot/>		<!-- Inhalt -->
 				</div>
-				<slot name="childs"/>
+				<slot name="childs"/>		<!-- Kinder -->
 			</b-card-body>
 		</b-collapse>
 		<div slot="footer" style="margin: -8px -9px;" v-if="content.addableAfter.length > 0">
@@ -40,7 +40,7 @@
 	<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
 		<div @contextmenu.prevent="contextMenue" class="context">
 			<b v-if="title">{{ title }}:</b><br v-if="title && layoutBase === 'box'"/>
-			<slot/>
+			<slot/>		<!-- Inhalt -->
 		</div>
 		<div :class="{'inline': layoutBase !== 'box'}" v-if="content.addableInner.length > 0">
 			<b-button size="xs" variant="success" class="mir5" :title="content.addableInner[0].title" v-if="content.addableInner[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableInner[0].title }}</span></b-button>
@@ -50,7 +50,7 @@
 				{{ aVal.title }}
 			</b-button>
 		</div>
-		<slot name="childs"/>
+		<slot name="childs"/>		<!-- Kinder -->
 		<div :class="{'inline': layoutBase !== 'box'}" v-if="content.addableAfter.length > 0">
 			<b-button size="xs" variant="success" class="mir5" :title="content.addableAfter[0].title" v-if="content.addableAfter[0].type === 'self' && content.addableAfter[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableAfter[0].title }}</span></b-button>
 			<b-button @click="isOpenAdditionalAddBtn = !isOpenAdditionalAddBtn" size="xs" variant="secondary" class="mir5" title="Weitere mögliche Tags anzeigen." v-if="(content.addableAfter[0].type === 'self' && content.addableAfter.length > 1) || (content.addableAfter[0].type !== 'self' && content.addableAfter.length > 0)"><font-awesome-icon :icon="((!isOpenAdditionalAddBtn) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>

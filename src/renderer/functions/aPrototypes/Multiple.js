@@ -62,7 +62,7 @@ const localFunctions = {
 	updateFamilyErrors: function () {
 		if (this.family.length > 0) {
 			this.family.forEach(function (aObj) {
-				if (aObj.errors.length > 0 && aObj.parents.length > 0) {
+				if (aObj && aObj.errors.length > 0 && aObj.parents.length > 0) {
 					aObj.parents[0].childsWithErrors = true
 					aObj.parents.forEach(function (aPar) {
 						aPar.descendantsWithErrors = true

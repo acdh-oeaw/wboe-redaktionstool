@@ -61,7 +61,7 @@ const localFunctions = {
 		}
 		// "copy"-Objekte befüllen
 		this.family.forEach(function (aObj) {
-			if (aObj.isCopy) {
+			if (aObj && aObj.isCopy) {
 				aObj.makeCopy()
 			}
 		})

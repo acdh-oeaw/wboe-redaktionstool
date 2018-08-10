@@ -1,6 +1,7 @@
 <template>
 	<div>
 		<div class="context-menu-title"><b>Tag:</b> {{ this.content.orgXmlObj.name }}</div>
+
 		<template v-if="attributes">
 			<div class="context-menu-subtitle"><b>Attribute:</b></div>
 			<ul>
@@ -27,6 +28,7 @@
 				</li>
 			</ul>
 		</template>
+
 		<template v-if="this.content.addableInner.length > 0">
 			<div class="context-menu-subtitle"><font-awesome-icon icon="angle-down" class="fa-icon"/> <b>Einfügen in Tag "{{ this.content.orgXmlObj.name }}":</b></div>
 			<ul>
@@ -45,6 +47,7 @@
 				</li>
 			</ul>
 		</template>
+
 		<EditorContextMenuContent :content="content.parents[0]" :subContextMenuLeft="subContextMenuLeft" v-if="content.parents.length > 0 && content.parserObj.options && content.parents.length > 0 && content.parserObj.options.get('editor.parentInContext')"/>
 	</div>
 </template>

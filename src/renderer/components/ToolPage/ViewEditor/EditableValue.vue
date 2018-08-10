@@ -1,4 +1,5 @@
 <template>
+
 	<span :class="{ 'val-obj': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }"
 				v-if="editType === 'selectPossibleValues'">
 		<SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.get('value.is.possibleValues')"/>
@@ -9,6 +10,7 @@
 		<span class="val-edit val-focus" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
 		<font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
 	</span>
+
 </template>
 
 <script>
@@ -38,7 +40,7 @@
 			}
 		},
 		methods: {
-			getSelected: function () {
+			getSelected: function () {		// Gibt die aktuell ausgewählte Option zurück
 				let sVal = this.content.orgXmlObj.getValue(false)
 				let oKey = -1
 				this.content.parserObj.options.get('value.is.possibleValues').some(function (aVal, aKey) {
@@ -49,7 +51,7 @@
 				}, this)
 				return oKey
 			},
-			setSelected: function (val) {
+			setSelected: function (val) {		// Auswahl ändern
 				if (val >= 0) {
 					let aVal = this.content.parserObj.options.get('value.is.possibleValues')[val]
 					this.content.orgXmlObj.setValue(aVal.value || aVal)
@@ -63,12 +65,12 @@
 					this.content.orgXmlObj.setValue(null)
 				}
 			},
-			valEditUpdate: _.debounce(function (e) {
+			valEditUpdate: _.debounce(function (e) {		// Bei Textfeldern HTML-Elemente und Zeilenumbrüche entfernen
 				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
 				e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
 				restoreCaretPosition()
 			}, 20),
-			valEditUpdateValue: function (e) {
+			valEditUpdateValue: function (e) {		// Aktuelle Eingabe setzen
 				this.content.orgXmlObj.setValue(e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
 				this.content.checkParser()
 			},
