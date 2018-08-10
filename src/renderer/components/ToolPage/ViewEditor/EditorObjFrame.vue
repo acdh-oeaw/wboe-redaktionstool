@@ -14,7 +14,7 @@
 			<b-list-group flush v-if="content.addableInner.length > 0">
 				<b-list-group-item style="background: #eee;">
 					<div style="margin: -8px -9px;">
-						<b-button size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.bShow">
+						<b-button @click="addIn(aVal.uId)" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.bShow">
 							<font-awesome-icon icon="plus" class="fa-icon"/>
 							{{ aVal.title }}
 						</b-button>
@@ -29,7 +29,7 @@
 			</b-card-body>
 		</b-collapse>
 		<div slot="footer" style="margin: -8px -9px;" v-if="content.addableAfter.length > 0">
-			<b-button size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.bShow">
+			<b-button @click="addAfter(aVal.uId)" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.bShow">
 				<font-awesome-icon icon="plus" class="fa-icon"/>
 				{{ aVal.title }}
 			</b-button>
@@ -43,18 +43,18 @@
 			<slot/>		<!-- Inhalt -->
 		</div>
 		<div :class="{'inline': layoutBase !== 'box'}" v-if="content.addableInner.length > 0">
-			<b-button size="xs" variant="success" class="mir5" :title="content.addableInner[0].title" v-if="content.addableInner[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableInner[0].title }}</span></b-button>
+			<b-button @click="addIn(content.addableInner[0].uId)" size="xs" variant="success" class="mir5" :title="content.addableInner[0].title" v-if="content.addableInner[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableInner[0].title }}</span></b-button>
 			<b-button @click="isOpenAdditionalAddInBtn = !isOpenAdditionalAddInBtn" size="xs" variant="secondary" class="mir5" title="Weitere mögliche Tags anzeigen." v-if="content.addableInner.length > 1"><font-awesome-icon :icon="((!isOpenAdditionalAddInBtn) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
-			<b-button size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aKey !== 0 && isOpenAdditionalAddInBtn">
+			<b-button @click="addIn(aVal.uId)" size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aKey !== 0 && isOpenAdditionalAddInBtn">
 				<font-awesome-icon icon="plus" class="fa-icon"/>
 				{{ aVal.title }}
 			</b-button>
 		</div>
 		<slot name="childs"/>		<!-- Kinder -->
 		<div :class="{'inline': layoutBase !== 'box'}" v-if="content.addableAfter.length > 0">
-			<b-button size="xs" variant="success" class="mir5" :title="content.addableAfter[0].title" v-if="content.addableAfter[0].type === 'self' && content.addableAfter[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableAfter[0].title }}</span></b-button>
+			<b-button @click="addAfter(content.addableAfter[0].uId)" size="xs" variant="success" class="mir5" :title="content.addableAfter[0].title" v-if="content.addableAfter[0].type === 'self' && content.addableAfter[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableAfter[0].title }}</span></b-button>
 			<b-button @click="isOpenAdditionalAddBtn = !isOpenAdditionalAddBtn" size="xs" variant="secondary" class="mir5" title="Weitere mögliche Tags anzeigen." v-if="(content.addableAfter[0].type === 'self' && content.addableAfter.length > 1) || (content.addableAfter[0].type !== 'self' && content.addableAfter.length > 0)"><font-awesome-icon :icon="((!isOpenAdditionalAddBtn) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
-			<b-button size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.type !== 'self' && isOpenAdditionalAddBtn">
+			<b-button @click="addAfter(aVal.uId)" size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.type !== 'self' && isOpenAdditionalAddBtn">
 				<font-awesome-icon icon="plus" class="fa-icon"/>
 				{{ aVal.title }}
 			</b-button>
@@ -108,6 +108,12 @@
 				this.$nextTick(() => {
 					this.$refs.contextMenuEditor.open(e)
 				})
+			},
+			addAfter (aParUId) {
+				this.content.addAfter(this.content.parserObj.root.family[aParUId])
+			},
+			addIn (aParUId) {
+				this.content.add(0, this.content.parserObj.root.family[aParUId])
 			},
 		},
 		components: {

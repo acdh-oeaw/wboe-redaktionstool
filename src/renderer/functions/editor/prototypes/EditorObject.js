@@ -51,17 +51,29 @@ const localFunctions = {
 					}
 				}
 				if (useParser) {
-					this.add(aParList[0].pObj, null, aXmlObj, aErrors, aWarnings, aParList[0].match.ignoreChilds, aParList)
+					this.add(null, aParList[0].pObj, aXmlObj, aErrors, aWarnings, aParList[0].match.ignoreChilds, aParList)
 				} else {
 					this.add(null, null, aXmlObj, aErrors, aWarnings, null, aParList)
 				}
 			}, this)
 		}
+		if (!this.orgXmlObj && this.parserObj && !this.isRoot) {		// Wenn kein XML Objekt übergeben wurde soll eins erstellt werden
+			let aPrevSibs = this.getSiblings('prev', true)
+			console.log(this, aPrevSibs)
+			if (aPrevSibs.length > 0) {
+				console.log('XmlObj erstellen! (After)')
+				this.orgXmlObj = aPrevSibs[0].orgXmlObj.addAfterByParser(this.parserObj)
+			} else {
+				console.log('XmlObj erstellen! (At Top)')
+				this.orgXmlObj = this.parents[0].orgXmlObj.addByParser(0, this.parserObj)
+			}
+			console.log('XmlObj erstellt ...', this.orgXmlObj)
+		}
 		this.ready = true
 		// ToDo: Fehlende Kinder aus Parser ergänzen
 		// aParserChilds.forEach(function (aPar) {
 		// 	if (aPar.hasToBeHere(this)) {
-		// 		this.add(aPar)
+		// 		this.add(null, aPar)
 		// 	}
 		// }, this)
 		if (Object.keys(this.errors).length > 0) {
@@ -76,25 +88,34 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	add: function (aPar, pos, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {
-		if (pos || pos === 0) {
-			// ToDo: An einer bestimmten Stelle einfügen
+	add: function (pos, aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {
+		let aKey = pos
+		if (aKey || aKey === 0) {
+			this.childs.splice(aKey, 0, new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds, true))
 		} else {
-			let aKey = this.childs.push(new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds)) - 1
-			if (aParList) {
-				this.childs[aKey].parserMatches = aParList
-			}
-			aErrors.forEach(function (aErr) {
-				this.childs[aKey].addError(aErr)
-			}, this)
-			aWarnings.forEach(function (aWarn) {
-				this.childs[aKey].addWarning(aWarn)
-			}, this)
-			if (this.root.ready) {
-				this.childs.forEach(function (aChild, cKey) {
-					aChild.updateData((cKey === aKey))
-				})
-			}
+			aKey = this.childs.push(new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds, true)) - 1
+		}
+		this.childs[aKey].init()
+		if (aParList) {
+			this.childs[aKey].parserMatches = aParList
+		}
+		aErrors.forEach(function (aErr) {
+			this.childs[aKey].addError(aErr)
+		}, this)
+		aWarnings.forEach(function (aWarn) {
+			this.childs[aKey].addWarning(aWarn)
+		}, this)
+		if (this.root.ready) {
+			this.updateData(true)
+		}
+		return this.childs[aKey]
+	},
+	addAfter: function (aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {
+		if (this.parents.length > 0) {
+			let aPos = this.siblings.indexOf(this) + 1
+			return this.parents[0].add(aPos, aPar, orgXml, aErrors, aWarnings, ignoreChilds, aParList)
+		} else {
+			console.log('Editor - Kann nicht hinzugefügt werden!', this)
 		}
 	},
 	move: function (eObj, dir = true) {		// dir = true - Nach eObj verschieben

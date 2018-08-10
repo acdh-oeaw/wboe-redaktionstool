@@ -46,7 +46,7 @@
 					<span>Einfügen in Tag "{{ this.content.orgXmlObj.name }}"</span>
 					<div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="subShow === 'addInner'">
 						<ul>
-							<li v-for="(aVal, aKey) in this.content.addableInner" v-if="aVal.cShow">
+							<li @click="addIn(aVal.uId); close()" v-for="(aVal, aKey) in this.content.addableInner" v-if="aVal.cShow">
 								<font-awesome-icon icon="plus" class="fa-icon"/>
 								{{ aVal.title }}
 							</li>
@@ -63,7 +63,7 @@
 					<span>Einfügen nach Tag "{{ this.content.orgXmlObj.name }}"</span>
 					<div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="subShow === 'addAfter'">
 						<ul>
-							<li v-for="(aVal, aKey) in this.content.addableAfter" v-if="aVal.cShow">
+							<li @click="addAfter(aVal.uId); close()" v-for="(aVal, aKey) in this.content.addableAfter" v-if="aVal.cShow">
 								<font-awesome-icon icon="plus" class="fa-icon"/>
 								{{ aVal.title }}
 							</li>
@@ -173,9 +173,15 @@
 					}
 				}
 			},
+			addAfter (aParUId) {
+				this.content.addAfter(this.content.parserObj.root.family[aParUId])
+			},
+			addIn (aParUId) {
+				this.content.add(0, this.content.parserObj.root.family[aParUId])
+			},
 			close () {
 				this.$emit('close')
-			}
+			},
 		},
 		components: {
 			SelectPossibleValues,

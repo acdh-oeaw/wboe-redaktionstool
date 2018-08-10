@@ -64,6 +64,38 @@ const localFunctions = {
 		}
 		return true
 	},
+	addByParser: function (pos, pObj) {
+		let aKey = pos
+		if (aKey || aKey === 0) {
+			this.childs.splice(aKey, 0, new Xml.XmlObject(this.root, [this, ...this.parents]))
+		} else {
+			aKey = this.childs.push(new Xml.XmlObject(this.root, [this, ...this.parents])) - 1
+		}
+		this.childs[aKey].type = ((pObj.name === '#text') ? 'TEXT' : 'ELEMENT')
+		this.childs[aKey].name = pObj.name
+		let pAttr = pObj.options.get('attributes')
+		Object.keys(pAttr).forEach(function (attrKey) {
+			let aAttr = pAttr[attrKey]
+			if (aAttr.value) {
+				this.childs[aKey].attributes[attrKey] = aAttr.value
+			}
+		}, this)
+		if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
+			this.childs[aKey].value = pObj.options.get('value.is.value')
+		}
+		this.childs[aKey].useable = true
+		this.childs[aKey].ready = true
+		this.childs[aKey].parserIgnore = false
+		return this.childs[aKey]
+	},
+	addAfterByParser: function (pObj) {
+		if (this.parents.length > 0) {
+			let aPos = this.siblings.indexOf(this) + 1
+			return this.parents[0].addByParser(aPos, pObj)
+		} else {
+			console.log('Xml - Kann nicht hinzugefügt werden!', this)
+		}
+	},
 	move: function (xObj, dir = true) {		// dir = true - Nach xObj verschieben
 		// console.log('move', this.siblings.indexOf(this) + ' ' + ((dir) ? 'after' : 'before') + ' ' + this.siblings.indexOf(xObj), this, xObj)
 		let tPos = this.siblings.indexOf(this)

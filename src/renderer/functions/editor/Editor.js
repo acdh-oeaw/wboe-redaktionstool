@@ -15,7 +15,7 @@ const localFunctions = {
 		this.init()										// Immer dirket initialisieren
 		this.updateFamilyErrors()
 	},
-	EditorObject: function (root, parents, parser, xml, isRoot, ignoreChilds) {
+	EditorObject: function (root, parents, parser, xml, isRoot, ignoreChilds, dontInit) {
 		this.parserObj = parser || null		// Aktuelles Parser Objekt
 		this.orgXmlObj	= xml || null	// Original Xml Objekt
 		this.ready = false						// Ist das Objekt bereit?
@@ -41,8 +41,9 @@ const localFunctions = {
 		this.multipleLast = true			// Letzter der aktuellen "multiple"-Gruppe
 		this.addableAfter = []				// Welche Objekte können nach diesem hinzugefügt werden?
 		this.addableInner = []				// Welche Objekte können nach diesem hinzugefügt werden?
-		// Immer dirket initialisieren
-		this.init()
+		if (!dontInit) {
+			this.init()
+		}
 		// this.add(parser, pos, xml)			// Kind hinzufügen (XML hinzufügen falls nicht vorhanden!)
 		// this.delete(pos)						// Kind löschen (Rekursion beachten)	(XML entfernen!)
 		// this.getSiblings(mode, useable)		// Alle Geschwister
@@ -64,6 +65,7 @@ localFunctions.EditorObject.prototype.deleteErrors = prototypeMultiple.deleteErr
 localFunctions.EditorObject.prototype.deleteWarnings = prototypeMultiple.deleteWarnings
 localFunctions.EditorObject.prototype.init = prototypeEditorObject.init
 localFunctions.EditorObject.prototype.add = prototypeEditorObject.add
+localFunctions.EditorObject.prototype.addAfter = prototypeEditorObject.addAfter
 localFunctions.EditorObject.prototype.getSiblings = prototypeEditorObject.getSiblings
 localFunctions.EditorObject.prototype.getChilds = prototypeEditorObject.getChilds
 localFunctions.EditorObject.prototype.checkParser = prototypeEditorObject.checkParser
