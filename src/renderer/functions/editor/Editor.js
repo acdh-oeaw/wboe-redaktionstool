@@ -70,6 +70,6 @@ localFunctions.EditorObject.prototype.checkParser = prototypeEditorObject.checkP
 localFunctions.EditorObject.prototype.updateAddable = prototypeEditorObject.updateAddable
 localFunctions.EditorObject.prototype.updateData = prototypeEditorObject.updateData
 localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
-// localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete		// ToDo !!!
+localFunctions.EditorObject.prototype.move = prototypeEditorObject.move
 
 export default localFunctions

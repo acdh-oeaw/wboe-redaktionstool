@@ -97,6 +97,23 @@ const localFunctions = {
 			}
 		}
 	},
+	move: function (eObj, dir = true) {		// dir = true - Nach eObj verschieben
+		// console.log('move', this.siblings.indexOf(this) + ' ' + ((dir) ? 'after' : 'before') + ' ' + this.siblings.indexOf(eObj), this, eObj)
+		let tPos = this.siblings.indexOf(this)
+		let ePos = this.siblings.indexOf(eObj)
+		if (tPos > -1 && ePos > -1) {
+			this.siblings.splice(ePos, 0, this.siblings.splice(tPos, 1)[0])
+			this.orgXmlObj.move(eObj.orgXmlObj, dir)
+		} else {
+			console.log('Fehler! Verschieben kann nicht funktionieren!')
+		}
+		this.siblings.forEach(function (aChild, cKey) {
+			aChild.updateData()
+		})
+		if (this.parents.length > 0) {
+			this.parents[0].updateData()
+		}
+	},
 	delete: function (direct = false) {
 		if (this.siblings) {
 			if (direct || confirm('Soll der Tag "' + (this.parserObj && this.parserObj.name) + '" wirklich gelöscht werden?')) {

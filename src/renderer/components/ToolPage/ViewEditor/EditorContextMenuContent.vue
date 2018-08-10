@@ -141,8 +141,18 @@
 				this.$emit('close')
 				this.content.delete()
 			},
-			moveObj (dir = 'right') {		// Objekt bewegen!
-				console.log('Bewegen', dir)
+			moveObj (dir = 'right') {		// Objekt nach rechts/links bewegen!
+				this.$emit('close')
+				let aSib = this.content.getSiblings(((dir === 'right') ? 'next' : 'prev'), true)
+				if (aSib.length > 0) {
+					if (this.content.isMultiple) {
+						if ((dir === 'right' && !this.content.multipleLast) || (dir !== 'right' && this.content.multipleNr > 0)) {
+							this.content.move(aSib[0], (dir === 'right'))
+						}
+					} else {
+						// ToDo ! (Multiple beachten und überspringen)
+					}
+				}
 			},
 			close () {
 				this.$emit('close')

@@ -64,6 +64,16 @@ const localFunctions = {
 		}
 		return true
 	},
+	move: function (xObj, dir = true) {		// dir = true - Nach xObj verschieben
+		// console.log('move', this.siblings.indexOf(this) + ' ' + ((dir) ? 'after' : 'before') + ' ' + this.siblings.indexOf(xObj), this, xObj)
+		let tPos = this.siblings.indexOf(this)
+		let ePos = this.siblings.indexOf(xObj)
+		if (tPos > -1 && ePos > -1) {
+			this.siblings.splice(ePos, 0, this.siblings.splice(tPos, 1)[0])
+		} else {
+			console.log('Fehler! Verschieben kann nicht funktionieren!')
+		}
+	},
 	delete: function (direct = false) {
 		if (this.siblings) {
 			if (direct || confirm('Soll der Tag "' + this.name + '" wirklich gelöscht werden? (xml)')) {
