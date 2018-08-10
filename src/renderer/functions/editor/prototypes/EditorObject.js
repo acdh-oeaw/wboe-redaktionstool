@@ -176,15 +176,47 @@ const localFunctions = {
 		// Nach diesem Tag hinzufügbare Tags
 		this.addableAfter = []
 		if (this.parserObj && !this.isRoot) {
-			if (this.parserObj.options.get('tag.multiple.use')) {
+			if (this.isMultiple) {
 				this.addableAfter.push({ 'uId': this.parserObj.uId, 'type': 'self', 'title': this.parserObj.options.get('editor.addTitle') || this.parserObj.options.get('title.value') || this.parserObj.name, 'cShow': true, 'bShow': !(this.isMultiple && !this.multipleLast && this.parserObj.options.get('editor.onlyLastElementHasAddButton')) })
 			}
-			let aSibs = this.parserObj.getSiblings('all', true)
-			aSibs.forEach(function (aSib) {
-				if (aSib.checkPosition(this, true, true).length === 0) {
-					this.addableAfter.push({ 'uId': aSib.uId, 'type': (aSib.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'), 'title': aSib.options.get('editor.addTitle') || aSib.options.get('title.value') || aSib.name, 'cShow': true, 'bShow': true })
+			if (!(this.isMultiple && !this.multipleLast)) {
+				let aParSibs = this.parserObj.getSiblings('all', true)
+				aParSibs.forEach(function (aParSib) {
+					if (aParSib.options.get('tag.anywhere.use')) {
+						this.addableAfter.push({ 'uId': aParSib.uId, 'type': 'anywhere', 'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name, 'cShow': true, 'bShow': true })
+					}
+				}, this)
+				let startPos = this
+				if (this.parserObj.options.get('tag.anywhere.use')) {		// Wenn dieses "EditorObj" ein "anywhere" ist das nächste vorherige "EditorObj" das nicht "anywhere" ist als Startpunkt zu benutzen.
+					this.getSiblings('prev', true).some(function (aPrevSib) {
+						if (!aPrevSib.parserObj || !aPrevSib.parserObj.options.get('tag.anywhere.use')) {
+							startPos = aPrevSib
+							return true
+						}
+					}, this)
 				}
-			}, this)
+				let aParNextSibs = startPos.parserObj.getSiblings('next', true)
+				let mHit = false
+				let aNextSibs = startPos.getSiblings('next', true)
+				aParNextSibs.forEach(function (aParSib) {
+					if (!aParSib.options.get('tag.anywhere.use')) {
+						let addThis = true
+						if (mHit) {
+							addThis = false
+						} else {
+							aNextSibs.forEach(function (aNextSib) {
+								if (aNextSib.parserObj === aParSib) {
+									addThis = false
+									mHit = true
+								}
+							}, this)
+						}
+						if (addThis) {
+							this.addableAfter.push({ 'uId': aParSib.uId, 'type': 'ect', 'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name, 'cShow': true, 'bShow': true })
+						}
+					}
+				}, this)
+			}
 			this.addableAfter = this.addableAfter.slice().sort(AddableSort)
 		}
 		// In diesem Tag am Start hinzufügbare Tags

@@ -566,7 +566,8 @@
 												}
 											},
 											"editor": {
-												"parentInContext": true
+												"parentInContext": true,
+												"onlyLastElementHasAddButton": true
 											}
 										} ?>
 				</placeName>

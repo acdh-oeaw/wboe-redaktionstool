@@ -36,7 +36,7 @@
 		</template>
 
 		<template v-if="this.content.addableInner.length > 0">
-			<div class="context-menu-subtitle"><font-awesome-icon icon="angle-down" class="fa-icon"/> <b>Einfügen in Tag "{{ this.content.orgXmlObj.name }}":</b></div>
+			<div class="context-menu-subtitle"><font-awesome-icon icon="circle-notch" class="fa-icon"/> <b>Einfügen in Tag "{{ this.content.orgXmlObj.name }}":</b></div>
 			<ul>
 				<li v-for="(aVal, aKey) in this.content.addableInner" v-if="aVal.cShow">
 					<font-awesome-icon icon="plus" class="fa-icon"/>
