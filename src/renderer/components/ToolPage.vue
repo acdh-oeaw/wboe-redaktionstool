@@ -76,6 +76,10 @@
 						</template>
 						<button @click="$store.dispatch('TOGGLE_SHOW', 'professional')"><font-awesome-icon :icon="((Options.show.professional) ? 'eye' : 'eye-slash')"/> Professional</button>
 						<button @click="$store.dispatch('TOGGLE_SHOW', 'develope')"><font-awesome-icon :icon="((Options.show.develope) ? 'eye' : 'eye-slash')"/> Developer</button>
+						<template v-if="Options.show.develope">
+							<hr>
+							<button @click="openDevTool(); showTabView = false"><font-awesome-icon icon="external-link-alt"/> Dev Tool</button>
+						</template>
 					</div>
 				</li>
 			</template>
@@ -95,6 +99,7 @@
 	import EditorObject from '@/functions/editor/Editor'
 	import fPath from 'path'
 	const fs = remote.require('fs')
+	const currentWindow = remote.getCurrentWindow()
 
 	export default {
 		name: 'tool-page',
@@ -212,7 +217,10 @@
 				if (this.showTabView && !(e.target.closest('.vis-dropdown') || e.target.closest('.vis-dropdown-button'))) {
 					this.showTabView = false
 				}
-			}
+			},
+			openDevTool () {
+				currentWindow.webContents.openDevTools()
+			},
 		},
 		created: function () {
 			window.addEventListener('mousedown', this.mousedown)
