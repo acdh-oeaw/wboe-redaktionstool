@@ -127,7 +127,7 @@ const localFunctions = {
 			console.log('combineProcessingOptions - array !!!???')
 		} else if (typeof newOptions === 'object') {
 			for (var key in newOptions) {
-				if (comOptions[key]) {
+				if (comOptions.hasOwnProperty(key)) {
 					comOptions[key] = localFunctions.combineProcessingOptions(comOptions[key], newOptions[key])
 				} else {
 					comOptions[key] = newOptions[key]

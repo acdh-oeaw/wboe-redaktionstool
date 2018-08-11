@@ -263,7 +263,7 @@ const localFunctions = {
 			let mHit = false
 			this.parserObj.childs.forEach(function (acParser) {
 				let addThis = true
-				if (!acParser.options.get('tag.anywhere.use') && !acParser.name === '#text') {
+				if (!acParser.options.get('tag.anywhere.use') && acParser.name !== '#text') {
 					if (mHit) {
 						addThis = false
 					} else {
@@ -280,7 +280,7 @@ const localFunctions = {
 					}
 				}
 				if (addThis) {
-					this.addableInner.push({ 'uId': acParser.uId, 'type': (acParser.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'), 'title': acParser.options.get('addButton') || acParser.options.get('title.value') || acParser.name, 'cShow': true, 'bShow': true })
+					this.addableInner.push({ 'uId': acParser.uId, 'type': (acParser.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'), 'title': acParser.options.get('editor.addTitle') || acParser.options.get('title.value') || acParser.name, 'cShow': true, 'bShow': true })
 				}
 			}, this)
 			this.addableInner = this.addableInner.slice().sort(AddableSort)

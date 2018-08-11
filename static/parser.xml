@@ -72,14 +72,16 @@
 													"attributes": [{
 														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}
 													}],
-													"tag": ["multiple", "possibleTag"]
+													"tag": ["multiple", "possibleTag"],
+													"editor": {
+														"addTitle": "Form Variant Diminutive"
+													}
 												} ?>
 							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true } } } ?>
 							<gramGrp>
 								<?copy {"fromId": "gram-gender"} ?>
 							</gramGrp>
 						</form>
-
 						<?copy { "fromId": "usg-geo", "options": {
 																											"tag": ["possibleTag", "multiple"],
 																											"layout": {
@@ -96,10 +98,19 @@
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
-													"tag": ["multiple", "possibleTag", "anywhere"]
+													"tag": ["multiple", "possibleTag", "anywhere"],
+													"editor": {
+														"addTitle": "Form Lautung"
+													}
 												} ?>
-							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
-							<?copy { "fromId": "form-variant" } ?>
+							<?copy { "fromId": "usg-geo", "options": {
+																													"tag": ["possibleTag", "multiple", "anywhere"]
+																												} } ?>
+							<?copy { "fromId": "form-variant", "options": {
+																															"editor": {
+																																"addTitle": "Form Variant 2"
+																															}
+																														} } ?>
 						</form>
 
 						<form>
@@ -545,7 +556,8 @@
 											}
 										},
 										"editor": {
-											"onlyLastElementHasAddButton": true
+											"onlyLastElementHasAddButton": true,
+											"addTitle": "Usg Geo"
 										}
 									} ?>
 				<placeName>
