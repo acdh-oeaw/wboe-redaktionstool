@@ -19,24 +19,13 @@
 												"attributes": [{"n": {"type": "edit", "valueType": "num+", "canBeEmpty": {"use": true}}}]
 											} ?>
 						<form type="lemma">
+							<?copyOptions { "fromId": "inlineMultipleJoin", "options": { "editor": { "addTitle": "Lemma" } } } ?>
 							<?options {
 													"id": "lemma-base",
-													"tagAsTitle": false,
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
-													"tag": ["multiple"],
-													"layout": {
-														"frame": "inline",
-														"multiple": {
-															"use": true,
-															"join": ", "
-														}
-													},
-													"editor": {
-														"onlyLastElementHasAddButton": true,
-														"addTitle": "Lemma"
-													}
+													"tag": ["multiple"]
 												} ?>
 							<?copy { "fromId": "orth", "options": { "title": "", "tagAsTitle": false, "layout": { "frame": "inline", "bold": true }, "editor": { "addTitle": "Orth", "parentInContext": true } } } ?>
             </form>
@@ -108,64 +97,24 @@
 																												} } ?>
 							<?copy { "fromId": "form-variant", "options": {
 																															"editor": {
-																																"addTitle": "Form Variant 2"
+																																"addTitle": "Form Variant"
 																															}
 																														} } ?>
 						</form>
 
-						<form>
-							<?options {
-													"id": "form-variant",
-													"tagAsTitle": false,
-													"attributes": [{
-														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
-														"type": {"type": "edit", "possibleValues": ["variant", "dialect"]},
-														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
-													}],
-													"tag": ["multiple", "possibleTag"],
-													"layout": {
-														"frame": "inline",
-														"multiple": {
-															"use": true,
-															"header": "Belegauswahl",
-															"spaceBefore": 10,
-															"spaceAfter": 25
-														}
-													},
-													"editor": {
-														"onlyLastElementHasAddButton": true,
-														"addTitle": "Form Variant 2"
-													}
-												} ?>
-							 <pron xml:lang="bar-AT">
-								 <?options {
- 														"tagAsTitle": false,
-														"attributes": [{
-															"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
-														}],
- 														"value": ["edit", "required"],
-														"layout": {
-															"frame": "inline",
-															"italic": true
-														},
-														"editor": {
-															"parentInContext": true
-														}
- 													} ?>
-							 </pron>
-							 <?copy { "fromId": "usg-geo", "options": {
-		 				 																							"tag": ["possibleTag", "multiple"],
-		 																											"layout": {
-		 																												"frame": "inline",
-		 																												"multiple": {
-		 																													"use": true,
-		 																													"join": ", ",
-		 																													"before": "(",
-		 																													"after": ")"
-		 																												}
-		 																											}
-		 																										} } ?>
-						</form>
+						<?copy { "fromId": "form-variant", "options": {
+																														"layout": {
+																															"multiple": {
+																																"use": true,
+																																"header": "Belegauswahl",
+																																"spaceBefore": 10,
+																																"spaceAfter": 25
+																															}
+																														},
+																														"editor": {
+																															"addTitle": "Belegauswahl"
+																														}
+																													} } ?>
 
 						<etym>
 							<?options {
@@ -274,6 +223,29 @@
 
 	<!-- Element Vorlagen: -->
 	<objParserSystem>
+
+		<options>
+			<?optionsPreset {
+												"id": "nameSimple",
+												"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " }
+											} ?>
+			<?optionsPreset {
+												"id": "inlineMultipleJoin",
+												"tagAsTitle": false,
+												"layout": {
+													"frame": "inline",
+													"multiple": {
+														"use": true,
+														"join": ", "
+													}
+												},
+												"editor": {
+													"onlyLastElementHasAddButton": true
+												}
+											} ?>
+
+		</options>
+
 		<tags>
 
 			<xr>		<!-- ToDo!? -->
@@ -453,6 +425,54 @@
 																							} } ?>
 			</sense>
 
+			<form>
+				<?options {
+										"id": "form-variant",
+										"tagAsTitle": false,
+										"attributes": [{
+											"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
+											"type": {"type": "edit", "possibleValues": ["variant", "dialect"]},
+											"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
+										}],
+										"tag": ["multiple", "possibleTag"],
+										"layout": {
+											"frame": "inline"
+										},
+										"editor": {
+											"onlyLastElementHasAddButton": true,
+											"addTitle": "Form Variant"
+										}
+									} ?>
+				 <pron xml:lang="bar-AT">
+					 <?options {
+											"tagAsTitle": false,
+											"attributes": [{
+												"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
+											}],
+											"value": ["edit", "required"],
+											"layout": {
+												"frame": "inline",
+												"italic": true
+											},
+											"editor": {
+												"parentInContext": true
+											}
+										} ?>
+				 </pron>
+				 <?copy { "fromId": "usg-geo", "options": {
+																										"tag": ["possibleTag", "multiple"],
+																										"layout": {
+																											"frame": "inline",
+																											"multiple": {
+																												"use": true,
+																												"join": ", ",
+																												"before": "(",
+																												"after": ")"
+																											}
+																										}
+																									} } ?>
+			</form>
+
 			<ref type="bibl">
 				<?options {
 										"id": "ref-bibl",
@@ -561,6 +581,7 @@
 										}
 									} ?>
 				<placeName>
+					<?copyOptions { "fromId": "inlineMultipleJoin", "options": { "editor": { "parentInContext": true } } } ?>
 					<?options {
 											"tagAsTitle": false,
 											"value": ["edit", "required"],
@@ -568,18 +589,7 @@
 												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
 												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
-											"tag": ["multiple"],
-											"layout": {
-												"frame": "inline",
-												"multiple": {
-													"use": true,
-													"join": ", "
-												}
-											},
-											"editor": {
-												"parentInContext": true,
-												"onlyLastElementHasAddButton": true
-											}
+											"tag": ["multiple"]
 										} ?>
 				</placeName>
 			</usg>
@@ -713,12 +723,8 @@
 					</sourceDesc>
 				</fileDesc>
 			</teiHeader>
+
 		</tags>
-		<options>
-			<?optionsPreset {
-												"id": "nameSimple",
-												"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " }
-			} ?>
-		</options>
+
 	</objParserSystem>
 </objParser>
