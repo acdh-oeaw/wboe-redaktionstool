@@ -103,7 +103,7 @@ const localFunctions = {
 	},
 	makeCopy: function () {
 		if (this.isCopy) {
-			let aCopyOptions = undefined
+			let aCopyOptions = null
 			try {
 				aCopyOptions = JSON.parse(this.orgDOM.nodeValue)
 			} catch (err) {

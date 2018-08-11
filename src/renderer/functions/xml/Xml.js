@@ -10,8 +10,8 @@ const localFunctions = {
 		this.warnings = {}						// Warnungen. Property = "XmlObject.uId" oder "-1" für "XmlBase"
 		this.content = []							// Enthaltene "XmlObject" Kinder
 		this.family = []							// Alle "XmlObject"e "Key" = "uId"
-		this.orgString = undefined		// Original String für DOM
-		this.orgDOM = undefined				// Original DOM über init generiert
+		this.orgString = null					// Original String für DOM
+		this.orgDOM = null						// Original DOM über init generiert
 		if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
 			this.init(xmlString)
 			this.updateFamilyErrors()
@@ -25,11 +25,11 @@ const localFunctions = {
 		this.warnings = []						// Liste der Warnungen
 		this.childsWithErrors = false		// Gibt es Kinder mit Fehlern
 		this.descendantsWithErrors = false		// Gibt es Nachfahren mit Fehlern
-		this.uId = undefined					// Individuelle Nummer des XmlObjects
-		this.name = undefined					// Tagname
-		this.type = undefined					// Node Type
+		this.uId = null								// Individuelle Nummer des XmlObjects
+		this.name = null							// Tagname
+		this.type = null							// Node Type
 		this.comments = []						// Kommentare (<?comment Text?>)
-		this.value = undefined				// Inhalt des Tags falls Value
+		this.value = null							// Inhalt des Tags falls Value
 		this.attributes = {}					// Attribute des Tags
 		this.childs = []							// Enthaltene "XmlObject" Kinder
 		this.parents = parents || []	// Liste der Eltern

@@ -5,8 +5,8 @@ const fs = remote.require('fs')
 
 const state = {
 	paths: {},		// Cach für Verzeichnissstruktur
-	file: undefined,
-	fileContent: undefined
+	file: null,
+	fileContent: null
 }
 
 const mutations = {
@@ -30,12 +30,12 @@ const actions = {
 	TOGGLE_OPEN: function ({ commit, dispatch }, {path, fileKey}) {		// Anzeige Pfad offen/geschlossen wechseln und ggf. Inhalt cachen
 		if (state.paths[path] && state.paths[path].paths && state.paths[path].paths[fileKey]) {
 			commit('TOGGLE_PATH_OPEN', { path: path, fileKey: fileKey })
-			if (state.paths[path].paths[fileKey].isOpen && state.paths[state.paths[path].paths[fileKey].fullFileName] === undefined) {
+			if (!state.paths[path].paths[fileKey].isOpen && state.paths[state.paths[path].paths[fileKey].fullFileName]) {
 				dispatch('GET_PATH', state.paths[path].paths[fileKey].fullFileName)
 			}
 		}
 	},
-	LOAD_FILE: function ({ commit, dispatch }, file = undefined) {
+	LOAD_FILE: function ({ commit, dispatch }, file = null) {
 		try {
 			commit('SET_FILE', { 'file': file, 'content': fs.readFileSync(file, 'utf8') })
 		} catch (e) {
@@ -67,7 +67,7 @@ const actions = {
 			try {
 				var stats = fs.statSync(aFullFileName)
 			} catch (e) {
-				stats = undefined
+				stats = null
 				console.log(e)
 			}
 			if (stats) {

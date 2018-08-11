@@ -38,7 +38,7 @@ const localFunctions = {
 	getCompressedBaseError: function () {
 		let cErrors = {}
 		if (Object.keys(this.errors).length > 0) {
-			let lErr = undefined
+			let lErr = null
 			let cErrKey = []
 			Object.keys(this.errors).forEach(function (aErrKey) {
 				if (lErr) {

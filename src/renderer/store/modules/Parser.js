@@ -4,8 +4,8 @@ import fPath from 'path'
 const fs = remote.require('fs')
 
 const state = {
-	file: undefined,
-	parser: undefined
+	file: null,
+	parser: null
 }
 
 const mutations = {
@@ -17,9 +17,9 @@ const mutations = {
 
 const actions = {
 	LOAD_PARSER_FILE: function ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
-		var aFile = undefined		// fPath.join(state.projectPath, '/parser.xml')
-		let fileContent = undefined
-		var aParser = undefined
+		var aFile = null		// fPath.join(state.projectPath, '/parser.xml')
+		let fileContent = null
+		var aParser = null
 		try {
 			fileContent = fs.readFileSync(aFile, 'utf8')
 		} catch (e) {
@@ -39,7 +39,7 @@ const actions = {
 	RELOAD_PARSER_FILE: function ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
 		var aFile = state.file
 		var fileContent = fs.readFileSync(aFile, 'utf8')
-		var aParser = undefined
+		var aParser = null
 		if (fileContent) {
 			aParser = new ParserObject.ParserBase(fileContent)
 		}

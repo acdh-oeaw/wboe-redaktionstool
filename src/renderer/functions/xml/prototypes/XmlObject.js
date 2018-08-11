@@ -117,7 +117,7 @@ const localFunctions = {
 				this.childs.forEach(function (aChild) {
 					aChild.delete(true)
 				}, this)
-				this.root.family[this.uId] = undefined
+				this.root.family[this.uId] = null
 				this.siblings.some(function (aSib, aSibKey) {
 					if (aSib === this) {
 						Vue.delete(this.siblings, aSibKey)
@@ -212,7 +212,7 @@ const localFunctions = {
 				if (Object.keys(this.attributes).length > 0) {
 					Object.keys(this.attributes).forEach(function (aKey) {
 						aXML += ' ' + aKey
-						if (this.attributes[aKey] !== undefined && this.attributes[aKey] !== null) {
+						if (this.attributes[aKey]) {
 							aXML += '="' + this.attributes[aKey] + '"'
 						}
 					}, this)

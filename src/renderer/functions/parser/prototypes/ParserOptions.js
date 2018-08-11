@@ -57,7 +57,7 @@ const localFunctions = {
 				}
 				errObj.addError({'txt': 'Fehler im JSON-String! (extendJSON)', 'err': errArr})
 			}
-			return undefined
+			return null
 		}
 	},
 	extendObj: function (optionObj) {

@@ -8,7 +8,7 @@ const localFunctions = {
 			this.addError('init() - Übergebener Wert ist kein "string"!')
 			return false
 		} else if (xmlString.trim().length < 20) {
-			this.orgString = undefined
+			this.orgString = null
 			this.addError('init() - Übergebener Wert ist viel zu klein!')
 			return false
 		}
@@ -17,7 +17,7 @@ const localFunctions = {
 		this.orgDOM = new DOMParser().parseFromString(this.orgString, 'application/xml')
 		var xmlStringError = xmlFunctions.xmlDomCheck(this.orgDOM)		// Prüfen ob es Fehler gab
 		if (xmlStringError.length > 0) {
-			this.orgDOM = undefined
+			this.orgDOM = null
 			this.addError({'txt': 'Beim verarbeiten der XML ist es zu einen Fehler gekommen!', 'sErr': xmlStringError})
 			return false
 		}

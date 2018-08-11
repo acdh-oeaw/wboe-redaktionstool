@@ -1,7 +1,8 @@
 <template>
 	<div :class="{'file': true, 'open': (path && path.isOpen)}">
+
 		<div class="pathline" v-if="path">
-			<button @click="toggleMe()" :title="path.fullFileName">
+			<button @click="toggleMe()" :title="path.fullFileName" :class="{'active': (Files.file && Files.file.indexOf(path.fullFileName) === 0)}">
 				<font-awesome-icon :icon="((path.isOpen) ? 'folder-open' : 'folder')" style="width:20px;"/>
 				<span>{{ path.file }}</span>
 				<span class="foldercontent" v-if="Files.paths[path.fullFileName]">{{ Files.paths[path.fullFileName].files.length.toLocaleString() }} <font-awesome-icon icon="file" style="margin-right:5px;"/> {{ Files.paths[path.fullFileName].paths.length.toLocaleString() }} <font-awesome-icon icon="folder"/></span>
@@ -12,13 +13,15 @@
 				<FileLine :file="sFile" @loading="loading" v-for="(sFile, fKey) in Files.paths[path.fullFileName].files" :key="'file-' + fKey" :base="path.fullFileName"/>
 			</div>
 		</div>
+
 		<div class="fileline" v-if="file">
-			<button @click="loadFile" :title="file.fullFileName">
+			<button @click="loadFile" :title="file.fullFileName" :class="{'active': Files.file === file.fullFileName}">
 				<font-awesome-icon icon="file" style="width:20px;"/>
 				<span>{{ file.file }}</span>
 				<span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
 			</button>
 		</div>
+
 	</div>
 </template>
 
@@ -65,6 +68,9 @@
 		padding: 0px;
 		background: none;
 		border: none;
+	}
+	.pathline > button.active, .fileline > button.active {
+		color: #33f;
 	}
 	.pathline > button:hover, .fileline > button:hover {
 		background: #eee;

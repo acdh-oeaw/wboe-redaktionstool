@@ -40,7 +40,7 @@
 		},
 		watch: {
 			'Options.projectPath': function (nVal) {
-				if (nVal !== undefined) {		// Wenn sich der Projektpfad ändert alle Verzeichnisse zurücksetzen
+				if (nVal) {		// Wenn sich der Projektpfad ändert alle Verzeichnisse zurücksetzen
 					this.loading = true
 					this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
 					this.$store.dispatch('GET_PATH', this.Options.projectPath)
@@ -75,7 +75,7 @@
 		},
 		mounted: function () {
 			this.loading = true
-			if (this.Options.projectPath === undefined) {		// Projektpfad laden
+			if (!this.Options.projectPath) {		// Projektpfad laden
 				this.$store.dispatch('GET_PROJECT_PATH')
 			}
 			this.updateFolder()

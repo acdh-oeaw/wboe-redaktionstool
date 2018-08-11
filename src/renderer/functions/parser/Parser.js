@@ -12,11 +12,11 @@ const localFunctions = {
 		this.warnings = {}						// Warnungen. Property = "ParserObject.uId" oder "-1" für "ParserBase"
 		this.content = []							// Enthaltene "ParserObject" Kinder
 		this.system = []							// Enthaltene "ParserObject" Kinder
-		this.header = undefined				// Wird als String bei der ausgegebenen XML-Datei eingefügt
+		this.header = null						// Wird als String bei der ausgegebenen XML-Datei eingefügt
 		this.family = []							// Alle "ParserObject"e "Key" = "uId"
 		this.idList = {}							// Alle "ParserObject"e mit "id". Property = "id"
-		this.orgString = undefined		// Original String für DOM
-		this.orgDOM = undefined				// Original DOM über init generiert
+		this.orgString = null					// Original String für DOM
+		this.orgDOM = null						// Original DOM über init generiert
 		if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
 			this.init(xmlString)
 			this.updateFamilyErrors()
@@ -29,8 +29,8 @@ const localFunctions = {
 		this.warnings = []						// Liste der Warnungen
 		this.childsWithErrors = false		// Gibt es Kinder mit Fehlern
 		this.descendantsWithErrors = false		// Gibt es Nachfahren mit Fehlern
-		this.uId = undefined					// Individuelle Nummer des ParserObjects
-		this.name = undefined					// Tagname
+		this.uId = null								// Individuelle Nummer des ParserObjects
+		this.name = null							// Tagname
 		this.attributes = {}					// Attribute des Tags
 		this.childs = []							// Enthaltene "ParserObject" Kinder
 		this.parents = parents || []	// Liste der Eltern

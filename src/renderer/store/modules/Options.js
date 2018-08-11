@@ -6,9 +6,9 @@ const Store = require('electron-store')
 const store = new Store()
 
 const state = {
-	projectPath: undefined,
-	parserFile: undefined,
-	parserFileContent: undefined,
+	projectPath: null,
+	parserFile: null,
+	parserFileContent: null,
 	show: {}
 }
 
@@ -49,7 +49,7 @@ const actions = {
 			defaultPath: state.projectPath,
 			properties: ['openDirectory']
 		})
-		if (newFolder === undefined) return
+		if (!newFolder) return
 		var folderState = fs.statSync(newFolder[0])
 		if (folderState && folderState.isDirectory) {
 			if (folderState.isDirectory()) {
@@ -64,7 +64,7 @@ const actions = {
 	},
 	GET_PARSER_FILE: function ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
 		var aFile = fPath.join(state.projectPath, '/parser.xml')
-		let fileContents = undefined
+		let fileContents = null
 		try {
 			fileContents = fs.readFileSync(aFile, 'utf8')
 		} catch (e) {

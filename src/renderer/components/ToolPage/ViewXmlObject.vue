@@ -1,5 +1,5 @@
 <template>
-	<div class="start" v-if="content === undefined && object !== undefined">
+	<div class="start" v-if="!content && object">
 		<ErrorCard :error="object.errors" title="Fehler" variant="danger"/>
 		<ErrorCard :error="object.warnings" title="Warnung" variant="warning"/>
 		<div v-if="object.content">
@@ -10,7 +10,7 @@
 		</div>
 	</div>
 
-	<div class="obj" v-else-if="content !== undefined">
+	<div class="obj" v-else-if="content">
 		<b-card :header="content.name" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
@@ -36,7 +36,7 @@
 					</div>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
 						<b-button-group size="sm" class="mr-1">
-							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
+							<b-button @click="setInfoOpen(null)"><font-awesome-icon :icon="((infoOpen) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 							<b-button @click="setInfoOpen('value')" v-if="content.value" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('comment')" v-if="content.comments.length > 0" :pressed="infoOpen === 'comment'" variant="outline-secondary"><b>Comments</b></b-button>
 						</b-button-group>
@@ -84,7 +84,7 @@
 				'processOpen': false,
 				'valueOpen': false,
 				'xmlOpen': false,
-				'infoOpen': undefined,
+				'infoOpen': null,
 				'pHeaderColor': '#333',
 			}
 		},
@@ -108,7 +108,7 @@
 			},
 			tranculatedValue () {
 				var aVal = this.content.value
-				if (aVal !== undefined) {
+				if (aVal) {
 					return aVal.length > 25 ? aVal.slice(0, 25) + '...' : aVal
 				} else {
 					return ''
@@ -125,7 +125,7 @@
 				this.isOpen = state
 			},
 			setInfoOpen (open) {
-				this.infoOpen = ((this.infoOpen !== open) ? open : undefined)
+				this.infoOpen = ((this.infoOpen !== open) ? open : null)
 			},
 			length (val) {
 				if (Array.isArray(val)) {
@@ -136,7 +136,7 @@
 			},
 		},
 		created: function () {
-			if (this.content !== undefined) {
+			if (this.content) {
 				if (!this.content.parserIgnore
 				&& this.content.type !== 'TEXT') {
 					this.isOpen = true

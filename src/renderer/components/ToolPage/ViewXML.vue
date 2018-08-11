@@ -16,7 +16,7 @@
 				selection: {},
 				monaco: {},
 				editor: {},
-				editorModel: undefined
+				editorModel: null
 			}
 		},
 		computed: {
@@ -40,7 +40,7 @@
 			baseUrl: uriFromPath(path.join(__dirname, ((process.env.NODE_ENV === 'development') ? '../../' : '') + '../../node_modules/monaco-editor/dev'))
 		})
 		// workaround monaco-css not understanding the environment
-		self.module = undefined
+		self.module = null
 		// workaround monaco-typescript not understanding the environment
 		self.process.browser = true
 		amdRequire(['vs/editor/editor.main'], function () {
@@ -71,7 +71,7 @@
 		})
 	}
 	function loadMonacoEditor (thisEditor) {
-		if (thisEditor.$store.state.AmdRequire.amdRequire.config === undefined) {
+		if (!thisEditor.$store.state.AmdRequire.amdRequire.config) {
 			const nodeRequire = global.require
 			const loaderScript = document.createElement('script')
 			loaderScript.onload = () => {

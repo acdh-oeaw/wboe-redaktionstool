@@ -116,7 +116,7 @@
 				editorObject: null,
 				updateTimer: performance.now(),
 				devMode: (process.env.NODE_ENV === 'development'),
-				devFiles: undefined,
+				devFiles: null,
 				update: false,
 			}
 		},
@@ -143,10 +143,10 @@
 		mounted: function () {
 			var t0 = performance.now()
 			this.update = true
-			if (this.Parser.parser === undefined) {
+			if (!this.Parser.parser) {
 				this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
 			}
-			if (this.Files.fileContent === undefined) {
+			if (!this.Files.fileContent) {
 				// ToDo: Leere Datei erstellen
 				// this.$store.dispatch('LOAD_FILE')		// Datei laden
 			}
@@ -195,7 +195,7 @@
 				}
 			},
 			devSelectFile (file) {
-				if (this.devMode && file !== undefined) {
+				if (this.devMode && file) {
 					var t0 = performance.now()
 					this.$store.dispatch('LOAD_FILE', file)
 					this.loadData()

@@ -1,5 +1,5 @@
 <template>
-	<div class="start" v-if="parser !== undefined && content === undefined">
+	<div class="start" v-if="parser && !content">
 		<ErrorCard :error="parser.errors" title="Fehler" variant="danger"/>
 		<ErrorCard :error="parser.warnings" title="Warnung" variant="warning"/>
 		<b-card header="Header" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
@@ -45,7 +45,7 @@
 		</b-card>
 	</div>
 
-	<div class="obj" v-else-if="content !== undefined">
+	<div class="obj" v-else-if="content">
 		<b-card :header="content.name" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
@@ -65,7 +65,7 @@
 						{{ attr + ((attrOpt.value) ? ':' : '') }}
 						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
 						<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('attributes.' + attr + '.possibleValues'))"/>
-						<font-awesome-icon :icon="((attrOpt.type === 'fixed' || attrOpt.type === undefined) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
+						<font-awesome-icon :icon="((attrOpt.type === 'fixed' || !attrOpt.type) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
 					</span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="content.errors.length > 0"/>
@@ -79,7 +79,7 @@
 					</b-alert>
 					<b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
 						<b-button-group size="sm" class="mr-1">
-							<b-button @click="setInfoOpen(undefined)"><font-awesome-icon :icon="((infoOpen !== undefined) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
+							<b-button @click="setInfoOpen(null)"><font-awesome-icon :icon="((infoOpen) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 							<b-button @click="setInfoOpen('value')" v-if="content.options.get('value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
 							<b-button @click="setInfoOpen('options')" :pressed="infoOpen === 'options'" variant="outline-secondary"><b>Optionen</b></b-button>
 						</b-button-group>
@@ -124,7 +124,7 @@
 				'headerOpen': true,
 				'contentOpen': true,
 				'systemOpen': false,
-				'infoOpen': undefined,
+				'infoOpen': null,
 				'pHeaderColor': '#333',
 			}
 		},
@@ -143,7 +143,7 @@
 			},
 			tranculatedValue () {
 				var aVal = this.content.options.get('value.is.value')
-				if (aVal !== undefined) {
+				if (aVal) {
 					return aVal.length > 25 ? aVal.slice(0, 25) + '...' : aVal
 				} else {
 					return ''
@@ -160,7 +160,7 @@
 				this.isOpen = state
 			},
 			setInfoOpen (open) {
-				this.infoOpen = ((this.infoOpen !== open) ? open : undefined)
+				this.infoOpen = ((this.infoOpen !== open) ? open : null)
 			},
 			length (val) {
 				if (Array.isArray(val)) {

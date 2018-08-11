@@ -21,7 +21,7 @@ const localFunctions = {
 				}
 			})
 		}
-		return ((retVal) ? ((out) ? aObj : undefined) : out)
+		return ((retVal) ? ((out) ? aObj : null) : out)
 	},
 	getValOfSubProp: function (obj, propertys) {		// Gibt Wert eines Property eines verschachtelten Objekts zurück
 		return localFunctions.hasSubProp(obj, propertys, true)
@@ -31,7 +31,7 @@ const localFunctions = {
 		if (Array.isArray(aObj)) {
 			return (aObj.indexOf(value) > -1)
 		} else {
-			return undefined
+			return null
 		}
 	},
 }

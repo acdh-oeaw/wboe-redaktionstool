@@ -131,7 +131,7 @@ const localFunctions = {
 			}
 			if ((aValOption && ((aValOption.edit && aValOption.edit.use) || (aValOption.variable && aValOption.variable.use)))) {
 				// ToDo: min, max ... usw.
-				if ((aVal === undefined || aVal.length === 0) && !aValOption.canBeEmpty) {
+				if ((!aVal || aVal.length === 0) && !aValOption.canBeEmpty) {
 					warnings.push('Wert darf nicht leer sein!')
 				} else {
 					if (aValOption.is && Array.isArray(aValOption.is.possibleValues)) {
@@ -150,7 +150,7 @@ const localFunctions = {
 			} else {
 				if (aValOption && aValOption.is && aValOption.is.use) {
 					if (Array.isArray(aValOption.is.possibleValues)) {
-						if (aVal === undefined || aValOption.is.possibleValues.indexOf(aVal) < 0) {
+						if (!aVal || aValOption.is.possibleValues.indexOf(aVal) < 0) {
 							errors.push('Tag Wert "' + aVal + '" stimmt nicht mit den möglichen Werten überein!')
 						}
 					} else if (aValOption.is.value !== aVal) {
@@ -205,7 +205,7 @@ const localFunctions = {
 		if (aParAttrObj.type === 'fixed' && val !== aParAttrObj.value) {
 			return { 'txt': 'Attribut "' + attr + '" hat nicht den erwateten Wert!', 'type': 'error' }
 		}
-		if (!aParAttrObj.canBeEmpty && (val === undefined || val.length === 0)) {
+		if (!aParAttrObj.canBeEmpty && (!val || val.length === 0)) {
 			return { 'txt': 'Wert von Attribut "' + attr + '" darf nicht leer sein!', 'type': 'warning' }
 		}
 		if (aParAttrObj.type === 'variable') {

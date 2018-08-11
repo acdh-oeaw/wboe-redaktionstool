@@ -6,7 +6,7 @@ const localFunctions = {
 			if (showAlert) {
 				alert('Beim verarbeiten der XML ist es zu einen Fehler gekommen:\n\n' + xmlStringError)
 			}
-			return { 'xmlDom': undefined, 'errors': xmlStringError }
+			return { 'xmlDom': null, 'errors': xmlStringError }
 		}
 		return { 'xmlDom': xmlDom }
 	},
@@ -20,7 +20,7 @@ const localFunctions = {
 					txt += y.nodeValue + '\n'
 				}
 			} else {
-				if (y.childNodes[0] !== undefined) {
+				if (y.childNodes[0]) {
 					txt += localFunctions.xmlDomCheck(y, error || y.nodeName === 'parsererror')
 				}
 			}
@@ -44,7 +44,7 @@ const localFunctions = {
 		return hasIt
 	},
 	getFirstDescendantsTagByName: function (childs, tagName) {
-		var obj = undefined
+		var obj = null
 		if (Array.isArray(childs)) {
 			childs.some(function (c) {
 				if (c.n === tagName) {
@@ -53,7 +53,7 @@ const localFunctions = {
 				}
 				if (c.c) {
 					obj = localFunctions.getFirstDescendantsTagByName(c.c, tagName)
-					if (obj !== undefined) { return true }
+					if (obj) { return true }
 				}
 			})
 		}
@@ -63,7 +63,7 @@ const localFunctions = {
 		return {
 			'options': {
 				'tagAsTitle': true,
-				'attributes': undefined
+				'attributes': null
 			}
 		}
 	},
@@ -75,7 +75,7 @@ const localFunctions = {
 		var deflat = JSON.parse(JSON.stringify(options))
 		for (var key in deflat) {
 			// tag
-			if (key === 'tag' && deflat[key] !== undefined) {
+			if (key === 'tag' && deflat[key]) {
 				deflat[key] = localFunctions.dcpoSimpleToComplex(deflat[key], localFunctions.defaultTag())
 			}
 			// title
@@ -83,7 +83,7 @@ const localFunctions = {
 				deflat[key] = {'value': deflat[key], 'use': true}
 			}
 			// attributes
-			if (key === 'attributes' && deflat[key] !== undefined) {
+			if (key === 'attributes' && deflat[key]) {
 				if (typeof deflat[key] === 'object' && !Array.isArray(deflat[key])) {
 					for (var cKey in deflat[key]) {
 						if (typeof deflat[key][cKey] === 'string') {
@@ -102,19 +102,19 @@ const localFunctions = {
 				}
 			}
 			// value
-			if (key === 'value' && deflat[key] !== undefined) {
+			if (key === 'value' && deflat[key]) {
 				deflat[key] = localFunctions.dcpoSimpleToComplex(deflat[key], localFunctions.defaultValue())
 			}
 			// layout
-			if ((key === 'layout' && deflat[key] !== undefined)) {
+			if ((key === 'layout' && deflat[key])) {
 				deflat[key] = localFunctions.checkLayout(deflat[key])
 			}
 			// editor > layout
-			if (key === 'editor' && deflat[key] !== undefined && deflat[key].layout !== undefined) {
+			if (key === 'editor' && deflat[key] && deflat[key].layout) {
 				deflat[key].layout = localFunctions.checkLayout(deflat[key].layout)
 			}
 			// html > layout
-			if (key === 'html' && deflat[key] !== undefined && deflat[key].layout !== undefined) {
+			if (key === 'html' && deflat[key] && deflat[key].layout) {
 				deflat[key].layout = localFunctions.checkLayout(deflat[key].layout)
 			}
 		}
@@ -127,7 +127,7 @@ const localFunctions = {
 			console.log('combineProcessingOptions - array !!!???')
 		} else if (typeof newOptions === 'object') {
 			for (var key in newOptions) {
-				if (comOptions[key] !== undefined) {
+				if (comOptions[key]) {
 					comOptions[key] = localFunctions.combineProcessingOptions(comOptions[key], newOptions[key])
 				} else {
 					comOptions[key] = newOptions[key]
@@ -155,7 +155,7 @@ const localFunctions = {
 		}
 		if (typeof deflat === 'object') {
 			for (var key in deflat) {
-				if (key === 'class' && deflat[key] !== undefined) {
+				if (key === 'class' && deflat[key]) {
 					deflat[key] = localFunctions.dcpoSimpleToComplex(deflat[key], localFunctions.defaultLayout())
 				}
 			}
@@ -163,7 +163,7 @@ const localFunctions = {
 		// console.log('layout', JSON.parse(JSON.stringify(layout)), JSON.parse(JSON.stringify(deflat)), Array.isArray(deflat))
 		return deflat
 	},
-	dcpoSimpleToComplex: function (content, standard, str2Val = undefined) {
+	dcpoSimpleToComplex: function (content, standard, str2Val = null) {
 		if (typeof content === 'string') {
 			return {[content]: standard}
 		} else if (Array.isArray(content)) {
@@ -174,7 +174,7 @@ const localFunctions = {
 				} else if (typeof value === 'object') {
 					for (var valueKey in value) {
 						var nVal = value[valueKey]
-						if (str2Val !== undefined && typeof nVal === 'string') {
+						if (str2Val && typeof nVal === 'string') {
 							nVal = {[str2Val.prop]: nVal}
 							nObjValue[valueKey] = localFunctions.combineProcessingOptions(str2Val.std, nVal)
 						} else {
