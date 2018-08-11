@@ -12,42 +12,43 @@
 	</div>
 
 	<div class="inline" v-else-if="content">
-
-		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
-			<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceBefore')"></div>
-			<h3 v-if="content.parserObj.options.get('layout.multiple.header')">{{ content.parserObj.options.get('layout.multiple.header') }}</h3>
-			<span class="before" v-if="content.parserObj.options.get('layout.multiple.before')">{{ content.parserObj.options.get('layout.multiple.before') }}</span>
-		</template>
-
-		<div :style="'height: ' + content.parserObj.options.get('layout.spaceBefore') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceBefore')"></div>
-		<h3 v-if="content.parserObj.options && content.parserObj.options.get('layout.header')">{{ content.parserObj.options.get('layout.header') }}</h3>
-		<span class="before" v-if="content.parserObj.options && content.parserObj.options.get('layout.before')">{{ content.parserObj.options.get('layout.before') }}</span>
-		<span class="enumeraterom" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerateRom')">{{ num2rom(content.multipleNr + 1) }}.&nbsp;</span>
-		<span class="enumerate" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerate')">{{ content.multipleNr + 1 }})&nbsp;</span>
-
-		<EditorObjFrame :content="content">
-			<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
-				{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
-			</span>
-			<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
-			<template slot="childs" v-if="content.childs.length > 0">
-				<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+		<template v-if="!content.refresh">
+			<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
+				<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceBefore')"></div>
+				<h3 v-if="content.parserObj.options.get('layout.multiple.header')">{{ content.parserObj.options.get('layout.multiple.header') }}</h3>
+				<span class="before" v-if="content.parserObj.options.get('layout.multiple.before')">{{ content.parserObj.options.get('layout.multiple.before') }}</span>
 			</template>
-		</EditorObjFrame>
 
-		<span class="join" v-if="content.isMultiple && !content.multipleLast && content.parserObj.options.get('layout.multiple.use') && content.parserObj.options.get('layout.multiple.join')">
-			{{ content.parserObj.options.get('layout.multiple.join') }}
-		</span>
+			<div :style="'height: ' + content.parserObj.options.get('layout.spaceBefore') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceBefore')"></div>
+			<h3 v-if="content.parserObj.options && content.parserObj.options.get('layout.header')">{{ content.parserObj.options.get('layout.header') }}</h3>
+			<span class="before" v-if="content.parserObj.options && content.parserObj.options.get('layout.before')">{{ content.parserObj.options.get('layout.before') }}</span>
+			<span class="enumeraterom" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerateRom')">{{ num2rom(content.multipleNr + 1) }}.&nbsp;</span>
+			<span class="enumerate" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerate')">{{ content.multipleNr + 1 }})&nbsp;</span>
 
-		<span class="after" v-if="content.parserObj.options && content.parserObj.options.get('layout.after')">{{ content.parserObj.options.get('layout.after') }}</span>
-		<h4 v-if="content.parserObj.options && content.parserObj.options.get('layout.footer')">{{ content.parserObj.options.get('layout.footer') }}</h4>
-		<div :style="'height: ' + content.parserObj.options.get('layout.spaceAfter') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceAfter')"></div>
+			<EditorObjFrame :content="content">
+				<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
+					{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
+				</span>
+				<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
+				<template slot="childs" v-if="content.childs.length > 0">
+					<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+				</template>
+			</EditorObjFrame>
 
-		<template v-if="content.isMultiple && content.multipleLast && content.parserObj.options.get('layout.multiple.use')">
-			<span class="after" v-if="content.parserObj.options.get('layout.multiple.after')">{{ content.parserObj.options.get('layout.multiple.after') }}</span>
-			<br v-if="content.parserObj.options.get('layout.multiple.lastBR')"/>
-			<h4 v-if="content.parserObj.options.get('layout.multiple.footer')">{{ content.parserObj.options.get('layout.multiple.footer') }}</h4>
-			<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceAfter') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceAfter')"></div>
+			<span class="join" v-if="content.isMultiple && !content.multipleLast && content.parserObj.options.get('layout.multiple.use') && content.parserObj.options.get('layout.multiple.join')">
+				{{ content.parserObj.options.get('layout.multiple.join') }}
+			</span>
+
+			<span class="after" v-if="content.parserObj.options && content.parserObj.options.get('layout.after')">{{ content.parserObj.options.get('layout.after') }}</span>
+			<h4 v-if="content.parserObj.options && content.parserObj.options.get('layout.footer')">{{ content.parserObj.options.get('layout.footer') }}</h4>
+			<div :style="'height: ' + content.parserObj.options.get('layout.spaceAfter') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceAfter')"></div>
+
+			<template v-if="content.isMultiple && content.multipleLast && content.parserObj.options.get('layout.multiple.use')">
+				<span class="after" v-if="content.parserObj.options.get('layout.multiple.after')">{{ content.parserObj.options.get('layout.multiple.after') }}</span>
+				<br v-if="content.parserObj.options.get('layout.multiple.lastBR')"/>
+				<h4 v-if="content.parserObj.options.get('layout.multiple.footer')">{{ content.parserObj.options.get('layout.multiple.footer') }}</h4>
+				<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceAfter') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceAfter')"></div>
+			</template>
 		</template>
 	</div>
 
@@ -89,6 +90,20 @@
 					return 'editable'
 				}
 				return 'none'
+			}
+		},
+		watch: {
+			'content.refresh' (nVal) {
+				if (nVal) {
+					this.$nextTick(() => {
+						this.content.refresh = false
+					})
+				}
+			}
+		},
+		mounted () {
+			if (this.content) {
+				this.content.refresh = false
 			}
 		},
 		methods: {

@@ -106,7 +106,11 @@ const localFunctions = {
 			this.childs[aKey].addWarning(aWarn)
 		}, this)
 		if (this.root.ready) {
-			this.updateData(true)
+			if (this.parents.length > 0) {
+				this.parents[0].updateData(true)
+			} else {
+				this.updateData(true)
+			}
 		}
 		return this.childs[aKey]
 	},
@@ -167,6 +171,7 @@ const localFunctions = {
 		this.countParser = 0
 		this.multipleNr = 0
 		this.multipleLast = false
+		this.refresh = true
 		let aPrevSibs = this.getSiblings('prev', true, false, true)
 		if (aPrevSibs.length > 0) {
 			aPrevSibs.forEach(function (aPSib) {
@@ -197,14 +202,17 @@ const localFunctions = {
 		// Nach diesem Tag hinzufügbare Tags
 		this.addableAfter = []
 		if (this.parserObj && !this.isRoot) {
-			if (this.isMultiple) {
+			if (this.isMultiple && this.parserObj.name !== '#text') {
 				this.addableAfter.push({ 'uId': this.parserObj.uId, 'type': 'self', 'title': this.parserObj.options.get('editor.addTitle') || this.parserObj.options.get('title.value') || this.parserObj.name, 'cShow': true, 'bShow': !(this.isMultiple && !this.multipleLast && this.parserObj.options.get('editor.onlyLastElementHasAddButton')) })
 			}
 			if (!(this.isMultiple && !this.multipleLast)) {
 				let aParSibs = this.parserObj.getSiblings('all', true)
+				let aNextSibs = this.getSiblings('next', true)
 				aParSibs.forEach(function (aParSib) {
 					if (aParSib.options.get('tag.anywhere.use')) {
-						this.addableAfter.push({ 'uId': aParSib.uId, 'type': 'anywhere', 'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name, 'cShow': true, 'bShow': true })
+						if (!((this.parserObj.name === '#text' || (aNextSibs[0] && aNextSibs[0].parserObj && aNextSibs[0].parserObj.name === '#text')) && aParSib.name === '#text')) {
+							this.addableAfter.push({ 'uId': aParSib.uId, 'type': 'anywhere', 'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name, 'cShow': true, 'bShow': true })
+						}
 					}
 				}, this)
 				let startPos = this
@@ -218,14 +226,19 @@ const localFunctions = {
 				}
 				let aParNextSibs = startPos.parserObj.getSiblings('next', true)
 				let mHit = false
-				let aNextSibs = startPos.getSiblings('next', true)
+				let aNextSibsSP = startPos.getSiblings('next', true)
 				aParNextSibs.forEach(function (aParSib) {
 					if (!aParSib.options.get('tag.anywhere.use')) {
 						let addThis = true
 						if (mHit) {
 							addThis = false
 						} else {
-							aNextSibs.forEach(function (aNextSib) {
+							if (aParSibs.length > 0) {
+								if (aParSibs[0].parserObj && aParSibs[0].parserObj.name === '#text' && aParSib.name === '#text') {
+									addThis = false
+								}
+							}
+							aNextSibsSP.forEach(function (aNextSib) {
 								if (aNextSib.parserObj === aParSib) {
 									addThis = false
 									mHit = true
@@ -247,7 +260,7 @@ const localFunctions = {
 			let mHit = false
 			this.parserObj.childs.forEach(function (acParser) {
 				let addThis = true
-				if (!acParser.options.get('tag.anywhere.use')) {
+				if (!acParser.options.get('tag.anywhere.use') && !acParser.name === '#text') {
 					if (mHit) {
 						addThis = false
 					} else {
@@ -257,6 +270,10 @@ const localFunctions = {
 								mHit = true
 							}
 						}, this)
+					}
+				} else {
+					if ((acParser.name === '#text' && eChilds.length > 0 && eChilds[0].parserObj.name === '#text') || (!acParser.options.get('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
+						addThis = false
 					}
 				}
 				if (addThis) {

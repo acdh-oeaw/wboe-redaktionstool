@@ -74,12 +74,14 @@ const localFunctions = {
 		this.childs[aKey].type = ((pObj.name === '#text') ? 'TEXT' : 'ELEMENT')
 		this.childs[aKey].name = pObj.name
 		let pAttr = pObj.options.get('attributes')
-		Object.keys(pAttr).forEach(function (attrKey) {
-			let aAttr = pAttr[attrKey]
-			if (aAttr.value) {
-				this.childs[aKey].attributes[attrKey] = aAttr.value
-			}
-		}, this)
+		if (pAttr) {
+			Object.keys(pAttr).forEach(function (attrKey) {
+				let aAttr = pAttr[attrKey]
+				if (aAttr.value) {
+					this.childs[aKey].attributes[attrKey] = aAttr.value
+				}
+			}, this)
+		}
 		if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
 			this.childs[aKey].value = pObj.options.get('value.is.value')
 		}
@@ -190,16 +192,16 @@ const localFunctions = {
 		let aXML = ''
 		if (this.type === 'TEXT') {
 			if (prvXmlObj && (['COMMENT', 'PROCESSING_INSTRUCTION', 'UNKNOWN'].indexOf(prvXmlObj.type) > -1)) {
-				aXML += '\n' + '	'.repeat(deep) + this.value + '\n' + '	'.repeat(deep - 1)
+				aXML += '\n' + '	'.repeat(deep) + (this.value || '') + '\n' + '	'.repeat(deep - 1)
 			} else {
-				aXML += this.value
+				aXML += this.value || ''
 			}
 		} else if (this.type === 'COMMENT' && all) {
-			aXML += '\n' + '	'.repeat(deep) + '<!-- ' + this.value + ' -->'
+			aXML += '\n' + '	'.repeat(deep) + '<!-- ' + (this.value || '') + ' -->'
 		} else if (this.type === 'PROCESSING_INSTRUCTION' && all) {
-			aXML += '\n' + '	'.repeat(deep) + '<?' + this.name + ' ' + this.value + '?>'
+			aXML += '\n' + '	'.repeat(deep) + '<?' + (this.name || '') + ' ' + (this.value || '') + '?>'
 		} else if (this.type === 'UNKNOWN' && all) {
-			aXML += this.value
+			aXML += (this.value || '')
 		} else if (this.type === 'ELEMENT') {
 			let aChildCont = ''
 			let lChild = null

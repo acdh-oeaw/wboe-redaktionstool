@@ -19,6 +19,7 @@ const localFunctions = {
 		this.parserObj = parser || null		// Aktuelles Parser Objekt
 		this.orgXmlObj	= xml || null	// Original Xml Objekt
 		this.ready = false						// Ist das Objekt bereit?
+		this.refresh = true						// Neu zeichnen ...
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = []							// Liste der Fehler
 		this.warnings = []						// Liste der Warnungen
