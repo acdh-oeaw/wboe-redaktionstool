@@ -125,7 +125,7 @@ const localFunctions = {
 		var comOptions = JSON.parse(JSON.stringify(orgOptions))
 		if (Array.isArray(newOptions)) {
 			console.log('combineProcessingOptions - array !!!???')
-		} else if (typeof newOptions === 'object') {
+		} else if (typeof newOptions === 'object' && !(newOptions === null || newOptions === undefined)) {
 			for (var key in newOptions) {
 				if (comOptions.hasOwnProperty(key)) {
 					comOptions[key] = localFunctions.combineProcessingOptions(comOptions[key], newOptions[key])

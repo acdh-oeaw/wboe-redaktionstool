@@ -15,6 +15,7 @@ const localFunctions = {
 		this.header = null						// Wird als String bei der ausgegebenen XML-Datei eingefügt
 		this.family = []							// Alle "ParserObject"e "Key" = "uId"
 		this.idList = {}							// Alle "ParserObject"e mit "id". Property = "id"
+		this.idOptions = {}						// Alle "optionsPreset". Property = "id"
 		this.orgString = null					// Original String für DOM
 		this.orgDOM = null						// Original DOM über init generiert
 		if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
@@ -38,6 +39,7 @@ const localFunctions = {
 		this.options = new localFunctions.ParserOptions()	// Aktuelle Optionen als "ParserOptions"
 		this.orgDOM = dom							// Original DOM
 		this.isCopy = false						// Hanelt es sich um eine Kopie?
+		this.copyOptions = []					// Optionen die im zweiten Durchlauf angewendet werden müssen.
 		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : this.root.content)		// Geschwister
 		this.init()										// Immer dirket initialisieren
 		// this.hasToBeHere(EditorObject)		// Ermitteln ob es sich um ein notwendiges Kind des "EditorObject"s handelt
@@ -61,6 +63,7 @@ const localFunctions = {
 
 // ParserBase Prototypen
 localFunctions.ParserBase.prototype.addError = prototypeMultiple.addError
+localFunctions.ParserBase.prototype.prescan = prototypeParserBase.prescan
 localFunctions.ParserBase.prototype.init = prototypeParserBase.init
 localFunctions.ParserBase.prototype.updateFamilyErrors = prototypeMultiple.updateFamilyErrors
 

@@ -22,6 +22,8 @@ const localFunctions = {
 			return false
 		}
 		// "this.orgDOM" verarbeiten und in "ParserObject"e umwandeln
+		this.prescan(this.orgDOM)		// Prescan für "optionsPreset"
+		// Eigentliche "ParserObject"e
 		if (this.orgDOM.childNodes.length > 0) {
 			this.orgDOM.childNodes.forEach(function (topChild) {
 				if (topChild.nodeType === topChild.ELEMENT_NODE && topChild.nodeName === 'objParser') {
@@ -72,6 +74,36 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
+	prescan: function (aDom) {
+		if (aDom.nodeType === aDom.PROCESSING_INSTRUCTION_NODE && aDom.nodeName === 'optionsPreset') {
+			let aOptions
+			try {
+				aOptions = JSON.parse(aDom.nodeValue)
+			} catch (err) {
+				console.log(err)
+				let errArr = [err.toString()]
+				let errRange = errArr[0].match(/position (\d+)/mi)
+				if (errRange.length > 1) {
+					errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
+				}
+				this.addError({'txt': 'Fehler im JSON-String! (text)', 'err': errArr})
+			}
+			if (!aOptions.id) {
+				this.addError({'txt': 'Fehler in "optionsPreset": Keine ID übergeben!'})
+			} else if (this.idOptions[aOptions.id]) {
+				this.addError({'txt': 'Fehler in "optionsPreset": ID doppelt vergeben!'})
+			} else {
+				let aId = aOptions.id
+				delete aOptions.id
+				this.idOptions[aId] = new Parser.ParserOptions()
+				this.idOptions[aId].extendJSON(JSON.stringify(aOptions), this)
+			}
+		} else if (aDom.childNodes.length > 0) {
+			aDom.childNodes.forEach(function (child) {
+				this.prescan(child)
+			}, this)
+		}
+	}
 }
 
 export default localFunctions

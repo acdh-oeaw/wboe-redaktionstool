@@ -655,21 +655,21 @@
 									"layout": ["hidden"]
 								} ?>
 							</resp>
-							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Jack Bowers</name>
-							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Daniel Schopper</name>
-							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline" } } ?>Omar Siam</name>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Jack Bowers</name>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Daniel Schopper</name>
+							<name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Omar Siam</name>
 						</respStmt>
 						<respStmt>
 							<?options { "title": "DBOE Team", "layout": { "frame": "line" } } ?>
 							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
-							<name xml:id="AL"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Alexandra N. Lenz</name>
-							<name xml:id="PhS"><?options {"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Philip Stöckle</name>
-							<name xml:id="AG"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Andreas Gellan</name>
-							<name xml:id="PZ"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Patrick Zeithuber</name>
-							<name xml:id="SW"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Sabine Wahl</name>
-							<name xml:id="SS"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Sonja Schwaiger</name>
-							<name xml:id="JD"><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Jan Braun</name>
-							<name xml:id="AB"><?options {	"tagAsTitle": false, "layout": { "frame": "inline" } } ?>Angela Bergmayer</name>
+							<name xml:id="AL"><?copyOptions { "fromId": "nameSimple" } ?>Alexandra N. Lenz</name>
+							<name xml:id="PhS"><?copyOptions { "fromId": "nameSimple" } ?>Philip Stöckle</name>
+							<name xml:id="AG"><?copyOptions { "fromId": "nameSimple" } ?>Andreas Gellan</name>
+							<name xml:id="PZ"><?copyOptions { "fromId": "nameSimple" } ?>Patrick Zeithuber</name>
+							<name xml:id="SW"><?copyOptions { "fromId": "nameSimple" } ?>Sabine Wahl</name>
+							<name xml:id="SS"><?copyOptions { "fromId": "nameSimple" } ?>Sonja Schwaiger</name>
+							<name xml:id="JD"><?copyOptions { "fromId": "nameSimple" } ?>Jan Braun</name>
+							<name xml:id="AB"><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Angela Bergmayer</name>
 						</respStmt>
 						<respStmt>
 							<?options { "title": "Student assistants", "layout": { "frame": "line" } } ?>
@@ -685,10 +685,10 @@
 									"layout": ["hidden"]
 								} ?>
 							</resp>
-							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Eva Wahlmüller</name>
-							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Susanna Muhr</name>
-							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " } } ?>Alexandra Grohe</name>
-							<name><?options {	"tagAsTitle": false, "layout": { "frame": "inline" } } ?>Klemens Wagner</name>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Eva Wahlmüller</name>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Susanna Muhr</name>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Alexandra Grohe</name>
+							<name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Klemens Wagner</name>
 						</respStmt>
 					</titleStmt>
 					<publicationStmt>
@@ -714,5 +714,11 @@
 				</fileDesc>
 			</teiHeader>
 		</tags>
+		<options>
+			<?optionsPreset {
+												"id": "nameSimple",
+												"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " }
+			} ?>
+		</options>
 	</objParserSystem>
 </objParser>

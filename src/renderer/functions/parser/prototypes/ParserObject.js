@@ -23,6 +23,30 @@ const localFunctions = {
 					if (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'options') {
 						this.options.extendJSON(child.nodeValue, this)
 					}
+					if (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'copyOptions') {
+						let aOptions
+						try {
+							aOptions = JSON.parse(child.nodeValue)
+						} catch (err) {
+							console.log(err)
+							let errArr = [err.toString()]
+							let errRange = errArr[0].match(/position (\d+)/mi)
+							if (errRange.length > 1) {
+								errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
+							}
+							this.addError({'txt': 'Fehler im JSON-String! (text)', 'err': errArr})
+						}
+						if (!aOptions.fromId) {
+							this.addError({'txt': 'Fehler in "copyOptions": Keine ID übergeben!'})
+						} else if (!this.root.idOptions[aOptions.fromId]) {
+							this.addError({'txt': 'Fehler in "copyOptions": ID existiert nicht!'})
+						} else {
+							this.options.extendObj(this.root.idOptions[aOptions.fromId].options)
+							if (aOptions.options) {
+								this.options.extendJSON(JSON.stringify(aOptions.options), this)
+							}
+						}
+					}
 				}, this)
 				// Handelt es sich bei den Childs um einen "innerText"?
 				if (this.options.get('value.innerText')) {
