@@ -9,16 +9,10 @@ const state = {
 	projectPath: undefined,
 	parserFile: undefined,
 	parserFileContent: undefined,
-	useFile: undefined,
-	useFileContent: undefined,
 	show: {}
 }
 
 const mutations = {
-	SET_USE_FILE: (state, { file, content }) => {		// Aktuelle Datei zum bearbeiten setzen und cachen
-		state.useFile = file
-		state.useFileContent = content
-	},
 	SET_PROJECT_PATH: (state, { projectPath }) => {		// Aktuellen Projektpfad setzen
 		state.projectPath = projectPath
 	},
@@ -40,25 +34,6 @@ const actions = {
 		aShow[obj] = !aShow[obj]
 		store.set('show', aShow)
 		commit('SET_SHOW', { show: aShow })
-	},
-	SET_USE_FILE: function ({ commit }, file) {		// Aktuelle Datei zum bearbeiten setzen und cachen
-		var aFile = file
-		let fileContents = undefined
-		try {
-			fileContents = fs.readFileSync(aFile, 'utf8')
-		} catch (e) {
-			try {
-				// ToDo: Keine Demodaten laden!
-				aFile = fPath.join(__static, '/demo.xml')
-				fileContents = fs.readFileSync(aFile, 'utf8')
-			} catch (e) {
-				console.log(e)
-			}
-		}
-		commit('SET_USE_FILE', { file: aFile, content: fileContents })
-	},
-	UNSET_USE_FILE: function ({ commit }, file) {		// Aktuelle Datei zum bearbeiten aufheben
-		commit('SET_USE_FILE', { file: undefined, content: undefined })
 	},
 	GET_PROJECT_PATH: function ({ commit, dispatch }) {		// Aktuellen Projektpfad aus den "store" laden
 		commit('SET_PROJECT_PATH', { projectPath: store.get('projectPath', remote.app.getPath('userData')) })

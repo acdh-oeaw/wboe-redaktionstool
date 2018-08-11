@@ -32,16 +32,20 @@
 			</b-tab>
 			<b-tab title="Vorschau">
 				<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
+					<div v-if="editorObject">todo ...</div>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
 				<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1 && !update">
+					<div v-if="editorObject">todo ...</div>
+					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
 				<div class="viewxml lh76vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3 && !update">
 					<ViewXML :xmlString="editorObject.getXML()" v-if="editorObject"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
+					<div class="alert alert-danger mi20" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}">
@@ -52,7 +56,7 @@
 			</b-tab>
 			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
 				<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1 && !update">
-					<ViewXmlObject :object="xmlObject" v-if="xmlObject && xmlObject.content.length > 0"/>
+					<ViewXmlObject :object="xmlObject" v-if="xmlObject && xmlObject.content && xmlObject.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
@@ -142,8 +146,9 @@
 			if (this.Parser.parser === undefined) {
 				this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
 			}
-			if (this.Files.fileContent === undefined) {		// ToDo: Leere Datei erstellen
-				this.$store.dispatch('LOAD_FILE')		// Datei laden
+			if (this.Files.fileContent === undefined) {
+				// ToDo: Leere Datei erstellen
+				// this.$store.dispatch('LOAD_FILE')		// Datei laden
 			}
 			this.loadData()
 			console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
@@ -156,9 +161,6 @@
 				var t0 = performance.now()
 				var aFiles = []
 				if (this.devMode) {
-					var xmlObjD = new XmlObject.XmlBase(fs.readFileSync(fPath.join(__static, '/demo2.xml'), 'utf8'))
-					var editorObjD = new EditorObject.EditorBase(this.Parser.parser, xmlObjD)
-					aFiles.push({ 'file': 'demo2.xml', 'fullFileName': fPath.join(__static, '/demo2.xml'), 'errors': Object.keys(editorObjD.errors).length, 'warnings': Object.keys(editorObjD.warnings).length })
 					var aPath = 'D:\\OEAW\\Redaktionstool\\Vorlagen\\2018-06-18\\wboe_articles-master\\102_derived_tei'
 					var aPathRead = fs.readdirSync(aPath)
 					aPathRead.forEach(function (file) {
@@ -201,8 +203,16 @@
 				}
 			},
 			loadData () {
-				this.xmlObject = new XmlObject.XmlBase(this.Files.fileContent)		// XML Objekt erstellen
-				this.editorObject = new EditorObject.EditorBase(this.Parser.parser, this.xmlObject)		// Editor Objekt erstellen
+				if (this.Files.fileContent) {
+					this.xmlObject = new XmlObject.XmlBase(this.Files.fileContent)		// XML Objekt erstellen
+				} else {
+					this.xmlObject = null
+				}
+				if (this.Parser.parser && this.xmlObject) {
+					this.editorObject = new EditorObject.EditorBase(this.Parser.parser, this.xmlObject)		// Editor Objekt erstellen
+				} else {
+					this.editorObject = null
+				}
 				if (this.devMode) {
 					this.devFiles = this.devFileList()
 				}

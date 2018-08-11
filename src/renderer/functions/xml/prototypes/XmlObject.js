@@ -79,6 +79,8 @@ const localFunctions = {
 				let aAttr = pAttr[attrKey]
 				if (aAttr.value) {
 					this.childs[aKey].attributes[attrKey] = aAttr.value
+				} else if ((!aAttr.canBeEmpty || !aAttr.canBeEmpty.use) && aAttr.possibleValues && aAttr.possibleValues[0]) {
+					this.childs[aKey].attributes[attrKey] = aAttr.possibleValues[0]
 				}
 			}, this)
 		}

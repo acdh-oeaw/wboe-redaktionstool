@@ -36,21 +36,13 @@ const actions = {
 		}
 	},
 	LOAD_FILE: function ({ commit, dispatch }, file = undefined) {
-		var aFile = file
-		let fileContent = undefined
-		// ToDo: Datei laden!
 		try {
-			fileContent = fs.readFileSync(aFile, 'utf8')
+			commit('SET_FILE', { 'file': file, 'content': fs.readFileSync(file, 'utf8') })
 		} catch (e) {
-			try {
-				aFile = fPath.join(__static, '/demo2.xml')
-				fileContent = fs.readFileSync(aFile, 'utf8')
-			} catch (e) {
-				console.log(e)
-			}
+			console.log(e)
+			commit('SET_FILE', { 'file': null, 'content': null })
+			alert('Konnte Datei "' + file + '" nicht laden!')
 		}
-		console.log('SET_FILE', aFile)
-		commit('SET_FILE', { file: aFile, content: fileContent })
 	},
 	RELOAD_FILE: function ({ commit, dispatch }) {
 		var aFile = state.file
@@ -99,18 +91,16 @@ const actions = {
 				}
 			}
 		}, this)
-		files = files.slice().sort((a, b) => {
-			if (a.file.toLowerCase() > b.file.toLowerCase()) { return 1 }
-			if (a.file.toLowerCase() < b.file.toLowerCase()) { return -1 }
-			return 0
-		})
-		paths = paths.slice().sort((a, b) => {
-			if (a.file.toLowerCase() > b.file.toLowerCase()) { return 1 }
-			if (a.file.toLowerCase() < b.file.toLowerCase()) { return -1 }
-			return 0
-		})
+		files = files.slice().sort(lowerSort)
+		paths = paths.slice().sort(lowerSort)
 		commit('SET_CONTENT', { path: path, files: files, paths: paths })
 	}
+}
+
+function lowerSort (a, b) {
+	if (a.file.toLowerCase() > b.file.toLowerCase()) { return 1 }
+	if (a.file.toLowerCase() < b.file.toLowerCase()) { return -1 }
+	return 0
 }
 
 export default {

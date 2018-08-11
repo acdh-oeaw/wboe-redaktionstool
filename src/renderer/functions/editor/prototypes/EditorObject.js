@@ -166,7 +166,7 @@ const localFunctions = {
 			console.log('Editor - Kann nicht gelöscht werden!', this)
 		}
 	},
-	updateData: function (withChilds = false, posAsError = false) {
+	updateData: function (withChilds = false, posAsError = false, first = true) {
 		this.count = 0
 		this.countParser = 0
 		this.multipleNr = 0
@@ -194,8 +194,11 @@ const localFunctions = {
 		this.updateAddable()
 		if (withChilds && this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {
-				aChild.updateData(withChilds, posAsError)
+				aChild.updateData(withChilds, posAsError, first = false)
 			}, this)
+		}
+		if (first) {
+			this.root.updateFamilyErrors()
 		}
 	},
 	updateAddable: function (withChilds = false) {

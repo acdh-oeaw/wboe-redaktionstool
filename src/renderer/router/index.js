@@ -6,7 +6,7 @@ Vue.use(Router)
 export default new Router({
 	routes: [
 		{
-			path: '/',
+			path: '/home',
 			name: 'start-page',
 			component: require('@/components/StartPage').default
 		},
@@ -17,7 +17,7 @@ export default new Router({
 		},
 		{
 			path: '*',
-			redirect: '/'
+			redirect: '/home'
 		}
 	]
 })
