@@ -1,5 +1,7 @@
 <template>
 	<div class="tool-page">
+
+		<!-- Obere Toolbar -->
 		<b-button-toolbar class="main-toolbar">
 			<b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
 				<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
@@ -23,49 +25,60 @@
 				<b-btn title="" v-b-tooltip.hover.html><font-awesome-icon icon="clipboard-check"/></b-btn>
 			</b-button-group>
 		</b-button-toolbar>
+
+		<!-- Tabs -->
 		<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
+
 			<b-tab title="Editor">
 				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1 && !update">
 					<ViewEditor :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
+
 			<b-tab title="Vorschau">
 				<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
 					<div v-if="editorObject">todo ...</div>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
+
 			<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
 				<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1 && !update">
 					<div v-if="editorObject">todo ...</div>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
+
 			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
 				<div class="viewxml lh76vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3 && !update">
 					<ViewXML :xmlString="editorObject.getXML()" v-if="editorObject"/>
 					<div class="alert alert-danger mi20" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
+
 			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}">
 				<div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1 && !update">
 					<ViewParser :parser="this.Parser.parser" v-if="this.Parser.parser && this.Parser.parser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
+
 			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
 				<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1 && !update">
 					<ViewXmlObject :object="xmlObject" v-if="xmlObject && xmlObject.content && xmlObject.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
+
 			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
 				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(6) > -1 && !update">
 					<ViewEditorObject :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
+
+			<!-- Ansicht Einstellungen (eye) -->
 			<template slot="tabs">
 				<li class="nav-item extra">
 					<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
@@ -87,6 +100,7 @@
 					</div>
 				</li>
 			</template>
+
 		</b-tabs>
 	</div>
 </template>
@@ -146,6 +160,13 @@
 			if (!this.Parser.parser) {
 				this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
 			}
+			if (!this.Files.fileContent || !this.Files.fileContent === '') {
+				if (this.devMode && this.Options.lastFile && this.Options.lastFile) {
+					this.$store.dispatch('LOAD_FILE', this.Options.lastFile)		// Datei laden
+				} else {
+					this.$router.push('/home')
+				}
+			}
 			if (!this.Files.fileContent) {
 				// ToDo: Leere Datei erstellen
 				// this.$store.dispatch('LOAD_FILE')		// Datei laden
@@ -158,20 +179,16 @@
 				shell.showItemInFolder(this.Files.file)
 			},
 			devFileList () {
-				var t0 = performance.now()
-				var aFiles = []
-				if (this.devMode) {
-					var aPath = 'D:\\OEAW\\Redaktionstool\\Vorlagen\\2018-06-18\\wboe_articles-master\\102_derived_tei'
-					var aPathRead = fs.readdirSync(aPath)
-					aPathRead.forEach(function (file) {
-						var aFullFileName = fPath.join(aPath, file)
-						var stats = fs.statSync(aFullFileName)
-						if (!stats.isDirectory()) {
+				let t0 = performance.now()
+				let aFiles = []
+				if (this.devMode && this.Files.file) {
+					let aPath = this.Files.file.substr(0, this.Files.file.length - this.Files.file.split('\\').pop().split('/').pop().length)
+					fs.readdirSync(aPath).forEach(function (file) {
+						let aFullFileName = fPath.join(aPath, file)
+						if (!fs.statSync(aFullFileName).isDirectory()) {
 							let aExt = file.split('.').pop()
 							if (aExt === 'xml') {
-								var fileContent = fs.readFileSync(aFullFileName, 'utf8')
-								var xmlObj = new XmlObject.XmlBase(fileContent)
-								var editorObj = new EditorObject.EditorBase(this.Parser.parser, xmlObj)
+								let editorObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(fs.readFileSync(aFullFileName, 'utf8')))
 								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length })
 							}
 						}

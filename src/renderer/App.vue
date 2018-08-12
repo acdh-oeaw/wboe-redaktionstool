@@ -65,6 +65,7 @@
 		},
 		created: function () {
 			this.$store.dispatch('LOAD_SHOW')
+			this.$store.dispatch('LOAD_LASTFILE')
 			window.addEventListener('keyup', this.keyUp)
 		},
 		beforeDestroy: function () {

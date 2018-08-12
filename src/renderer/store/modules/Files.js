@@ -40,6 +40,7 @@ const actions = {
 	LOAD_FILE: function ({ commit, dispatch }, file = null) {
 		try {
 			commit('SET_FILE', { 'file': file, 'content': fs.readFileSync(file, 'utf8') })
+			dispatch('SET_LASTFILE', file)
 		} catch (e) {
 			console.log(e)
 			commit('SET_FILE', { 'file': null, 'content': null })
