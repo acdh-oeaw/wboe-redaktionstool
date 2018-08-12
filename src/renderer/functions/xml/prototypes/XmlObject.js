@@ -1,5 +1,6 @@
 import Xml from '../Xml'
 import Vue from 'vue'
+import store from '@/store'
 
 const localFunctions = {
 	init: function () {
@@ -65,6 +66,7 @@ const localFunctions = {
 		return true
 	},
 	addByParser: function (pos, pObj) {
+		console.log('addByParser', this, pos, pObj)
 		let aKey = pos
 		if (aKey || aKey === 0) {
 			this.childs.splice(aKey, 0, new Xml.XmlObject(this.root, [this, ...this.parents]))
@@ -90,6 +92,9 @@ const localFunctions = {
 		this.childs[aKey].useable = true
 		this.childs[aKey].ready = true
 		this.childs[aKey].parserIgnore = false
+		if (this.ready) {
+			store.dispatch('IS_CHANGED')
+		}
 		return this.childs[aKey]
 	},
 	addAfterByParser: function (pObj) {
@@ -101,11 +106,14 @@ const localFunctions = {
 		}
 	},
 	move: function (xObj, dir = true) {		// dir = true - Nach xObj verschieben
-		// console.log('move', this.siblings.indexOf(this) + ' ' + ((dir) ? 'after' : 'before') + ' ' + this.siblings.indexOf(xObj), this, xObj)
+		console.log('move', this.siblings.indexOf(this) + ' ' + ((dir) ? 'after' : 'before') + ' ' + this.siblings.indexOf(xObj), this, xObj)
 		let tPos = this.siblings.indexOf(this)
 		let ePos = this.siblings.indexOf(xObj)
 		if (tPos > -1 && ePos > -1) {
 			this.siblings.splice(ePos, 0, this.siblings.splice(tPos, 1)[0])
+			if (this.ready) {
+				store.dispatch('IS_CHANGED')
+			}
 		} else {
 			console.log('Fehler! Verschieben kann nicht funktionieren!')
 		}
@@ -114,14 +122,17 @@ const localFunctions = {
 		if (this.siblings) {
 			if (direct || confirm('Soll der Tag "' + this.name + '" wirklich gelöscht werden? (xml)')) {
 				console.log('XML - Löschen: ' + this.name)
-				this.childs.forEach(function (aChild) {
+				this.childs.forEach(function (aChild) {		// Zuerst die Kinder löschen!
 					aChild.delete(true)
 				}, this)
 				this.root.family[this.uId] = null
-				this.siblings.some(function (aSib, aSibKey) {
+				this.siblings.some(function (aSib, aSibKey) {		// Aktuellen Key ermitteln und löschen!
 					if (aSib === this) {
 						Vue.delete(this.siblings, aSibKey)
 						console.log('XmlObject gelöscht ...')
+						if (this.ready) {
+							store.dispatch('IS_CHANGED')
+						}
 						return true
 					}
 				}, this)
@@ -163,13 +174,20 @@ const localFunctions = {
 		}
 	},
 	setValue: function (val) {
+		console.log('setValue', this, val)
 		// ToDo: innerXML ?!?!
 		if (this.type === 'TEXT') {
-			this.value = val
+			if (this.value !== val) {
+				this.value = val
+				store.dispatch('IS_CHANGED')
+			}
 		} else {
 			let aTxtChilds = this.getChildsOfType(['TEXT'], false, false)
 			if (aTxtChilds.length === 1) {
-				aTxtChilds[0].value = val
+				if (aTxtChilds[0].value !== val) {
+					aTxtChilds[0].value = val
+					store.dispatch('IS_CHANGED')
+				}
 			} else if (aTxtChilds.length > 1) {
 				// ToDo: Mehrer Text Kinder ?!?
 				console.log(aTxtChilds.length + ' TEXT Kind ...')
@@ -182,12 +200,17 @@ const localFunctions = {
 				this.childs[nTxt].useable = true
 				this.childs[nTxt].ready = true
 				this.childs[nTxt].parserIgnore = false
+				if (val) { store.dispatch('IS_CHANGED') }
 			}
 		}
 		return this.getValue(false)
 	},
 	setAttribute: function (attr, val) {
-		Vue.set(this.attributes, attr, val)
+		console.log('setAttribute', this, val)
+		if (!this.attributes[attr] || this.attributes[attr] !== val) {
+			Vue.set(this.attributes, attr, val)
+			store.dispatch('IS_CHANGED')
+		}
 		return { 'attribute': attr, 'value': val }
 	},
 	getXML: function (all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {

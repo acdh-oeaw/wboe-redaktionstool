@@ -15,7 +15,7 @@
 				<b-btn @click="updateData()" title="Parser und Datei neu laden"><font-awesome-icon icon="sync-alt"/></b-btn>
 				<b-btn @click="devNextFile()" title="Nächste Datei"><font-awesome-icon icon="angle-right"/></b-btn>
 			</b-button-group>
-			<b-input-group size="sm" class="w-25 mx-1" prepend="Datei">
+			<b-input-group size="sm" class="w-25 mx-1" :prepend="'Datei' + ((Files.changed) ? '!' : '')">
 				<p class="form-control file-name" :title="Files.file">{{ Files.file }}</p>
 				<b-input-group-append>
 					<b-btn @click="showFile()" variant="outline-secondary" title="Ordner in Explorer öffnen" :disabled="!Files.file"><font-awesome-icon icon="external-link-alt"/></b-btn>
@@ -83,12 +83,16 @@
 				<li class="nav-item extra">
 					<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
 					<div class="vis-dropdown" v-if="showTabView">
-						<template v-if="aTab === 6">
-							<button @click="$store.dispatch('TOGGLE_SHOW', 'editorObjectWithoutParser')"><font-awesome-icon :icon="((Options.show.editorObjectWithoutParser) ? 'eye' : 'eye-slash')"/> Ohne Parser</button>
+						<template v-if="aTab === 3">
+							<button @click="$store.dispatch('TOGGLE_SHOW', 'monacoDiff')"><font-awesome-icon :icon="((Options.show.monacoDiff) ? 'eye' : 'eye-slash')"/> Änderungen anzeigen</button>
 							<hr>
 						</template>
 						<template v-if="aTab === 5">
 							<button @click="$store.dispatch('TOGGLE_SHOW', 'xmlObjectUselessTypes')"><font-awesome-icon :icon="((Options.show.xmlObjectUselessTypes) ? 'eye' : 'eye-slash')"/> Unbrauchbare Nodes</button>
+							<hr>
+						</template>
+						<template v-if="aTab === 6">
+							<button @click="$store.dispatch('TOGGLE_SHOW', 'editorObjectWithoutParser')"><font-awesome-icon :icon="((Options.show.editorObjectWithoutParser) ? 'eye' : 'eye-slash')"/> Ohne Parser</button>
 							<hr>
 						</template>
 						<button @click="$store.dispatch('TOGGLE_SHOW', 'professional')"><font-awesome-icon :icon="((Options.show.professional) ? 'eye' : 'eye-slash')"/> Professional</button>
@@ -160,14 +164,17 @@
 			if (!this.Parser.parser) {
 				this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
 			}
-			if (!this.Files.fileContent || !this.Files.fileContent === '') {
+			if (!this.Files.file) {
 				if (this.devMode && this.Options.lastFile && this.Options.lastFile) {
 					this.$store.dispatch('LOAD_FILE', this.Options.lastFile)		// Datei laden
 				} else {
 					this.$router.push('/home')
 				}
 			}
-			if (!this.Files.fileContent) {
+			if (!this.Files.file) {
+				this.$router.push('/home')
+			}
+			if (!this.Files.fileContent || !this.Files.fileContent === '') {
 				// ToDo: Leere Datei erstellen
 				// this.$store.dispatch('LOAD_FILE')		// Datei laden
 			}

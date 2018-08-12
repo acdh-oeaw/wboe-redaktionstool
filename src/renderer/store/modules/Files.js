@@ -6,7 +6,8 @@ const fs = remote.require('fs')
 const state = {
 	paths: {},		// Cach für Verzeichnissstruktur
 	file: null,
-	fileContent: null
+	fileContent: null,
+	changed: false,
 }
 
 const mutations = {
@@ -28,9 +29,18 @@ const mutations = {
 		state.file = file
 		state.fileContent = content
 	},
+	SET_CHANGED: (state, { bool }) => {		// Anzeige Pfad offen/geschlossen wechseln
+		state.changed = bool
+	},
 }
 
 const actions = {
+	IS_CHANGED: function ({ commit }) {
+		commit('SET_CHANGED', { 'bool': true })
+	},
+	NOT_CHANGED: function ({ commit }) {
+		commit('SET_CHANGED', { 'bool': false })
+	},
 	TOGGLE_OPEN: function ({ commit, dispatch }, { path }) {		// Anzeige Pfad offen/geschlossen wechseln und ggf. Inhalt cachen
 		if (!state.paths[path]) {
 			dispatch('GET_PATH', { 'path': path })
@@ -41,6 +51,7 @@ const actions = {
 		try {
 			commit('SET_FILE', { 'file': file, 'content': fs.readFileSync(file, 'utf8') })
 			dispatch('SET_LASTFILE', file)
+			dispatch('NOT_CHANGED')
 		} catch (e) {
 			console.log(e)
 			commit('SET_FILE', { 'file': null, 'content': null })
@@ -51,6 +62,7 @@ const actions = {
 		var aFile = state.file
 		var fileContent = fs.readFileSync(aFile, 'utf8')
 		commit('SET_FILE', { 'file': aFile, 'content': fileContent })
+		dispatch('NOT_CHANGED')
 	},
 	CLEAN_PATH: function ({ commit }) {		// Cache für Verzeichnissstruktur löschen
 		commit('CLEAN_CONTENT')
