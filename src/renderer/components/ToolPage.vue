@@ -29,49 +29,49 @@
 		<!-- Tabs -->
 		<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
 
-			<b-tab title="Editor">
+			<b-tab title="Editor" :disabled="tabsLocked">
 				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1 && !update">
 					<ViewEditor :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 
-			<b-tab title="Vorschau">
+			<b-tab title="Vorschau" :disabled="tabsLocked">
 				<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
 					<div v-if="editorObject">todo ...</div>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 
-			<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
+			<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked">
 				<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1 && !update">
 					<div v-if="editorObject">todo ...</div>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 
-			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
+			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}" :disabled="tabsLocked">
 				<div class="viewxml lh76vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3 && !update">
-					<ViewXML :xmlString="editorObject.getXML()" v-if="editorObject"/>
+					<ViewXML :xmlString="editorObject.getXML()" :orgXmlString="Files.fileContent" @changed="xmlChanged" @refresh="xmlRefresh" v-if="editorObject"/>
 					<div class="alert alert-danger mi20" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 
-			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}">
+			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}" :disabled="tabsLocked">
 				<div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1 && !update">
-					<ViewParser :parser="this.Parser.parser" v-if="this.Parser.parser && this.Parser.parser.content.length > 0"/>
+					<ViewParser :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content.length > 0"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
 				</div>
 			</b-tab>
 
-			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}">
+			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}" :disabled="tabsLocked">
 				<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1 && !update">
-					<ViewXmlObject :object="xmlObject" v-if="xmlObject && xmlObject.content && xmlObject.content.length > 0"/>
+					<ViewXmlObject :object="xmlObject" v-if="xmlObject"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
 				</div>
 			</b-tab>
 
-			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}">
+			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked">
 				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(6) > -1 && !update">
 					<ViewEditorObject :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
@@ -81,6 +81,7 @@
 			<!-- Ansicht Einstellungen (eye) -->
 			<template slot="tabs">
 				<li class="nav-item extra">
+					<b-button size="sm" @click="xmlEditorSet" v-if="aTab === 3" variant="primary" :disabled="!xmlEditorLocked">Anwenden</b-button>
 					<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
 					<div class="vis-dropdown" v-if="showTabView">
 						<template v-if="aTab === 3">
@@ -136,12 +137,17 @@
 				devMode: (process.env.NODE_ENV === 'development'),
 				devFiles: null,
 				update: false,
+				xmlEditorLocked: false,
+				xmlEditorNewContent: '',
 			}
 		},
 		computed: {
 			...mapState(['Options']),
 			...mapState(['Parser']),
 			...mapState(['Files']),
+			tabsLocked () {
+				return (this.xmlEditorLocked)
+			}
 		},
 		watch: {
 			aTab: function (nVal) {
@@ -184,6 +190,32 @@
 		methods: {
 			showFile () {		// Ordner in Explorer öffnen
 				shell.showItemInFolder(this.Files.file)
+			},
+			xmlRefresh () {
+				this.update = true
+			},
+			xmlChanged (val) {
+				this.xmlEditorNewContent = val
+				this.xmlEditorLocked = true
+			},
+			xmlEditorSet () {
+				let xmlObject = new XmlObject.XmlBase(this.xmlEditorNewContent)		// XML Objekt erstellen
+				let editorObject = new EditorObject.EditorBase(this.Parser.parser, xmlObject)		// Editor Objekt erstellen
+				console.log(xmlObject, editorObject)
+				if (Object.keys(xmlObject.errors).length === 0) {
+					if (Object.keys(editorObject.errors).length === 0) {
+						this.xmlObject = xmlObject
+						this.editorObject = editorObject
+						this.update = true
+						this.xmlEditorLocked = false
+					} else {
+						alert('Es gab Fehler bei der Verarbeitung der XML Objekte für den Editor!')
+						console.log(xmlObject.errors)
+					}
+				} else {
+					alert('Es gab Fehler bei der Verarbeitung der XML Daten!')
+					console.log(xmlObject.errors)
+				}
 			},
 			devFileList () {
 				let t0 = performance.now()

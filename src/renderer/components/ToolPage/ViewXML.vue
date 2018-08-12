@@ -5,25 +5,62 @@
 </template>
 
 <script>
+	import _ from 'lodash'
+	import { mapState } from 'vuex'
+
 	export default {
 		name: 'ViewXML',
 		props: {
 			xmlString: String,
+			orgXmlString: String,
 		},
 		data () {
 			return {
 				content: '',
+				orgContent: '',
 				selection: {},
 				monaco: {},
 				editor: {},
-				editorModel: null
+				editorModel: null,
+				orgModel: null,
+				alertDiff: true,
+				changed: false,
+				ready: false,
 			}
 		},
 		computed: {
+			...mapState(['Options']),
+		},
+		watch: {
+			'Options.show.monacoDiff': function (nVal, oVal) {
+				if (this.alertDiff && this.changed) {
+					alert('Ansicht kann nur nach dem Anwenden der Änderungen geändert werden!')
+					this.$nextTick(() => {
+						this.$store.dispatch('TOGGLE_SHOW', 'monacoDiff')
+						this.alertDiff = false
+					})
+				} else {
+					console.log('refresh')
+					this.alertDiff = true
+					this.$emit('refresh')
+				}
+			},
+			'content': function (nVal) {
+				if (this.ready) {
+					this.updateContent()
+					this.changed = true
+				}
+			},
 		},
 		mounted: function () {
 			this.content = this.xmlString
+			this.orgContent = this.orgXmlString
 			loadMonacoEditor(this)
+		},
+		methods: {
+			updateContent: _.debounce(function () {
+				this.$emit('changed', this.content)
+			}, 250),
 		},
 	}
 
@@ -39,22 +76,25 @@
 		amdRequire.config({
 			baseUrl: uriFromPath(path.join(__dirname, ((process.env.NODE_ENV === 'development') ? '../../' : '') + '../../node_modules/monaco-editor/dev'))
 		})
-		// workaround monaco-css not understanding the environment
 		self.module = null
-		// workaround monaco-typescript not understanding the environment
 		self.process.browser = true
 		amdRequire(['vs/editor/editor.main'], function () {
 			thisEditor.monaco = this.monaco
 			thisEditor.monaco.languages.html.htmlDefaults.options.format.tabSize = 2
 			const editorContainer = document.getElementById('editor')
-			thisEditor.editor = this.monaco.editor.create(editorContainer, {
+			const editorOptions = {
 				language: 'xml',
 				autoIndent: true,
 				wrappingIndent: 'same',
 				showFoldingControls: 'always',
 				multiCursorModifier: 'ctrlCmd',
 				tabSize: 2
-			})
+			}
+			if (thisEditor.Options.show.monacoDiff) {
+				thisEditor.editor = this.monaco.editor.createDiffEditor(editorContainer, editorOptions)
+			} else {
+				thisEditor.editor = this.monaco.editor.create(editorContainer, editorOptions)
+			}
 			function updateDimensions () {
 				thisEditor.editor.layout()
 			}
@@ -64,10 +104,18 @@
 			thisEditor.editorModel.onDidChangeContent(e => {
 				thisEditor.content = thisEditor.editorModel.getValue()
 			})
-			thisEditor.editor.onDidChangeCursorSelection(e => {
-				thisEditor.selection = e.selection
-			})
-			thisEditor.editor.setModel(thisEditor.editorModel)
+			if (thisEditor.Options.show.monacoDiff) {
+				thisEditor.orgModel = this.monaco.editor.createModel(thisEditor.orgContent, 'xml')
+				thisEditor.editor.setModel({'original': thisEditor.orgModel, 'modified': thisEditor.editorModel})
+			} else {
+				thisEditor.editor.setModel(thisEditor.editorModel)
+				thisEditor.editor.onDidChangeCursorSelection(e => {
+					thisEditor.selection = e.selection
+				})
+			}
+		})
+		thisEditor.$nextTick(() => {
+			thisEditor.ready = true
 		})
 	}
 	function loadMonacoEditor (thisEditor) {
