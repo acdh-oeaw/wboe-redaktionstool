@@ -22,7 +22,10 @@
 				</b-input-group-append>
 			</b-input-group>
 			<b-button-group size="sm" class="mr-1 mil-auto">
-				<b-btn title="" v-b-tooltip.hover.html><font-awesome-icon icon="clipboard-check"/></b-btn>
+				<b-btn @click="saveFile()"
+							:title="((!Files.changed) ? '' : ((dataStatus === 'ok') ? 'Datei kann gespeichert werden.' : ((dataStatus === 'error') ? 'Datei enthält Fehler!' : 'Datei enthält Warnungen!')))"
+							:variant="((!Files.changed) ? 'secondary' : ((dataStatus === 'ok') ? 'success' : ((dataStatus === 'error') ? 'danger' : 'warning')))" v-b-tooltip.hover.html :disabled="tabsLocked"><font-awesome-icon icon="save"/></b-btn>
+				<b-btn @click="discardChanges" title="Änderungen verwerfen und zurück zur Auswahl!" variant="warning" v-b-tooltip.hover.html v-if="Files.changed"><font-awesome-icon icon="minus-circle"/></b-btn>
 			</b-button-group>
 		</b-button-toolbar>
 
@@ -82,6 +85,7 @@
 			<template slot="tabs">
 				<li class="nav-item extra">
 					<b-button size="sm" @click="xmlEditorSet" v-if="aTab === 3" variant="primary" :disabled="!xmlEditorLocked">Anwenden</b-button>
+					<b-button size="sm" @click="xmlEditorUnset" v-if="aTab === 3" variant="warning" :disabled="!xmlEditorLocked">Verwerfen</b-button>
 					<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
 					<div class="vis-dropdown" v-if="showTabView">
 						<template v-if="aTab === 3">
@@ -147,7 +151,26 @@
 			...mapState(['Files']),
 			tabsLocked () {
 				return (this.xmlEditorLocked)
-			}
+			},
+			dataStatus () {
+				if (this.Parser.parser && this.xmlObject && this.editorObject) {
+					if (Object.keys(this.Parser.parser.errors).length > 0
+						|| Object.keys(this.xmlObject.errors).length > 0
+						|| Object.keys(this.editorObject.errors).length > 0) {
+							return 'error'
+						} else {
+							if (Object.keys(this.Parser.parser.warnings).length > 0
+								|| Object.keys(this.xmlObject.warnings).length > 0
+								|| Object.keys(this.editorObject.warnings).length > 0) {
+									return 'warning'
+								} else {
+									return 'ok'
+								}
+						}
+				} else {
+					return 'error'
+				}
+			},
 		},
 		watch: {
 			aTab: function (nVal) {
@@ -188,6 +211,21 @@
 			console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
 		},
 		methods: {
+			saveFile () {
+				if (this.Files.changed) {
+					if (this.dataStatus === 'ok'
+					|| (this.dataStatus === 'error' && confirm('Daten enthalten Fehler! Wiklich speichern?'))
+					|| (this.dataStatus === 'warning' && confirm('Daten enthalten Warnungen! Wiklich speichern?'))) {
+						this.$store.dispatch('SAVE_FILE', this.editorObject.getXML())
+					}
+				}
+			},
+			discardChanges () {
+				if (confirm('Aktuelle Änderungen wirklich verwerfen?')) {
+					this.$store.dispatch('NOT_CHANGED')
+					this.$router.push('/home')
+				}
+			},
 			showFile () {		// Ordner in Explorer öffnen
 				shell.showItemInFolder(this.Files.file)
 			},
@@ -215,6 +253,12 @@
 				} else {
 					alert('Es gab Fehler bei der Verarbeitung der XML Daten!')
 					console.log(xmlObject.errors)
+				}
+			},
+			xmlEditorUnset () {
+				if (confirm('Änderungen im XML-Editor verwerfen?')) {
+					this.update = true
+					this.xmlEditorLocked = false
 				}
 			},
 			devFileList () {

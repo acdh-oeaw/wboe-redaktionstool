@@ -96,7 +96,7 @@
 		cursor: pointer;
 	}
 	#loading {
-		position: absolute;
+		position: fixed;
 		background: rgba(0, 0, 0, 0.25);
 		color: #fff;
 		text-align: center;

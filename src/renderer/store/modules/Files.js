@@ -58,6 +58,16 @@ const actions = {
 			alert('Konnte Datei "' + file + '" nicht laden!')
 		}
 	},
+	SAVE_FILE: function ({ commit, dispatch }, content) {
+		commit('SET_FILE', { 'file': state.file, 'content': content })
+		try {
+			fs.writeFileSync(state.file, content, 'utf8')
+			dispatch('NOT_CHANGED')
+		} catch (e) {
+			console.log(e)
+			alert('Beim speichern kam es zu einem Fehler!\nDatei NICHT gespeichert!')
+		}
+	},
 	RELOAD_FILE: function ({ commit, dispatch }) {
 		var aFile = state.file
 		var fileContent = fs.readFileSync(aFile, 'utf8')
