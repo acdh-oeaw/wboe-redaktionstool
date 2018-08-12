@@ -43,7 +43,7 @@
 				if (nVal) {		// Wenn sich der Projektpfad ändert alle Verzeichnisse zurücksetzen
 					this.loading = true
 					this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
-					this.$store.dispatch('GET_PATH', this.Options.projectPath)
+					this.$store.dispatch('GET_PATH', { 'path': this.Options.projectPath })
 					this.loading = false
 				}
 			}
@@ -60,9 +60,7 @@
 				shell.openItem(this.Options.projectPath)
 			},
 			updateFolder () {		// Projektpfad neu laden
-				// ToDo: UPDATE_PATHS
-				this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
-				this.$store.dispatch('GET_PATH', this.Options.projectPath)
+				this.$store.dispatch('UPDATE_PATHS')
 			},
 			showParser () {		// Parser-Datei in Explorer anzeigen
 				shell.showItemInFolder(this.Options.parserFile)

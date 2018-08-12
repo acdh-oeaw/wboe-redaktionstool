@@ -9,7 +9,7 @@
 					<b-collapse is-nav id="nav_collapse">
 							<b-navbar-nav class="ml-auto">
 								<b-nav-item to="/home">Home</b-nav-item>
-								<b-nav-item to="/tool">Tool</b-nav-item>
+								<b-nav-item to="/tool" :disabled="!Files.file">Tool</b-nav-item>
 							</b-navbar-nav>
 					</b-collapse>
 				</div>
@@ -27,6 +27,8 @@
 	import searchInPage from 'electron-in-page-search'
 	import { remote } from 'electron'
 
+	import { mapState } from 'vuex'
+
 	const inPageSearch = searchInPage(remote.getCurrentWebContents())
 
 	export default {
@@ -36,6 +38,11 @@
 				devMode: (process.env.NODE_ENV === 'development')
 			}
 		},
+		computed: {
+			...mapState(['Options']),
+			...mapState(['Parser']),
+			...mapState(['Files']),
+		},
 		methods: {
 			keyUp: function (e) {
 				if (e.ctrlKey && e.key === 'f') {
@@ -44,7 +51,6 @@
 					}
 				}
 				if (e.key === 'F3') {
-					console.log(inPageSearch)
 					if (!inPageSearch.opened) {
 						inPageSearch.openSearchWindow()
 					} else if (inPageSearch.isSearching()) {

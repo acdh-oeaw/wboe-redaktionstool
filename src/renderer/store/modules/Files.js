@@ -14,10 +14,15 @@ const mutations = {
 		state.paths = {}
 	},
 	SET_CONTENT: (state, { path, files, paths }) => {		// Werte für Verzeichnissstruktur setzen
-		Vue.set(state.paths, path, {paths: paths, files: files})
+		Vue.set(state.paths, path, {'paths': paths, 'files': files, 'isOpen': false})
 	},
-	TOGGLE_PATH_OPEN: (state, { path, fileKey }) => {		// Anzeige Pfad offen/geschlossen wechseln
-		state.paths[path].paths[fileKey].isOpen = !state.paths[path].paths[fileKey].isOpen
+	UPDATE_CONTENT: (state, { path, files, paths }) => {		// Werte für Verzeichnissstruktur updaten
+		// ToDo!
+		Vue.set(state.paths[path], 'paths', paths)
+		Vue.set(state.paths[path], 'files', files)
+	},
+	TOGGLE_PATH_OPEN: (state, { path }) => {		// Anzeige Pfad offen/geschlossen wechseln
+		state.paths[path].isOpen = !state.paths[path].isOpen
 	},
 	SET_FILE: (state, { file, content }) => {		// Aktuelle Datei laden
 		state.file = file
@@ -26,14 +31,11 @@ const mutations = {
 }
 
 const actions = {
-	// ToDo: UPDATE_PATHS
-	TOGGLE_OPEN: function ({ commit, dispatch }, {path, fileKey}) {		// Anzeige Pfad offen/geschlossen wechseln und ggf. Inhalt cachen
-		if (state.paths[path] && state.paths[path].paths && state.paths[path].paths[fileKey]) {
-			commit('TOGGLE_PATH_OPEN', { path: path, fileKey: fileKey })
-			if (!state.paths[path].paths[fileKey].isOpen && state.paths[state.paths[path].paths[fileKey].fullFileName]) {
-				dispatch('GET_PATH', state.paths[path].paths[fileKey].fullFileName)
-			}
+	TOGGLE_OPEN: function ({ commit, dispatch }, { path }) {		// Anzeige Pfad offen/geschlossen wechseln und ggf. Inhalt cachen
+		if (!state.paths[path]) {
+			dispatch('GET_PATH', { 'path': path })
 		}
+		commit('TOGGLE_PATH_OPEN', { 'path': path })
 	},
 	LOAD_FILE: function ({ commit, dispatch }, file = null) {
 		try {
@@ -47,13 +49,13 @@ const actions = {
 	RELOAD_FILE: function ({ commit, dispatch }) {
 		var aFile = state.file
 		var fileContent = fs.readFileSync(aFile, 'utf8')
-		commit('SET_FILE', { file: aFile, content: fileContent })
+		commit('SET_FILE', { 'file': aFile, 'content': fileContent })
 	},
 	CLEAN_PATH: function ({ commit }) {		// Cache für Verzeichnissstruktur löschen
 		commit('CLEAN_CONTENT')
 	},
-	GET_PATH: function ({ commit }, path) {		// Inhalt für das Verzeichniss "path" cachen
-		console.log('GET_PATH', path)
+	GET_PATH: function ({ commit }, { path, update = false }) {		// Inhalt für das Verzeichniss "path" cachen
+		console.log('GET_PATH:', ((update) ? 'Update - ' : 'Neu - '), path)
 		let files = []
 		let paths = []
 		try {
@@ -73,19 +75,20 @@ const actions = {
 			if (stats) {
 				if (stats.isDirectory()) {
 					paths.push({
-						file: file,
-						fullFileName: aFullFileName,
-						isOpen: false,
-						size: stats.size
+						'file': file,
+						'fullFileName': aFullFileName,
+						'isOpen': false,
+						'size': stats.size
 					})
 				} else {
 					let aExt = file.split('.').pop()
 					if (aExt === 'xml') {
 						files.push({
-							file: file,
-							ext: aExt,
-							fullFileName: aFullFileName,
-							size: stats.size
+							'file': file,
+							'ext': aExt,
+							'fullFileName': aFullFileName,
+							'path': path,
+							'size': stats.size
 						})
 					}
 				}
@@ -93,8 +96,13 @@ const actions = {
 		}, this)
 		files = files.slice().sort(lowerSort)
 		paths = paths.slice().sort(lowerSort)
-		commit('SET_CONTENT', { path: path, files: files, paths: paths })
-	}
+		commit(((update) ? 'UPDATE_CONTENT' : 'SET_CONTENT'), { 'path': path, 'files': files, 'paths': paths })
+	},
+	UPDATE_PATHS: function ({ commit, dispatch }) {		// Gecachte Inhalt für "Verzeichnisse" updaten
+		Object.keys(state.paths).forEach(function (aDir) {
+			dispatch('GET_PATH', { 'path': aDir, 'update': true })
+		}, this)
+	},
 }
 
 function lowerSort (a, b) {

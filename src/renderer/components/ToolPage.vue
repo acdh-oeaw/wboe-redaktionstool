@@ -16,7 +16,7 @@
 			<b-input-group size="sm" class="w-25 mx-1" prepend="Datei">
 				<p class="form-control file-name" :title="Files.file">{{ Files.file }}</p>
 				<b-input-group-append>
-					<b-btn @click="showFile()" variant="outline-secondary" title="Ordner in Explorer öffnen"><font-awesome-icon icon="external-link-alt"/></b-btn>
+					<b-btn @click="showFile()" variant="outline-secondary" title="Ordner in Explorer öffnen" :disabled="!Files.file"><font-awesome-icon icon="external-link-alt"/></b-btn>
 				</b-input-group-append>
 			</b-input-group>
 			<b-button-group size="sm" class="mr-1 mil-auto">

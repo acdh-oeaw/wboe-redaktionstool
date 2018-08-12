@@ -34,6 +34,18 @@ const localFunctions = {
 			return null
 		}
 	},
+	getFirstKeyOfValueInPropertyOfArray: function (arr, property, value) {
+		let rKey = -1
+		if (Array.isArray(arr)) {
+			arr.some(function (aVal, aKey) {
+				if (aVal[property] && aVal[property] === value) {
+					rKey = aKey
+					return true
+				}
+			}, this)
+		}
+		return rKey
+	},
 }
 
 export default localFunctions

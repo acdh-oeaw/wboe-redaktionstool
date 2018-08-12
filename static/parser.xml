@@ -92,14 +92,8 @@
 														"addTitle": "Form Lautung"
 													}
 												} ?>
-							<?copy { "fromId": "usg-geo", "options": {
-																													"tag": ["possibleTag", "multiple", "anywhere"]
-																												} } ?>
-							<?copy { "fromId": "form-variant", "options": {
-																															"editor": {
-																																"addTitle": "Form Variant"
-																															}
-																														} } ?>
+							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
+							<?copy { "fromId": "form-variant", "options": { "editor": { "addTitle": "Form Variant" } } } ?>
 						</form>
 
 						<?copy { "fromId": "form-variant", "options": {
@@ -177,7 +171,7 @@
             </etym>
 						<?copy { "fromId": "sense", "options": {
 																										"tagAsTitle": false,
-																										"title": "",
+																										"title": null,
 																										"layout": {
 																											"frame": "box",
 																											"multiple": {
@@ -219,6 +213,16 @@
 			</text>
 		</TEI>
 	</objParserContent>
+
+
+
+
+
+
+
+
+
+
 
 
 	<!-- Element Vorlagen: -->
