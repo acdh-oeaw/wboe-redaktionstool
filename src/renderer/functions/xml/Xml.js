@@ -45,6 +45,7 @@ localFunctions.XmlBase.prototype.addError = prototypeMultiple.addError
 localFunctions.XmlBase.prototype.updateFamilyErrors = prototypeMultiple.updateFamilyErrors
 localFunctions.XmlBase.prototype.init = prototypeXmlBase.init
 localFunctions.XmlBase.prototype.getXML = prototypeXmlBase.getXML
+localFunctions.XmlBase.prototype.addByParser = prototypeXmlBase.addByParser
 
 // XmlObject Prototypen
 localFunctions.XmlObject.prototype.addError = prototypeMultiple.addError

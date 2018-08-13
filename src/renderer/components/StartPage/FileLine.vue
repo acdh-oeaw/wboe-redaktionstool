@@ -3,20 +3,21 @@
 
 		<div class="pathline" v-if="path">
 			<button @click="toggleMe()" :title="path.fullFileName" :class="{'active': (Files.file && Files.file.indexOf(path.fullFileName) === 0)}">
-				<font-awesome-icon :icon="((isOpen) ? 'folder-open' : 'folder')" style="width:20px;"/>
+				<font-awesome-icon :icon="((isOpen) ? 'folder-open' : 'folder')" class="mir5" style="width:20px;"/>
 				<span>{{ path.file }}</span>
 				<span class="foldercontent" v-if="Files.paths[path.fullFileName]">{{ Files.paths[path.fullFileName].files.length.toLocaleString() }} <font-awesome-icon icon="file" style="margin-right:5px;"/> {{ Files.paths[path.fullFileName].paths.length.toLocaleString() }} <font-awesome-icon icon="folder"/></span>
 				<span class="foldercontent unknown" v-else>? <font-awesome-icon icon="file" style="margin-right:5px;"/> ? <font-awesome-icon icon="folder"/></span>
 			</button>
 			<div class="subdata" v-if="isOpen && Files.paths[path.fullFileName]">
-				<FileLine :path="sPath" @loading="loading" v-for="(sPath, fKey) in Files.paths[path.fullFileName].paths" :key="'path-' + fKey" :base="path.fullFileName"/>
-				<FileLine :file="sFile" @loading="loading" v-for="(sFile, fKey) in Files.paths[path.fullFileName].files" :key="'file-' + fKey" :base="path.fullFileName"/>
+				<FileLine :path="sPath" @loading="loading" @new="newFile" v-for="(sPath, fKey) in Files.paths[path.fullFileName].paths" :key="'path-' + fKey" :base="path.fullFileName"/>
+				<button @click="$emit('new', path.fullFileName)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk" class="mir5" style="width:20px;"/><span>Neue Datei erstellen ...</span></button>
+				<FileLine :file="sFile" @loading="loading" @new="newFile" v-for="(sFile, fKey) in Files.paths[path.fullFileName].files" :key="'file-' + fKey" :base="path.fullFileName"/>
 			</div>
 		</div>
 
 		<div class="fileline" v-if="file">
-			<button @click="loadFile()" :title="file.fullFileName" :class="{'active': Files.file === file.fullFileName, 'italic': isParser}">
-				<font-awesome-icon :icon="((isParser) ? 'project-diagram' : 'file')" style="width:20px;"/>
+			<button @click="loadFile()" :title="file.fullFileName" :class="{'active': isActiveFile, 'italic': isParser}">
+				<font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5" style="width:20px;"/>
 				<span>{{ file.file }}</span>
 				<span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
 			</button>
@@ -48,7 +49,12 @@
 				if (this.path) {
 					return this.Files.paths[this.path.fullFileName] && this.Files.paths[this.path.fullFileName].isOpen
 				}
-			}
+			},
+			isActiveFile () {
+				if (this.file) {
+					return this.Files.file === this.file.fullFileName
+				}
+			},
 		},
 		methods: {
 			toggleMe () {		// Verzeichniss öffnen/schließen
@@ -63,6 +69,9 @@
 					this.debouncedLoadFile()
 				}
 			},
+			newFile (nf) {
+				this.$emit('new', nf)
+			},
 			debouncedLoadFile: _.debounce(function () {		// Verzögert öffnen damit "Laden ..." angezeigt wird
 				this.$store.dispatch('LOAD_FILE', this.file.fullFileName)		// Datei laden
 				// Nur Tool öffnen wenn Datei lesbar!
@@ -73,7 +82,7 @@
 </script>
 
 <style scoped>
-	.pathline > button, .fileline > button {
+	.pathline > button, .fileline > button, .fileline-btn {
 		width: 100%;
 		text-align: left;
 		margin: 0px;
@@ -81,10 +90,15 @@
 		background: none;
 		border: none;
 	}
-	.pathline > button.active, .fileline > button.active {
+	.fileline-btn.new-file {
+		color: #666;
+		font-style: italic;
+	}
+	.pathline > button.active, .fileline > button.active, .fileline-btn.active {
 		color: #33f;
 	}
-	.pathline > button:hover, .fileline > button:hover {
+	.pathline > button:hover, .fileline > button:hover, .fileline-btn:hover {
+		color: #000;
 		background: #eee;
 	}
 	.subdata {

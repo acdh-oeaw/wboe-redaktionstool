@@ -1,3 +1,5 @@
+import EditorObject from '@/functions/editor/Editor'
+import XmlObject from '@/functions/xml/Xml'
 import Vue from 'vue'
 import { remote } from 'electron'
 import fPath from 'path'
@@ -73,6 +75,21 @@ const actions = {
 		var fileContent = fs.readFileSync(aFile, 'utf8')
 		commit('SET_FILE', { 'file': aFile, 'content': fileContent })
 		dispatch('NOT_CHANGED')
+	},
+	UNSET_FILE: function ({ commit }) {
+		commit('SET_FILE', { 'file': null, 'content': null })
+	},
+	NEW_FILE: function ({ commit, dispatch }, { filename, parser }) {
+		console.log('NEW_FILE', filename)
+		let aCont = ''
+		let aXmlObj = new XmlObject.XmlBase()
+		aXmlObj.ready = true
+		aXmlObj.useable = true
+		let aEditorObj = new EditorObject.EditorBase(parser, aXmlObj)
+		console.log(aEditorObj)
+		aCont = aEditorObj.getXML()
+		commit('SET_FILE', { 'file': filename, 'content': aCont })
+		dispatch('SAVE_FILE', aCont)
 	},
 	CLEAN_PATH: function ({ commit }) {		// Cache für Verzeichnissstruktur löschen
 		commit('CLEAN_CONTENT')

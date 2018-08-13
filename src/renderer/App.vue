@@ -4,7 +4,7 @@
 				<div class="container">
 					<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 					<b-navbar-brand>
-						<router-link to="/" class="navbar-brand"><img alt="WBÖ" title="WBÖ" width="100" height="55" src="~@/assets//wboelogo100.png"> Redaktionstool</router-link>
+						<span class="navbar-brand"><img alt="WBÖ" title="WBÖ" width="100" height="55" src="~@/assets//wboelogo100.png"> Redaktionstool</span>
 					 </b-navbar-brand>
 					<b-collapse is-nav id="nav_collapse">
 							<b-navbar-nav class="ml-auto">
@@ -156,6 +156,9 @@
 	}
 	.mib20 {
 		margin-bottom: 20px;
+	}
+	.mib50 {
+		margin-bottom: 50px;
 	}
 	.mitb5 {
 		margin-top: 5px;

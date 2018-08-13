@@ -692,7 +692,7 @@
 								<?options {
 									"value": {
 										"is": {
-											"value": "Editor",
+											"value": "Student assistants",
 											"use": true,
 											"possibleValues": ["Student assistants", "student assistants"]
 										}

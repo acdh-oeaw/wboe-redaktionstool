@@ -66,7 +66,7 @@ const localFunctions = {
 		return true
 	},
 	addByParser: function (pos, pObj) {
-		console.log('addByParser', this, pos, pObj)
+		// console.log('addByParser', this, pos, pObj)
 		let aKey = pos
 		if (aKey || aKey === 0) {
 			this.childs.splice(aKey, 0, new Xml.XmlObject(this.root, [this, ...this.parents]))
@@ -254,16 +254,18 @@ const localFunctions = {
 					lChild = aChild
 				}, this)
 			}
-			if (!inner && short && aChildCont.length === 0) {
+			if (!inner && short && aChildCont.length === 0 && !this.value) {
 				aXML += '/>'
 			} else {
-				if (!inner && short && aChildCont.length > 0) { aXML += '>' }
+				if (!inner && short && (aChildCont.length > 0 || this.value)) { aXML += '>' }
 				if (aChildCont.length > 0) {
 					if (this.getChildsOfType(['ELEMENT', 'COMMENT'], false, false).length > 0) {
 						aXML += aChildCont + '\n' + '	'.repeat(deep)
 					} else {
 						aXML += aChildCont
 					}
+				} else if (this.value) {
+					aXML += this.value
 				}
 				if (!inner) {
 					aXML += '</' + this.name + '>'

@@ -50,7 +50,36 @@ const localFunctions = {
 			aXML += aCont.getXML()
 		}, this)
 		return aXML
-	}
+	},
+	addByParser: function (pos, pObj) {
+		console.log('addByParser', this, pos, pObj)
+		let aKey = pos
+		if (aKey || aKey === 0) {
+			this.content.splice(aKey, 0, new Xml.XmlObject(this, null))
+		} else {
+			aKey = this.content.push(new Xml.XmlObject(this, null)) - 1
+		}
+		this.content[aKey].type = ((pObj.name === '#text') ? 'TEXT' : 'ELEMENT')
+		this.content[aKey].name = pObj.name
+		let pAttr = pObj.options.get('attributes')
+		if (pAttr) {
+			Object.keys(pAttr).forEach(function (attrKey) {
+				let aAttr = pAttr[attrKey]
+				if (aAttr.value) {
+					this.content[aKey].attributes[attrKey] = aAttr.value
+				} else if ((!aAttr.canBeEmpty || !aAttr.canBeEmpty.use) && aAttr.possibleValues && aAttr.possibleValues[0]) {
+					this.content[aKey].attributes[attrKey] = aAttr.possibleValues[0]
+				}
+			}, this)
+		}
+		if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
+			this.content[aKey].value = pObj.options.get('value.is.value')
+		}
+		this.content[aKey].useable = true
+		this.content[aKey].ready = true
+		this.content[aKey].parserIgnore = false
+		return this.content[aKey]
+	},
 }
 
 export default localFunctions

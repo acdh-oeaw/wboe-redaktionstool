@@ -1,3 +1,4 @@
+// import XmlObject from '@/functions/xml/Xml'
 import Vue from 'vue'
 import stdFunctions from '@/functions/stdFunctions'
 import Editor from '../Editor'
@@ -67,7 +68,7 @@ const localFunctions = {
 				console.log('XmlObj erstellen! (At Top)')
 				this.orgXmlObj = this.parents[0].orgXmlObj.addByParser(0, this.parserObj)
 			}
-			console.log('XmlObj erstellt ...', this.orgXmlObj)
+			console.log('XmlObj erstellt ...', ((this.orgXmlObj) ? 'Erfolgreich' : 'Fehler!'))
 		}
 		this.ready = true
 		if (Object.keys(this.errors).length > 0) {

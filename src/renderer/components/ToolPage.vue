@@ -203,10 +203,6 @@
 			if (!this.Files.file) {
 				this.$router.push('/home')
 			}
-			if (!this.Files.fileContent || !this.Files.fileContent === '') {
-				// ToDo: Leere Datei erstellen
-				// this.$store.dispatch('LOAD_FILE')		// Datei laden
-			}
 			this.loadData()
 			console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
 		},
