@@ -19,13 +19,14 @@
 												"attributes": [{"n": {"type": "edit", "valueType": "num+", "canBeEmpty": {"use": true}}}]
 											} ?>
 						<form type="lemma">
-							<?copyOptions { "fromId": "inlineMultipleJoin", "options": { "editor": { "addTitle": "Lemma" } } } ?>
+							<?copyOptions { "fromId": "inlineMultipleJoin" } ?>
 							<?options {
 													"id": "lemma-base",
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
-													"tag": ["multiple"]
+													"tag": ["multiple"],
+													"editor": { "addTitle": "Lemma" }
 												} ?>
 							<?copy { "fromId": "orth", "options": { "title": "", "tagAsTitle": false, "layout": { "frame": "inline", "bold": true }, "editor": { "addTitle": "Orth", "parentInContext": true } } } ?>
             </form>

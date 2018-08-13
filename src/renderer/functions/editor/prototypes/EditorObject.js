@@ -59,7 +59,7 @@ const localFunctions = {
 		}
 		if (!this.orgXmlObj && this.parserObj && !this.isRoot) {		// Wenn kein XML Objekt übergeben wurde soll eins erstellt werden
 			let aPrevSibs = this.getSiblings('prev', true)
-			console.log(this, aPrevSibs)
+			// console.log(this, aPrevSibs)
 			if (aPrevSibs.length > 0) {
 				console.log('XmlObj erstellen! (After)')
 				this.orgXmlObj = aPrevSibs[0].orgXmlObj.addAfterByParser(this.parserObj)
@@ -70,14 +70,42 @@ const localFunctions = {
 			console.log('XmlObj erstellt ...', this.orgXmlObj)
 		}
 		this.ready = true
-		// ToDo: Fehlende Kinder aus Parser ergänzen
-		// aParserChilds.forEach(function (aPar) {
-		// 	if (aPar.hasToBeHere(this)) {
-		// 		this.add(null, aPar)
-		// 	}
-		// }, this)
 		if (Object.keys(this.errors).length > 0) {
 			return false
+		}
+		// Fehlende Kinder aus Parser ergänzen
+		if (aParserChilds.length > 0) {
+			let neededParsers = []
+			aParserChilds.forEach(function (aPar) {		// Notwendige Tags ermitteln
+				if (!aPar.options.get('tag.possibleTag.use')) {
+					neededParsers.push(aPar)
+				}
+			}, this)
+			if (neededParsers.length > 0) {		// Ermitteln ob die Tags bereits vorhanden sind
+				this.childs.some(function (aVal, aKey) {
+					let aNPPos = neededParsers.indexOf(aVal.parserObj)
+					if (aNPPos > -1) {
+						if (aNPPos === 0) {
+							neededParsers.splice(0, 1)
+						} else {
+							neededParsers.splice(0, aNPPos).forEach(function (bVal, bKey) {
+								console.log('!!!!! TODO !!!!! "' + bVal.name + '" automatisch hinzugefügt. (m)')
+								// ToDo !!!
+							}, this)
+							neededParsers.splice(0, 1)
+						}
+					}
+					if (neededParsers.length === 0) {
+						return true
+					}
+				}, this)
+			}
+			if (neededParsers.length > 0) {		// Sind noch Tags übrig?
+				neededParsers.forEach(function (aVal, aKey) {
+					console.log('"' + aVal.name + '" automatisch hinzugefügt.')
+					this.add(null, aVal)
+				}, this)
+			}
 		}
 		if (this.orgXmlObj && !this.orgXmlObj.useable) {
 			return false
