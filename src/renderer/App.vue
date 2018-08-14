@@ -66,6 +66,9 @@
 		created: function () {
 			this.$store.dispatch('LOAD_SHOW')
 			this.$store.dispatch('LOAD_LASTFILE')
+			if (!this.Options.projectPath) {		// Projektpfad laden
+				this.$store.dispatch('GET_PROJECT_PATH')
+			}
 			window.addEventListener('keyup', this.keyUp)
 		},
 		beforeDestroy: function () {

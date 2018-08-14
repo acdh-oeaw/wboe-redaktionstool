@@ -2,7 +2,7 @@
 
 	<span :class="{ 'val-obj': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }"
 				v-if="editType === 'selectPossibleValues'">
-		<SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.get('value.is.possibleValues')"/>
+		<SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.get('value.is.possibleValues')" v-if="!refreshSelect"/>
 	</span>
 
 	<span :class="{ 'val-obj': true, 'val-txt': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }"
@@ -26,6 +26,7 @@
 		data () {
 			return {
 				'isOpen': true,
+				'refreshSelect': false,
 			}
 		},
 		computed: {
@@ -39,9 +40,19 @@
 				return 'text'
 			}
 		},
+		watch: {
+			'refreshSelect': function (nVal) {
+				if (nVal) {
+					this.$nextTick(() => {
+						this.refreshSelect = false
+					})
+				}
+			},
+		},
 		methods: {
 			getSelected: function () {		// Gibt die aktuell ausgewählte Option zurück
 				let sVal = this.content.orgXmlObj.getValue(false)
+				console.log(sVal)
 				let oKey = -1
 				this.content.parserObj.options.get('value.is.possibleValues').some(function (aVal, aKey) {
 					if ((aVal.title || aVal.value || aVal) === sVal) {
@@ -65,6 +76,7 @@
 					this.content.orgXmlObj.setValue(null)
 					this.content.checkParser()
 				}
+				// this.refreshSelect = true
 			},
 			valEditUpdate: _.debounce(function (e) {		// Bei Textfeldern HTML-Elemente und Zeilenumbrüche entfernen
 				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)

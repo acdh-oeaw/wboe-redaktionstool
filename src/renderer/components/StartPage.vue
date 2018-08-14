@@ -123,8 +123,8 @@
 		},
 		mounted: function () {
 			this.loading = true
-			if (!this.Options.projectPath) {		// Projektpfad laden
-				this.$store.dispatch('GET_PROJECT_PATH')
+			if (!this.Files.paths[this.Options.projectPath]) {
+				this.$store.dispatch('GET_PATH', { 'path': this.Options.projectPath })
 			}
 			this.updateFolder()
 			this.loading = false

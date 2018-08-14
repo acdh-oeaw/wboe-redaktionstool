@@ -87,7 +87,7 @@ const localFunctions = {
 			}, this)
 		}
 		if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
-			this.childs[aKey].value = pObj.options.get('value.is.value')
+			this.childs[aKey].setValue(pObj.options.get('value.is.value'))
 		}
 		this.childs[aKey].useable = true
 		this.childs[aKey].ready = true
