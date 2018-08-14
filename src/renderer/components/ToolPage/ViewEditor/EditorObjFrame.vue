@@ -1,5 +1,6 @@
 <template>
 	<div class="inline">
+		<!-- Vor Inhalten -->
 		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
 			<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceBefore')"></div>
 			<h3 @contextmenu.prevent="contextMenue" v-if="content.parserObj.options.get('layout.multiple.header')">{{ content.parserObj.options.get('layout.multiple.header') }}</h3>
@@ -9,17 +10,18 @@
 		<div :style="'height: ' + content.parserObj.options.get('layout.spaceBefore') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceBefore')"></div>
 		<h3 @contextmenu.prevent="contextMenue" v-if="content.parserObj.options && content.parserObj.options.get('layout.header')">{{ content.parserObj.options.get('layout.header') }}</h3>
 		<span class="before" v-if="content.parserObj.options && content.parserObj.options.get('layout.before')">{{ content.parserObj.options.get('layout.before') }}</span>
-		<span class="enumeraterom" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerateRom')">{{ num2rom(content.multipleNr + 1) }}.&nbsp;</span>
-		<span class="enumerate" v-if="content.isMultiple && content.parserObj.options && content.parserObj.options.get('layout.multiple.enumerate')">{{ content.multipleNr + 1 }})&nbsp;</span>
 
+
+		<!-- Inhalte -->
 		<div :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
+			<span class="enumerate" v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
 			<slot name="childs"/>		<!-- Kinder -->
 		</div>
 
-
-		<b-card :class="{'obj': true, 'paneldecent': true, 'mitb5': true, 'warnings': content.warnings.length > 0}" v-else-if="layoutBase === 'panel'" :header="title" no-body>
+		<b-card :class="{'obj': true, 'paneldecent': true, 'mitb5': true, 'warnings': content.warnings.length > 0}" v-else-if="layoutBase === 'panel'" no-body>
 			<div @contextmenu.prevent="contextMenue" slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
+					<span class="enumerate" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 					<span><b>{{ title }}</b></span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 				</button>
@@ -29,8 +31,7 @@
 					<b-list-group-item style="background: #eee;">
 						<div style="margin: -8px -9px;">
 							<b-button @click="addIn(aVal.uId)" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.bShow">
-								<font-awesome-icon icon="circle-notch" class="fa-icon"/>
-								{{ aVal.title }}
+								<font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
 							</b-button>
 						</div>
 					</b-list-group-item>
@@ -52,6 +53,7 @@
 
 		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
 			<div @contextmenu.prevent="contextMenue" class="context">
+				<span class="enumerate" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 				<b v-if="title">{{ title }}:</b><br v-if="title && layoutBase === 'box'"/>
 				<slot/>		<!-- Inhalt -->
 			</div>
@@ -59,8 +61,7 @@
 				<b-button @click="addIn(content.addableInner[0].uId)" size="xs" variant="success" class="mir5" :title="content.addableInner[0].title" v-if="content.addableInner[0].bShow"><font-awesome-icon icon="circle-notch" class="fa-icon"/><span class="focusVisInline"> {{ content.addableInner[0].title }}</span></b-button>
 				<b-button @click="isOpenAdditionalAddInBtn = !isOpenAdditionalAddInBtn" size="xs" variant="secondary" class="mir5" title="Weitere mögliche Tags anzeigen." v-if="content.addableInner.length > 1"><font-awesome-icon :icon="((!isOpenAdditionalAddInBtn) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 				<b-button @click="addIn(aVal.uId)" size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aKey !== 0 && isOpenAdditionalAddInBtn">
-					<font-awesome-icon icon="circle-notch" class="fa-icon"/>
-					{{ aVal.title }}
+					<font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
 				</b-button>
 			</div>
 			<slot name="childs"/>		<!-- Kinder -->
@@ -68,13 +69,13 @@
 				<b-button @click="addAfter(content.addableAfter[0].uId)" size="xs" variant="success" class="mir5" :title="content.addableAfter[0].title" v-if="content.addableAfter[0].type === 'self' && content.addableAfter[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableAfter[0].title }}</span></b-button>
 				<b-button @click="isOpenAdditionalAddBtn = !isOpenAdditionalAddBtn" size="xs" variant="secondary" class="mir5" title="Weitere mögliche Tags anzeigen." v-if="(content.addableAfter[0].type === 'self' && content.addableAfter.length > 1) || (content.addableAfter[0].type !== 'self' && content.addableAfter.length > 0)"><font-awesome-icon :icon="((!isOpenAdditionalAddBtn) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
 				<b-button @click="addAfter(aVal.uId)" size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.type !== 'self' && isOpenAdditionalAddBtn">
-					<font-awesome-icon icon="plus" class="fa-icon"/>
-					{{ aVal.title }}
+					<font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
 				</b-button>
 			</div>
 		</div>
 
 
+		<!-- Nach Inhalten -->
 		<span class="join" v-if="content.isMultiple && !content.multipleLast && content.parserObj.options.get('layout.multiple.use') && content.parserObj.options.get('layout.multiple.join')">
 			{{ content.parserObj.options.get('layout.multiple.join') }}
 		</span>
@@ -131,6 +132,16 @@
 				}
 				return null
 			},
+			enumerate () {
+				if (this.content.parserObj.options && this.content.isMultiple) {
+					if (this.content.parserObj.options.get('layout.multiple.enumerateRom')) {
+						return this.num2rom(this.content.multipleNr + 1) + '.'
+					}
+					if (this.content.parserObj.options.get('layout.multiple.enumerate')) {
+						return this.content.multipleNr + 1 + ')'
+					}
+				}
+			}
 		},
 		methods: {
 			contextMenue: function (e) {
