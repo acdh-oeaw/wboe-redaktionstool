@@ -54,7 +54,7 @@
 		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
 			<div @contextmenu.prevent="contextMenue" class="context">
 				<span class="enumerate" v-if="enumerate">{{ enumerate }}&nbsp;</span>
-				<b v-if="title">{{ title }}:</b><br v-if="title && layoutBase === 'box'"/>
+				<b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
 				<slot/>		<!-- Inhalt -->
 			</div>
 			<div  @contextmenu.prevent="contextMenue" :class="{'inline': layoutBase !== 'box'}" v-if="content.addableInner.length > 0">
@@ -90,6 +90,9 @@
 			<h4 v-if="content.parserObj.options.get('layout.multiple.footer')">{{ content.parserObj.options.get('layout.multiple.footer') }}</h4>
 			<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceAfter') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceAfter')"></div>
 		</template>
+
+
+		<!-- Kontext Menü -->
 		<EditorContextMenu :content="content" ref="contextMenuEditor" v-if="contextMenuCached"/>
 	</div>
 </template>
@@ -129,6 +132,12 @@
 					} else if (this.content.parserObj.options.get('tagAsTitle') || this.layoutBase === 'panel') {
 						return this.content.orgXmlObj.name
 					}
+				}
+				return null
+			},
+			shownTitle () {
+				if (this.content.parserObj.options && !this.content.parserObj.options.get('layout.hideTitle')) {
+					return this.title
 				}
 				return null
 			},

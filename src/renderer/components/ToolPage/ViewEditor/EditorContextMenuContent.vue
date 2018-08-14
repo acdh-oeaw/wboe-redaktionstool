@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="context-menu-title"><b>Tag:</b> {{ this.content.orgXmlObj.name }}</div>
+		<div class="context-menu-title"><b class="mir5" v-if="title">{{ title }}</b><i :class="{'float-right': title}">Tag: {{ this.content.orgXmlObj.name }}</i></div>
 		<div class="tools">
 			<b-button-group size="sm" class="btn-group-xs d-flex" v-if="moveableLeft || moveableRight || deleteAble">
 				<b-button @click="moveObj('left')" variant="primary" class="w-100" :disabled="!moveableLeft"><font-awesome-icon icon="angle-left" class="fa-icon"/></b-button>
@@ -111,6 +111,16 @@
 					}, this)
 					// console.log(oAttr)
 					return oAttr
+				}
+				return null
+			},
+			title () {
+				if (this.content.parserObj.options) {
+					if (this.content.parserObj.options.getResult('title')) {
+						return this.content.parserObj.options.getResult('title')
+					} else if (this.content.parserObj.options.get('tagAsTitle') || this.layoutBase === 'panel') {
+						return this.content.orgXmlObj.name
+					}
 				}
 				return null
 			},

@@ -113,15 +113,17 @@
 
 						<etym>
 							<?options {
+													"title": "Etymologie",
 													"tagAsTitle": false,
 													"layout": {
 														"frame": "box",
+														"hideTitle": true,
 														"header": "Etymologie",
 														"spaceBefore": 10,
 														"spaceAfter": 25
 													},
 													"editor": {
-														"addTitle": "Etym"
+														"addTitle": "Etym hinzufügen"
 													}
 												} ?>
 							<?copy { "fromId": "date" } ?>
@@ -131,9 +133,13 @@
 														"attributes": [{
 															"part": {"type": "edit", "canBeEmpty": {"use": true}}
 														}],
-														"tag": ["possibleTag", "multiple", "anywhere"]
+														"tag": ["possibleTag", "multiple", "anywhere"],
+														"layout": {
+															"frame": "line",
+															"hideTitle": true
+														}
 													} ?>
-								<?copy { "fromId": "text" } ?>
+								<?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
 								<?copy { "fromId": "date" } ?>
 								<?copy { "fromId": "ref-sense" } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
