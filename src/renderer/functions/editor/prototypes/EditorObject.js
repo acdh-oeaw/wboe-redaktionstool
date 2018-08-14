@@ -78,7 +78,7 @@ const localFunctions = {
 		if (aParserChilds.length > 0) {
 			let neededParsers = []
 			aParserChilds.forEach(function (aPar) {		// Notwendige Tags ermitteln
-				if (!aPar.options.get('tag.possibleTag.use')) {
+				if (!aPar.options.get('tag.possibleTag.use') || aPar.options.get('tag.shouldTag.use')) {
 					neededParsers.push(aPar)
 				}
 			}, this)
