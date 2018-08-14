@@ -9,12 +9,15 @@
 				<button @click="$store.dispatch('UNSET_FILE')" class="mir5"><font-awesome-icon icon="times"/></button>
 			</p>
 			<p>
+				<!-- Projektpfad -->
 				<font-awesome-icon icon="project-diagram" class="mir10"/> {{ Options.projectPath }}
 				<button @click="selectFolder"><font-awesome-icon icon="edit"/></button>
 				<button @click="showFolder" title="Ordner in Explorer öffnen" class="mir5"><font-awesome-icon icon="external-link-alt"/></button>
 				<button @click="updateFolder" title="Projektpfad neu laden" class="mir5"><font-awesome-icon icon="sync-alt"/></button>
-				<button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Options.parserFile" class="float-right" v-if="Options.parserFile && !(Options.parserFile.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
-				<button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right" v-else-if="Options.parserFileContent && Options.parserFileContent.length > 1"><font-awesome-icon icon="file-download"/></button>
+				<!-- Parser -->
+				<button @click="reloadParser" title="Parser-Datei neu laden" class="float-right mir5"><font-awesome-icon icon="sync-alt"/></button>
+				<button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Parser.file" class="float-right mir5" v-if="Parser.file && !(Parser.file.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
+				<button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right mir5" v-else-if="Parser.content && Parser.content.length > 0"><font-awesome-icon icon="file-download"/></button>
 			</p>
 			<div v-if="Files.paths[Options.projectPath]">
 				<FileLine :path="path" @loading="loading = true" @new="newFile" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
@@ -86,14 +89,17 @@
 			},
 			updateFolder () {		// Projektpfad neu laden
 				this.$store.dispatch('UPDATE_PATHS')
-				this.$store.dispatch('GET_PARSER_FILE')
 				this.$store.dispatch('LOAD_PARSER_FILE')
 			},
 			showParser () {		// Parser-Datei in Explorer anzeigen
-				shell.showItemInFolder(this.Options.parserFile)
+				shell.showItemInFolder(this.Parser.file)
 			},
 			saveParser () {		// Parser-Datei speichern unter ...
 				this.$store.dispatch('DIALOG_SAVE_PARSER')	// Speicher Dialog
+				this.updateFolder()
+			},
+			reloadParser () {
+				this.$store.dispatch('RELOAD_PARSER_FILE')	// "parser.xml" neu laden
 				this.updateFolder()
 			},
 			newFile (nf) {
@@ -131,7 +137,6 @@
 
 <style scoped>
 	button {
-		margin: 0px;
 		padding: 0px;
 		background: none;
 		border: none;

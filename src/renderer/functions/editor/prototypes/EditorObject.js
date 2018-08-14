@@ -171,7 +171,7 @@ const localFunctions = {
 	delete: function (direct = false) {
 		if (this.siblings) {
 			if (direct || confirm('Soll der Tag "' + (this.parserObj && this.parserObj.name) + '" wirklich gelöscht werden?')) {
-				console.log('Editor - Löschen: ' + this.parserObj)
+				console.log('Editor - Löschen: ', this.parserObj)
 				this.deleteErrors()
 				this.deleteWarnings()
 				this.childs.forEach(function (aChild) {
