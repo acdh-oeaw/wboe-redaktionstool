@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="context-menu-title"><b class="mir5" v-if="title">{{ title }}</b><i :class="{'float-right': title}">Tag: {{ this.content.orgXmlObj.name }}</i></div>
+		<div class="context-menu-title clearfix"><b class="mir5" v-if="title">{{ title }}</b><i :class="{'float-right': title}">Tag: {{ this.content.orgXmlObj.name }}</i></div>
 		<div class="tools">
 			<b-button-group size="sm" class="btn-group-xs d-flex" v-if="moveableLeft || moveableRight || deleteAble">
 				<b-button @click="moveObj('left')" variant="primary" class="w-100" :disabled="!moveableLeft"><font-awesome-icon icon="angle-left" class="fa-icon"/></b-button>
@@ -90,7 +90,8 @@
 		},
 		data () {
 			return {
-				'subShow': null
+				'subShow': null,
+				'subContextMenuTopPx': 0,
 			}
 		},
 		computed: {
@@ -142,8 +143,9 @@
 				if (nVal) {
 					this.subContextMenuTopPx = 0
 					this.$nextTick(() => {
-						if (this.$refs.subContext && this.$refs.subContext.length > 0) {
-							let aOverBottom = this.$refs.subContext[0].getBoundingClientRect().bottom - window.innerHeight + 25
+						let aSubContext = ((Array.isArray(this.$refs.subContext)) ? this.$refs.subContext : [this.$refs.subContext])
+						if (aSubContext && aSubContext[0]) {
+							let aOverBottom = aSubContext[0].getBoundingClientRect().bottom - window.innerHeight + 25
 							if (aOverBottom > 0) {
 								this.subContextMenuTopPx = -aOverBottom
 							}
