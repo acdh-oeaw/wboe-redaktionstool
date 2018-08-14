@@ -732,6 +732,40 @@
 							} ?>
 						</p>
 					</sourceDesc>
+					<revisionDesc>
+						<?options {
+												"title": "Informationen über Änderungen!",
+												"attributes": [{
+													"status": { "type": "edit", "canBeEmpty": {"use": true} }
+												}],
+												"tag": ["possibleTag", "shouldTag"],
+												"layout": { "bold": true, "frame": "panelClosed" }
+											} ?>
+						<change>
+							<?options {
+													"title": "Änderung",
+													"value": ["edit", "required", {"autoCreateValue": "Datensatz erstellt"}],
+													"attributes": [{
+														"when": { "type": "edit", "value": { "fx": "now" } },
+														"who": { "type": "edit", "value": "", "possibleValues": [
+																																											{"title": "Alexandra N. Lenz", "value": "AL"},
+																																											{"title": "Philip Stöckle", "value": "PhS"},
+																																											{"title": "Andreas Gellan", "value": "AG"},
+																																											{"title": "Patrick Zeithuber", "value": "PZ"},
+																																											{"title": "Sabine Wahl", "value": "SW"},
+																																											{"title": "Sonja Schwaiger", "value": "SS"},
+																																											{"title": "Jan Braun", "value": "JD"},
+																																											{"title": "Angela Bergmayer", "value": "AB"}
+																																										]}
+													}],
+													"tag": ["multiple", "possibleTag", "shouldTag"],
+													"layout": { "bold": true, "frame": "line" },
+													"editor": {
+														"onlyLastElementHasAddButton": true
+													}
+												} ?>
+						</change>
+					</revisionDesc>
 				</fileDesc>
 			</teiHeader>
 

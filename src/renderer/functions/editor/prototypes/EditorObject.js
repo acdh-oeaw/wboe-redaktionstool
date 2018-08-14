@@ -63,10 +63,10 @@ const localFunctions = {
 			// console.log(this, aPrevSibs)
 			if (aPrevSibs.length > 0) {
 				console.log('XmlObj erstellen! (After)')
-				this.orgXmlObj = aPrevSibs[0].orgXmlObj.addAfterByParser(this.parserObj)
+				Vue.set(this, 'orgXmlObj', aPrevSibs[0].orgXmlObj.addAfterByParser(this.parserObj, this.autoCreated))
 			} else {
 				console.log('XmlObj erstellen! (At Top)')
-				this.orgXmlObj = this.parents[0].orgXmlObj.addByParser(0, this.parserObj)
+				Vue.set(this, 'orgXmlObj', this.parents[0].orgXmlObj.addByParser(0, this.parserObj, this.autoCreated))
 			}
 			console.log('XmlObj erstellt ...', ((this.orgXmlObj) ? 'Erfolgreich' : 'Fehler!'))
 		}
@@ -104,7 +104,7 @@ const localFunctions = {
 			if (neededParsers.length > 0) {		// Sind noch Tags übrig?
 				neededParsers.forEach(function (aVal, aKey) {
 					console.log('"' + aVal.name + '" automatisch hinzugefügt.')
-					this.add(null, aVal)
+					this.add(null, aVal, null, [], [], false, null, true)
 				}, this)
 			}
 		}
@@ -117,12 +117,12 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	add: function (pos, aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {
+	add: function (pos, aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList, autoCreate) {
 		let aKey = pos
 		if (aKey || aKey === 0) {
-			this.childs.splice(aKey, 0, new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds, true))
+			this.childs.splice(aKey, 0, new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds, true, autoCreate))
 		} else {
-			aKey = this.childs.push(new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds, true)) - 1
+			aKey = this.childs.push(new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds, true, autoCreate)) - 1
 		}
 		this.childs[aKey].init()
 		if (aParList) {
@@ -141,6 +141,7 @@ const localFunctions = {
 				this.updateData(true)
 			}
 		}
+		Vue.set(this.childs, aKey, this.childs[aKey])
 		return this.childs[aKey]
 	},
 	addAfter: function (aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {

@@ -65,7 +65,7 @@ const localFunctions = {
 		}
 		return true
 	},
-	addByParser: function (pos, pObj) {
+	addByParser: function (pos, pObj, autoCreate) {
 		// console.log('addByParser', this, pos, pObj)
 		let aKey = pos
 		if (aKey || aKey === 0) {
@@ -79,14 +79,21 @@ const localFunctions = {
 		if (pAttr) {
 			Object.keys(pAttr).forEach(function (attrKey) {
 				let aAttr = pAttr[attrKey]
-				if (aAttr.value) {
-					this.childs[aKey].attributes[attrKey] = aAttr.value
+				let aVal = ((typeof aAttr.value === 'object') ? JSON.parse(JSON.stringify(aAttr.value)) : aAttr.value)
+				if (aVal && aVal.fx === 'now') {
+					let aDate = new Date()
+					aVal = aDate.getFullYear() + '-' + ((aDate.getMonth() < 10) ? '0' : '') + aDate.getMonth() + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
+				}
+				if (aVal || aVal === '') {
+					Vue.set(this.childs[aKey].attributes, attrKey, aVal)
 				} else if ((!aAttr.canBeEmpty || !aAttr.canBeEmpty.use) && aAttr.possibleValues && aAttr.possibleValues[0]) {
-					this.childs[aKey].attributes[attrKey] = aAttr.possibleValues[0]
+					Vue.set(this.childs[aKey].attributes, attrKey, (aAttr.possibleValues[0].value || aAttr.possibleValues[0]))
 				}
 			}, this)
 		}
-		if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
+		if (autoCreate && pObj.options.get('value.autoCreateValue')) {
+			this.childs[aKey].setValue(pObj.options.get('value.autoCreateValue'))
+		} else if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
 			this.childs[aKey].setValue(pObj.options.get('value.is.value'))
 		}
 		this.childs[aKey].useable = true
@@ -95,12 +102,13 @@ const localFunctions = {
 		if (this.ready) {
 			store.dispatch('IS_CHANGED')
 		}
+		Vue.set(this.childs, aKey, this.childs[aKey])
 		return this.childs[aKey]
 	},
-	addAfterByParser: function (pObj) {
+	addAfterByParser: function (pObj, autoCreate) {
 		if (this.parents.length > 0) {
 			let aPos = this.siblings.indexOf(this) + 1
-			return this.parents[0].addByParser(aPos, pObj)
+			return this.parents[0].addByParser(aPos, pObj, autoCreate)
 		} else {
 			console.log('Xml - Kann nicht hinzugefügt werden!', this)
 		}
@@ -199,6 +207,7 @@ const localFunctions = {
 				this.childs[nTxt].useable = true
 				this.childs[nTxt].ready = true
 				this.childs[nTxt].parserIgnore = false
+				Vue.set(this.childs, nTxt, this.childs[nTxt])
 				if (val) { store.dispatch('IS_CHANGED') }
 			}
 		}
@@ -206,11 +215,12 @@ const localFunctions = {
 	},
 	setAttribute: function (attr, val) {
 		console.log('setAttribute', this, val)
-		if (!this.attributes[attr] || this.attributes[attr] !== val) {
-			Vue.set(this.attributes, attr, val)
+		let aVal = ((val) ? (val.value || val) : '')
+		if (!this.attributes[attr] || this.attributes[attr] !== aVal) {
+			Vue.set(this.attributes, attr, aVal)
 			store.dispatch('IS_CHANGED')
 		}
-		return { 'attribute': attr, 'value': val }
+		return { 'attribute': attr, 'value': aVal }
 	},
 	getXML: function (all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {
 		let aXML = ''

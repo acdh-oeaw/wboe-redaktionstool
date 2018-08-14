@@ -15,11 +15,12 @@ const localFunctions = {
 		this.init()										// Immer dirket initialisieren
 		this.updateFamilyErrors()
 	},
-	EditorObject: function (root, parents, parser, xml, isRoot, ignoreChilds, dontInit) {
+	EditorObject: function (root, parents, parser, xml, isRoot, ignoreChilds, dontInit, autoCreate) {
 		this.parserObj = parser || null		// Aktuelles Parser Objekt
 		this.orgXmlObj	= xml || null	// Original Xml Objekt
 		this.ready = false						// Ist das Objekt bereit?
 		this.refresh = true						// Neu zeichnen ...
+		this.autoCreated = autoCreate		// Wurde dieses Objekt automatisch erstellt?
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = []							// Liste der Fehler
 		this.warnings = []						// Liste der Warnungen

@@ -22,8 +22,8 @@
 								Kein Wert!
 							</button>
 							<button @click="selectAttr(aKey, attrKey)" class="sel-obj" v-for="(attrVal, attrKey) in aVal.options.possibleValues">
-								<font-awesome-icon icon="check" class="fa-icon" v-if="attrVal === aVal.value"/>
-								{{ attrVal }}
+								<font-awesome-icon icon="check" class="fa-icon" v-if="(attrVal.value || attrVal) === aVal.value"/>
+								{{ attrVal.title || attrVal }}
 							</button>
 						</div>
 						<div class="txt-attribut" v-else>
@@ -127,7 +127,7 @@
 			},
 			deleteAble () {
 				return (this.content.parserObj.options && this.content.parserObj.options.get('tag.possibleTag'))
-				|| (this.content.isMultiple && !(this.content.multipleNr === 0 && this.content.multipleLast))
+						|| (this.content.isMultiple && !(this.content.multipleNr === 0 && this.content.multipleLast))
 			},
 			moveableLeft () {
 				// ToDo: Komplexere Abfrage!
