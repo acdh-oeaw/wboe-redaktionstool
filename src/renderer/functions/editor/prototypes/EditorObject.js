@@ -172,6 +172,8 @@ const localFunctions = {
 		if (this.siblings) {
 			if (direct || confirm('Soll der Tag "' + (this.parserObj && this.parserObj.name) + '" wirklich gelöscht werden?')) {
 				console.log('Editor - Löschen: ' + this.parserObj)
+				this.deleteErrors()
+				this.deleteWarnings()
 				this.childs.forEach(function (aChild) {
 					aChild.delete(true)
 				}, this)
@@ -335,6 +337,7 @@ const localFunctions = {
 				this.addWarning(aWarn)
 			}, this)
 		}
+		this.refresh = true
 	},
 	getSiblings: function (mode = 'all', useable = false, inclSelf = false, withParser = false) {
 		let rObj = []

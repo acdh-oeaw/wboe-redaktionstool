@@ -192,7 +192,6 @@ const localFunctions = {
 				// ToDo: Mehrer Text Kinder ?!?
 				console.log(aTxtChilds.length + ' TEXT Kind ...')
 			} else {
-				// ToDo: "TEXT" - NODE hinzufügen
 				let nTxt = this.childs.push(new Xml.XmlObject(this.root, [this, ...this.parents])) - 1
 				this.childs[nTxt].type = 'TEXT'
 				this.childs[nTxt].name = '#text'

@@ -31,7 +31,7 @@
 				</span>
 				<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 				<template slot="childs" v-if="content.childs.length > 0">
-					<ViewEditor ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+					<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 				</template>
 			</EditorObjFrame>
 

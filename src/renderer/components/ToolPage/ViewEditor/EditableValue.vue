@@ -63,6 +63,7 @@
 					this.content.checkParser()
 				} else {
 					this.content.orgXmlObj.setValue(null)
+					this.content.checkParser()
 				}
 			},
 			valEditUpdate: _.debounce(function (e) {		// Bei Textfeldern HTML-Elemente und Zeilenumbrüche entfernen
