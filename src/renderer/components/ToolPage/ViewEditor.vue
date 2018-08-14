@@ -12,17 +12,15 @@
 	</div>
 
 	<div class="inline" v-else-if="content">
-		<template v-if="!content.refresh">
-			<EditorObjFrame :content="content">
-				<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
-					{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
-				</span>
-				<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
-				<template slot="childs" v-if="content.childs.length > 0">
-					<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
-				</template>
-			</EditorObjFrame>
-		</template>
+		<EditorObjFrame :content="content">
+			<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
+				{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
+			</span>
+			<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
+			<template slot="childs" v-if="content.childs.length > 0">
+				<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+			</template>
+		</EditorObjFrame>
 	</div>
 
 	<div class="error" v-else>
@@ -63,18 +61,8 @@
 			}
 		},
 		watch: {
-			'content.refresh' (nVal) {
-				if (nVal) {
-					this.$nextTick(() => {
-						this.content.refresh = false
-					})
-				}
-			}
 		},
 		mounted () {
-			if (this.content) {
-				this.content.refresh = false
-			}
 		},
 		methods: {
 			showObj (obj) {		// Soll das Element angezeigt werden?

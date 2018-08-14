@@ -62,9 +62,9 @@
 				}
 			},
 			focusChanged: _.debounce(function (e) {
+				// console.log(this._uid, this.show, this.ready, document.activeElement, document.activeElement.closest('#ecm-' + this._uid))
 				if (this.show && this.ready) {
 					if (!document.activeElement.closest('#ecm-' + this._uid)) {
-						// console.log(document.activeElement, document.activeElement.closest('#ecm-' + this._uid))
 						this.close()
 					}
 				}
