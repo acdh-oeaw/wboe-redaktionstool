@@ -343,7 +343,7 @@
 				<?options {
 										"id": "gram-gender",
 										"title": "Gram Gender",
-										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Neutrum", "Masculinum", "Femininum"]}}],
+										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Masculinum", "Femininum", "Neutrum", "Diminutiv"]}}],
 										"tag": ["multiple"],
 										"layout": { "frame": "line" },
 										"editor": {

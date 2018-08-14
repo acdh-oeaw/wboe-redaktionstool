@@ -72,8 +72,11 @@
 				restoreCaretPosition()
 			}, 20),
 			valEditUpdateValue: function (e) {		// Aktuelle Eingabe setzen
-				this.content.orgXmlObj.setValue(e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
-				this.content.checkParser()
+				let nVal = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
+				if (nVal !== this.aValue) {
+					this.content.orgXmlObj.setValue(nVal)
+					this.content.checkParser()
+				}
 			},
 		},
 		components: {
