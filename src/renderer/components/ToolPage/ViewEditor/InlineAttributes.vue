@@ -4,28 +4,22 @@
 		<span class="title" v-if="!attrOpt.hideTitle">{{ attrOpt.title || attrKey }}</span>
 		<template v-if="parserOptions.type === 'edit'">
 			<span class="value" v-if="parserOptions.possibleValues">
-				<SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="attrValue" :values="this.parserOptions.possibleValues" v-if="!refreshSelect"/>
+				<SelectPossibleValues @select="setSelected" :selected="getSelected()" :empty="this.parserOptions.canBeEmpty" :selectedText="attrValue" :values="this.parserOptions.possibleValues" v-if="!refreshSelect"/>
 			</span>
 			<span class="value" v-else>
-				y{{ attrValue || '&nbsp;' }}y
+				<span class="attr-edit" ref="attrEdit" @input="valAttrUpdate" @focus="valAttrUpdate" @blur="valAttrUpdateValue" @keyup.enter="valAttrUpdateValue" @keydown.enter.prevent contenteditable>{{ attrValue }}</span>
+				<font-awesome-icon @click="$refs.attrEdit.focus()" icon="edit" class="fa-icon"/>
 			</span>
 		</template>
 		<span class="value" v-else>{{ attrValue || '&nbsp;' }}</span>
 		<span class="before" v-if="attrOpt.after">{{ attrOpt.after }}</span>
 	</span>
-
-	<!-- <span :class="{ 'val-obj': true, 'val-txt': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }"
-				v-else>
-		<span class="val-edit val-focus" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
-		<font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
-	</span> -->
-
 </template>
 
 <script>
-	// import _ from 'lodash'
+	import _ from 'lodash'
 	import SelectPossibleValues from './SelectPossibleValues'
-	// import veFunctions from './functions'
+	import veFunctions from './functions'
 	import stdFunctions from '@/functions/stdFunctions'
 
 	export default {
@@ -79,11 +73,20 @@
 				return oKey
 			},
 			setSelected: function (key) {
-				console.log('setSelected', key)
 				this.content.orgXmlObj.setAttribute(this.attrKey, this.parserOptions.possibleValues[key])
 				this.content.checkParser()
 				this.refreshSelect = true
 			},
+			valAttrUpdateValue: function (e) {
+				this.content.orgXmlObj.setAttribute(this.attrKey, e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
+				this.content.checkParser()
+			},
+			valAttrUpdate: _.debounce(function (e) {
+				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
+				e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
+				restoreCaretPosition()
+			}, 20),
+
 		},
 		components: {
 			SelectPossibleValues
@@ -140,5 +143,8 @@
 	}
 	.layout-box > .value {
 		padding-left: 2px;
+	}
+	.attr-edit {
+		cursor: text;
 	}
 </style>

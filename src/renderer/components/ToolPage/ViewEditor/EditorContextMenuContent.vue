@@ -17,7 +17,7 @@
 					<span>{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}</span>
 					<div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="aVal.editable && subShow === aKey">
 						<div class="sel-attribut" v-if="aVal.editType === 'select'">
-							<button @click="selectAttr(aKey, -1)" class="sel-obj">
+							<button @click="selectAttr(aKey, -1)" class="sel-obj" v-if="aVal.options.canBeEmpty && aVal.options.canBeEmpty.use">
 								<font-awesome-icon icon="check" class="fa-icon" v-if="!aVal.value"/>
 								Kein Wert!
 							</button>
