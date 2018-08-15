@@ -302,7 +302,7 @@
 				<?options {
 										"id": "lbl",
 										"title": "lbl",
-										"value": ["variable", "required", "innerXML"],
+										"value": ["edit", "required"],
 										"tag": ["possibleTag"]
 									} ?>
 			</lbl>
@@ -495,16 +495,22 @@
 										"title": "Ref Bibl",
 										"attributes": [{
 											"target": {"type": "edit", "canBeEmpty": {"use": true}}
-										}]
+										}],
+										"layout": {
+											"frame": "line",
+											"showAttributeAfter" : {
+												"target": { }
+											}
+										}
 									} ?>
-				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "text", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+				<?copy { "fromId": "text", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 				<citedRange>
 					<?options {
 											"title": "Cited Range",
 											"value": ["edit", "required"],
 											"tag": ["possibleTag"],
-											"layout": { "frame": "line" }
+											"layout": { "frame": "inline" }
 										} ?>
 				</citedRange>
 			</ref>
@@ -766,10 +772,10 @@
 													"layout": {
 														"bold": true,
 														"frame": "line",
-														"showTagBefore" : {
+														"showAttributeBefore" : {
 															"who": { "title": "Von", "class": "text", "after": " - " }
 														},
-														"showTagAfter" : {
+														"showAttributeAfter" : {
 															"when": { "title": "am", "class": "text" }
 														}
 													},
