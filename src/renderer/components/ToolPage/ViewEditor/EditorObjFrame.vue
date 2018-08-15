@@ -195,7 +195,7 @@
 	}
 
 	.obj.lb-inline {
-		display: inline-block;
+		display: inline;
 		padding: 0px 3px;
 	}
 	.obj.lb-inline:hover {
@@ -215,5 +215,8 @@
 	}
 	h4:first-child {
 		margin-top: 0px;
+	}
+	.enumerate {
+		font-weight: bold;
 	}
 </style>

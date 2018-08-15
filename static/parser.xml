@@ -63,7 +63,7 @@
 							</pron>
 							<?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
 						</form>
-						<?copy { "fromId": "gramGrp" } ?>
+						<?copy { "fromId": "gramGrp", "options": { "layout": { "frame": "line" } } } ?>
 						<form type="variant" subtype="diminutive">
 							<?options {
 													"title": "Form Variant Diminutive",
@@ -71,13 +71,31 @@
 														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}
 													}],
 													"tag": ["multiple", "possibleTag"],
+													"layout": {
+														"frame": "inline",
+														"hideTitle": true,
+														"multiple": {
+															"spaceBefore": 1,
+															"spaceAfter": 1,
+															"join": ","
+														}
+													},
 													"editor": {
 														"addTitle": "Form Variant Diminutive"
 													}
 												} ?>
 							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true } } } ?>
 							<gramGrp>
-								<?copy {"fromId": "gram-gender"} ?>
+								<?options {
+														"title": "Gram Group",
+														"layout": {
+															"frame": "inline",
+															"hideTitle": true,
+															"before": "(",
+															"after": ")"
+														}
+													} ?>
+								<?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
 							</gramGrp>
 						</form>
 						<?copy { "fromId": "usg-geo", "options": {
@@ -114,12 +132,9 @@
 													"layout": {
 														"frame": "line",
 														"hideTitle": true,
-														"multiple": {
-															"use": true,
-															"header": "Datenbankbbeleg (exempl.)",
-															"spaceBefore": 10,
-															"spaceAfter": 5
-														}
+														"header": "Datenbankbbeleg (exempl.)",
+														"spaceBefore": 10,
+														"spaceAfter": 5
 													}
 												} ?>
 							<?copy { "fromId": "form-variant", "options": { "editor": { "addTitle": "Form Variant" } } } ?>
@@ -172,7 +187,7 @@
 									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
 									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
 								</form>
-								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							</cit>
@@ -209,7 +224,8 @@
 																												"spaceBefore": 10,
 																												"spaceAfter": 5,
 																												"enumerateRom": true
-																											}
+																											},
+																											"spaceAfter": 15
 																										},
 																										"editor": {
 																											"onlyLastElementHasAddButton": true,
@@ -255,7 +271,7 @@
 																													"parentInContext": true
 																												}
 																											} } ?>
-								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 							</form>
 							<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
@@ -315,12 +331,16 @@
 									} ?>
 			</xr>
 
-			<lang>		<!-- ToDo!!!! -->
+			<lang>
 				<?options {
 										"id": "lang",
 										"title": "Lang",
-										"value": ["variable", "required"],
-										"tag": ["possibleTag"]
+										"value": ["edit", "required"],
+										"tag": ["possibleTag"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true
+										}
 									} ?>
 			</lang>
 
@@ -357,7 +377,11 @@
 										"id": "date",
 										"title": "Date",
 										"value": ["edit", "required"],
-										"tag": ["possibleTag"]
+										"tag": ["possibleTag"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true
+										}
 									} ?>
 			</date>
 
@@ -410,8 +434,11 @@
 				<?options {
 										"id": "gram-number",
 										"title": "Gram Number",
-										"value": ["edit", "required", {"is": {"value": "Plural", "possibleValues": ["Plural"]}}],
-										"value": ["edit", "required"]
+										"value": ["edit", "required"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true
+										}
 									} ?>
 			</gram>
 
@@ -423,7 +450,11 @@
 											"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg", "gram"]},
 											"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 										}],
-										"value": ["edit", "required"]
+										"value": ["edit", "required"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true
+										}
 									} ?>
 			</usg>
 
@@ -451,6 +482,7 @@
 											"layout": {
 												"frame": "inline",
 												"hideTitle": true,
+
 												"before": "– "
 											}
 										} ?>
@@ -552,7 +584,10 @@
 											"target": {"type": "edit", "canBeEmpty": {"use": true}}
 										}],
 										"layout": {
-											"frame": "line",
+											"frame": "inline",
+											"hideTitle": true,
+											"before": "(",
+											"after": ")",
 											"showAttributeAfter" : {
 												"target": { }
 											}
@@ -565,7 +600,11 @@
 											"title": "Cited Range",
 											"value": ["edit", "required"],
 											"tag": ["possibleTag"],
-											"layout": { "frame": "inline" }
+											"layout": {
+												"frame": "inline",
+												"hideTitle": true,
+												"before": ":"
+											}
 										} ?>
 				</citedRange>
 			</ref>
@@ -574,17 +613,29 @@
 				<?options {
 										"id": "ref-form",
 										"title": "Ref Form",
-										"tag": ["possibleTag"]
+										"tag": ["possibleTag"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true
+										}
 									} ?>
-				<?copy { "fromId": "text" } ?>
+				<?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true } } } ?>
 				<oRef>
 					<?options {
 						"id": "oRef",
+						"value": ["edit", "required"],
 						"attributes": [{
 							"target": {"type": "edit", "canBeEmpty": {"use": true}}
 						}],
-						"value": ["edit", "canBeEmpty"],
-						"tag": ["possibleTag"]
+						"tag": ["possibleTag"],
+						"layout": {
+							"frame": "inline",
+							"italic": true,
+							"hideTitle": true,
+							"showAttributeBefore" : {
+								"target": { }
+							}
+						}
 					} ?>
 				</oRef>
 			</ref>
