@@ -12,7 +12,9 @@
 	</div>
 
 	<EditorObjFrame :content="content" v-else-if="content">
-		<InlineAttributes :content="content" pos="showTagBefore" v-if="content.parserObj.options && content.parserObj.options.get('layout.showTagBefore')"/>
+		<template  v-if="content.parserObj.options && content.parserObj.options.get('layout.showTagBefore')">
+			<InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in content.parserObj.options.get('layout.showTagBefore')"/>
+		</template>
 
 		<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
 			{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
@@ -23,7 +25,9 @@
 			<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 		</template>
 
-		<InlineAttributes :content="content" pos="showTagAfter" v-if="content.parserObj.options && content.parserObj.options.get('layout.showTagAfter')"/>
+		<template  v-if="content.parserObj.options && content.parserObj.options.get('layout.showTagAfter')">
+			<InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in content.parserObj.options.get('layout.showTagAfter')"/>
+		</template>
 	</EditorObjFrame>
 
 	<div class="error" v-else>

@@ -767,10 +767,10 @@
 														"bold": true,
 														"frame": "line",
 														"showTagBefore" : {
-															"who": { "title": "Von" }
+															"who": { "title": "Von", "class": "text", "after": " - " }
 														},
 														"showTagAfter" : {
-															"who": { "hideTitle": true }
+															"when": { "title": "am", "class": "text" }
 														}
 													},
 													"editor": {

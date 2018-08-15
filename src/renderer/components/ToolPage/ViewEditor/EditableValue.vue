@@ -54,7 +54,7 @@
 				let sVal = this.content.orgXmlObj.getValue(false)
 				let oKey = -1
 				this.content.parserObj.options.get('value.is.possibleValues').some(function (aVal, aKey) {
-					if ((aVal.title || aVal.value || aVal) === sVal) {
+					if ((aVal.value || aVal) === sVal) {
 						oKey = aKey
 						return true
 					}
