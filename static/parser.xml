@@ -130,7 +130,7 @@
 													"title": "Etymologie",
 													"tagAsTitle": false,
 													"layout": {
-														"frame": "box",
+														"frame": "line",
 														"hideTitle": true,
 														"header": "Etymologie",
 														"spaceBefore": 10,
@@ -147,7 +147,11 @@
 														"attributes": [{
 															"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
 														}],
-														"tag": ["multiple", "possibleTag", "anywhere"]
+														"tag": ["multiple", "possibleTag", "anywhere"],
+														"layout": {
+															"frame": "inline",
+															"hideTitle": true
+														}
 													} ?>
 								<?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
@@ -159,7 +163,11 @@
 															"attributes": [{
 																"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
 															}],
-															"tag": ["possibleTag", "multiple"]
+															"tag": ["possibleTag", "multiple"],
+															"layout": {
+																"frame": "inline",
+																"hideTitle": true
+															}
 														} ?>
 									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
 									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
@@ -176,7 +184,7 @@
 														}],
 														"tag": ["possibleTag", "multiple", "anywhere"],
 														"layout": {
-															"frame": "line",
+															"frame": "inline",
 															"hideTitle": true
 														}
 													} ?>
@@ -194,7 +202,7 @@
 																										"tagAsTitle": false,
 																										"hideTitle": true,
 																										"layout": {
-																											"frame": "box",
+																											"frame": "line",
 																											"multiple": {
 																												"use": true,
 																												"header": "Bedeutung",
@@ -217,7 +225,7 @@
 														"hideTitle": true,
 														"multiple": {
 															"use": true,
-															"header": "Wortbildung",
+															"header": "Wortbildung / Redewendung",
 															"spaceBefore": 10,
 															"spaceAfter": 5
 														}
@@ -249,7 +257,7 @@
 																											} } ?>
 								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
 							</form>
-							<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
+							<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 						</re>
@@ -347,7 +355,7 @@
 			<date>
 				<?options {
 										"id": "date",
-										"title": "Desc",
+										"title": "Date",
 										"value": ["edit", "required"],
 										"tag": ["possibleTag"]
 									} ?>
@@ -358,7 +366,13 @@
 										"id": "def",
 										"title": "Def",
 										"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
-										"value": ["edit", "required"]
+										"value": ["edit", "required"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true,
+											"before": "'",
+											"after": "'"
+										}
 									} ?>
 			</def>
 
@@ -372,7 +386,7 @@
 											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
 										}],
 										"layout": {
-											"frame": "line",
+											"frame": "inline",
 											"hideTitle": true
 										}
 									} ?>
@@ -452,7 +466,11 @@
 										"id": "sense",
 										"title": "Sense",
 										"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
-										"tag": ["multiple"]
+										"tag": ["multiple"],
+										"layout": {
+											"frame": "line",
+											"hideTitle": true
+										}
 									} ?>
 				<?copy { "fromId": "ref-form" } ?>
 				<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
@@ -465,7 +483,7 @@
 																								"title": "",
 																								"tag": ["possibleTag"],
 																								"layout": {
-																									"frame": "box",
+																									"frame": "inline",
 																									"multiple": {
 																										"use": true,
 																										"enumerate": true

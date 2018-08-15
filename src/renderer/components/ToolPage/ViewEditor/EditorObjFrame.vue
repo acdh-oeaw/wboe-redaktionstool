@@ -160,9 +160,11 @@
 				})
 			},
 			addAfter (aParUId) {
+				this.isOpenAdditionalAddBtn = false
 				this.content.addAfter(this.content.parserObj.root.family[aParUId])
 			},
 			addIn (aParUId) {
+				this.isOpenAdditionalAddInBtn = false
 				this.content.add(0, this.content.parserObj.root.family[aParUId])
 			},
 			num2rom: function (num) {		// Römische Zahlen
