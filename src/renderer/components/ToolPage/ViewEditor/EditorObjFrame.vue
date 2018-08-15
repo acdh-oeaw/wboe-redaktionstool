@@ -1,5 +1,5 @@
 <template>
-	<div class="inline">
+	<div :id="'eo' + content.uId" class="inline">
 		<!-- Vor Inhalten -->
 		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
 			<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceBefore')"></div>
@@ -26,7 +26,7 @@
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 				</button>
 			</div>
-			<b-collapse v-model="isOpen" :id="'collapse-' + _uid">
+			<b-collapse v-model="isOpen" :id="'collapse-' + _uid" class="fxcollapse">
 				<b-list-group @contextmenu.prevent="contextMenue" flush v-if="content.addableInner.length > 0">
 					<b-list-group-item style="background: #eee;">
 						<div style="margin: -8px -9px;">

@@ -1,15 +1,15 @@
 <template>
 	<ul v-if="base || Array.isArray(aError)">
 		<li v-for="(errorObj, errKey) in aError">
-			<b v-if="fxUseErrKey(errKey)">{{ fxErrKey(errKey) }}</b><ErrorContent :error="errorObj" :noObj="fxUseErrKey(errKey)"/>
+			<b v-if="fxUseErrKey(errKey)">{{ fxErrKey(errKey) }}</b><ErrorContent :error="errorObj" :noObj="fxUseErrKey(errKey)" @goto="goto"/>
 		</li>
 	</ul>
 	<span v-else-if="typeof aError === 'string'">{{ aError }}<br></span>
-	<span v-else>
+	<span  @click="goto(aError.obj, true)" :class="{'clickable': aError.obj}" v-else>
 		<b v-if="aError.obj && !noObj">{{ aError.obj.uId }} - </b>
-		<ErrorContent :error="aError.txt" v-if="aError.txt"/>
-		<div v-if="Array.isArray(aError.err)" class="subArray"><ErrorContent :error="aError.err"/></div>
-		<ErrorContent :error="aError.err" v-else-if="aError.err"/>
+		<ErrorContent :error="aError.txt" v-if="aError.txt" @goto="goto"/>
+		<div v-if="Array.isArray(aError.err)" class="subArray"><ErrorContent :error="aError.err" @goto="goto"/></div>
+		<ErrorContent :error="aError.err" v-else-if="aError.err" @goto="goto"/>
 	</span>
 </template>
 
@@ -41,7 +41,15 @@
 					return key + ' - '
 				}
 				return ''
-			}
+			},
+			goto: function (aObj, show) {
+				if (aObj) {
+					if (show) {
+						console.log('uId: ' + aObj.uId, aObj)
+					}
+					this.$emit('goto', aObj)
+				}
+			},
 		},
 		mounted: function () {
 			// console.log(this.error, this.aError)
@@ -55,5 +63,8 @@
 	}
 	.subArray > ul {
 		padding-left: 20px;
+	}
+	.clickable {
+		cursor: pointer;
 	}
 </style>

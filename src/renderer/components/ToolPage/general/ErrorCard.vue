@@ -4,7 +4,7 @@
 		<b-collapse v-model="errorsOpen" :id="'collapse-errcard-' + _uid">
 			<b-card-body>
 				<div class="g-errors">
-					<ErrorContent :error="error" base=true class="mi0 pl20"/>
+					<ErrorContent :error="error" base=true @goto="goto" class="mi0 pl20"/>
 				</div>
 			</b-card-body>
 		</b-collapse>
@@ -28,6 +28,9 @@
 				} else {
 					return Object.keys(val).length
 				}
+			},
+			goto: function (aObj) {
+				this.$emit('goto', aObj)
 			},
 		},
 		components: {

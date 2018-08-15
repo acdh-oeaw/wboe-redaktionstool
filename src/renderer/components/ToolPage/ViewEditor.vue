@@ -1,7 +1,7 @@
 <template>
 	<div class="start" v-if="!content && object">
-		<ErrorCard :error="object.getCompressedBaseError()" title="Fehler" variant="danger"/>
-		<ErrorCard :error="object.warnings" title="Warnung" variant="warning"/>
+		<ErrorCard :error="object.getCompressedBaseError()" title="Fehler" variant="danger" @goto="goToObject"/>
+		<ErrorCard :error="object.warnings" title="Warnung" variant="warning" @goto="goToObject"/>
 		<div v-if="object.contentObj">
 			<div v-if="object.errors && length(object.errors) > 0">Datei enthält Fehler!</div>
 			<ViewEditor :content="object.contentObj" v-else/>
@@ -11,17 +11,15 @@
 		</div>
 	</div>
 
-	<div class="inline" v-else-if="content">
-		<EditorObjFrame :content="content">
-			<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
-				{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
-			</span>
-			<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
-			<template slot="childs" v-if="content.childs.length > 0">
-				<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
-			</template>
-		</EditorObjFrame>
-	</div>
+	<EditorObjFrame :content="content" v-else-if="content">
+		<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
+			{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
+		</span>
+		<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
+		<template slot="childs" v-if="content.childs.length > 0">
+			<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+		</template>
+	</EditorObjFrame>
 
 	<div class="error" v-else>
 		Kein "object" übergeben !!!!
@@ -34,6 +32,7 @@
 	import ErrorCard from './general/ErrorCard'
 	import EditorObjFrame from './ViewEditor/EditorObjFrame'
 	import EditableValue from './ViewEditor/EditableValue'
+	import _ from 'lodash'
 
 	export default {
 		name: 'ViewEditor',
@@ -81,6 +80,38 @@
 					return Object.keys(val).length
 				}
 			},
+			goToObject (aObj) {
+				let aElement = document.getElementById('eo' + aObj.uId)
+				if (aElement) {
+					// console.log(aElement)
+					let opendPanels = false
+					if (aElement.offsetParent === null) {
+						let pElement = aElement.parentElement
+						while (pElement) {
+							if (pElement.classList.contains('fxcollapse')) {
+								if (pElement.__vue__ && pElement.__vue__.$parent) {
+									if (pElement.__vue__.$parent.hasOwnProperty('isOpen') && pElement.__vue__.$parent.isOpen === false) {
+										pElement.__vue__.$parent.isOpen = true
+										opendPanels = true
+									} else if (pElement.__vue__.$parent.$parent.hasOwnProperty('isOpen') && pElement.__vue__.$parent.$parent.isOpen === false) {
+										pElement.__vue__.$parent.$parent.isOpen = true
+										opendPanels = true
+									}
+								}
+							}
+							pElement = pElement.parentElement
+						}
+					}
+					if (opendPanels) {
+						this.scrollToObjectv(aElement)
+					} else {
+						this.$parent.$el.getElementsByClassName('vieweditorobject')[0].scrollTop = aElement.getBoundingClientRect().top - 300
+					}
+				}
+			},
+			scrollToObjectv: _.debounce(function (aElement) {
+				this.$parent.$el.getElementsByClassName('vieweditorobject')[0].scrollTop = aElement.getBoundingClientRect().top - 300
+			}, 250),
 		},
 		components: {
 			ErrorContent,

@@ -52,7 +52,6 @@
 		methods: {
 			getSelected: function () {		// Gibt die aktuell ausgewählte Option zurück
 				let sVal = this.content.orgXmlObj.getValue(false)
-				console.log(sVal)
 				let oKey = -1
 				this.content.parserObj.options.get('value.is.possibleValues').some(function (aVal, aKey) {
 					if ((aVal.title || aVal.value || aVal) === sVal) {
@@ -76,7 +75,6 @@
 					this.content.orgXmlObj.setValue(null)
 					this.content.checkParser()
 				}
-				// this.refreshSelect = true
 			},
 			valEditUpdate: _.debounce(function (e) {		// Bei Textfeldern HTML-Elemente und Zeilenumbrüche entfernen
 				var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
