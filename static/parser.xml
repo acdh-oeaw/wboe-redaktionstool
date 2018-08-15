@@ -32,8 +32,8 @@
 													},
 													"editor": { "addTitle": "Lemma" }
 												} ?>
-							<?copy { "fromId": "orth", "options": { "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
-            </form>
+							<?copy { "fromId": "orth", "options": { "layout": { "frame": "inline", "bold": true, "fontsize": 120 }, "editor": { "parentInContext": true } } } ?>
+						</form>
 						<form type="variant">
 							<?options {
 													"tagAsTitle": false,
@@ -58,7 +58,7 @@
 													} ?>
 							</pron>
 							<?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
-            </form>
+						</form>
 						<?copy { "fromId": "gramGrp" } ?>
 						<form type="variant" subtype="diminutive">
 							<?options {
@@ -149,7 +149,7 @@
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "lang" } ?>
 								<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
-              	<form>
+								<form>
 									<?options {
 															"title": "Form",
 															"attributes": [{
@@ -159,11 +159,11 @@
 														} ?>
 									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
 									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-              	</form>
+								</form>
 								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
-              </cit>
+							</cit>
 							<desc>
 								<?options {
 														"title": "Desc",
@@ -185,7 +185,7 @@
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "xr" } ?>
-            </etym>
+						</etym>
 						<?copy { "fromId": "sense", "options": {
 																										"tagAsTitle": false,
 																										"title": null,
@@ -271,7 +271,7 @@
 
 			<xr>		<!-- ToDo!? -->
 				<?options {
-				 						"id": "xr",
+										"id": "xr",
 										"title": "XR",
 										"value": ["variable", "required", "innerXML"],
 										"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}}}],
@@ -281,7 +281,7 @@
 
 			<lang>		<!-- ToDo!!!! -->
 				<?options {
-				 						"id": "lang",
+										"id": "lang",
 										"title": "Lang",
 										"value": ["variable", "required"],
 										"tag": ["possibleTag"]
@@ -290,7 +290,7 @@
 
 			<bibl>		<!-- ToDo!? Zusätzlich zu "ref-bibl" ? -->
 				<?options {
-				 						"id": "bibl",
+										"id": "bibl",
 										"title": "Bibl",
 										"value": ["variable", "required", "innerXML"],
 										"attributes": [{"type": {"type": "edit", "canBeEmpty": {"use": true}}}],
@@ -336,7 +336,7 @@
 
 			<orth>
 				<?options {
-				 						"id": "orth",
+										"id": "orth",
 										"title": "Orth",
 										"value": ["edit", "required"],
 										"attributes": [{
@@ -570,7 +570,7 @@
 										} ?>
 				</iType>
 				<?copy {"fromId": "gram-gender", "options": {
-				 																							"tag": ["possibleTag"],
+																											"tag": ["possibleTag"],
 																											"layout": {
 																												"frame": "inline",
 																												"multiple": {
@@ -587,7 +587,7 @@
 
 			<usg type="geo">
 				<?options {
-			 							"id": "usg-geo",
+										"id": "usg-geo",
 										"tagAsTitle": false,
 										"layout": {
 											"frame": "inline",
@@ -736,11 +736,36 @@
 						<?options { "title": "Information about the source", "layout": { "frame": "panelClosed" } } ?>
 						<p>
 							<?options {
-								"value": ["edit", "canBeEmpty"],
-								"tagAsTitle": false,
-								"layout": { "frame": "box" }
+									"value": ["edit", "canBeEmpty"],
+									"tagAsTitle": false,
+									"layout": { "frame": "box" },
+									"tag": ["possibleTag"],
+									"editor": {
+										"noAddButton": true
+									}
 							} ?>
 						</p>
+						<list>
+							<?options {
+													"tag": ["possibleTag", "shouldTag"],
+													"layout": { "frame": "justChilds" }
+												} ?>
+							<item>
+								<?options {	"layout": { "frame": "justChilds" } } ?>
+								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>Geo-data</label>
+								<ref xml:id="geo-inventory-WBOE" target="../geodata-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+							</item>
+							<item>
+								<?options {	"layout": { "frame": "justChilds" } } ?>
+								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>Bibliography</label>
+								<ref xml:id="bibliography-WBOE" target="../bibl-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+							</item>
+							<item>
+								<?options {	"layout": { "frame": "justChilds" } } ?>
+								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Slips</label>
+								<ref xml:id="slips-WBOE" target="../slips-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+							</item>
+						</list>
 					</sourceDesc>
 					<revisionDesc>
 						<?options {

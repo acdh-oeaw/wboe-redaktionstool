@@ -139,7 +139,6 @@
 		cursor: default;
 	}
 	.val-fix {
-		padding: 0px 3px;
 		padding-bottom: 3px;
     border-radius: 2px;
 	}

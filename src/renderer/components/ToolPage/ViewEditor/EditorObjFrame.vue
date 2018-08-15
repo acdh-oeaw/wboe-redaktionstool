@@ -1,5 +1,5 @@
 <template>
-	<div :id="'eo' + content.uId" class="inline">
+	<div :id="'eo' + content.uId" class="inline" :style="'font-size: ' + ((content.parserObj.options && content.parserObj.options.get('layout.fontsize')) ? content.parserObj.options.get('layout.fontsize') : 100) + '%;'">
 		<!-- Vor Inhalten -->
 		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
 			<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceBefore')"></div>

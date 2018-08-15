@@ -1,116 +1,117 @@
 <template>
 	<div class="tool-page">
+		<div class="container-fluid">
+			<!-- Obere Toolbar -->
+			<b-button-toolbar class="main-toolbar">
+				<b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
+					<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
+					<b-dropdown-divider></b-dropdown-divider>
+					<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : aFile.errors, 'warning': aFile.warnings}" :key="aKey" v-for="(aFile, aKey) in devFiles">
+						{{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ')' : '') }}
+					</b-dropdown-item>
+				</b-dropdown>
+				<b-button-group size="sm" class="mx-1" v-if="devMode">
+					<b-btn @click="devNextFile(false)" title="Vorherige Datei"><font-awesome-icon icon="angle-left"/></b-btn>
+					<b-btn @click="updateData()" title="Parser und Datei neu laden"><font-awesome-icon icon="sync-alt"/></b-btn>
+					<b-btn @click="devNextFile()" title="Nächste Datei"><font-awesome-icon icon="angle-right"/></b-btn>
+				</b-button-group>
+				<b-input-group size="sm" class="w-25 mx-1" :prepend="'Datei' + ((Files.changed) ? '!' : '')">
+					<p class="form-control file-name" :title="Files.file">{{ Files.file }}</p>
+					<b-input-group-append>
+						<b-btn @click="showFile()" variant="outline-secondary" title="Ordner in Explorer öffnen" :disabled="!Files.file"><font-awesome-icon icon="external-link-alt"/></b-btn>
+					</b-input-group-append>
+				</b-input-group>
+				<b-button-group size="sm" class="mr-1 mil-auto">
+					<b-btn @click="saveFile()"
+								:title="((!Files.changed) ? '' : ((dataStatus === 'ok') ? 'Datei kann gespeichert werden.' : ((dataStatus === 'error') ? 'Datei enthält Fehler!' : 'Datei enthält Warnungen!')))"
+								:variant="((!Files.changed) ? 'secondary' : ((dataStatus === 'ok') ? 'success' : ((dataStatus === 'error') ? 'danger' : 'warning')))" v-b-tooltip.hover.html :disabled="tabsLocked"><font-awesome-icon icon="save"/></b-btn>
+					<b-btn @click="discardChanges" title="Änderungen verwerfen und zurück zur Auswahl!" variant="warning" v-b-tooltip.hover.html v-if="Files.changed"><font-awesome-icon icon="minus-circle"/></b-btn>
+				</b-button-group>
+			</b-button-toolbar>
 
-		<!-- Obere Toolbar -->
-		<b-button-toolbar class="main-toolbar">
-			<b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
-				<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
-				<b-dropdown-divider></b-dropdown-divider>
-				<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : aFile.errors, 'warning': aFile.warnings}" :key="aKey" v-for="(aFile, aKey) in devFiles">
-					{{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ')' : '') }}
-				</b-dropdown-item>
-			</b-dropdown>
-			<b-button-group size="sm" class="mx-1" v-if="devMode">
-				<b-btn @click="devNextFile(false)" title="Vorherige Datei"><font-awesome-icon icon="angle-left"/></b-btn>
-				<b-btn @click="updateData()" title="Parser und Datei neu laden"><font-awesome-icon icon="sync-alt"/></b-btn>
-				<b-btn @click="devNextFile()" title="Nächste Datei"><font-awesome-icon icon="angle-right"/></b-btn>
-			</b-button-group>
-			<b-input-group size="sm" class="w-25 mx-1" :prepend="'Datei' + ((Files.changed) ? '!' : '')">
-				<p class="form-control file-name" :title="Files.file">{{ Files.file }}</p>
-				<b-input-group-append>
-					<b-btn @click="showFile()" variant="outline-secondary" title="Ordner in Explorer öffnen" :disabled="!Files.file"><font-awesome-icon icon="external-link-alt"/></b-btn>
-				</b-input-group-append>
-			</b-input-group>
-			<b-button-group size="sm" class="mr-1 mil-auto">
-				<b-btn @click="saveFile()"
-							:title="((!Files.changed) ? '' : ((dataStatus === 'ok') ? 'Datei kann gespeichert werden.' : ((dataStatus === 'error') ? 'Datei enthält Fehler!' : 'Datei enthält Warnungen!')))"
-							:variant="((!Files.changed) ? 'secondary' : ((dataStatus === 'ok') ? 'success' : ((dataStatus === 'error') ? 'danger' : 'warning')))" v-b-tooltip.hover.html :disabled="tabsLocked"><font-awesome-icon icon="save"/></b-btn>
-				<b-btn @click="discardChanges" title="Änderungen verwerfen und zurück zur Auswahl!" variant="warning" v-b-tooltip.hover.html v-if="Files.changed"><font-awesome-icon icon="minus-circle"/></b-btn>
-			</b-button-group>
-		</b-button-toolbar>
+			<!-- Tabs -->
+			<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
 
-		<!-- Tabs -->
-		<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
-
-			<b-tab title="Editor" :disabled="tabsLocked">
-				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1 && !update">
-					<ViewEditor :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
-				</div>
-			</b-tab>
-
-			<b-tab title="Vorschau" :disabled="tabsLocked">
-				<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
-					<div v-if="editorObject">todo ...</div>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
-				</div>
-			</b-tab>
-
-			<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked">
-				<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1 && !update">
-					<div v-if="editorObject">todo ...</div>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
-				</div>
-			</b-tab>
-
-			<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}" :disabled="tabsLocked">
-				<div class="viewxml lh76vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3 && !update">
-					<ViewXML :xmlString="editorObject.getXML()" :orgXmlString="Files.fileContent" @changed="xmlChanged" @refresh="xmlRefresh" v-if="editorObject"/>
-					<div class="alert alert-danger mi20" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
-				</div>
-			</b-tab>
-
-			<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}" :disabled="tabsLocked">
-				<div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1 && !update">
-					<ViewParser :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content.length > 0"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
-				</div>
-			</b-tab>
-
-			<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}" :disabled="tabsLocked">
-				<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1 && !update">
-					<ViewXmlObject :object="xmlObject" v-if="xmlObject"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
-				</div>
-			</b-tab>
-
-			<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked">
-				<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(6) > -1 && !update">
-					<ViewEditorObject :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
-					<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
-				</div>
-			</b-tab>
-
-			<!-- Ansicht Einstellungen (eye) -->
-			<template slot="tabs">
-				<li class="nav-item extra">
-					<b-button size="sm" @click="xmlEditorSet" v-if="aTab === 3" variant="primary" :disabled="!xmlEditorLocked">Anwenden</b-button>
-					<b-button size="sm" @click="xmlEditorUnset" v-if="aTab === 3" variant="warning" :disabled="!xmlEditorLocked">Verwerfen</b-button>
-					<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
-					<div class="vis-dropdown" v-if="showTabView">
-						<template v-if="aTab === 3">
-							<button @click="$store.dispatch('TOGGLE_SHOW', 'monacoDiff')"><font-awesome-icon :icon="((Options.show.monacoDiff) ? 'eye' : 'eye-slash')"/> Änderungen anzeigen</button>
-							<hr>
-						</template>
-						<template v-if="aTab === 5">
-							<button @click="$store.dispatch('TOGGLE_SHOW', 'xmlObjectUselessTypes')"><font-awesome-icon :icon="((Options.show.xmlObjectUselessTypes) ? 'eye' : 'eye-slash')"/> Unbrauchbare Nodes</button>
-							<hr>
-						</template>
-						<template v-if="aTab === 6">
-							<button @click="$store.dispatch('TOGGLE_SHOW', 'editorObjectWithoutParser')"><font-awesome-icon :icon="((Options.show.editorObjectWithoutParser) ? 'eye' : 'eye-slash')"/> Ohne Parser</button>
-							<hr>
-						</template>
-						<button @click="$store.dispatch('TOGGLE_SHOW', 'professional')"><font-awesome-icon :icon="((Options.show.professional) ? 'eye' : 'eye-slash')"/> Professional</button>
-						<button @click="$store.dispatch('TOGGLE_SHOW', 'develope')"><font-awesome-icon :icon="((Options.show.develope) ? 'eye' : 'eye-slash')"/> Developer</button>
-						<template v-if="Options.show.develope">
-							<hr>
-							<button @click="openDevTool(); showTabView = false"><font-awesome-icon icon="external-link-alt"/> Dev Tool</button>
-						</template>
+				<b-tab title="Editor" :disabled="tabsLocked">
+					<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1 && !update">
+						<ViewEditor :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 					</div>
-				</li>
-			</template>
+				</b-tab>
 
-		</b-tabs>
+				<b-tab title="Vorschau" :disabled="tabsLocked">
+					<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
+						<div v-if="editorObject">todo ...</div>
+						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
+					</div>
+				</b-tab>
+
+				<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked">
+					<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1 && !update">
+						<div v-if="editorObject">todo ...</div>
+						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
+					</div>
+				</b-tab>
+
+				<b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}" :disabled="tabsLocked">
+					<div class="viewxml lh95vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3 && !update">
+						<ViewXML :xmlString="editorObject.getXML()" :orgXmlString="Files.fileContent" @changed="xmlChanged" @refresh="xmlRefresh" v-if="editorObject"/>
+						<div class="alert alert-danger mi20" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
+					</div>
+				</b-tab>
+
+				<b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}" :disabled="tabsLocked">
+					<div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1 && !update">
+						<ViewParser :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content.length > 0"/>
+						<div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
+					</div>
+				</b-tab>
+
+				<b-tab title="XML Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}" :disabled="tabsLocked">
+					<div class="viewxmlobject scroll p20" v-if="aTabCach.indexOf(5) > -1 && !update">
+						<ViewXmlObject :object="xmlObject" v-if="xmlObject"/>
+						<div class="alert alert-danger" role="alert" v-else>Kein <b>XML Objekt</b> vorhanden!</div>
+					</div>
+				</b-tab>
+
+				<b-tab title="Editor Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked">
+					<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(6) > -1 && !update">
+						<ViewEditorObject :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
+					</div>
+				</b-tab>
+
+				<!-- Ansicht Einstellungen (eye) -->
+				<template slot="tabs">
+					<li class="nav-item extra">
+						<b-button size="sm" @click="xmlEditorSet" v-if="aTab === 3" variant="primary" :disabled="!xmlEditorLocked">Anwenden</b-button>
+						<b-button size="sm" @click="xmlEditorUnset" v-if="aTab === 3" variant="warning" :disabled="!xmlEditorLocked">Verwerfen</b-button>
+						<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
+						<div class="vis-dropdown" v-if="showTabView">
+							<template v-if="aTab === 3">
+								<button @click="$store.dispatch('TOGGLE_SHOW', 'monacoDiff')"><font-awesome-icon :icon="((Options.show.monacoDiff) ? 'eye' : 'eye-slash')"/> Änderungen anzeigen</button>
+								<hr>
+							</template>
+							<template v-if="aTab === 5">
+								<button @click="$store.dispatch('TOGGLE_SHOW', 'xmlObjectUselessTypes')"><font-awesome-icon :icon="((Options.show.xmlObjectUselessTypes) ? 'eye' : 'eye-slash')"/> Unbrauchbare Nodes</button>
+								<hr>
+							</template>
+							<template v-if="aTab === 6">
+								<button @click="$store.dispatch('TOGGLE_SHOW', 'editorObjectWithoutParser')"><font-awesome-icon :icon="((Options.show.editorObjectWithoutParser) ? 'eye' : 'eye-slash')"/> Ohne Parser</button>
+								<hr>
+							</template>
+							<button @click="$store.dispatch('TOGGLE_SHOW', 'professional')"><font-awesome-icon :icon="((Options.show.professional) ? 'eye' : 'eye-slash')"/> Professional</button>
+							<button @click="$store.dispatch('TOGGLE_SHOW', 'develope')"><font-awesome-icon :icon="((Options.show.develope) ? 'eye' : 'eye-slash')"/> Developer</button>
+							<template v-if="Options.show.develope">
+								<hr>
+								<button @click="openDevTool(); showTabView = false"><font-awesome-icon icon="external-link-alt"/> Dev Tool</button>
+							</template>
+						</div>
+					</li>
+				</template>
+
+			</b-tabs>
+		</div>
 	</div>
 </template>
 
@@ -354,16 +355,19 @@
 	.tool-page {
 		margin-top: 10px;
 	}
+	.vieweditorobject {
+		font-size: 1.06rem;
+	}
+	.vieweditorobject .btn {
+		font-size: 1.06rem;
+	}
 	.tabc {
 		border: 1px solid #eee;
 		border-top: none;
-		min-height: 75vh;
+		height: calc( 100vh - 190px );
 	}
-	.lh76vh, .tabc > div > .scroll {
-		height: 75vh;
-	}
-	.tabc > div > .scroll.wtool, .tabc > div > .ohidden.wtool {
-		height: calc( 75vh - 49px )
+	.lh95vh, .tabc > div > .scroll {
+		height: calc( 100vh - 191px );
 	}
 	.toolbar {
 		margin-bottom: 0px;

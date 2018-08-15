@@ -2,7 +2,7 @@
 	<span :class="'inline-attr layout-' + (attrOpt.class || 'attr')">
 		<span class="before" v-if="attrOpt.before">{{ attrOpt.before }}</span>
 		<span class="title" v-if="!attrOpt.hideTitle">{{ attrOpt.title || attrKey }}</span>
-		<template v-if="parserOptions.type === 'edit'">
+		<template v-if="parserOptions && parserOptions.type === 'edit'">
 			<span class="value" v-if="parserOptions.possibleValues">
 				<SelectPossibleValues @select="setSelected" :selected="getSelected()" :empty="this.parserOptions.canBeEmpty" :selectedText="attrValue" :values="this.parserOptions.possibleValues" v-if="!refreshSelect"/>
 			</span>
@@ -37,15 +37,17 @@
 		},
 		computed: {
 			attrValue () {
-				let pv = this.parserOptions.possibleValues
-				let aVal = this.content.orgXmlObj.attributes[this.attrKey]
-				if (pv && pv.length > 0 && pv[0].value) {
-					let xVal = stdFunctions.getFirstKeyOfValueInPropertyOfArray(pv, 'value', aVal)
-					if (xVal >= 0 && pv[xVal].title) {
-						aVal = pv[xVal].title
+				if (this.parserOptions) {
+					let pv = this.parserOptions.possibleValues
+					let aVal = this.content.orgXmlObj.attributes[this.attrKey]
+					if (pv && pv.length > 0 && pv[0].value) {
+						let xVal = stdFunctions.getFirstKeyOfValueInPropertyOfArray(pv, 'value', aVal)
+						if (xVal >= 0 && pv[xVal].title) {
+							aVal = pv[xVal].title
+						}
 					}
+					return aVal
 				}
-				return aVal
 			},
 			parserOptions () {
 				return this.content.parserObj.options.get('attributes.' + this.attrKey)
@@ -64,18 +66,22 @@
 			getSelected: function () {		// Gibt die aktuell ausgewählte Option zurück
 				let sVal = this.content.orgXmlObj.attributes[this.attrKey]
 				let oKey = -1
-				this.parserOptions.possibleValues.some(function (aVal, aKey) {
-					if ((aVal.value || aVal) === sVal) {
-						oKey = aKey
-						return true
-					}
-				}, this)
+				if (this.parserOptions) {
+					this.parserOptions.possibleValues.some(function (aVal, aKey) {
+						if ((aVal.value || aVal) === sVal) {
+							oKey = aKey
+							return true
+						}
+					}, this)
+				}
 				return oKey
 			},
 			setSelected: function (key) {
-				this.content.orgXmlObj.setAttribute(this.attrKey, this.parserOptions.possibleValues[key])
-				this.content.checkParser()
-				this.refreshSelect = true
+				if (this.parserOptions) {
+					this.content.orgXmlObj.setAttribute(this.attrKey, this.parserOptions.possibleValues[key])
+					this.content.checkParser()
+					this.refreshSelect = true
+				}
 			},
 			valAttrUpdateValue: function (e) {
 				this.content.orgXmlObj.setAttribute(this.attrKey, e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))

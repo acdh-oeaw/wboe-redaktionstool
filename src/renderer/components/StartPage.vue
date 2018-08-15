@@ -1,38 +1,40 @@
 <template>
 	<div class="start-page mib50">
-		<br>
-		<h2>Übersicht</h2>
-		<div class="project-path" v-if="Options.projectPath">
-			<p v-if="Files.file">
-				<span :title="'Geöffnete Datei: ' + Files.file"><font-awesome-icon icon="book-open" class="mir10"/> {{ Files.file.split('\\').pop().split('/').pop() }}</span>
-				<button @click="goToTool" class="mir5"><font-awesome-icon icon="edit"/></button>
-				<button @click="$store.dispatch('UNSET_FILE')" class="mir5"><font-awesome-icon icon="times"/></button>
-			</p>
-			<p>
-				<!-- Projektpfad -->
-				<font-awesome-icon icon="project-diagram" class="mir10"/> {{ Options.projectPath }}
-				<button @click="selectFolder"><font-awesome-icon icon="edit"/></button>
-				<button @click="showFolder" title="Ordner in Explorer öffnen" class="mir5"><font-awesome-icon icon="external-link-alt"/></button>
-				<button @click="updateFolder" title="Projektpfad neu laden" class="mir5"><font-awesome-icon icon="sync-alt"/></button>
-				<!-- Parser -->
-				<button @click="reloadParser" title="Parser-Datei neu laden" class="float-right mir5"><font-awesome-icon icon="sync-alt"/></button>
-				<button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Parser.file" class="float-right mir5" v-if="Parser.file && !(Parser.file.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
-				<button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right mir5" v-else-if="Parser.content && Parser.content.length > 0"><font-awesome-icon icon="file-download"/></button>
-			</p>
-			<div v-if="Files.paths[Options.projectPath]">
-				<FileLine :path="path" @loading="loading = true" @new="newFile" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
-				<button @click="newFile(Options.projectPath)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk" class="mir5" style="width:20px;"/><span>Neue Datei erstellen ...</span></button>
-				<FileLine :file="file" @loading="loading = true" @new="newFile" v-for="(file, fKey) in Files.paths[Options.projectPath].files" :key="'file-' + fKey" :base="Options.projectPath"/>
+		<div class="container">
+			<br>
+			<h2>Übersicht</h2>
+			<div class="project-path" v-if="Options.projectPath">
+				<p v-if="Files.file">
+					<span :title="'Geöffnete Datei: ' + Files.file"><font-awesome-icon icon="book-open" class="mir10"/> {{ Files.file.split('\\').pop().split('/').pop() }}</span>
+					<button @click="goToTool" class="mir5"><font-awesome-icon icon="edit"/></button>
+					<button @click="$store.dispatch('UNSET_FILE')" class="mir5"><font-awesome-icon icon="times"/></button>
+				</p>
+				<p>
+					<!-- Projektpfad -->
+					<font-awesome-icon icon="project-diagram" class="mir10"/> {{ Options.projectPath }}
+					<button @click="selectFolder"><font-awesome-icon icon="edit"/></button>
+					<button @click="showFolder" title="Ordner in Explorer öffnen" class="mir5"><font-awesome-icon icon="external-link-alt"/></button>
+					<button @click="updateFolder" title="Projektpfad neu laden" class="mir5"><font-awesome-icon icon="sync-alt"/></button>
+					<!-- Parser -->
+					<button @click="reloadParser" title="Parser-Datei neu laden" class="float-right mir5"><font-awesome-icon icon="sync-alt"/></button>
+					<button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Parser.file" class="float-right mir5" v-if="Parser.file && !(Parser.file.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
+					<button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right mir5" v-else-if="Parser.content && Parser.content.length > 0"><font-awesome-icon icon="file-download"/></button>
+				</p>
+				<div v-if="Files.paths[Options.projectPath]">
+					<FileLine :path="path" @loading="loading = true" @new="newFile" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
+					<button @click="newFile(Options.projectPath)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk" class="mir5" style="width:20px;"/><span>Neue Datei erstellen ...</span></button>
+					<FileLine :file="file" @loading="loading = true" @new="newFile" v-for="(file, fKey) in Files.paths[Options.projectPath].files" :key="'file-' + fKey" :base="Options.projectPath"/>
+				</div>
 			</div>
+			<b-alert show variant="danger" v-else>Projektpfad nicht vergeben!</b-alert>
+			<div id="loading" v-if="loading">Lade ...</div>
+			<b-modal ref="modalNewFile" title="Neue Datei Erstellen:" @ok="newFileModalOk" cancel-title="Abbrechen" ok-title="Datei erstellen" centered>
+				<p>Wie soll die Datei, die im Verzeichniss "{{ newFilePath }}" erstellt werden soll, heißen?</p>
+				<form @submit.stop.prevent="">
+	        <b-form-input type="text" placeholder="Neuer Dateiname ..." v-model="newFileName"></b-form-input>
+	      </form>
+			</b-modal>
 		</div>
-		<b-alert show variant="danger" v-else>Projektpfad nicht vergeben!</b-alert>
-		<div id="loading" v-if="loading">Lade ...</div>
-		<b-modal ref="modalNewFile" title="Neue Datei Erstellen:" @ok="newFileModalOk" cancel-title="Abbrechen" ok-title="Datei erstellen" centered>
-			<p>Wie soll die Datei, die im Verzeichniss "{{ newFilePath }}" erstellt werden soll, heißen?</p>
-			<form @submit.stop.prevent="">
-        <b-form-input type="text" placeholder="Neuer Dateiname ..." v-model="newFileName"></b-form-input>
-      </form>
-		</b-modal>
 	</div>
 </template>
 

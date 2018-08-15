@@ -237,14 +237,14 @@ const localFunctions = {
 		// Nach diesem Tag hinzufügbare Tags
 		this.addableAfter = []
 		if (this.parserObj && !this.isRoot) {
-			if (this.isMultiple && this.parserObj.name !== '#text') {
+			if (this.isMultiple && this.parserObj.name !== '#text' && !this.parserObj.options.get('editor.noAddButton')) {
 				this.addableAfter.push({ 'uId': this.parserObj.uId, 'type': 'self', 'title': this.parserObj.options.get('editor.addTitle') || this.parserObj.options.get('title.value') || this.parserObj.name, 'cShow': true, 'bShow': !(this.isMultiple && !this.multipleLast && this.parserObj.options.get('editor.onlyLastElementHasAddButton')) })
 			}
 			if (!(this.isMultiple && !this.multipleLast)) {
 				let aParSibs = this.parserObj.getSiblings('all', true)
 				let aNextSibs = this.getSiblings('next', true)
 				aParSibs.forEach(function (aParSib) {
-					if (aParSib.options.get('tag.anywhere.use')) {
+					if (aParSib.options.get('tag.anywhere.use') && !aParSib.options.get('editor.noAddButton')) {
 						if (!((this.parserObj.name === '#text' || (aNextSibs[0] && aNextSibs[0].parserObj && aNextSibs[0].parserObj.name === '#text')) && aParSib.name === '#text')) {
 							this.addableAfter.push({ 'uId': aParSib.uId, 'type': 'anywhere', 'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name, 'cShow': true, 'bShow': true })
 						}
@@ -263,7 +263,7 @@ const localFunctions = {
 				let mHit = false
 				let aNextSibsSP = startPos.getSiblings('next', true)
 				aParNextSibs.forEach(function (aParSib) {
-					if (!aParSib.options.get('tag.anywhere.use')) {
+					if (!aParSib.options.get('tag.anywhere.use') && !aParSib.options.get('editor.noAddButton')) {
 						let addThis = true
 						if (mHit) {
 							addThis = false
@@ -295,6 +295,9 @@ const localFunctions = {
 			let mHit = false
 			this.parserObj.childs.forEach(function (acParser) {
 				let addThis = true
+				if (acParser.options.get('editor.noAddButton')) {
+					addThis = false
+				}
 				if (!acParser.options.get('tag.anywhere.use') && acParser.name !== '#text') {
 					if (mHit) {
 						addThis = false

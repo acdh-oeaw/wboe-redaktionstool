@@ -7,7 +7,7 @@
 
 	<span :class="{ 'val-obj': true, 'val-txt': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }"
 				v-else>
-		<span class="val-edit val-focus" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
+		<span :class="{ 'val-edit': true, 'val-focus': true, 'empty': !aValue }" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
 		<font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
 	</span>
 
@@ -97,7 +97,7 @@
 
 <style scoped>
 	.val-txt {
-		padding: 0px 3px;
+		padding: 0px 1px;
 		padding-bottom: 3px;
     border-radius: 2px;
 	}
@@ -106,8 +106,13 @@
 	}
 	.val-edit {
 		display: inline-block;
-		min-width:5px;
+		min-width:15px;
 		padding: 0px 2px;
 		cursor: text;
+	}
+	.val-edit.empty {
+		border-bottom: 2px solid #f83;
+    margin-bottom: -2px;
+    min-width: 25px;
 	}
 </style>

@@ -243,8 +243,8 @@ const localFunctions = {
 				aXML += '\n' + '	'.repeat(deep) + '<' + this.name
 				if (Object.keys(this.attributes).length > 0) {
 					Object.keys(this.attributes).forEach(function (aKey) {
+						aXML += ' ' + aKey
 						if (this.attributes[aKey]) {
-							aXML += ' ' + aKey
 							aXML += '="' + this.attributes[aKey] + '"'
 						}
 					}, this)
