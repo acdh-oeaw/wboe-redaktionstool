@@ -1,0 +1,522 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objParser>
+	<xmlParserHeader>
+		&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+		&lt;?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?&gt;
+		&lt;?xml-model href="../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?&gt;
+	</xmlParserHeader>
+	<objParserContent>
+		<TEI xmlns="http://www.tei-c.org/ns/1.0">
+			<?options {	"layout": { "frame": "justChilds" } } ?>
+			<?copy { "fromId": "teiHeader" } ?>
+			<text>
+				<?options {	"layout": { "frame": "justChilds" } } ?>
+				<body>
+					<?options {	"layout": { "frame": "justChilds" } } ?>
+					<entry>
+						<?options { "title": "Eintrag" } ?>
+						<form type="lemma">
+							<?copyOptions { "fromId": "inlineMultipleJoin" } ?>
+							<?options {
+													"id": "lemma-base",
+													"tag": ["multiple"],
+													"editor": { "addTitle": "Lemma" }
+												} ?>
+							<orth>
+				 				<?options {
+				 				 						"id": "orth",
+				 										"title": "Orth",
+				 										"value": ["edit", "required"],
+				 										"attributes": [{
+				 											"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]}
+				 										}],
+				 										"layout": {
+															"frame": "inline",
+															"hideTitle": true,
+															"bold": true
+														},
+														"editor": { "parentInContext": true }
+				 									} ?>
+				 			</orth>
+						</form>
+						<gramGrp>
+							<?options {
+													"id": "gramGrp",
+													"title": "Gram Gruppe",
+													"layout": {
+														"frame": "line"
+													}
+												} ?>
+							<gram type="pos">
+			 					<?options {
+			 											"title": "Gram Pos",
+			 											"value": ["edit", "required"],
+			 											"tag": ["possibleTag"],
+			 											"layout": { "frame": "inline" }
+			 										} ?>
+			 				</gram>
+							<gram type="gender">
+								<?copyOptions { "fromId": "inlineMultipleJoinParentheses" } ?>
+								<?options {
+														"id": "gram-gender",
+														"title": "Gender",
+														"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Masculinum", "Femininum", "Neutrum", "Diminutiv"]}}],
+														"tag": ["multiple"]
+													} ?>
+							</gram>
+						</gramGrp>
+
+						<form type="variant" subtype="diminutive">
+							<?options {
+													"title": "Form Variant Diminutive",
+													"attributes": [{
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}
+													}],
+													"tag": ["multiple", "possibleTag"],
+													"editor": {
+														"addTitle": "Form Variant Diminutive"
+													}
+												} ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true } } } ?>
+							<gramGrp>
+								<?copy {"fromId": "gram-gender"} ?>
+							</gramGrp>
+						</form>
+
+						<!-- Formatting Rule: (Subheading)  "Verbreitung": before the first instance of: /entry/usg[@type = "geo"] -->
+						<!-- Formatting Rule: insert semicolon ";" between each: /entry/usg[@type="geo"] -->
+						<!-- Note: editor can replace <placeName type="grossregion"> with <placeName type="region"> if needed -->
+
+						<usg type="geo">
+							<?copyOptions { "fromId": "inlineMultipleJoin" } ?>
+							<?options {
+													"title": "Geo",
+													"value": ["variable", "required", "innerXML"],
+													"tag": ["possibleTag", "multiple"],
+													"layout": {
+														"frame": "inline",
+														"multiple": {
+															"use": true,
+															"join": ";",
+															"header": "Verbreitung",
+															"spaceBefore": 10,
+															"spaceAfter": 25
+														}
+													}
+												} ?>
+						</usg>
+
+						<form>
+							<?options {
+													"id": "form-variant",
+													"tagAsTitle": false,
+													"attributes": [{
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
+														"type": {"type": "edit", "possibleValues": ["variant", "dialect"]},
+														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
+													}],
+													"tag": ["multiple", "possibleTag"],
+													"layout": {
+														"frame": "inline"
+													},
+													"layout": {
+														"multiple": {
+															"use": true,
+															"header": "Belegauswahl",
+															"spaceBefore": 10,
+															"spaceAfter": 25
+														}
+													},
+													"editor": {
+														"onlyLastElementHasAddButton": true,
+														"addTitle": "Form Variant"
+													}
+												} ?>
+							 <pron xml:lang="bar-AT">
+								 <?options {
+														"tagAsTitle": false,
+														"attributes": [{
+															"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
+														}],
+														"value": ["edit", "required"],
+														"layout": {
+															"frame": "inline",
+															"italic": true
+														},
+														"editor": {
+															"parentInContext": true
+														}
+													} ?>
+							 </pron>
+							 <usg type="geo">
+	 							<?copyOptions { "fromId": "inlineMultipleJoinParentheses" } ?>
+	 							<?options {
+	 													"title": "Geo",
+	 													"value": ["variable", "required", "innerXML"],
+	 													"tag": ["possibleTag", "multiple"]
+	 												} ?>
+	 						</usg>
+						</form>
+
+						<!-- Formatting Rule: (Subheading)  "Belegauswahl": before the first form[@type = "lautung"] -->
+
+						<!-- Formatting Rule: (Subheading)  "Datenbankbbeleg (exempl.)": before the first form[@type = "lautung"] -->
+						<!-- Formatting Rule: surround /entry/form/usg[@type="geo"] contents with brackets "(" ")" -->
+
+							 <!-- <form type="dialect"> -->
+									<!-- Formatting Rule: /form/pron in italics -->
+									<!-- <pron xml:lang="bar-AT"></pron> -->
+									<!-- <usg type="geo"> --><!-- user delete the type of <placeName> not needed -->
+										 <!-- <placeName></placeName>
+										 <placeName type="grossregion"></placeName>
+									</usg>
+							 </form> -->
+
+							 <!-- Formatting Rule: semicolon between <form type="dialect">'s -->
+						<!-- <form type="dialect">
+									<pron xml:lang="bar-AT"></pron>
+									<usg type="geo">
+										<placeName></placeName>
+										<placeName type="grossregion"></placeName>
+									</usg>
+						</form> -->
+
+						<!-- Formatting Rule: print "Etymologie" before <etym> -->
+						<etym>
+							<?options {
+													"title": "Etymologie",
+													"tagAsTitle": false,
+													"layout": {
+														"frame": "box",
+														"hideTitle": true,
+														"header": "Etymologie",
+														"spaceBefore": 10,
+														"spaceAfter": 25
+													}
+												} ?>
+								<!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
+								<!-- Formatting Rule:  enter comma after <def> where //cit/desc -->
+								<!-- Formatting Rule:  enter comma after <cit> where followed by /desc -->
+								<!--Formatting Rule:  add colon betweeen: (/date  or /edition>) and /citedRange within /bibl -->
+								<cit type="etymon">
+									<?options {
+															"title": "Cit Etymon",
+															"attributes": [{
+																"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
+															}],
+															"tag": ["multiple", "possibleTag"]
+														} ?>
+									<lang></lang>
+									<form>
+										<?options {
+																"title": "Form",
+																"attributes": [{
+																	"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
+																}],
+																"tag": ["possibleTag", "multiple"]
+															} ?>
+															<orth></orth>
+									</form>
+									<def></def>
+								</cit>
+						</etym>
+
+						<!-- Formatting Rule: Print "Bedeutung" (project should only have one or the other!) -->
+						<!-- Formatting Rule: where (2...n) <sense> for each print number in roman numerals with period -->
+						<!-- Formatting Rule: where (2...n) <def> 's in <sense> before each print number in arabic numerals with period -->
+						<!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
+						<!--Formatting Rule: letter spacing within def should be 1 pt -->
+						<!-- Formatting Rule: <cit type="example"><quote> in italics -->
+						<!-- Formatting Rule: surround <cit type="example"><usg type="geo"> contents with brackets "(" ")" -->
+						<!-- Formatting Rule: add a long dash before each //cit[@type="example"]  -->
+						<sense>
+							 <def></def>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+
+							 <cit type="example">
+									<quote xml:lang="bar-AT"></quote>
+									<usg type="geo"><placeName></placeName><placeName type="grossregion"></placeName></usg>
+							 </cit>
+
+							 <!-- INSERT SUB-SENSES HERE -->
+						</sense>
+
+							 <!-- Formatting Rule: before variant in Wortbildung surround form with brackets and print 'auch' before form -->
+							 <!-- Formatting Rule: insert "Wortbildung" before first <re> (same label for: compound, derivations, suffixes  -->
+							 <!-- Formatting Rule: <cit type="example"><quote> in italics -->
+							 <!-- Formatting Rule: surround <cit type="example"><usg type="geo"> contents with brackets "(" ")" -->
+							 <!-- Formatting Rule: add a long dash before each //cit[@type="example"]  -->
+							<!-- Formatting Rule: <re><orth> in italics -->
+							 <!-- Formatting Rule: surround contents of <def> with single quotes (both in <sense> and in <etym>) -->
+						<re>
+							 <form type="lemma" subtype="compound"><orth></orth></form>
+							 <sense>
+									<def></def>
+							 </sense>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <cit type="example">
+									<quote xml:lang="bar-AT"></quote>
+									<usg type="geo"><placeName></placeName><placeName type="grossregion"></placeName></usg>
+							 </cit>
+						</re>
+
+						<re>
+							 <form type="lemma" subtype="compound"><orth></orth></form>
+							 <sense>
+									<def></def>
+							 </sense>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <cit type="example">
+									<quote xml:lang="bar-AT"></quote>
+									<usg type="geo"><placeName></placeName><placeName type="grossregion"></placeName></usg>
+							 </cit>
+						</re>
+
+						<!-- Formatting Rule: before variant in Wortbildung surround form with brackets and print 'auch' before form -->
+						<!-- Formatting Rule: insert "Redenwendung" before first //form[@type='MWE'] -->
+
+						<re>
+							 <form type="lemma" subtype="MWE"><orth></orth></form>
+							 <sense>
+									<def></def>
+							 </sense>
+							 <usg type="geo"><placeName type="grossregion"></placeName></usg>
+							 <cit type="example">
+									<quote xml:lang="bar-AT"></quote>
+									<usg type="geo"><placeName></placeName><placeName type="grossregion"></placeName></usg>
+							 </cit>
+						</re>
+
+					</entry>
+				</body>
+			</text>
+		</TEI>
+	</objParserContent>
+
+
+
+
+
+
+
+
+
+
+
+	<!-- Element Vorlagen: -->
+	<objParserSystem>
+
+		<options>
+			<?optionsPreset {
+				"id": "nameSimple",
+				"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " }
+			} ?>
+			<?optionsPreset {
+				"id": "inlineMultipleJoin",
+				"tagAsTitle": false,
+				"layout": {
+					"frame": "inline",
+					"multiple": {
+						"use": true,
+						"join": ", "
+					}
+				},
+				"editor": {
+					"onlyLastElementHasAddButton": true
+				}
+			} ?>
+			<?optionsPreset {
+				"id": "inlineMultipleJoinParentheses",
+				"tag": ["multiple"],
+				"layout": {
+					"frame": "inline",
+					"multiple": {
+						"use": true,
+						"join": ", ",
+						"before": "(",
+						"after": ")"
+					}
+				},
+				"editor": {
+					"onlyLastElementHasAddButton": true
+				}
+			} ?>
+		</options>
+
+		<tags>
+
+
+
+
+
+
+			<!-- Kopfzeile -->
+			<teiHeader>
+				<?options {
+										"id": "teiHeader",
+										"title": "Kopfzeile"
+									} ?>
+				<fileDesc>
+					<?options {	"layout": { "frame": "justChilds" } } ?>
+					<titleStmt>
+						<?options {	"layout": { "frame": "justChilds" } } ?>
+						<title>
+							<?options {
+													"id": "title",
+													"title": "Titel",
+													"value": ["edit", {"required": {"use": true}}],
+													"layout": { "frame": "line" }
+												} ?>
+						</title>
+						<respStmt>
+							<?options {	"layout": { "frame": "justChilds" } } ?>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Editor",
+											"use": true,
+											"possibleValues": ["Editor", "article editor"]
+										}
+									},
+									"layout": ["hidden"]
+								} ?>
+							</resp>
+							<name>
+								<?options {
+														"title": "Editor",
+														"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
+														"value": ["edit", "required", {"is": {
+															"possibleValues": [
+																{"value": "Alexandra N. Lenz", "attribute": {"xml:id": "AL"}},
+																{"value": "Philip Stöckle", "attribute": {"xml:id": "PhS"}},
+																{"value": "Andreas Gellan", "attribute": {"xml:id": "AG"}},
+																{"value": "Patrick Zeithuber", "attribute": {"xml:id": "PZ"}},
+																{"value": "Sabine Wahl", "attribute": {"xml:id": "SW"}},
+																{"value": "Sonja Schwaiger", "attribute": {"xml:id": "SS"}},
+																{"value": "Jan Braun", "attribute": {"xml:id": "JD"}},
+																{"value": "Angela Bergmayer", "attribute": {"xml:id": "AB"}}
+															]
+														}}],
+														"layout": { "frame": "line" }
+													} ?>
+							</name>
+						</respStmt>
+						<respStmt>
+							<?options { "title": "Encoding Scheme", "layout": { "frame": "line" } } ?>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Encoding Scheme",
+											"use": true,
+											"possibleValues": ["Encoding Scheme", "encoding"]
+										}
+									},
+									"layout": ["hidden"]
+								} ?>
+							</resp>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Jack Bowers</name>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Daniel Schopper</name>
+							<name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Omar Siam</name>
+						</respStmt>
+						<respStmt>
+							<?options { "title": "DBOE Team", "layout": { "frame": "line" } } ?>
+							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
+							<name xml:id="AL"><?copyOptions { "fromId": "nameSimple" } ?>Alexandra N. Lenz</name>
+							<name xml:id="PhS"><?copyOptions { "fromId": "nameSimple" } ?>Philip Stöckle</name>
+							<name xml:id="AG"><?copyOptions { "fromId": "nameSimple" } ?>Andreas Gellan</name>
+							<name xml:id="PZ"><?copyOptions { "fromId": "nameSimple" } ?>Patrick Zeithuber</name>
+							<name xml:id="SW"><?copyOptions { "fromId": "nameSimple" } ?>Sabine Wahl</name>
+							<name xml:id="SS"><?copyOptions { "fromId": "nameSimple" } ?>Sonja Schwaiger</name>
+							<name xml:id="JD"><?copyOptions { "fromId": "nameSimple" } ?>Jan Braun</name>
+							<name xml:id="AB"><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Angela Bergmayer</name>
+						</respStmt>
+						<respStmt>
+							<?options { "title": "Student assistants", "layout": { "frame": "line" } } ?>
+							<resp>
+								<?options {
+									"value": {
+										"is": {
+											"value": "Student assistants",
+											"use": true,
+											"possibleValues": ["Student assistants", "student assistants"]
+										}
+									},
+									"layout": ["hidden"]
+								} ?>
+							</resp>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Eva Wahlmüller</name>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Susanna Muhr</name>
+							<name><?copyOptions { "fromId": "nameSimple" } ?>Alexandra Grohe</name>
+							<name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Klemens Wagner</name>
+						</respStmt>
+					</titleStmt>
+					<publicationStmt>
+						<?options { "title": "Publication Information", "layout": { "frame": "panelClosed" } } ?>
+						<p>
+							<?options {
+								"value": ["edit", "canBeEmpty"],
+								"tagAsTitle": false,
+								"layout": { "frame": "box" }
+							} ?>
+						</p>
+					</publicationStmt>
+					<sourceDesc>
+						<?options { "title": "Information about the source", "layout": { "frame": "panelClosed" } } ?>
+						<p>
+							<?options {
+								"value": ["edit", "canBeEmpty"],
+								"tagAsTitle": false,
+								"layout": { "frame": "box" }
+							} ?>
+						</p>
+					</sourceDesc>
+					<revisionDesc>
+						<?options {
+												"title": "Informationen über Änderungen!",
+												"attributes": [{
+													"status": { "type": "edit", "canBeEmpty": {"use": true} }
+												}],
+												"tag": ["possibleTag", "shouldTag"],
+												"layout": { "bold": true, "frame": "panelClosed" }
+											} ?>
+						<change>
+							<?options {
+													"title": "Änderung",
+													"value": ["edit", "required", {"autoCreateValue": "Datensatz erstellt"}],
+													"attributes": [{
+														"when": { "type": "edit", "value": { "fx": "now" } },
+														"who": { "type": "edit", "value": "", "possibleValues": [
+																																											{"title": "Alexandra N. Lenz", "value": "AL"},
+																																											{"title": "Philip Stöckle", "value": "PhS"},
+																																											{"title": "Andreas Gellan", "value": "AG"},
+																																											{"title": "Patrick Zeithuber", "value": "PZ"},
+																																											{"title": "Sabine Wahl", "value": "SW"},
+																																											{"title": "Sonja Schwaiger", "value": "SS"},
+																																											{"title": "Jan Braun", "value": "JD"},
+																																											{"title": "Angela Bergmayer", "value": "AB"}
+																																										]}
+													}],
+													"tag": ["multiple", "possibleTag", "shouldTag"],
+													"layout": { "bold": true, "frame": "line" },
+													"editor": {
+														"onlyLastElementHasAddButton": true
+													}
+												} ?>
+						</change>
+					</revisionDesc>
+				</fileDesc>
+			</teiHeader>
+
+		</tags>
+
+	</objParserSystem>
+</objParser>

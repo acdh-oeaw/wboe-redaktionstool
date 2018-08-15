@@ -22,13 +22,17 @@
 							<?copyOptions { "fromId": "inlineMultipleJoin" } ?>
 							<?options {
 													"id": "lemma-base",
+													"title": "Lemma",
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 													}],
 													"tag": ["multiple"],
+													"layout": {
+														"hideTitle": true
+													},
 													"editor": { "addTitle": "Lemma" }
 												} ?>
-							<?copy { "fromId": "orth", "options": { "title": "", "tagAsTitle": false, "layout": { "frame": "inline", "bold": true }, "editor": { "addTitle": "Orth", "parentInContext": true } } } ?>
+							<?copy { "fromId": "orth", "options": { "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
             </form>
 						<form type="variant">
 							<?options {
@@ -53,7 +57,7 @@
 														"layout": { "italic": true }
 													} ?>
 							</pron>
-							<?copy { "fromId": "orth", "options": { "title": "", "tagAsTitle": false, "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "addTitle": "Orth", "parentInContext": true } } } ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
             </form>
 						<?copy { "fromId": "gramGrp" } ?>
 						<form type="variant" subtype="diminutive">
@@ -73,7 +77,7 @@
 							</gramGrp>
 						</form>
 						<?copy { "fromId": "usg-geo", "options": {
-																											"tag": ["possibleTag", "multiple"],
+																											"tag": ["multiple"],
 																											"layout": {
 																												"multiple": {
 																													"header": "Verbreitung",
@@ -82,20 +86,6 @@
 																												}
 																											}
 																										} } ?>
-						<form type="lautung">
-							<?options {
-													"title": "Form Lautung",
-													"attributes": [{
-														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
-													}],
-													"tag": ["multiple", "possibleTag", "anywhere"],
-													"editor": {
-														"addTitle": "Form Lautung"
-													}
-												} ?>
-							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
-							<?copy { "fromId": "form-variant", "options": { "editor": { "addTitle": "Form Variant" } } } ?>
-						</form>
 
 						<?copy { "fromId": "form-variant", "options": {
 																														"layout": {
@@ -110,6 +100,26 @@
 																															"addTitle": "Belegauswahl"
 																														}
 																													} } ?>
+						<form type="lautung">
+							<?options {
+													"title": "Datenbankbbeleg (exempl.)",
+													"attributes": [{
+														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+													}],
+													"tag": ["possibleTag"],
+													"layout": {
+														"frame": "line",
+														"hideTitle": true,
+														"multiple": {
+															"use": true,
+															"header": "Datenbankbbeleg (exempl.)",
+															"spaceBefore": 10,
+															"spaceAfter": 25
+														}
+													}
+												} ?>
+							<?copy { "fromId": "form-variant", "options": { "editor": { "addTitle": "Form Variant" } } } ?>
+						</form>
 
 						<etym>
 							<?options {
@@ -127,6 +137,33 @@
 													}
 												} ?>
 							<?copy { "fromId": "date" } ?>
+							<cit type="etymon">
+								<?options {
+														"title": "Cit Etymon",
+														"attributes": [{
+															"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
+														}],
+														"tag": ["multiple", "possibleTag", "anywhere"]
+													} ?>
+								<?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
+								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "lang" } ?>
+								<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
+              	<form>
+									<?options {
+															"title": "Form",
+															"attributes": [{
+																"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
+															}],
+															"tag": ["possibleTag", "multiple"]
+														} ?>
+									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
+									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
+              	</form>
+								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
+              </cit>
 							<desc>
 								<?options {
 														"title": "Desc",
@@ -145,33 +182,6 @@
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "lang" } ?>
 							</desc>
-              <cit type="etymon">
-								<?options {
-														"title": "Cit Etymon",
-														"attributes": [{
-															"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
-														}],
-														"tag": ["multiple", "possibleTag"]
-													} ?>
-								<?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-								<?copy { "fromId": "lang" } ?>
-								<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
-              	<form>
-									<?options {
-															"title": "Form",
-															"attributes": [{
-																"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
-															}],
-															"tag": ["possibleTag", "multiple"]
-														} ?>
-									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
-									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-              	</form>
-								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
-								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-								<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
-              </cit>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "xr" } ?>
@@ -278,14 +288,6 @@
 									} ?>
 			</lang>
 
-			<pos>		<!-- ToDo!? -->
-				<?options {
-				 						"id": "pos",
-										"title": "Pos",
-										"value": ["variable", "required", "innerXML"]
-									} ?>
-			</pos>
-
 			<bibl>		<!-- ToDo!? Zusätzlich zu "ref-bibl" ? -->
 				<?options {
 				 						"id": "bibl",
@@ -319,7 +321,7 @@
 										"id": "date",
 										"title": "Desc",
 										"value": ["edit", "required"],
-										"tag": ["possibleTag", "multiple", "anywhere"]
+										"tag": ["possibleTag"]
 									} ?>
 			</date>
 
@@ -341,7 +343,10 @@
 											"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]},
 											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
 										}],
-										"layout": { "frame": "line" }
+										"layout": {
+											"frame": "line",
+											"hideTitle": true
+										}
 									} ?>
 			</orth>
 
@@ -558,7 +563,6 @@
 											"layout": { "frame": "inline" }
 										} ?>
 				</iType>
-				<?copy {"fromId": "pos", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 				<?copy {"fromId": "gram-gender", "options": {
 				 																							"tag": ["possibleTag"],
 																											"layout": {
