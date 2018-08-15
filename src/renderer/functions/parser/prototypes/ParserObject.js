@@ -131,7 +131,7 @@ const localFunctions = {
 			try {
 				aCopyOptions = JSON.parse(this.orgDOM.nodeValue)
 			} catch (err) {
-				console.log(err)
+				console.log(this.orgDOM.nodeValue, err)
 				let errArr = [err.toString()]
 				let errRange = errArr[0].match(/position (\d+)/mi)
 				if (errRange.length > 1) {

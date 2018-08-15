@@ -28,7 +28,11 @@
 													}],
 													"tag": ["multiple"],
 													"layout": {
-														"hideTitle": true
+														"hideTitle": true,
+														"multiple": {
+															"header": "Lemma-Informationen",
+															"spaceAfter": 5
+														}
 													},
 													"editor": { "addTitle": "Lemma" }
 												} ?>
@@ -82,7 +86,7 @@
 																												"multiple": {
 																													"header": "Verbreitung",
 																													"spaceBefore": 10,
-																													"spaceAfter": 25
+																													"spaceAfter": 5
 																												}
 																											}
 																										} } ?>
@@ -93,7 +97,7 @@
 																																"use": true,
 																																"header": "Belegauswahl",
 																																"spaceBefore": 10,
-																																"spaceAfter": 25
+																																"spaceAfter": 5
 																															}
 																														},
 																														"editor": {
@@ -114,7 +118,7 @@
 															"use": true,
 															"header": "Datenbankbbeleg (exempl.)",
 															"spaceBefore": 10,
-															"spaceAfter": 25
+															"spaceAfter": 5
 														}
 													}
 												} ?>
@@ -130,7 +134,7 @@
 														"hideTitle": true,
 														"header": "Etymologie",
 														"spaceBefore": 10,
-														"spaceAfter": 25
+														"spaceAfter": 5
 													},
 													"editor": {
 														"addTitle": "Etym hinzufügen"
@@ -188,14 +192,14 @@
 						</etym>
 						<?copy { "fromId": "sense", "options": {
 																										"tagAsTitle": false,
-																										"title": null,
+																										"hideTitle": true,
 																										"layout": {
 																											"frame": "box",
 																											"multiple": {
 																												"use": true,
 																												"header": "Bedeutung",
 																												"spaceBefore": 10,
-																												"spaceAfter": 25,
+																												"spaceAfter": 5,
 																												"enumerateRom": true
 																											}
 																										},
@@ -206,8 +210,21 @@
 																									} } ?>
 						<re>
 							<?options {
-													"title": "Re",
-													"tag": ["multiple", "possibleTag"]
+													"title": "Wortbildung / Redewendung",
+													"tag": ["multiple", "possibleTag"],
+													"layout": {
+														"frame": "box",
+														"hideTitle": true,
+														"multiple": {
+															"use": true,
+															"header": "Wortbildung",
+															"spaceBefore": 10,
+															"spaceAfter": 5
+														}
+													},
+													"editor": {
+														"onlyLastElementHasAddButton": true
+													}
 												} ?>
 							<form>
 								<?options {
@@ -216,9 +233,20 @@
 															"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variable"]},
 															"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["compound", "MWE"]}
 														}],
+														"layout": {
+															"frame": "inline",
+															"hideTitle": true
+														},
 														"tag": ["multiple"]
 													} ?>
-								<?copy { "fromId": "orth" } ?>
+								<?copy { "fromId": "orth", "options": {
+																												"layout": {
+																													"italic": true
+																												},
+																												"editor": {
+																													"parentInContext": true
+																												}
+																											} } ?>
 								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"] } } ?>
 							</form>
 							<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"] } } ?>
@@ -393,6 +421,10 @@
 											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
 											"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 										}],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true
+										},
 										"tag": ["multiple", "possibleTag"]
 									} ?>
 				 <quote>
@@ -401,13 +433,18 @@
 											"attributes": [{
 												"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
 											}],
-											"value": ["edit", "required"]
+											"value": ["edit", "required"],
+											"layout": {
+												"frame": "inline",
+												"hideTitle": true,
+												"before": "– "
+											}
 										} ?>
 				 </quote>
 				 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
-				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
 			</cit>
 
 			<sense>
@@ -550,7 +587,8 @@
 										"id": "gramGrp",
 										"title": "Gram Gruppe",
 										"layout": {
-															"frame": "line"
+															"frame": "line",
+															"hideTitle": true
 										}
 									} ?>
 				<gram type="pos">
@@ -558,7 +596,10 @@
 											"title": "Gram Pos",
 											"value": ["edit", "required"],
 											"tag": ["possibleTag"],
-											"layout": { "frame": "inline" }
+											"layout": {
+																"frame": "inline",
+																"hideTitle": true
+											}
 										} ?>
 				</gram>
 				<iType>
