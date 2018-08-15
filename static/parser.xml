@@ -763,7 +763,16 @@
 																																										]}
 													}],
 													"tag": ["multiple", "possibleTag", "shouldTag"],
-													"layout": { "bold": true, "frame": "line" },
+													"layout": {
+														"bold": true,
+														"frame": "line",
+														"showTagBefore" : {
+															"who": { "title": "Von" }
+														},
+														"showTagAfter" : {
+															"who": { "hideTitle": true }
+														}
+													},
 													"editor": {
 														"onlyLastElementHasAddButton": true
 													}

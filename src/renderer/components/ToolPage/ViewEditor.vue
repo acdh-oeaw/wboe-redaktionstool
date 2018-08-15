@@ -12,13 +12,18 @@
 	</div>
 
 	<EditorObjFrame :content="content" v-else-if="content">
+		<InlineAttributes :content="content" pos="showTagBefore" v-if="content.parserObj.options && content.parserObj.options.get('layout.showTagBefore')"/>
+
 		<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
 			{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
 		</span>
 		<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
+
 		<template slot="childs" v-if="content.childs.length > 0">
 			<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 		</template>
+
+		<InlineAttributes :content="content" pos="showTagAfter" v-if="content.parserObj.options && content.parserObj.options.get('layout.showTagAfter')"/>
 	</EditorObjFrame>
 
 	<div class="error" v-else>
@@ -32,6 +37,7 @@
 	import ErrorCard from './general/ErrorCard'
 	import EditorObjFrame from './ViewEditor/EditorObjFrame'
 	import EditableValue from './ViewEditor/EditableValue'
+	import InlineAttributes from './ViewEditor/InlineAttributes'
 	import _ from 'lodash'
 
 	export default {
@@ -117,7 +123,8 @@
 			ErrorContent,
 			ErrorCard,
 			EditorObjFrame,
-			EditableValue
+			EditableValue,
+			InlineAttributes,
 		},
 	}
 </script>
