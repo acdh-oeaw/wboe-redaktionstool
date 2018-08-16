@@ -482,9 +482,12 @@
 											"value": ["edit", "required"],
 											"layout": {
 												"frame": "inline",
+												"italic": true,
 												"hideTitle": true,
-
 												"before": "– "
+											},
+											"editor": {
+												"parentInContext": true
 											}
 										} ?>
 				 </quote>
@@ -619,11 +622,10 @@
 											"hideTitle": true
 										}
 									} ?>
-				<?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true } } } ?>
+				<?copy { "fromId": "text", "options": { "tag": {"possibleTag": false, "anywhere": false}, "layout": { "frame": "inline", "hideTitle": true } } } ?>
 				<oRef>
 					<?options {
 						"id": "oRef",
-						"value": ["edit", "required"],
 						"attributes": [{
 							"target": {"type": "edit", "canBeEmpty": {"use": true}}
 						}],

@@ -144,10 +144,10 @@
 			enumerate () {
 				if (this.content.parserObj.options && this.content.isMultiple) {
 					if (this.content.parserObj.options.get('layout.multiple.enumerateRom')) {
-						return this.num2rom(this.content.multipleNr + 1) + '.'
+						return this.num2rom(this.content.multipleNr + 1) + '. '
 					}
 					if (this.content.parserObj.options.get('layout.multiple.enumerate')) {
-						return this.content.multipleNr + 1 + ')'
+						return this.content.multipleNr + 1 + '. '
 					}
 				}
 			}
