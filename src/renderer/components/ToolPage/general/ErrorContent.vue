@@ -8,6 +8,7 @@
 	<span  @click="goto(aError.obj, true)" :class="{'clickable': aError.obj}" v-else>
 		<b v-if="aError.obj && !noObj">{{ aError.obj.uId }} - </b>
 		<ErrorContent :error="aError.txt" v-if="aError.txt" @goto="goto"/>
+		<div v-if="aError.sErr">{{ aError.sErr }}</div>
 		<div v-if="Array.isArray(aError.err)" class="subArray"><ErrorContent :error="aError.err" @goto="goto"/></div>
 		<ErrorContent :error="aError.err" v-else-if="aError.err" @goto="goto"/>
 	</span>

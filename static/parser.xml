@@ -40,6 +40,7 @@
 						</form>
 						<form type="variant">
 							<?options {
+													"title": "Variante (Aussprache/Orth)",
 													"tagAsTitle": false,
 													"attributes": [{
 														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
@@ -47,10 +48,8 @@
 													"tag": ["possibleTag"],
 													"layout": {
 														"frame": "inline",
+														"hideTitle": true,
 														"before": ", "
-													},
-													"editor": {
-														"addTitle": "Form Variant 1"
 													}
 												} ?>
 							<pron>
@@ -58,7 +57,8 @@
 														"title": "Aussprache",
 														"value": ["edit", "required"],
 														"tag": ["possibleTag"],
-														"layout": { "italic": true }
+														"layout": { "frame": "inline", "hideTitle": true, "italic": true },
+														"editor": { "parentInContext": true }
 													} ?>
 							</pron>
 							<?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>

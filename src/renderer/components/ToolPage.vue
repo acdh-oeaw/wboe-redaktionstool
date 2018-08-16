@@ -214,6 +214,7 @@
 					|| (this.dataStatus === 'error' && confirm('Daten enthalten Fehler! Wiklich speichern?'))
 					|| (this.dataStatus === 'warning' && confirm('Daten enthalten Warnungen! Wiklich speichern?'))) {
 						this.$store.dispatch('SAVE_FILE', this.editorObject.getXML())
+						this.loadData()
 					}
 				}
 			},
