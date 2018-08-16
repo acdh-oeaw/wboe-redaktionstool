@@ -57,20 +57,38 @@
 				<b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
 				<slot/>		<!-- Inhalt -->
 			</div>
-			<div  @contextmenu.prevent="contextMenue" :class="{'inline': layoutBase !== 'box'}" v-if="content.addableInner.length > 0">
-				<b-button @click="addIn(content.addableInner[0].uId)" size="xs" variant="success" class="mir5" :title="content.addableInner[0].title" v-b-tooltip.hover v-if="content.addableInner[0].bShow"><font-awesome-icon icon="circle-notch" class="fa-icon"/><span class="focusVisInline"> {{ content.addableInner[0].title }}</span></b-button>
-				<b-button @click="isOpenAdditionalAddInBtn = !isOpenAdditionalAddInBtn" size="xs" variant="secondary" class="mir5" title="Weitere mögliche Tags anzeigen." v-if="content.addableInner.length > 1"><font-awesome-icon :icon="((!isOpenAdditionalAddInBtn) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
-				<b-button @click="addIn(aVal.uId)" size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aKey !== 0 && isOpenAdditionalAddInBtn">
-					<font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
-				</b-button>
+			<div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
+					 @mouseenter="showAddableInButtons" @mouseleave="hideAddableInButtons"
+			 			v-if="addableInButtons.length > 0">
+				<b-button @click="addIn(addableInButtons[0].uId)" size="xs"
+									@focus="showAddableInButtons"
+									@blur="hideAddableInButtons"
+									ref="addableInButton"
+									:variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"><font-awesome-icon icon="circle-notch" class="fa-icon"/></b-button>
+				<div class="addable-in-btns" v-if="isOpenAdditionalAddInBtnC">
+					<b-button @click="addIn(aVal.uId)" @blur="hideAddableInButtons" size="xs"
+										:variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableInButtons.length - 1}"
+										:key="aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
+						<font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
+					</b-button>
+				</div>
 			</div>
 			<slot name="childs"/>		<!-- Kinder -->
-			<div @contextmenu.prevent="contextMenue" :class="{'inline': layoutBase !== 'box'}" v-if="content.addableAfter.length > 0">
-				<b-button @click="addAfter(content.addableAfter[0].uId)" size="xs" variant="success" class="mir5" :title="content.addableAfter[0].title" v-b-tooltip.hover v-if="content.addableAfter[0].type === 'self' && content.addableAfter[0].bShow"><font-awesome-icon icon="plus" class="fa-icon"/><span class="focusVisInline"> {{ content.addableAfter[0].title }}</span></b-button>
-				<b-button @click="isOpenAdditionalAddBtn = !isOpenAdditionalAddBtn" size="xs" variant="secondary" class="mir5" title="Weitere mögliche Tags anzeigen." v-if="(content.addableAfter[0].type === 'self' && content.addableAfter.length > 1) || (content.addableAfter[0].type !== 'self' && content.addableAfter.length > 0)"><font-awesome-icon :icon="((!isOpenAdditionalAddBtn) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
-				<b-button @click="addAfter(aVal.uId)" size="xs" :variant="((aVal.type === 'anywhere') ? 'secondary' : 'primary')" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.type !== 'self' && isOpenAdditionalAddBtn">
-					<font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
-				</b-button>
+			<div @contextmenu.prevent="contextMenue" :class="{'addable-after-btn': true, 'inline': layoutBase !== 'box'}"
+					 @mouseenter="showAddableAfterButtons" @mouseleave="hideAddableAfterButtons"
+			 			v-if="addableAfterButtons.length > 0">
+				<b-button @click="addAfter(addableAfterButtons[0].uId)" size="xs"
+									@focus="showAddableAfterButtons"
+									@blur="hideAddableAfterButtons"
+									ref="addableAfterButton"
+									:variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"><font-awesome-icon icon="plus" class="fa-icon"/></b-button>
+				<div class="addable-after-btns" v-if="isOpenAdditionalAddBtnC">
+					<b-button @click="addAfter(aVal.uId)" @blur="hideAddableAfterButtons" size="xs"
+										:variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableAfterButtons.length - 1}"
+										:key="aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
+						<font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
+					</b-button>
+				</div>
 			</div>
 		</div>
 
@@ -111,6 +129,8 @@
 				'contextMenuCached': false,
 				'isOpenAdditionalAddBtn': false,
 				'isOpenAdditionalAddInBtn': false,
+				'isOpenAdditionalAddBtnC': false,
+				'isOpenAdditionalAddInBtnC': false,
 			}
 		},
 		computed: {
@@ -141,6 +161,28 @@
 				}
 				return null
 			},
+			addableAfterButtons () {
+				let outAddable = []
+				if (this.content.addableAfter) {
+					this.content.addableAfter.forEach(function (aA) {
+						if (aA.bShow) {
+							outAddable.push(aA)
+						}
+					}, this)
+				}
+				return outAddable
+			},
+			addableInButtons () {
+				let outAddable = []
+				if (this.content.addableInner) {
+					this.content.addableInner.forEach(function (aA) {
+						if (aA.bShow) {
+							outAddable.push(aA)
+						}
+					}, this)
+				}
+				return outAddable
+			},
 			enumerate () {
 				if (this.content.parserObj.options && this.content.isMultiple) {
 					if (this.content.parserObj.options.get('layout.multiple.enumerateRom')) {
@@ -152,7 +194,55 @@
 				}
 			}
 		},
+		watch: {
+			'isOpenAdditionalAddBtnC' (nVal) {
+				if (nVal) {
+					this.$nextTick(() => {
+						let refAB = this.$refs.addableAfterButtons[this.$refs.addableAfterButtons.length - 1]
+						if (refAB) {
+							refAB.focus()
+						}
+					})
+				}
+			},
+			'isOpenAdditionalAddInBtnC' (nVal) {
+				if (nVal) {
+					this.$nextTick(() => {
+						let refAB = this.$refs.addableInButtons[this.$refs.addableInButtons.length - 1]
+						if (refAB) {
+							refAB.focus()
+						}
+					})
+				}
+			},
+		},
 		methods: {
+			showAddableAfterButtons () {
+				this.isOpenAdditionalAddBtnC = true
+			},
+			hideAddableAfterButtons (e) {
+				this.$nextTick(() => {
+					if (e.type === 'blur') {
+						if (this.$refs.addableAfterButton === document.activeElement || this.$refs.addableAfterButtons.indexOf(document.activeElement) > -1) {
+							return false
+						}
+					}
+					this.isOpenAdditionalAddBtnC = false
+				})
+			},
+			showAddableInButtons () {
+				this.isOpenAdditionalAddInBtnC = true
+			},
+			hideAddableInButtons (e) {
+				this.$nextTick(() => {
+					if (e.type === 'blur') {
+						if (this.$refs.addableInButton === document.activeElement || this.$refs.addableInButtons.indexOf(document.activeElement) > -1) {
+							return false
+						}
+					}
+					this.isOpenAdditionalAddInBtnC = false
+				})
+			},
 			contextMenue: function (e) {
 				this.contextMenuCached = true
 				this.$nextTick(() => {
@@ -221,5 +311,26 @@
 	}
 	.enumerate {
 		font-weight: bold;
+	}
+	.addable-after-btn, .addable-in-btn {
+		position: relative;
+	}
+	.addable-after-btns, .addable-in-btns {
+		position: absolute;
+		bottom: 100%;
+		left: 0;
+		border: 1px solid #bbb;
+		background: #eee;
+		border-radius: 5px;
+		padding: 3px 6px;
+	}
+	.addable-after-btns > button, .addable-in-btns > button {
+		display: block;
+		width: 100%;
+		margin: 3px 0;
+		text-align: left;
+	}
+	.addable-after-btns > button.first, .addable-in-btns > button.first {
+		font-weight: bolder;
 	}
 </style>
