@@ -55,7 +55,7 @@
 												} ?>
 							<pron>
 								<?options {
-														"title": "Pron",
+														"title": "Aussprache",
 														"value": ["edit", "required"],
 														"tag": ["possibleTag"],
 														"layout": { "italic": true }
@@ -66,7 +66,7 @@
 						<?copy { "fromId": "gramGrp", "options": { "layout": { "frame": "line" } } } ?>
 						<form type="variant" subtype="diminutive">
 							<?options {
-													"title": "Form Variant Diminutive",
+													"title": "Diminutiv",
 													"attributes": [{
 														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}
 													}],
@@ -79,15 +79,12 @@
 															"spaceAfter": 1,
 															"join": ","
 														}
-													},
-													"editor": {
-														"addTitle": "Form Variant Diminutive"
 													}
 												} ?>
 							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true } } } ?>
 							<gramGrp>
 								<?options {
-														"title": "Gram Group",
+														"title": "grammatische Information",
 														"layout": {
 															"frame": "inline",
 															"hideTitle": true,
@@ -110,6 +107,7 @@
 																										} } ?>
 
 						<?copy { "fromId": "form-variant", "options": {
+																														"tag": ["multiple", "possibleTag"],
 																														"layout": {
 																															"multiple": {
 																																"use": true,
@@ -137,7 +135,7 @@
 														"spaceAfter": 5
 													}
 												} ?>
-							<?copy { "fromId": "form-variant", "options": { "editor": { "addTitle": "Form Variant" } } } ?>
+							<?copy { "fromId": "form-variant", "options": { "tag": ["multiple", "possibleTag"], "editor": { "addTitle": "Form Variant" } } } ?>
 						</form>
 
 						<etym>
@@ -214,7 +212,6 @@
 							<?copy { "fromId": "xr" } ?>
 						</etym>
 						<?copy { "fromId": "sense", "options": {
-																										"tagAsTitle": false,
 																										"hideTitle": true,
 																										"layout": {
 																											"frame": "line",
@@ -324,10 +321,14 @@
 			<xr>		<!-- ToDo!? -->
 				<?options {
 										"id": "xr",
-										"title": "XR",
+										"title": "Querverweis auf Artikel",
 										"value": ["variable", "required", "innerXML"],
 										"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}}}],
-										"tag": ["possibleTag"]
+										"tag": ["possibleTag"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true
+										}
 									} ?>
 			</xr>
 
@@ -388,7 +389,7 @@
 			<def>
 				<?options {
 										"id": "def",
-										"title": "Def",
+										"title": "Definition",
 										"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
 										"value": ["edit", "required"],
 										"layout": {
@@ -419,7 +420,7 @@
 			<gram type="gender">
 				<?options {
 										"id": "gram-gender",
-										"title": "Gram Gender",
+										"title": "Genus",
 										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Masculinum", "Femininum", "Neutrum", "Diminutiv"]}}],
 										"tag": ["multiple"],
 										"layout": { "frame": "line" },
@@ -445,7 +446,7 @@
 			<usg>
 				<?options {
 										"id": "usg-drg",
-										"title": "Usg (dom, reg, gram / cert)",
+										"title": "Gebrauch (dom, reg, gram / cert)",
 										"attributes": [{
 											"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg", "gram"]},
 											"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
@@ -461,7 +462,7 @@
 			<cit type="example">
 				<?options {
 										"id": "cit-example",
-										"title": "Cit Example",
+										"title": "Beispiel-Beleg",
 										"attributes": [{
 											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
 											"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
@@ -496,7 +497,7 @@
 			<sense>
 				<?options {
 										"id": "sense",
-										"title": "Sense",
+										"title": "Bedeutung",
 										"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
 										"tag": ["multiple"],
 										"layout": {
@@ -512,7 +513,7 @@
 				<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "sense", "options": {
 																								"tagAsTitle": false,
-																								"title": "",
+																								"title": "Bedeutung (sub)",
 																								"tag": ["possibleTag"],
 																								"layout": {
 																									"frame": "inline",
@@ -531,19 +532,18 @@
 			<form>
 				<?options {
 										"id": "form-variant",
-										"tagAsTitle": false,
+										"title": "Variante",
 										"attributes": [{
 											"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
 											"type": {"type": "edit", "possibleValues": ["variant", "dialect"]},
 											"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
 										}],
-										"tag": ["multiple", "possibleTag"],
 										"layout": {
-											"frame": "inline"
+											"frame": "inline",
+											"hideTitle": true
 										},
 										"editor": {
-											"onlyLastElementHasAddButton": true,
-											"addTitle": "Form Variant"
+											"onlyLastElementHasAddButton": true
 										}
 									} ?>
 				 <pron xml:lang="bar-AT">
@@ -579,7 +579,7 @@
 			<ref type="bibl">
 				<?options {
 										"id": "ref-bibl",
-										"title": "Ref Bibl",
+										"title": "Verweis auf Literatur",
 										"attributes": [{
 											"target": {"type": "edit", "canBeEmpty": {"use": true}}
 										}],
@@ -612,7 +612,7 @@
 			<ref type="form">
 				<?options {
 										"id": "ref-form",
-										"title": "Ref Form",
+										"title": "Verweis (form)",
 										"tag": ["possibleTag"],
 										"layout": {
 											"frame": "inline",
@@ -643,7 +643,7 @@
 			<ref type="sense">
 				<?options {
 										"id": "ref-sense",
-										"title": "Ref Sense",
+										"title": "Verweis (Bedeutung)",
 										"attributes": [{
 											"target": {"type": "edit", "canBeEmpty": {"use": true}}
 										}],
@@ -654,7 +654,7 @@
 			<gramGrp>
 				<?options {
 										"id": "gramGrp",
-										"title": "Gram Gruppe",
+										"title": "grammatische Information",
 										"layout": {
 															"frame": "line",
 															"hideTitle": true
@@ -663,7 +663,7 @@
 				<gram type="pos">
 					<?options {
 											"title": "Gram Pos",
-											"value": ["edit", "required"],
+											"value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb"]}}],
 											"tag": ["possibleTag"],
 											"layout": {
 																"frame": "inline",
@@ -673,7 +673,7 @@
 				</gram>
 				<iType>
 					<?options {
-											"title": "iType",
+											"title": "Verbflektion",
 											"value": ["edit", "required", {"is": {"possibleValues": ["stark", "schwach", "gemischt"]}}],
 											"tag": ["possibleTag"],
 											"layout": { "frame": "inline" }
@@ -698,17 +698,18 @@
 			<usg type="geo">
 				<?options {
 										"id": "usg-geo",
+										"title": "Lokation",
 										"tagAsTitle": false,
 										"layout": {
 											"frame": "inline",
+											"hideTitle": true,
 											"multiple": {
 												"use": true,
 												"join": ";"
 											}
 										},
 										"editor": {
-											"onlyLastElementHasAddButton": true,
-											"addTitle": "Usg Geo"
+											"onlyLastElementHasAddButton": true
 										}
 									} ?>
 				<placeName>
@@ -783,7 +784,7 @@
 							</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "Encoding Scheme", "layout": { "frame": "line" } } ?>
+							<?options { "title": "Encoding Scheme", "layout": { "frame": "hide" } } ?>
 							<resp>
 								<?options {
 									"value": {
@@ -801,7 +802,7 @@
 							<name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Omar Siam</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "DBOE Team", "layout": { "frame": "line" } } ?>
+							<?options { "title": "DBOE Team", "layout": { "frame": "hide" } } ?>
 							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
 							<name xml:id="AL"><?copyOptions { "fromId": "nameSimple" } ?>Alexandra N. Lenz</name>
 							<name xml:id="PhS"><?copyOptions { "fromId": "nameSimple" } ?>Philip Stöckle</name>
@@ -813,7 +814,7 @@
 							<name xml:id="AB"><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Angela Bergmayer</name>
 						</respStmt>
 						<respStmt>
-							<?options { "title": "Student assistants", "layout": { "frame": "line" } } ?>
+							<?options { "title": "Student assistants", "layout": { "frame": "hide" } } ?>
 							<resp>
 								<?options {
 									"value": {
@@ -881,16 +882,17 @@
 						<?options {
 												"title": "Informationen über Änderungen!",
 												"attributes": [{
-													"status": { "type": "edit", "canBeEmpty": {"use": true} }
+													"status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] }
 												}],
 												"tag": ["possibleTag", "shouldTag"],
-												"layout": { "bold": true, "frame": "panelClosed" }
+												"layout": { "bold": true, "frame": "panel" }
 											} ?>
 						<change>
 							<?options {
 													"title": "Änderung",
 													"value": ["edit", "required", {"autoCreateValue": "Datensatz erstellt"}],
 													"attributes": [{
+														"status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] },
 														"when": { "type": "edit", "value": { "fx": "now" } },
 														"who": { "type": "edit", "value": "", "possibleValues": [
 																																											{"title": "Alexandra N. Lenz", "value": "AL"},
@@ -908,6 +910,7 @@
 														"bold": true,
 														"frame": "line",
 														"showAttributeBefore" : {
+															"status": { "hideTitle": true, "class": "box" },
 															"who": { "title": "Von", "class": "text", "after": " - " }
 														},
 														"showAttributeAfter" : {

@@ -201,6 +201,9 @@
 	.obj.lb-inline:hover {
 		background: #eee;
 	}
+	.obj.lb-hide {
+		display: none;
+	}
 	.obj.warnings {
 		background: #fff4b9;
 	}
