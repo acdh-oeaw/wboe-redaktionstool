@@ -1,9 +1,10 @@
 <template>
 	<div class="start" v-if="!content && object">
+		<ErrorCard :error="object.orgXmlObj.errors" title="Kritischer Fehler!" variant="danger" @goto="goToObject"/>
 		<ErrorCard :error="object.getCompressedBaseError()" title="Fehler" variant="danger" @goto="goToObject"/>
 		<ErrorCard :error="object.warnings" title="Warnung" variant="warning" @goto="goToObject"/>
 		<div v-if="object.contentObj">
-			<div v-if="object.errors && length(object.errors) > 0">Datei enthält Fehler!</div>
+			<div v-if="object.errors && length(object.errors) > 0 || object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0">Datei enthält Fehler!</div>
 			<ViewEditor :content="object.contentObj" v-else/>
 		</div>
 		<div v-else>
