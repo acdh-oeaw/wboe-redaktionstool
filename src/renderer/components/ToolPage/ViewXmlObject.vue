@@ -135,7 +135,7 @@
 				}
 			},
 		},
-		created: function () {
+		created () {
 			if (this.content) {
 				if (!this.content.parserIgnore
 				&& this.content.type !== 'TEXT') {

@@ -5,7 +5,7 @@ import prototypeParserObjectCheck from './prototypes/ParserObjectCheck'
 import prototypeParserOptions from './prototypes/ParserOptions'
 
 const localFunctions = {
-	ParserBase: function (xmlString) {
+	ParserBase (xmlString) {
 		this.ready = false						// Ist das Objekt bereit?
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = {}							// Fehler. Property = "ParserObject.uId" oder "-1" für "ParserBase"
@@ -23,7 +23,7 @@ const localFunctions = {
 			this.updateFamilyErrors()
 		}
 	},
-	ParserObject: function (root, parents, dom) {
+	ParserObject (root, parents, dom) {
 		this.ready = false						// Ist das Objekt bereit?
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = []							// Liste der Fehler
@@ -47,7 +47,7 @@ const localFunctions = {
 		// this.checkAttributes(attributes)	// Überprüft Attribute [{'attribut': 'value'}] -> gibt Array mit Fehlern zurück
 		// this.checkAttribute(attribute, value)		// Überprüft Attribut	-> gibt Fehler zurück
 	},
-	ParserOptions: function () {
+	ParserOptions () {
 		this.ready = false						// Ist die Option bereit?
 		this.useable = false					// Kann die Option zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = []							// Liste der Fehler

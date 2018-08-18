@@ -3,7 +3,7 @@ import stdFunctions from '@/functions/stdFunctions'
 // import Parser from '../Parser'
 
 const localFunctions = {
-	init: function () {
+	init () {
 		this.options = {
 			'tagAsTitle': true
 		}
@@ -12,10 +12,10 @@ const localFunctions = {
 		this.usable = true
 		return true
 	},
-	get: function (opt) {
+	get (opt) {
 		return stdFunctions.getValOfSubProp(this.options, opt)
 	},
-	getResult: function (opt) {
+	getResult (opt) {
 		let aOpt = stdFunctions.getValOfSubProp(this.options, opt)
 		let optName = opt.split('.')
 		optName = optName[optName.length - 1]
@@ -34,7 +34,7 @@ const localFunctions = {
 		return aOpt
 	},
 	decompressOptions: xmlFunctions.decompressProcessingOptions,
-	initFromParserObject: function (pObj) {
+	initFromParserObject (pObj) {
 		// Atribute auswerten
 		if (Object.keys(pObj.attributes).length > 0) {
 			Object.keys(pObj.attributes).forEach(function (aKey) {
@@ -44,7 +44,7 @@ const localFunctions = {
 		}
 		return true
 	},
-	extendJSON: function (jsonString, errObj) {
+	extendJSON (jsonString, errObj) {
 		try {
 			return this.extendObj(this.decompressOptions(JSON.parse(jsonString)))
 		} catch (err) {
@@ -60,7 +60,7 @@ const localFunctions = {
 			return null
 		}
 	},
-	extendObj: function (optionObj) {
+	extendObj (optionObj) {
 		this.options = this.combineObj(this.options, optionObj)
 		return true
 	},

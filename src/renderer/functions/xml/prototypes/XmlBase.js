@@ -2,7 +2,7 @@ import xmlFunctions from '@/functions/XmlFunctions'
 import Xml from '../Xml'
 
 const localFunctions = {
-	init: function (xmlString) {
+	init (xmlString) {
 		// "xmlString" überprüfen und auf "this.orgString" setzen
 		if (typeof xmlString !== 'string') {		// Prüfen ob der übergebene Wert ein String ist
 			this.addError('init() - Übergebener Wert ist kein "string"!')
@@ -44,14 +44,14 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	getXML: function () {
+	getXML () {
 		let aXML = ''
 		this.content.forEach(function (aCont) {
 			aXML += aCont.getXML()
 		}, this)
 		return aXML
 	},
-	addByParser: function (pos, pObj) {
+	addByParser (pos, pObj) {
 		console.log('addByParser', this, pos, pObj)
 		let aKey = pos
 		if (aKey || aKey === 0) {

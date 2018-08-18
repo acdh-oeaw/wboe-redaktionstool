@@ -4,7 +4,7 @@ import stdFunctions from '@/functions/stdFunctions'
 import Editor from '../Editor'
 
 const localFunctions = {
-	init: function () {
+	init () {
 		if (!(typeof this.uId === 'number') || this.root.family.indexOf[this.uId] === -1) {		// Die "uId" zuweisen falls noch nicht vorhanden
 			this.uId = this.root.family.push(this) - 1
 		}
@@ -117,7 +117,7 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	add: function (pos, aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList, autoCreate) {
+	add (pos, aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList, autoCreate) {
 		let aKey = pos
 		if (aKey || aKey === 0) {
 			this.childs.splice(aKey, 0, new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds, true, autoCreate))
@@ -144,7 +144,7 @@ const localFunctions = {
 		Vue.set(this.childs, aKey, this.childs[aKey])
 		return this.childs[aKey]
 	},
-	addAfter: function (aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {
+	addAfter (aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList) {
 		if (this.parents.length > 0) {
 			let aPos = this.siblings.indexOf(this) + 1
 			return this.parents[0].add(aPos, aPar, orgXml, aErrors, aWarnings, ignoreChilds, aParList)
@@ -152,7 +152,7 @@ const localFunctions = {
 			console.log('Editor - Kann nicht hinzugefügt werden!', this)
 		}
 	},
-	move: function (eObj, dir = true) {		// dir = true - Nach eObj verschieben
+	move (eObj, dir = true) {		// dir = true - Nach eObj verschieben
 		// console.log('move', this.siblings.indexOf(this) + ' ' + ((dir) ? 'after' : 'before') + ' ' + this.siblings.indexOf(eObj), this, eObj)
 		let tPos = this.siblings.indexOf(this)
 		let ePos = this.siblings.indexOf(eObj)
@@ -169,7 +169,7 @@ const localFunctions = {
 			this.parents[0].updateData()
 		}
 	},
-	delete: function (direct = false) {
+	delete (direct = false) {
 		if (this.siblings) {
 			if (direct || confirm('Soll der Tag "' + (this.parserObj && this.parserObj.name) + '" wirklich gelöscht werden?')) {
 				console.log('Editor - Löschen: ', this.parserObj)
@@ -198,7 +198,7 @@ const localFunctions = {
 			console.log('Editor - Kann nicht gelöscht werden!', this)
 		}
 	},
-	updateData: function (withChilds = false, posAsError = false, first = true) {
+	updateData (withChilds = false, posAsError = false, first = true) {
 		this.count = 0
 		this.countParser = 0
 		this.multipleNr = 0
@@ -233,7 +233,7 @@ const localFunctions = {
 			this.root.updateFamilyErrors()
 		}
 	},
-	updateAddable: function (withChilds = false) {
+	updateAddable (withChilds = false) {
 		// Nach diesem Tag hinzufügbare Tags
 		this.addableAfter = []
 		if (this.parserObj && !this.isRoot) {
@@ -327,7 +327,7 @@ const localFunctions = {
 			}, this)
 		}
 	},
-	checkParser: function (posAsError = false) {
+	checkParser (posAsError = false) {
 		if (this.orgXmlObj && this.parserObj) {
 			this.deleteErrors()
 			this.deleteWarnings()
@@ -343,7 +343,7 @@ const localFunctions = {
 		}
 		this.refresh = true
 	},
-	getSiblings: function (mode = 'all', useable = false, inclSelf = false, withParser = false) {
+	getSiblings (mode = 'all', useable = false, inclSelf = false, withParser = false) {
 		let rObj = []
 		let hit = false
 		if (this.siblings.length > 0) {
@@ -363,7 +363,7 @@ const localFunctions = {
 		if (mode === 'prev') { rObj.reverse() }
 		return rObj
 	},
-	getChilds: function (mode = 'all', useable = false, aChild = null, inclAChild = false) {
+	getChilds (mode = 'all', useable = false, aChild = null, inclAChild = false) {
 		let rObj = []
 		let hit = false
 		if (this.childs.length > 0) {

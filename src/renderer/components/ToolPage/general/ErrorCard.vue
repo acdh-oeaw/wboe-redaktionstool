@@ -29,7 +29,7 @@
 					return Object.keys(val).length
 				}
 			},
-			goto: function (aObj) {
+			goto (aObj) {
 				this.$emit('goto', aObj)
 			},
 		},

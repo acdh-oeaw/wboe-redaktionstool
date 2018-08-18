@@ -28,14 +28,14 @@
 		watch: {
 		},
 		methods: {
-			close: function () {
+			close () {
 				this.top = null
 				this.left = null
 				this.removeEventListeners()
 				this.show = false
 				this.ready = false
 			},
-			open: function (e) {
+			open (e) {
 				this.ready = false
 				this.addEventListeners()
 				this.show = true
@@ -49,13 +49,13 @@
 					this.ready = true
 				})
 			},
-			addEventListeners: function () {
+			addEventListeners () {
 				if (!this.show) {
 					document.addEventListener('focus', this.focusChanged, true)
 					document.addEventListener('blur', this.focusChanged, true)
 				}
 			},
-			removeEventListeners: function () {
+			removeEventListeners () {
 				if (this.show) {
 					document.removeEventListener('focus', this.focusChanged, true)
 					document.removeEventListener('blur', this.focusChanged, true)
@@ -70,7 +70,7 @@
 				}
 			}, 50),
 		},
-		beforeDestroy: function () {
+		beforeDestroy () {
 			this.removeEventListeners()
 		},
 		components: {

@@ -139,7 +139,7 @@
 			},
 		},
 		watch: {
-			subShow: function (nVal, oVal) {
+			subShow (nVal, oVal) {
 				if (nVal) {
 					this.subContextMenuTopPx = 0
 					this.$nextTick(() => {
@@ -155,11 +155,11 @@
 			},
 		},
 		methods: {
-			selectAttr: function (aAttr, key) {
+			selectAttr (aAttr, key) {
 				this.content.orgXmlObj.setAttribute(aAttr, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key])
 				this.content.checkParser()
 			},
-			valAttrUpdateValue: function (aAttr, e) {
+			valAttrUpdateValue (aAttr, e) {
 				this.content.orgXmlObj.setAttribute(aAttr, e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
 				this.content.checkParser()
 			},

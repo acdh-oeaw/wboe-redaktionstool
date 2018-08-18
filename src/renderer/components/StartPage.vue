@@ -62,7 +62,7 @@
 			...mapState(['Files'])
 		},
 		watch: {
-			'Options.projectPath': function (nVal) {
+			'Options.projectPath' (nVal) {
 				if (nVal) {		// Wenn sich der Projektpfad ändert alle Verzeichnisse zurücksetzen
 					this.loading = true
 					this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
@@ -123,7 +123,7 @@
 				this.goToTool()
 			},
 		},
-		mounted: function () {
+		mounted () {
 			this.loading = true
 			if (!this.Files.paths[this.Options.projectPath]) {
 				this.$store.dispatch('GET_PATH', { 'path': this.Options.projectPath })

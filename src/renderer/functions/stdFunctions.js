@@ -1,8 +1,8 @@
 const localFunctions = {
-	htmlEncode: function (html) {		// HTML-Sonderzeichen schützen
+	htmlEncode (html) {		// HTML-Sonderzeichen schützen
 		return document.createElement('a').appendChild(document.createTextNode(html)).parentNode.innerHTML
 	},
-	hasSubProp: function (obj, propertys, retVal = false) {		// Ermitten ob Property in einem verschachtelten Objekt existiert
+	hasSubProp (obj, propertys, retVal = false) {		// Ermitten ob Property in einem verschachtelten Objekt existiert
 		var out = false
 		if ((typeof propertys === 'string') && (propertys !== null) && propertys.length > 0) {
 			var aObj = obj
@@ -23,10 +23,10 @@ const localFunctions = {
 		}
 		return ((retVal) ? ((out) ? aObj : null) : out)
 	},
-	getValOfSubProp: function (obj, propertys) {		// Gibt Wert eines Property eines verschachtelten Objekts zurück
+	getValOfSubProp (obj, propertys) {		// Gibt Wert eines Property eines verschachtelten Objekts zurück
 		return localFunctions.hasSubProp(obj, propertys, true)
 	},
-	isValInArrOfSubProp: function (obj, propertys, value) {		// Ist Wert in Array eines verschachtelten Objekts vorhanden
+	isValInArrOfSubProp (obj, propertys, value) {		// Ist Wert in Array eines verschachtelten Objekts vorhanden
 		var aObj = localFunctions.getValOfSubProp(obj, propertys)
 		if (Array.isArray(aObj)) {
 			return (aObj.indexOf(value) > -1)
@@ -34,7 +34,7 @@ const localFunctions = {
 			return null
 		}
 	},
-	getFirstKeyOfValueInPropertyOfArray: function (arr, property, value) {
+	getFirstKeyOfValueInPropertyOfArray (arr, property, value) {
 		let rKey = -1
 		if (Array.isArray(arr)) {
 			arr.some(function (aVal, aKey) {

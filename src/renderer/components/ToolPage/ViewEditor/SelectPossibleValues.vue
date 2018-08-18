@@ -36,7 +36,7 @@
 			}
 		},
 		methods: {
-			select: function (key) {
+			select (key) {
 				this.$emit('select', key)
 			}
 		},

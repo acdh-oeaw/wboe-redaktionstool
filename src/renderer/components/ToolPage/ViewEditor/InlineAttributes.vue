@@ -54,7 +54,7 @@
 			}
 		},
 		watch: {
-			'refreshSelect': function (nVal) {
+			'refreshSelect' (nVal) {
 				if (nVal) {
 					this.$nextTick(() => {
 						this.refreshSelect = false
@@ -63,7 +63,7 @@
 			},
 		},
 		methods: {
-			getSelected: function () {		// Gibt die aktuell ausgewählte Option zurück
+			getSelected () {		// Gibt die aktuell ausgewählte Option zurück
 				let sVal = this.content.orgXmlObj.attributes[this.attrKey]
 				let oKey = -1
 				if (this.parserOptions) {
@@ -76,14 +76,14 @@
 				}
 				return oKey
 			},
-			setSelected: function (key) {
+			setSelected (key) {
 				if (this.parserOptions) {
 					this.content.orgXmlObj.setAttribute(this.attrKey, this.parserOptions.possibleValues[key])
 					this.content.checkParser()
 					this.refreshSelect = true
 				}
 			},
-			valAttrUpdateValue: function (e) {
+			valAttrUpdateValue (e) {
 				this.content.orgXmlObj.setAttribute(this.attrKey, e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
 				this.content.checkParser()
 			},

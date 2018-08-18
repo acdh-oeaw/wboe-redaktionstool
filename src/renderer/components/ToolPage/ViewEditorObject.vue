@@ -177,7 +177,7 @@
 				}
 			},
 		},
-		created: function () {
+		created () {
 			if (this.content) {
 				if (this.content.parents.length === 0) {		// Oberstes Element immer offen!
 					this.isOpen = true

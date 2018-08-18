@@ -19,7 +19,7 @@ const mutations = {
 }
 
 const actions = {
-	LOAD_PARSER_FILE: function ({ commit, dispatch, rootState }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
+	LOAD_PARSER_FILE ({ commit, dispatch, rootState }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
 		var aFile = fPath.join(rootState.Options.projectPath, '/parser.xml')
 		let fileContent = null
 		var aParser = null
@@ -39,7 +39,7 @@ const actions = {
 		console.log('LOAD_PARSER_FILE', aFile)
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })
 	},
-	RELOAD_PARSER_FILE: function ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
+	RELOAD_PARSER_FILE ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
 		var aFile = state.file
 		var fileContent = fs.readFileSync(aFile, 'utf8')
 		var aParser = null
@@ -48,7 +48,7 @@ const actions = {
 		}
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })
 	},
-	DIALOG_SAVE_PARSER: function ({ commit, dispatch, rootState }) {		// Dialog öffnen um aktuellen Parser zu speichern
+	DIALOG_SAVE_PARSER ({ commit, dispatch, rootState }) {		// Dialog öffnen um aktuellen Parser zu speichern
 		var saveFile = dialog.showSaveDialog({
 			title: 'Parser Datei speichern',
 			defaultPath: fPath.join(rootState.Options.projectPath, '/parser.xml')

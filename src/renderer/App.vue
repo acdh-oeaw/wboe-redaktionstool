@@ -42,7 +42,7 @@
 			...mapState(['Files']),
 		},
 		methods: {
-			keyUp: function (e) {
+			keyUp (e) {
 				if (e.ctrlKey && e.key === 'f') {
 					if (!inPageSearch.opened) {
 						inPageSearch.openSearchWindow()
@@ -61,7 +61,7 @@
 				}
 			}
 		},
-		created: function () {
+		created () {
 			this.$store.dispatch('LOAD_SHOW')
 			this.$store.dispatch('LOAD_LASTFILE')
 			if (!this.Options.projectPath) {		// Projektpfad laden
@@ -69,7 +69,7 @@
 			}
 			window.addEventListener('keyup', this.keyUp)
 		},
-		beforeDestroy: function () {
+		beforeDestroy () {
 			inPageSearch.closeSearchWindow()
 			window.removeEventListener('keyup', this.keyUp)
 		}

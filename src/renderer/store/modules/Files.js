@@ -37,19 +37,19 @@ const mutations = {
 }
 
 const actions = {
-	IS_CHANGED: function ({ commit }) {
+	IS_CHANGED ({ commit }) {
 		commit('SET_CHANGED', { 'bool': true })
 	},
-	NOT_CHANGED: function ({ commit }) {
+	NOT_CHANGED ({ commit }) {
 		commit('SET_CHANGED', { 'bool': false })
 	},
-	TOGGLE_OPEN: function ({ commit, dispatch }, { path }) {		// Anzeige Pfad offen/geschlossen wechseln und ggf. Inhalt cachen
+	TOGGLE_OPEN ({ commit, dispatch }, { path }) {		// Anzeige Pfad offen/geschlossen wechseln und ggf. Inhalt cachen
 		if (!state.paths[path]) {
 			dispatch('GET_PATH', { 'path': path })
 		}
 		commit('TOGGLE_PATH_OPEN', { 'path': path })
 	},
-	LOAD_FILE: function ({ commit, dispatch }, file = null) {
+	LOAD_FILE ({ commit, dispatch }, file = null) {
 		try {
 			commit('SET_FILE', { 'file': file, 'content': fs.readFileSync(file, 'utf8') })
 			dispatch('SET_LASTFILE', file)
@@ -60,7 +60,7 @@ const actions = {
 			alert('Konnte Datei "' + file + '" nicht laden!')
 		}
 	},
-	SAVE_FILE: function ({ commit, dispatch }, content) {
+	SAVE_FILE ({ commit, dispatch }, content) {
 		commit('SET_FILE', { 'file': state.file, 'content': content })
 		try {
 			fs.writeFileSync(state.file, content, 'utf8')
@@ -70,16 +70,16 @@ const actions = {
 			alert('Beim speichern kam es zu einem Fehler!\nDatei NICHT gespeichert!')
 		}
 	},
-	RELOAD_FILE: function ({ commit, dispatch }) {
+	RELOAD_FILE ({ commit, dispatch }) {
 		var aFile = state.file
 		var fileContent = fs.readFileSync(aFile, 'utf8')
 		commit('SET_FILE', { 'file': aFile, 'content': fileContent })
 		dispatch('NOT_CHANGED')
 	},
-	UNSET_FILE: function ({ commit }) {
+	UNSET_FILE ({ commit }) {
 		commit('SET_FILE', { 'file': null, 'content': null })
 	},
-	NEW_FILE: function ({ commit, dispatch }, { filename, parser }) {
+	NEW_FILE ({ commit, dispatch }, { filename, parser }) {
 		console.log('NEW_FILE', filename)
 		let aCont = ''
 		let aXmlObj = new XmlObject.XmlBase()
@@ -91,10 +91,10 @@ const actions = {
 		commit('SET_FILE', { 'file': filename, 'content': aCont })
 		dispatch('SAVE_FILE', aCont)
 	},
-	CLEAN_PATH: function ({ commit }) {		// Cache für Verzeichnissstruktur löschen
+	CLEAN_PATH ({ commit }) {		// Cache für Verzeichnissstruktur löschen
 		commit('CLEAN_CONTENT')
 	},
-	GET_PATH: function ({ commit }, { path, update = false }) {		// Inhalt für das Verzeichniss "path" cachen
+	GET_PATH ({ commit }, { path, update = false }) {		// Inhalt für das Verzeichniss "path" cachen
 		console.log('GET_PATH:', ((update) ? 'Update - ' : 'Neu - '), path)
 		let files = []
 		let paths = []
@@ -138,7 +138,7 @@ const actions = {
 		paths = paths.slice().sort(lowerSort)
 		commit(((update) ? 'UPDATE_CONTENT' : 'SET_CONTENT'), { 'path': path, 'files': files, 'paths': paths })
 	},
-	UPDATE_PATHS: function ({ commit, dispatch }) {		// Gecachte Inhalt für "Verzeichnisse" updaten
+	UPDATE_PATHS ({ commit, dispatch }) {		// Gecachte Inhalt für "Verzeichnisse" updaten
 		Object.keys(state.paths).forEach(function (aDir) {
 			dispatch('GET_PATH', { 'path': aDir, 'update': true })
 		}, this)

@@ -32,18 +32,18 @@
 			}
 		},
 		methods: {
-			fxUseErrKey: function (key) {
+			fxUseErrKey (key) {
 				if (typeof key === 'string' && key.indexOf('-') > -1 && key.split('-')[0] !== key.split('-')[1]) {
 					return true
 				}
 			},
-			fxErrKey: function (key) {
+			fxErrKey (key) {
 				if (typeof key === 'string' && key.indexOf('-') > -1 && key.split('-')[0] !== key.split('-')[1]) {
 					return key + ' - '
 				}
 				return ''
 			},
-			goto: function (aObj, show) {
+			goto (aObj, show) {
 				if (aObj) {
 					if (show) {
 						console.log('uId: ' + aObj.uId, aObj)
@@ -52,7 +52,7 @@
 				}
 			},
 		},
-		mounted: function () {
+		mounted () {
 			// console.log(this.error, this.aError)
 		}
 	}

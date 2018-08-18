@@ -1,5 +1,5 @@
 const localFunctions = {
-	string2xmlDom: function (string, showAlert = true) {
+	string2xmlDom (string, showAlert = true) {
 		var xmlDom = new DOMParser().parseFromString(string, 'application/xml')
 		var xmlStringError = localFunctions.xmlDomCheck(xmlDom)
 		if (xmlStringError.length > 0) {
@@ -10,7 +10,7 @@ const localFunctions = {
 		}
 		return { 'xmlDom': xmlDom }
 	},
-	xmlDomCheck: function (xmlDom, error = false) {		// Eventuelle Fehlermeldung des DOM-Objekts ausgeben
+	xmlDomCheck (xmlDom, error = false) {		// Eventuelle Fehlermeldung des DOM-Objekts ausgeben
 		var txt = ''
 		var x = xmlDom.childNodes
 		for (var i = 0; i < x.length; i++) {
@@ -27,7 +27,7 @@ const localFunctions = {
 		}
 		return txt
 	},
-	hasDescendantsTagWithName: function (childs, tagName) {
+	hasDescendantsTagWithName (childs, tagName) {
 		var hasIt = false
 		if (Array.isArray(childs)) {
 			childs.some(function (c) {
@@ -43,7 +43,7 @@ const localFunctions = {
 		}
 		return hasIt
 	},
-	getFirstDescendantsTagByName: function (childs, tagName) {
+	getFirstDescendantsTagByName (childs, tagName) {
 		var obj = null
 		if (Array.isArray(childs)) {
 			childs.some(function (c) {
@@ -59,7 +59,7 @@ const localFunctions = {
 		}
 		return obj
 	},
-	defaultProcess: function () {
+	defaultProcess () {
 		return {
 			'options': {
 				'tagAsTitle': true,
@@ -67,11 +67,11 @@ const localFunctions = {
 			}
 		}
 	},
-	defaultLayout: function () { return {'use': true} },
-	defaultValue: function () { return {'use': true} },
-	defaultTag: function () { return {'use': true} },
-	defaultAttributes: function () { return {'type': 'variable'} },
-	decompressProcessingOptions: function (options) {		// Optionen dekomprimieren
+	defaultLayout () { return {'use': true} },
+	defaultValue () { return {'use': true} },
+	defaultTag () { return {'use': true} },
+	defaultAttributes () { return {'type': 'variable'} },
+	decompressProcessingOptions (options) {		// Optionen dekomprimieren
 		var deflat = JSON.parse(JSON.stringify(options))
 		for (var key in deflat) {
 			// tag
@@ -121,7 +121,7 @@ const localFunctions = {
 		// console.log('decompressProcessingOptions', JSON.parse(JSON.stringify(options)), JSON.parse(JSON.stringify(deflat)))
 		return deflat
 	},
-	combineProcessingOptions: function (orgOptions, newOptions) {
+	combineProcessingOptions (orgOptions, newOptions) {
 		var comOptions = JSON.parse(JSON.stringify(orgOptions))
 		if (Array.isArray(newOptions)) {
 			console.log('combineProcessingOptions - array !!!???')
@@ -138,7 +138,7 @@ const localFunctions = {
 		}
 		return comOptions
 	},
-	checkLayout: function (layout) {		// Layout dekomprimieren
+	checkLayout (layout) {		// Layout dekomprimieren
 		var deflat = JSON.parse(JSON.stringify(layout))
 		if (Array.isArray(deflat)) {
 			var nObjValue = {}
@@ -163,7 +163,7 @@ const localFunctions = {
 		// console.log('layout', JSON.parse(JSON.stringify(layout)), JSON.parse(JSON.stringify(deflat)), Array.isArray(deflat))
 		return deflat
 	},
-	dcpoSimpleToComplex: function (content, standard, str2Val = null) {
+	dcpoSimpleToComplex (content, standard, str2Val = null) {
 		if (typeof content === 'string') {
 			return {[content]: standard}
 		} else if (Array.isArray(content)) {

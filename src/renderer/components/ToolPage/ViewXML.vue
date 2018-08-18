@@ -32,7 +32,7 @@
 			...mapState(['Options']),
 		},
 		watch: {
-			'Options.show.monacoDiff': function (nVal, oVal) {
+			'Options.show.monacoDiff' (nVal, oVal) {
 				if (this.alertDiff && this.changed) {
 					alert('Ansicht kann nur nach dem Anwenden der Änderungen geändert werden!')
 					this.$nextTick(() => {
@@ -45,14 +45,14 @@
 					this.$emit('refresh')
 				}
 			},
-			'content': function (nVal) {
+			'content' (nVal) {
 				if (this.ready) {
 					this.updateContent()
 					this.changed = true
 				}
 			},
 		},
-		mounted: function () {
+		mounted () {
 			this.content = this.xmlString
 			this.orgContent = this.orgXmlString
 			loadMonacoEditor(this)

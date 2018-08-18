@@ -3,7 +3,7 @@ import Vue from 'vue'
 import store from '@/store'
 
 const localFunctions = {
-	init: function () {
+	init () {
 		// Aktuelles DOM Objekt auswerten
 		if (!(typeof this.uId === 'number') || this.root.family.indexOf[this.uId] === -1) {		// Die "uId" zuweisen falls noch nicht vorhanden
 			this.uId = this.root.family.push(this) - 1
@@ -65,7 +65,7 @@ const localFunctions = {
 		}
 		return true
 	},
-	addByParser: function (pos, pObj, autoCreate) {
+	addByParser (pos, pObj, autoCreate) {
 		// console.log('addByParser', this, pos, pObj)
 		let aKey = pos
 		if (aKey || aKey === 0) {
@@ -105,7 +105,7 @@ const localFunctions = {
 		Vue.set(this.childs, aKey, this.childs[aKey])
 		return this.childs[aKey]
 	},
-	addAfterByParser: function (pObj, autoCreate) {
+	addAfterByParser (pObj, autoCreate) {
 		if (this.parents.length > 0) {
 			let aPos = this.siblings.indexOf(this) + 1
 			return this.parents[0].addByParser(aPos, pObj, autoCreate)
@@ -113,7 +113,7 @@ const localFunctions = {
 			console.log('Xml - Kann nicht hinzugefügt werden!', this)
 		}
 	},
-	move: function (xObj, dir = true) {		// dir = true - Nach xObj verschieben
+	move (xObj, dir = true) {		// dir = true - Nach xObj verschieben
 		console.log('move', this.siblings.indexOf(this) + ' ' + ((dir) ? 'after' : 'before') + ' ' + this.siblings.indexOf(xObj), this, xObj)
 		let tPos = this.siblings.indexOf(this)
 		let ePos = this.siblings.indexOf(xObj)
@@ -126,7 +126,7 @@ const localFunctions = {
 			console.log('Fehler! Verschieben kann nicht funktionieren!')
 		}
 	},
-	delete: function (direct = false) {
+	delete (direct = false) {
 		if (this.siblings) {
 			if (direct || confirm('Soll der Tag "' + this.name + '" wirklich gelöscht werden? (xml)')) {
 				console.log('XML - Löschen: ' + this.name)
@@ -149,14 +149,14 @@ const localFunctions = {
 			console.log('XML - Kann nicht gelöscht werden!', this)
 		}
 	},
-	getValueByOption: function (parOptVal, asArray = true, flat = true) {
+	getValueByOption (parOptVal, asArray = true, flat = true) {
 		if (parOptVal && parOptVal.innerXML && parOptVal.innerXML.use === true) {
 			return this.getXML(false, false, false, true)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
 		} else {
 			return this.getValue(asArray, flat)
 		}
 	},
-	getValue: function (asArray = true, flat = true) {
+	getValue (asArray = true, flat = true) {
 		let aValue = []
 		if (this.type === 'TEXT') {
 			aValue.push(this.value)
@@ -181,7 +181,7 @@ const localFunctions = {
 			return aValue.toString()
 		}
 	},
-	setValue: function (val) {
+	setValue (val) {
 		console.log('setValue', this, val)
 		// ToDo: innerXML ?!?!
 		if (this.type === 'TEXT') {
@@ -213,7 +213,7 @@ const localFunctions = {
 		}
 		return this.getValue(false)
 	},
-	setAttribute: function (attr, val) {
+	setAttribute (attr, val) {
 		console.log('setAttribute', this, val)
 		let aVal = ((val) ? (val.value || val) : '')
 		if (!this.attributes[attr] || this.attributes[attr] !== aVal) {
@@ -222,7 +222,7 @@ const localFunctions = {
 		}
 		return { 'attribute': attr, 'value': aVal }
 	},
-	getXML: function (all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {
+	getXML (all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {
 		let aXML = ''
 		if (this.type === 'TEXT') {
 			if (prvXmlObj && (['COMMENT', 'PROCESSING_INSTRUCTION', 'UNKNOWN'].indexOf(prvXmlObj.type) > -1)) {
@@ -284,7 +284,7 @@ const localFunctions = {
 		}
 		return aXML
 	},
-	getChildsOfType: function (types, ready = true, useable = true) {
+	getChildsOfType (types, ready = true, useable = true) {
 		let aChilds = []
 		if (this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {
@@ -296,7 +296,7 @@ const localFunctions = {
 		}
 		return aChilds
 	},
-	getChildsByName: function (name, ready = true, useable = true) {
+	getChildsByName (name, ready = true, useable = true) {
 		let aChilds = []
 		if (this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {

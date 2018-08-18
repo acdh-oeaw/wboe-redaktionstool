@@ -1,7 +1,7 @@
 // import xmlFunctions from '@/functions/XmlFunctions'
 
 const localFunctions = {
-	checkChilds: function (xmlObj) {		// Kinder überprüfen (simpel: nur Tagnamen)
+	checkChilds (xmlObj) {		// Kinder überprüfen (simpel: nur Tagnamen)
 		let errors = []
 		let aParserChilds = this.getChilds('all', true)
 		if (xmlObj.childs.length > 0) {		// Kinder vergleichen
@@ -38,7 +38,7 @@ const localFunctions = {
 		}
 		return errors
 	},
-	checkPosition: function (editorObj, eoDirekt = false, exp = false) {
+	checkPosition (editorObj, eoDirekt = false, exp = false) {
 		let errors = []
 		let aTagOption = this.options.get('tag')
 		// ToDo: Anzahl püfen! Darf nur einmal?
@@ -117,7 +117,7 @@ const localFunctions = {
 		// ToDo: if-Abfrage!
 		return errors
 	},
-	checkValue: function (xmlObj) {
+	checkValue (xmlObj) {
 		let errors = []
 		let warnings = []
 		let ignoreChilds = false
@@ -162,7 +162,7 @@ const localFunctions = {
 		// ToDo: if-Abfrage ...
 		return {'err': errors, 'warn': warnings, 'ignoreChilds': ignoreChilds}
 	},
-	checkAttributes: function (attrObjX) {
+	checkAttributes (attrObjX) {
 		let errors = []
 		let warnings = []
 		let attrObj = ((Object.keys(attrObjX).length > 0) ? attrObjX : null)
@@ -196,7 +196,7 @@ const localFunctions = {
 		}
 		return {'err': errors, 'warn': warnings}
 	},
-	checkAttribute: function (attr, val) {
+	checkAttribute (attr, val) {
 		let aParAttrObj = this.options.get('attributes.' + attr)
 		if (!aParAttrObj) {
 			return { 'txt': 'Attribut "' + attr + '" nicht erwartet', 'type': 'error' }

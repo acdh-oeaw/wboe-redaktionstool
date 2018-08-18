@@ -23,31 +23,31 @@ const mutations = {
 }
 
 const actions = {
-	LOAD_LASTFILE: function ({ commit }) {
+	LOAD_LASTFILE ({ commit }) {
 		commit('SET_LASTFILE', { 'filename': store.get('lastFilename', null) })
 	},
-	SET_LASTFILE: function ({ commit }, filename) {
+	SET_LASTFILE ({ commit }, filename) {
 		store.set('lastFilename', filename)
 		commit('SET_LASTFILE', { 'filename': filename })
 	},
-	LOAD_SHOW: function ({ commit }) {
+	LOAD_SHOW ({ commit }) {
 		commit('SET_SHOW', { 'show': store.get('show', { 'professional': true }) })
 	},
-	TOGGLE_SHOW: function ({ commit }, obj) {
+	TOGGLE_SHOW ({ commit }, obj) {
 		var aShow = JSON.parse(JSON.stringify(state.show))
 		aShow[obj] = !aShow[obj]
 		store.set('show', aShow)
 		commit('SET_SHOW', { 'show': aShow })
 	},
-	GET_PROJECT_PATH: function ({ commit, dispatch }) {		// Aktuellen Projektpfad aus den "store" laden
+	GET_PROJECT_PATH ({ commit, dispatch }) {		// Aktuellen Projektpfad aus den "store" laden
 		commit('SET_PROJECT_PATH', { 'projectPath': store.get('projectPath', remote.app.getPath('userData')) })
 		dispatch('LOAD_PARSER_FILE')
 	},
-	SET_PROJECT_PATH: function ({ commit, dispatch }) {		// Aktuellen Projektpfad neu setzen und in den "store" speichern
+	SET_PROJECT_PATH ({ commit, dispatch }) {		// Aktuellen Projektpfad neu setzen und in den "store" speichern
 		store.set('projectPath', state.projectPath)
 		dispatch('LOAD_PARSER_FILE')
 	},
-	DIALOG_PROJECT_PATH: function ({ commit, dispatch }) {		// Dialog zur auswahl einens neuen Projektpfads öffnen
+	DIALOG_PROJECT_PATH ({ commit, dispatch }) {		// Dialog zur auswahl einens neuen Projektpfads öffnen
 		var newFolder = dialog.showOpenDialog({
 			title: 'Projekt Verzeichniss auswählen',
 			defaultPath: state.projectPath,

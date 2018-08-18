@@ -2,7 +2,7 @@
 import Parser from '../Parser'
 
 const localFunctions = {
-	init: function () {
+	init () {
 		// Aktuelles DOM Objekt auswerten
 		if (!(typeof this.uId === 'number') || this.root.family.indexOf[this.uId] === -1) {		// Die "uId" zuweisen falls noch nicht vorhanden
 			this.uId = this.root.family.push(this) - 1
@@ -125,7 +125,7 @@ const localFunctions = {
 		}
 		return true
 	},
-	makeCopy: function () {
+	makeCopy () {
 		if (this.isCopy) {
 			let aCopyOptions = null
 			try {
@@ -156,7 +156,7 @@ const localFunctions = {
 			}
 		}
 	},
-	match: function (orgXmlObj, editorObj, checkChilds = true) {
+	match (orgXmlObj, editorObj, checkChilds = true) {
 		let errors = []
 		let warnings = []
 		let score = 0
@@ -212,7 +212,7 @@ const localFunctions = {
 		}
 		return {'score': score, 'errors': errors, 'warnings': warnings, 'possible': possible, 'ignoreChilds': ignoreChilds}
 	},
-	getSiblings: function (mode = 'all', useable = false, inclSelf = false, field = 'siblings') {
+	getSiblings (mode = 'all', useable = false, inclSelf = false, field = 'siblings') {
 		let rObj = []
 		let hit = false
 		if (this[field].length > 0) {
@@ -231,10 +231,10 @@ const localFunctions = {
 		if (mode === 'prev') { rObj.reverse() }
 		return rObj
 	},
-	getChilds: function (mode = 'all', useable = false, inclAChild = false) {
+	getChilds (mode = 'all', useable = false, inclAChild = false) {
 		return localFunctions.getSiblings.call(this, mode, useable, inclAChild, 'childs')
 	},
-	getChildsByName: function (name, ready = true, useable = true) {
+	getChildsByName (name, ready = true, useable = true) {
 		let aChilds = []
 		if (this.childs.length > 0) {
 			this.childs.forEach(function (aChild) {

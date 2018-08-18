@@ -170,7 +170,7 @@
 				}
 			},
 		},
-		created: function () {
+		created () {
 			this.isOpen = !(this.content && this.content.isCopy)
 		},
 		components: {

@@ -2,7 +2,7 @@
 import Editor from '../Editor'
 
 const localFunctions = {
-	init: function () {
+	init () {
 		if (!this.parserObj) {
 			this.addError('Es wurde kein "parserObject" übergeben!')
 			return false
@@ -19,7 +19,7 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	getXML: function () {
+	getXML () {
 		return (this.parserObj.header || '') + this.orgXmlObj.getXML()
 	}
 }

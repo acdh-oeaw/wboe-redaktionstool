@@ -243,7 +243,7 @@
 					this.isOpenAdditionalAddInBtnC = false
 				})
 			},
-			contextMenue: function (e) {
+			contextMenue (e) {
 				this.contextMenuCached = true
 				this.$nextTick(() => {
 					this.$refs.contextMenuEditor.open(e)
@@ -257,7 +257,7 @@
 				this.isOpenAdditionalAddInBtn = false
 				this.content.add(0, this.content.parserObj.root.family[aParUId])
 			},
-			num2rom: function (num) {		// Römische Zahlen
+			num2rom (num) {		// Römische Zahlen
 				var rom = ''
 				var aRom = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']
 				var aNum = [1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1]

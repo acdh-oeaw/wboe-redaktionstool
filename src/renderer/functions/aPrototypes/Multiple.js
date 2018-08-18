@@ -2,7 +2,7 @@
 import Vue from 'vue'
 
 const localFunctions = {
-	addError: function (error, field = 'errors') {
+	addError (error, field = 'errors') {
 		var aNr = -1
 		var root = this
 		if (this.uId || this.uId === 0) {		// Handelt es sich um ein "ParserObject"?
@@ -17,7 +17,7 @@ const localFunctions = {
 		}
 		root[field][aNr].push({'obj': this, 'err': error})
 	},
-	deleteErrors: function (field = 'errors') {
+	deleteErrors (field = 'errors') {
 		var aNr = -1
 		var root = this
 		if (this.uId || this.uId === 0) {		// Handelt es sich um ein "ParserObject"?
@@ -29,13 +29,13 @@ const localFunctions = {
 		}
 		Vue.delete(root[field], aNr)
 	},
-	addWarning: function (warning) {
+	addWarning (warning) {
 		localFunctions.addError.call(this, warning, 'warnings')
 	},
-	deleteWarnings: function () {
+	deleteWarnings () {
 		localFunctions.deleteErrors.call(this, 'warnings')
 	},
-	getCompressedBaseError: function () {
+	getCompressedBaseError () {
 		let cErrors = {}
 		if (Object.keys(this.errors).length > 0) {
 			let lErr = null
@@ -59,7 +59,7 @@ const localFunctions = {
 		// console.log(cErrors)
 		return cErrors
 	},
-	updateFamilyErrors: function () {
+	updateFamilyErrors () {
 		if (this.family.length > 0) {
 			this.family.forEach(function (aObj) {
 				if (aObj) {

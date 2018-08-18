@@ -2,7 +2,7 @@ import xmlFunctions from '@/functions/XmlFunctions'
 import Parser from '../Parser'
 
 const localFunctions = {
-	init: function (xmlString) {
+	init (xmlString) {
 		// "xmlString" überprüfen und auf "this.orgString" setzen
 		if (typeof xmlString !== 'string') {		// Prüfen ob der übergebene Wert ein String ist
 			this.addError('init() - Übergebener Wert ist kein "string"!')
@@ -74,7 +74,7 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	prescan: function (aDom) {
+	prescan (aDom) {
 		if (aDom.nodeType === aDom.PROCESSING_INSTRUCTION_NODE && aDom.nodeName === 'optionsPreset') {
 			let aOptions
 			try {

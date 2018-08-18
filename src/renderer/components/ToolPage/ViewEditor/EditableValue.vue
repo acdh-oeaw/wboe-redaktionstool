@@ -41,7 +41,7 @@
 			}
 		},
 		watch: {
-			'refreshSelect': function (nVal) {
+			'refreshSelect' (nVal) {
 				if (nVal) {
 					this.$nextTick(() => {
 						this.refreshSelect = false
@@ -50,7 +50,7 @@
 			},
 		},
 		methods: {
-			getSelected: function () {		// Gibt die aktuell ausgewählte Option zurück
+			getSelected () {		// Gibt die aktuell ausgewählte Option zurück
 				let sVal = this.content.orgXmlObj.getValue(false)
 				let oKey = -1
 				this.content.parserObj.options.get('value.is.possibleValues').some(function (aVal, aKey) {
@@ -61,7 +61,7 @@
 				}, this)
 				return oKey
 			},
-			setSelected: function (val) {		// Auswahl ändern
+			setSelected (val) {		// Auswahl ändern
 				if (val >= 0) {
 					let aVal = this.content.parserObj.options.get('value.is.possibleValues')[val]
 					this.content.orgXmlObj.setValue(aVal.value || aVal)
@@ -81,7 +81,7 @@
 				e.target.innerText = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
 				restoreCaretPosition()
 			}, 20),
-			valEditUpdateValue: function (e) {		// Aktuelle Eingabe setzen
+			valEditUpdateValue (e) {		// Aktuelle Eingabe setzen
 				let nVal = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
 				if (nVal !== this.aValue) {
 					this.content.orgXmlObj.setValue(nVal)

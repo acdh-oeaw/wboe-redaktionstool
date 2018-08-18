@@ -174,12 +174,12 @@
 			},
 		},
 		watch: {
-			aTab: function (nVal) {
+			aTab (nVal) {
 				if (this.aTabCach.indexOf(nVal) < 0) {
 					this.aTabCach.push(nVal)
 				}
 			},
-			update: function (nVal) {
+			update (nVal) {
 				if (nVal) {
 					this.$nextTick(() => {
 						this.update = false
@@ -188,7 +188,7 @@
 				}
 			},
 		},
-		mounted: function () {
+		mounted () {
 			var t0 = performance.now()
 			this.update = true
 			if (!this.Parser.parser) {
@@ -334,16 +334,16 @@
 				currentWindow.webContents.openDevTools()
 			},
 		},
-		created: function () {
+		created () {
 			window.addEventListener('mousedown', this.mousedown)
 		},
-		beforeUpdate: function () {
+		beforeUpdate () {
 			this.updateTimer = performance.now()
 		},
-		updated: function () {
+		updated () {
 			console.log('updated: ' + Math.ceil(performance.now() - this.updateTimer) + ' ms.')
 		},
-		beforeDestroy: function () {
+		beforeDestroy () {
 			window.removeEventListener('mousedown', this.mousedown)
 		},
 		components: {
