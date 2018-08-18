@@ -30,7 +30,7 @@
 				<b-list-group @contextmenu.prevent="contextMenue" flush v-if="content.addableInner.length > 0">
 					<b-list-group-item style="background: #eee;">
 						<div style="margin: -8px -9px;">
-							<b-button @click="addIn(aVal.uId)" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.bShow">
+							<b-button @click="addTag(aVal.uId, 'In')" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.bShow">
 								<font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
 							</b-button>
 						</div>
@@ -44,7 +44,7 @@
 				</b-card-body>
 			</b-collapse>
 			<div @contextmenu.prevent="contextMenue" slot="footer" style="margin: -8px -9px;" v-if="content.addableAfter.length > 0">
-				<b-button @click="addAfter(aVal.uId)" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.bShow">
+				<b-button @click="addTag(aVal.uId, 'After')" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.bShow">
 					<font-awesome-icon icon="plus" class="fa-icon"/>
 					{{ aVal.title }}
 				</b-button>
@@ -58,15 +58,15 @@
 				<slot/>		<!-- Inhalt -->
 			</div>
 			<div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
-					 @mouseenter="showAddableInButtons" @mouseleave="hideAddableInButtons"
+					 @mouseenter="showAddableButtons('In')" @mouseleave="hideAddableButtons($event, 'In')"
 			 			v-if="addableInButtons.length > 0">
-				<b-button @click="addIn(addableInButtons[0].uId)" size="xs"
-									@focus="showAddableInButtons"
-									@blur="hideAddableInButtons"
+				<b-button @click="addTag(addableInButtons[0].uId, 'In')" size="xs"
+									@focus="showAddableButtons('In')"
+									@blur="hideAddableButtons($event, 'In')"
 									ref="addableInButton"
 									:variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"><font-awesome-icon icon="circle-notch" class="fa-icon"/></b-button>
-				<div class="addable-in-btns" v-if="isOpenAdditionalAddInBtnC">
-					<b-button @click="addIn(aVal.uId)" @blur="hideAddableInButtons" size="xs"
+				<div class="addable-in-btns" v-if="isOpenAdditionalAddInBtn">
+					<b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
 										:variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableInButtons.length - 1}"
 										:key="aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
 						<font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
@@ -75,16 +75,18 @@
 			</div>
 			<slot name="childs"/>		<!-- Kinder -->
 			<div @contextmenu.prevent="contextMenue" :class="{'addable-after-btn': true, 'inline': layoutBase !== 'box'}"
-					 @mouseenter="showAddableAfterButtons" @mouseleave="hideAddableAfterButtons"
+					 @mouseenter="showAddableButtons('After')" @mouseleave="hideAddableButtons($event, 'After')"
 			 			v-if="addableAfterButtons.length > 0">
-				<b-button @click="addAfter(addableAfterButtons[0].uId)" size="xs"
-									@focus="showAddableAfterButtons"
-									@blur="hideAddableAfterButtons"
+				<b-button @click="addTag(addableAfterButtons[0].uId, 'After')" size="xs"
+									@focus="showAddableButtons('After')"
+									@blur="hideAddableButtons($event, 'After')"
 									ref="addableAfterButton"
 									:variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"><font-awesome-icon icon="plus" class="fa-icon"/></b-button>
-				<div class="addable-after-btns" v-if="isOpenAdditionalAddBtnC">
-					<b-button @click="addAfter(aVal.uId)" @blur="hideAddableAfterButtons" size="xs"
+				<div class="addable-after-btns" v-if="isOpenAdditionalAddAfterBtn">
+					<b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
 										:variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableAfterButtons.length - 1}"
+										@keyup.up.prevent=""
+										@keyup.down.prevent=""
 										:key="aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
 						<font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
 					</b-button>
@@ -127,10 +129,8 @@
 			return {
 				'isOpen': true,
 				'contextMenuCached': false,
-				'isOpenAdditionalAddBtn': false,
+				'isOpenAdditionalAddAfterBtn': false,
 				'isOpenAdditionalAddInBtn': false,
-				'isOpenAdditionalAddBtnC': false,
-				'isOpenAdditionalAddInBtnC': false,
 			}
 		},
 		computed: {
@@ -195,7 +195,7 @@
 			}
 		},
 		watch: {
-			'isOpenAdditionalAddBtnC' (nVal) {
+			'isOpenAdditionalAddAfterBtn' (nVal) {
 				if (nVal) {
 					this.$nextTick(() => {
 						let refAB = this.$refs.addableAfterButtons[this.$refs.addableAfterButtons.length - 1]
@@ -205,7 +205,7 @@
 					})
 				}
 			},
-			'isOpenAdditionalAddInBtnC' (nVal) {
+			'isOpenAdditionalAddInBtn' (nVal) {
 				if (nVal) {
 					this.$nextTick(() => {
 						let refAB = this.$refs.addableInButtons[this.$refs.addableInButtons.length - 1]
@@ -217,30 +217,17 @@
 			},
 		},
 		methods: {
-			showAddableAfterButtons () {
-				this.isOpenAdditionalAddBtnC = true
+			showAddableButtons (type) {
+				this['isOpenAdditionalAdd' + type + 'Btn'] = true
 			},
-			hideAddableAfterButtons (e) {
+			hideAddableButtons (e, type) {
 				this.$nextTick(() => {
 					if (e.type === 'blur') {
-						if (this.$refs.addableAfterButton === document.activeElement || this.$refs.addableAfterButtons.indexOf(document.activeElement) > -1) {
+						if (this.$refs['addable' + type + 'Button'] === document.activeElement || this.$refs['addable' + type + 'Buttons'].indexOf(document.activeElement) > -1) {
 							return false
 						}
 					}
-					this.isOpenAdditionalAddBtnC = false
-				})
-			},
-			showAddableInButtons () {
-				this.isOpenAdditionalAddInBtnC = true
-			},
-			hideAddableInButtons (e) {
-				this.$nextTick(() => {
-					if (e.type === 'blur') {
-						if (this.$refs.addableInButton === document.activeElement || this.$refs.addableInButtons.indexOf(document.activeElement) > -1) {
-							return false
-						}
-					}
-					this.isOpenAdditionalAddInBtnC = false
+					this['isOpenAdditionalAdd' + type + 'Btn'] = false
 				})
 			},
 			contextMenue (e) {
@@ -249,13 +236,13 @@
 					this.$refs.contextMenuEditor.open(e)
 				})
 			},
-			addAfter (aParUId) {
-				this.isOpenAdditionalAddBtn = false
-				this.content.addAfter(this.content.parserObj.root.family[aParUId])
-			},
-			addIn (aParUId) {
-				this.isOpenAdditionalAddInBtn = false
-				this.content.add(0, this.content.parserObj.root.family[aParUId])
+			addTag (aParUId, type) {
+				this['isOpenAdditionalAdd' + type + 'Btn'] = false
+				if (type === 'After') {
+					this.content.addAfter(this.content.parserObj.root.family[aParUId])
+				} else if (type === 'In') {
+					this.content.add(0, this.content.parserObj.root.family[aParUId])
+				}
 			},
 			num2rom (num) {		// Römische Zahlen
 				var rom = ''

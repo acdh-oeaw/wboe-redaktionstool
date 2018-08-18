@@ -151,6 +151,8 @@
 		padding-left: 2px;
 	}
 	.attr-edit {
+		display: inline-block;
 		cursor: text;
+		min-width: 5px;
 	}
 </style>
