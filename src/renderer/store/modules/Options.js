@@ -7,6 +7,7 @@ const store = new Store()
 const state = {
 	projectPath: null,
 	show: {},
+	options: {},
 	lastFile: null
 }
 
@@ -17,20 +18,23 @@ const mutations = {
 	SET_SHOW: (state, { show }) => {
 		state.show = show
 	},
+	SET_OPTIONS: (state, { options }) => {
+		state.options = options
+	},
 	SET_LASTFILE: (state, { filename }) => {
 		state.lastFile = filename
 	},
 }
 
 const actions = {
-	LOAD_LASTFILE ({ commit }) {
+	GET_LASTFILE ({ commit }) {
 		commit('SET_LASTFILE', { 'filename': store.get('lastFilename', null) })
 	},
 	SET_LASTFILE ({ commit }, filename) {
 		store.set('lastFilename', filename)
 		commit('SET_LASTFILE', { 'filename': filename })
 	},
-	LOAD_SHOW ({ commit }) {
+	GET_SHOW ({ commit }) {
 		commit('SET_SHOW', { 'show': store.get('show', { 'professional': true }) })
 	},
 	TOGGLE_SHOW ({ commit }, obj) {
@@ -38,6 +42,15 @@ const actions = {
 		aShow[obj] = !aShow[obj]
 		store.set('show', aShow)
 		commit('SET_SHOW', { 'show': aShow })
+	},
+	GET_OPTIONS ({ commit }) {
+		commit('SET_OPTIONS', { 'options': store.get('options', { 'zoom': 1 }) })
+	},
+	SET_OPTIONS ({ commit }, { option, value }) {
+		var aOptions = JSON.parse(JSON.stringify(state.show))
+		aOptions[option] = value
+		store.set('options', aOptions)
+		commit('SET_OPTIONS', { 'options': aOptions })
 	},
 	GET_PROJECT_PATH ({ commit, dispatch }) {		// Aktuellen Projektpfad aus den "store" laden
 		commit('SET_PROJECT_PATH', { 'projectPath': store.get('projectPath', remote.app.getPath('userData')) })

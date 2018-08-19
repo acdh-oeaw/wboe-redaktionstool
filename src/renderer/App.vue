@@ -10,6 +10,17 @@
 							<b-navbar-nav class="ml-auto">
 								<b-nav-item to="/home" :disabled="Files.changed">Home</b-nav-item>
 								<b-nav-item to="/tool" :disabled="!Files.file">Tool</b-nav-item>
+								<b-nav-item-dropdown right>
+									<template slot="button-content"><font-awesome-icon icon="address-card"/></template>
+									<div class="d-flex bd-highlight">
+										<label @dblclick="zoom = 1; setZoom();" title="Doppelklick für 100%"  v-b-tooltip.hover for="options-zoom" class="px-2 py-1 m-0"><font-awesome-icon icon="search"/></label>
+										<b-form-input v-model="zoom" @change="setZoom" id="options-zoom" type="range" class="p-0 mx-2 custom-range border-0" min="0.75" max="1.25" step="0.01"></b-form-input>
+										<b-tooltip target="options-zoom">
+											{{ parseInt(this.zoom * 100) }} %
+										</b-tooltip>
+									</div>
+									</b-nav-item-dropdown>
+								</b-navbar-nav>
 							</b-navbar-nav>
 					</b-collapse>
 				</div>
@@ -19,11 +30,12 @@
 </template>
 
 <script>
+	// import _ from 'lodash'
 	import 'bootstrap/dist/css/bootstrap.css'
 	import 'bootstrap-vue/dist/bootstrap-vue.css'
 
 	import searchInPage from 'electron-in-page-search'
-	import { remote } from 'electron'
+	import { remote, webFrame } from 'electron'
 
 	import { mapState } from 'vuex'
 
@@ -33,13 +45,19 @@
 		name: 'redaktionstool-electron-vue',
 		data () {
 			return {
-				devMode: (process.env.NODE_ENV === 'development')
+				devMode: (process.env.NODE_ENV === 'development'),
+				zoom: 1,
 			}
 		},
 		computed: {
 			...mapState(['Options']),
 			...mapState(['Parser']),
 			...mapState(['Files']),
+		},
+		watch: {
+			'Options.options.zoom' (nVal) {
+				this.zoom = nVal
+			}
 		},
 		methods: {
 			keyUp (e) {
@@ -59,11 +77,17 @@
 						}
 					}
 				}
+			},
+			setZoom () {
+				this.$store.dispatch('SET_OPTIONS', { 'option': 'zoom', 'value': this.zoom })
+				webFrame.setZoomFactor(parseFloat(this.Options.options.zoom))
 			}
 		},
 		created () {
-			this.$store.dispatch('LOAD_SHOW')
-			this.$store.dispatch('LOAD_LASTFILE')
+			this.$store.dispatch('GET_SHOW')
+			this.$store.dispatch('GET_OPTIONS')
+			webFrame.setZoomFactor(parseFloat(this.Options.options.zoom))
+			this.$store.dispatch('GET_LASTFILE')
 			if (!this.Options.projectPath) {		// Projektpfad laden
 				this.$store.dispatch('GET_PROJECT_PATH')
 			}
