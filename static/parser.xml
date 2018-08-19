@@ -88,7 +88,7 @@
 														"layout": {
 															"frame": "inline",
 															"hideTitle": true,
-															"before": "(",
+															"before": "(Diminutiv, ",
 															"after": ")"
 														}
 													} ?>
@@ -421,9 +421,9 @@
 				<?options {
 										"id": "gram-gender",
 										"title": "Genus",
-										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Masculinum", "Femininum", "Neutrum", "Diminutiv"]}}],
+										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}],
 										"tag": ["multiple"],
-										"layout": { "frame": "line" },
+										"layout": { "frame": "line", "hideTitle": true },
 										"editor": {
 											"onlyLastElementHasAddButton": true,
 											"addTitle": "Gender"
