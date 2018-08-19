@@ -111,8 +111,16 @@ const localFunctions = {
 		if (this.orgXmlObj && !this.orgXmlObj.useable) {
 			return false
 		}
+		// Daten an parserObj anpassen
 		if (this.parserObj && !this.isRoot) {
 			this.isMultiple = (this.parserObj.options.get('tag.multiple.use'))		// Ist aktuelles Objekt "multiple"?
+			if (this.orgXmlObj) {
+				if (this.parserObj.options.get('value.is.shouldValue')) {
+					if (this.orgXmlObj.getValueByOption(this.parserObj.options.get('value'), false) !== this.parserObj.options.get('value.is.shouldValue')) {
+						this.orgXmlObj.setValue(this.parserObj.options.get('value.is.shouldValue'))
+					}
+				}
+			}
 		}
 		this.useable = true
 		return true

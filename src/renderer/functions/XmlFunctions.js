@@ -118,6 +118,10 @@ const localFunctions = {
 				deflat[key].layout = localFunctions.checkLayout(deflat[key].layout)
 			}
 		}
+		// Automatische Werte setzen
+		if (deflat && deflat.value && deflat.value.is && deflat.value.is.shouldValue && !deflat.value.is.value) {	// Wenn shouldValue gesetzt aber nicht value:
+			deflat.value.is.value = deflat.value.is.shouldValue
+		}
 		// console.log('decompressProcessingOptions', JSON.parse(JSON.stringify(options)), JSON.parse(JSON.stringify(deflat)))
 		return deflat
 	},

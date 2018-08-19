@@ -205,6 +205,9 @@
 				this.$router.push('/home')
 			}
 			this.loadData()
+			if (this.devMode) {
+				this.devFiles = this.devFileList()
+			}
 			console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
 		},
 		methods: {
@@ -315,15 +318,15 @@
 				} else {
 					this.editorObject = null
 				}
-				if (this.devMode) {
-					this.devFiles = this.devFileList()
-				}
 				this.update = true
 			},
 			updateData () {
 				this.$store.dispatch('RELOAD_PARSER_FILE')
 				this.$store.dispatch('RELOAD_FILE')
 				this.loadData()
+				if (this.devMode) {
+					this.devFiles = this.devFileList()
+				}
 			},
 			mousedown (e) {
 				if (this.showTabView && !(e.target.closest('.vis-dropdown') || e.target.closest('.vis-dropdown-button'))) {

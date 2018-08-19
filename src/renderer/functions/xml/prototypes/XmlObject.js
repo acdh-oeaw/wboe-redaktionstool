@@ -182,17 +182,18 @@ const localFunctions = {
 		}
 	},
 	setValue (val) {
-		console.log('setValue', this, val)
 		// ToDo: innerXML ?!?!
 		if (this.type === 'TEXT') {
 			if (this.value !== val) {
 				this.value = val
+				console.log('setValue [value]', this, val)
 				store.dispatch('IS_CHANGED')
 			}
 		} else {
 			let aTxtChilds = this.getChildsOfType(['TEXT'], false, false)
 			if (aTxtChilds.length === 1) {
 				if (aTxtChilds[0].value !== val) {
+					console.log('setValue text [child]', this, val, aTxtChilds[0].value)
 					aTxtChilds[0].value = val
 					store.dispatch('IS_CHANGED')
 				}
@@ -208,6 +209,7 @@ const localFunctions = {
 				this.childs[nTxt].ready = true
 				this.childs[nTxt].parserIgnore = false
 				Vue.set(this.childs, nTxt, this.childs[nTxt])
+				console.log('setValue [new text child]', this, val)
 				if (val) { store.dispatch('IS_CHANGED') }
 			}
 		}
