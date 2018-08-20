@@ -5,7 +5,7 @@ import prototypeParserObjectCheck from './prototypes/ParserObjectCheck'
 import prototypeParserOptions from './prototypes/ParserOptions'
 
 const localFunctions = {
-	ParserBase (xmlString) {
+	ParserBase (xmlString, aFile) {
 		this.ready = false						// Ist das Objekt bereit?
 		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
 		this.errors = {}							// Fehler. Property = "ParserObject.uId" oder "-1" für "ParserBase"
@@ -17,9 +17,12 @@ const localFunctions = {
 		this.idList = {}							// Alle "ParserObject"e mit "id". Property = "id"
 		this.idOptions = {}						// Alle "optionsPreset". Property = "id"
 		this.orgString = null					// Original String für DOM
+		this.orgFilename = null				// Original Dateiname
+		this.orgPath = null						// Origianl Verzeichniss
 		this.orgDOM = null						// Original DOM über init generiert
+		this.additionalFiles = {}			// Zusätzliche, benötigte Dateien
 		if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
-			this.init(xmlString)
+			this.init(xmlString, aFile)
 			this.updateFamilyErrors()
 		}
 	},

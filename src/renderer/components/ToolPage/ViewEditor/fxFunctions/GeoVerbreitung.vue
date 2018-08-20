@@ -26,6 +26,8 @@
 				}
 			},
 		},
+		mounted () {
+		},
 		methods: {
 		},
 		components: {

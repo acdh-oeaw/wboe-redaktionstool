@@ -1,8 +1,9 @@
 import xmlFunctions from '@/functions/XmlFunctions'
 import Parser from '../Parser'
+const XLSX = require('xlsx')
 
 const localFunctions = {
-	init (xmlString) {
+	init (xmlString, aFile) {
 		// "xmlString" überprüfen und auf "this.orgString" setzen
 		if (typeof xmlString !== 'string') {		// Prüfen ob der übergebene Wert ein String ist
 			this.addError('init() - Übergebener Wert ist kein "string"!')
@@ -13,6 +14,10 @@ const localFunctions = {
 			return false
 		}
 		this.orgString = xmlString.trim()
+		this.orgFilename = aFile
+		if (this.orgFilename) {
+			this.orgPath = this.orgFilename.substr(0, this.orgFilename.length - this.orgFilename.split('\\').pop().split('/').pop().length)
+		}
 		// "this.orgString" in DOM Objekt umwanden, überprüfen und in "this.orgDOM" setzen
 		this.orgDOM = new DOMParser().parseFromString(this.orgString, 'application/xml')
 		var xmlStringError = xmlFunctions.xmlDomCheck(this.orgDOM)		// Prüfen ob es Fehler gab
@@ -67,6 +72,36 @@ const localFunctions = {
 				aObj.makeCopy()
 			}
 		})
+		// "additionalFiles" ermitteln und laden
+		if (this.orgPath) {
+			var path = require('path')
+			this.family.forEach(function (aObj) {
+				if (aObj && aObj.options && aObj.options.get('editor.fxFunction.filename')) {
+					let lFile = aObj.options.get('editor.fxFunction.filename')
+					if (!this.additionalFiles[lFile]) {
+						let fContent = {}
+						fContent.fullFileName = path.join(this.orgPath, lFile)
+						fContent.ext = lFile.split('.').pop()
+						if (fContent.ext === 'xlsx' || fContent.ext === 'xls') {
+							try {
+								let t0 = performance.now()
+								fContent.XLSX = XLSX.readFile(fContent.fullFileName)
+								let t1 = performance.now()
+								fContent.JSON = XLSX.utils.sheet_to_json(fContent.XLSX.Sheets[fContent.XLSX.SheetNames[0]])
+								// console.log('XLSX laden: ' + Math.ceil(t1 - t0) + ' ms. > JSON: ' + Math.ceil(performance.now() - t1) + ' ms.')
+							} catch (e) {
+								this.addError('Datei "' + fContent.fullFileName + '" konnte nicht geladen werden! (xlsx)')
+								console.log(e)
+							}
+						}
+						this.additionalFiles[lFile] = fContent
+					}
+				}
+			}, this)
+			console.log(this.additionalFiles)
+		} else {
+			this.addError('Das Verzeichniss des Parsers konnte nicht ermittelt werden!')
+		}
 		this.ready = true
 		if (Object.keys(this.errors).length > 0) {
 			return false

@@ -34,7 +34,7 @@ const actions = {
 			}
 		}
 		if (fileContent) {
-			aParser = new ParserObject.ParserBase(fileContent)
+			aParser = new ParserObject.ParserBase(fileContent, aFile)
 		}
 		console.log('LOAD_PARSER_FILE', aFile)
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })
@@ -44,7 +44,7 @@ const actions = {
 		var fileContent = fs.readFileSync(aFile, 'utf8')
 		var aParser = null
 		if (fileContent) {
-			aParser = new ParserObject.ParserBase(fileContent)
+			aParser = new ParserObject.ParserBase(fileContent, aFile)
 		}
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })
 	},

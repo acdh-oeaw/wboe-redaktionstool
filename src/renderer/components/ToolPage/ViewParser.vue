@@ -2,6 +2,20 @@
 	<div class="start" v-if="parser && !content">
 		<ErrorCard :error="parser.errors" title="Fehler" variant="danger"/>
 		<ErrorCard :error="parser.warnings" title="Warnung" variant="warning"/>
+
+		<b-card header="Info" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
+			<div slot="header"><button v-b-toggle="'collapse-header'" class="header-btn-toggle" style="color: #fff;"><b>Info</b><font-awesome-icon :icon="((topInfoOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="topInfoOpen" id="collapse-header">
+				<b-card-body>
+					<b>orgFilename:</b> {{ parser.orgFilename }}<br>
+					<b>orgPath:</b> {{ parser.orgPath }}<br>
+					<template v-if="Object.keys(parser.additionalFiles).length > 0">
+						<b>additionalFiles:</b> {{ Object.keys(parser.additionalFiles).join(', ') }}<br>
+					</template>
+				</b-card-body>
+			</b-collapse>
+		</b-card>
+
 		<b-card header="Header" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
 			<div slot="header"><button v-b-toggle="'collapse-header'" class="header-btn-toggle" style="color: #fff;"><b>Header</b><font-awesome-icon :icon="((headerOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="headerOpen" id="collapse-header">
@@ -17,6 +31,7 @@
 				</b-card-body>
 			</b-collapse>
 		</b-card>
+
 		<b-card header="Content" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
 			<div slot="header"><button v-b-toggle="'collapse-content'" class="header-btn-toggle" style="color: #fff;"><b>Content</b><font-awesome-icon :icon="((contentOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="contentOpen" id="collapse-content">
@@ -30,6 +45,7 @@
 				</b-card-body>
 			</b-collapse>
 		</b-card>
+
 		<b-card header="System" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
 			<div slot="header"><button v-b-toggle="'collapse-system'" class="header-btn-toggle" style="color: #fff;"><b>System</b><font-awesome-icon :icon="((systemOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
 			<b-collapse v-model="systemOpen" id="collapse-system">
@@ -43,6 +59,7 @@
 				</b-card-body>
 			</b-collapse>
 		</b-card>
+
 	</div>
 
 	<div class="obj" v-else-if="content">
@@ -121,6 +138,7 @@
 			return {
 				'isOpen': false,
 				'errorsOpen': true,
+				'topInfoOpen': true,
 				'headerOpen': true,
 				'contentOpen': true,
 				'systemOpen': false,
