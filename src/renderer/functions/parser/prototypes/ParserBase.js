@@ -84,9 +84,9 @@ const localFunctions = {
 						fContent.ext = lFile.split('.').pop()
 						if (fContent.ext === 'xlsx' || fContent.ext === 'xls') {
 							try {
-								let t0 = performance.now()
+								// let t0 = performance.now()
 								fContent.XLSX = XLSX.readFile(fContent.fullFileName)
-								let t1 = performance.now()
+								// let t1 = performance.now()
 								fContent.JSON = XLSX.utils.sheet_to_json(fContent.XLSX.Sheets[fContent.XLSX.SheetNames[0]])
 								// console.log('XLSX laden: ' + Math.ceil(t1 - t0) + ' ms. > JSON: ' + Math.ceil(performance.now() - t1) + ' ms.')
 							} catch (e) {
