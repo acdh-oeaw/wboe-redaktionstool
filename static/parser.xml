@@ -219,8 +219,7 @@
 																												"use": true,
 																												"header": "Bedeutung",
 																												"spaceBefore": 10,
-																												"spaceAfter": 5,
-																												"enumerateRom": true
+																												"spaceAfter": 5
 																											},
 																											"spaceAfter": 15
 																										},
@@ -505,7 +504,11 @@
 										"tag": ["multiple"],
 										"layout": {
 											"frame": "line",
-											"hideTitle": true
+											"hideTitle": true,
+											"multiple": {
+												"use": true,
+												"enumerateFX": true
+											}
 										}
 									} ?>
 				<?copy { "fromId": "ref-form" } ?>
@@ -519,11 +522,7 @@
 																								"title": "Bedeutung (sub)",
 																								"tag": ["possibleTag"],
 																								"layout": {
-																									"frame": "inline",
-																									"multiple": {
-																										"use": true,
-																										"enumerate": true
-																									}
+																									"frame": "inline"
 																								},
 																								"editor": {
 																									"onlyLastElementHasAddButton": true,

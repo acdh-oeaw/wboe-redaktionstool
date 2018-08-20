@@ -21,7 +21,7 @@
 						{{ attr + ((attrOpt) ? ':' : '') }}
 						<span v-if="attrOpt">{{ attrOpt }}</span>
 					</span>
-					<span>count: {{ content.count }}, countParser: {{  content.countParser }}<b v-if="content.isMultiple">, multipleNr: {{ content.multipleNr }}, multipleLast: {{ content.multipleLast }}</b></span>
+					<span>count: {{ content.count }}, countParser: {{  content.countParser }}<b v-if="content.isMultiple">, multipleNr: {{ content.multipleNr }}, multipleLast: {{ content.multipleLast }}</b><b v-if="content.isParserCopy">, parserCopyDeep: {{ content.parserCopyDeep }}</b></span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 					<font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="length(content.errors) > 0"/>
 				</button>

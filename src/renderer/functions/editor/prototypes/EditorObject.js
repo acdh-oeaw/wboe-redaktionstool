@@ -211,7 +211,21 @@ const localFunctions = {
 		this.countParser = 0
 		this.multipleNr = 0
 		this.multipleLast = false
+		this.isParserCopy = ((this.parserObj) ? this.parserObj.isCopy : false)
+		this.parserCopyDeep = 0
 		this.refresh = true
+		// ParserCopy - Tiefe
+		if (this.parserObj && this.parents.length > 0) {
+			let aId = this.parserObj.options.get('id')
+			if (aId) {
+				this.parents.forEach(function (aEObj) {
+					if (aEObj.parserObj && aEObj.parserObj.options && aEObj.parserObj.options.get('id') === aId) {
+						this.parserCopyDeep += 1
+					}
+				}, this)
+			}
+		}
+		// Zählen
 		let aPrevSibs = this.getSiblings('prev', true, false, true)
 		if (aPrevSibs.length > 0) {
 			aPrevSibs.forEach(function (aPSib) {
@@ -224,10 +238,12 @@ const localFunctions = {
 				this.multipleNr = aPrevSibs[0].multipleNr + 1
 			}
 		}
+		// Multiple Zählen
 		if (this.isMultiple) {
 			let aNextSibs = this.getSiblings('next', true, false, true)
 			this.multipleLast = !(aNextSibs.length > 0 && aNextSibs[0].parserObj === this.parserObj)
 		}
+		// Updates ...
 		if (this.parserObj && !this.isRoot) {
 			this.checkParser(posAsError)
 		}

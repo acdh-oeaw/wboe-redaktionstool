@@ -36,6 +36,8 @@ const localFunctions = {
 		this.isRoot = isRoot || false
 		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : [this])		// Geschwister
 		this.isMultiple = false				// Kann dieses Objekt öfter hinter einander vor kommen?
+		this.isParserCopy = false			// Ist das ParserObject eine Kopie?
+		this.parserCopyDeep = 0				// Tiefe ...
 		// Werte die nach dem Setzen alller "EditorObject"e gesetzt werden. (updateData)
 		this.count = 0								// Das wievielte Elment?
 		this.countParser = 0					// Das wievielte Objekt mit diesem Parser innerhalb dieser Generation ist es?

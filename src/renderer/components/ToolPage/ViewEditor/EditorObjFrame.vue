@@ -185,6 +185,15 @@
 			},
 			enumerate () {
 				if (this.content.parserObj.options && this.content.isMultiple) {
+					if (this.content.parserObj.options.get('layout.multiple.enumerateFX')) {
+						if (this.content.parserCopyDeep === 0) {
+							return this.num2rom(this.content.multipleNr + 1) + '. '
+						} else if (this.content.parserCopyDeep === 1) {
+							return this.content.multipleNr + 1 + '. '
+						} else if (this.content.parserCopyDeep >= 2) {
+							return this.num2abc(this.content.multipleNr + 1) + ') '
+						}
+					}
 					if (this.content.parserObj.options.get('layout.multiple.enumerateRom')) {
 						return this.num2rom(this.content.multipleNr + 1) + '. '
 					}
@@ -257,6 +266,16 @@
 					}
 				}
 				return rom
+			},
+			num2abc (num) {		// Alphabetische Zahlen
+				var bChar = ('a').charCodeAt(0)
+				var abc = ''
+				do {
+					num -= 1
+					abc = String.fromCharCode(bChar + (num % 26)) + abc
+					num = (num / 26) >> 0
+				} while (num > 0)
+				return abc
 			},
 		},
 		components: {
