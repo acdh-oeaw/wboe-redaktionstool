@@ -20,9 +20,10 @@
 		<span :class="{ 'val-fix': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }" v-if="valueType === 'fix'">
 			{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
 		</span>
+		<GeoVerbreitung :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'GeoVerbreitung'"/>
 		<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 
-		<template slot="childs" v-if="content.childs.length > 0">
+		<template slot="childs" v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
 			<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 		</template>
 
@@ -43,6 +44,9 @@
 	import EditorObjFrame from './ViewEditor/EditorObjFrame'
 	import EditableValue from './ViewEditor/EditableValue'
 	import InlineAttributes from './ViewEditor/InlineAttributes'
+	// fxFunctions
+	import GeoVerbreitung from './ViewEditor/fxFunctions/GeoVerbreitung'
+
 	import _ from 'lodash'
 
 	export default {
@@ -130,6 +134,7 @@
 			EditorObjFrame,
 			EditableValue,
 			InlineAttributes,
+			GeoVerbreitung,
 		},
 	}
 </script>

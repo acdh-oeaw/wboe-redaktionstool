@@ -95,16 +95,7 @@
 								<?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
 							</gramGrp>
 						</form>
-						<?copy { "fromId": "usg-geo", "options": {
-																											"tag": ["multiple"],
-																											"layout": {
-																												"multiple": {
-																													"header": "Verbreitung",
-																													"spaceBefore": 10,
-																													"spaceAfter": 5
-																												}
-																											}
-																										} } ?>
+						<?copy { "fromId": "usg-geo-verbreitung" } ?>
 
 						<?copy { "fromId": "form-variant", "options": {
 																														"tag": ["multiple", "possibleTag"],
@@ -695,6 +686,43 @@
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "gram-number", "options": { "tag": ["possibleTag"] } } ?>
 			</gramGrp>
+
+			<usg type="geo">
+				<?options {
+										"id": "usg-geo-verbreitung",
+										"title": "Verbreitung",
+										"tag": ["multiple"],
+										"tagAsTitle": false,
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true,
+											"multiple": {
+											"use": true,
+												"header": "Verbreitung",
+												"spaceBefore": 10,
+												"spaceAfter": 5,
+												"join": ";"
+											}
+										},
+										"editor": {
+											"onlyLastElementHasAddButton": true,
+											"fxFunction": {
+												"name": "GeoVerbreitung",
+												"filename": "eine.xml"
+											}
+										}
+									} ?>
+				<placeName>
+					<?options {
+											"tagAsTitle": false,
+											"value": ["edit", "required"],
+											"attributes": [{
+												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]}
+											}],
+											"tag": ["multiple"]
+										} ?>
+				</placeName>
+			</usg>
 
 			<usg type="geo">
 				<?options {
