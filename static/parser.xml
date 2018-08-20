@@ -717,9 +717,10 @@
 											"tagAsTitle": false,
 											"value": ["edit", "required"],
 											"attributes": [{
-												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]}
+												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "bundesland"]},
+												"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}
 											}],
-											"tag": ["multiple"]
+											"tag": ["multiple", "possible"]
 										} ?>
 				</placeName>
 			</usg>

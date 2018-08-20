@@ -62,13 +62,13 @@ const localFunctions = {
 			let aPrevSibs = this.getSiblings('prev', true)
 			// console.log(this, aPrevSibs)
 			if (aPrevSibs.length > 0) {
-				console.log('XmlObj erstellen! (After)')
+				// console.log('XmlObj erstellen! (After)')
 				Vue.set(this, 'orgXmlObj', aPrevSibs[0].orgXmlObj.addAfterByParser(this.parserObj, this.autoCreated))
 			} else {
-				console.log('XmlObj erstellen! (At Top)')
+				// console.log('XmlObj erstellen! (At Top)')
 				Vue.set(this, 'orgXmlObj', this.parents[0].orgXmlObj.addByParser(0, this.parserObj, this.autoCreated))
 			}
-			console.log('XmlObj erstellt ...', ((this.orgXmlObj) ? 'Erfolgreich' : 'Fehler!'))
+			// console.log('XmlObj erstellt ...', ((this.orgXmlObj) ? 'Erfolgreich' : 'Fehler!'))
 		}
 		this.ready = true
 		if (Object.keys(this.errors).length > 0) {
@@ -103,7 +103,7 @@ const localFunctions = {
 			}
 			if (neededParsers.length > 0) {		// Sind noch Tags übrig?
 				neededParsers.forEach(function (aVal, aKey) {
-					console.log('"' + aVal.name + '" automatisch hinzugefügt.')
+					// console.log('"' + aVal.name + '" automatisch hinzugefügt.')
 					this.add(null, aVal, null, [], [], false, null, true)
 				}, this)
 			}

@@ -1,6 +1,7 @@
 import xmlFunctions from '@/functions/XmlFunctions'
 import Parser from '../Parser'
 const XLSX = require('xlsx')
+const path = require('path')
 
 const localFunctions = {
 	init (xmlString, aFile) {
@@ -74,10 +75,10 @@ const localFunctions = {
 		})
 		// "additionalFiles" ermitteln und laden
 		if (this.orgPath) {
-			var path = require('path')
 			this.family.forEach(function (aObj) {
 				if (aObj && aObj.options && aObj.options.get('editor.fxFunction.filename')) {
 					let lFile = aObj.options.get('editor.fxFunction.filename')
+					// Datei laden falls noch nicht vorhanden.
 					if (!this.additionalFiles[lFile]) {
 						let fContent = {}
 						fContent.fullFileName = path.join(this.orgPath, lFile)
@@ -96,9 +97,39 @@ const localFunctions = {
 						}
 						this.additionalFiles[lFile] = fContent
 					}
+					// Datenvorbereitung für spezielle Funktionen:
+					if (this.additionalFiles[lFile].JSON && aObj.options.get('editor.fxFunction.name') === 'GeoVerbreitung') {		// Daten für GeoVerbreitung vorbereiten
+						let geoVerbreitung = { 'Großregion': [], 'Bundesland': [], 'BundeslandObj': {} }
+						this.additionalFiles[lFile].JSON.forEach(function (aPOS) {
+							if (aPOS.Sigle_DB) {
+								if (!aPOS.Ort && !aPOS.Gemeinde && !aPOS.Kleinregion) {
+									if (aPOS.Großregion) {		// Zeile ist Großregion
+										let gvKey = geoVerbreitung.Großregion.push(JSON.parse(JSON.stringify(aPOS))) - 1
+										geoVerbreitung.Großregion[gvKey].sort = gvKey
+										geoVerbreitung.Großregion[gvKey].title = aPOS.Großregion + ';' + aPOS.Bundesland + ' (' + aPOS.Sigle_DB + ')'
+										if (!geoVerbreitung.BundeslandObj[aPOS.Bundesland]) {
+											geoVerbreitung.BundeslandObj[aPOS.Bundesland] = { 'Bundesland': aPOS.Bundesland }
+										}
+										geoVerbreitung.Großregion[gvKey].BundeslandObj = geoVerbreitung.BundeslandObj[aPOS.Bundesland]
+									} else if (aPOS.Bundesland) {		// Zeile ist Bundesland
+										let bvKey = geoVerbreitung.Bundesland.push(JSON.parse(JSON.stringify(aPOS))) - 1
+										geoVerbreitung.Bundesland[bvKey].sort = bvKey
+										geoVerbreitung.Bundesland[bvKey].title = aPOS.Bundesland + ' (' + aPOS.Sigle_DB + ')'
+										if (!geoVerbreitung.BundeslandObj[aPOS.Bundesland]) {
+											geoVerbreitung.BundeslandObj[aPOS.Bundesland] = { 'Bundesland': aPOS.Bundesland }
+										}
+										geoVerbreitung.BundeslandObj[aPOS.Bundesland].Sigle_DB = aPOS.Sigle_DB
+										geoVerbreitung.Bundesland[bvKey].BundeslandObj = geoVerbreitung.BundeslandObj[aPOS.Bundesland]
+									}
+								}
+							}
+						}, this)
+						this.additionalFiles[lFile].geoVerbreitung = geoVerbreitung
+						// console.log(this.additionalFiles[lFile].JSON.length, geoVerbreitung.length, this.additionalFiles[lFile].JSON, geoVerbreitung)
+					}
 				}
 			}, this)
-			console.log(this.additionalFiles)
+			// console.log(this.additionalFiles)
 		} else {
 			this.addError('Das Verzeichniss des Parsers konnte nicht ermittelt werden!')
 		}

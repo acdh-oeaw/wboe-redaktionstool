@@ -186,14 +186,14 @@ const localFunctions = {
 		if (this.type === 'TEXT') {
 			if (this.value !== val) {
 				this.value = val
-				console.log('setValue [value]', this, val)
+				// console.log('setValue [value]', this, val)
 				store.dispatch('IS_CHANGED')
 			}
 		} else {
 			let aTxtChilds = this.getChildsOfType(['TEXT'], false, false)
 			if (aTxtChilds.length === 1) {
 				if (aTxtChilds[0].value !== val) {
-					console.log('setValue text [child]', this, val, aTxtChilds[0].value)
+					// console.log('setValue text [child]', this, val, aTxtChilds[0].value)
 					aTxtChilds[0].value = val
 					store.dispatch('IS_CHANGED')
 				}
@@ -209,14 +209,14 @@ const localFunctions = {
 				this.childs[nTxt].ready = true
 				this.childs[nTxt].parserIgnore = false
 				Vue.set(this.childs, nTxt, this.childs[nTxt])
-				console.log('setValue [new text child]', this, val)
+				// console.log('setValue [new text child]', this, val)
 				if (val) { store.dispatch('IS_CHANGED') }
 			}
 		}
 		return this.getValue(false)
 	},
 	setAttribute (attr, val) {
-		console.log('setAttribute', this, val)
+		// console.log('setAttribute', this, val)
 		let aVal = ((val) ? (val.value || val) : '')
 		if (!this.attributes[attr] || this.attributes[attr] !== aVal) {
 			Vue.set(this.attributes, attr, aVal)
