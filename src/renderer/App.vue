@@ -19,9 +19,10 @@
 											{{ parseInt(this.zoom * 100) }} %
 										</b-tooltip>
 									</div>
-									</b-nav-item-dropdown>
-								</b-navbar-nav>
+								</b-nav-item-dropdown>
+								<b-nav-item to="/info" :disabled="Files.changed"><font-awesome-icon icon="info"/></b-nav-item>
 							</b-navbar-nav>
+						</b-navbar-nav>
 					</b-collapse>
 				</div>
 		</b-navbar>
