@@ -14,14 +14,14 @@
 
 		<!-- Inhalte -->
 		<div :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
-			<span class="enumerate" v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
+			<span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
 			<slot name="childs"/>		<!-- Kinder -->
 		</div>
 
 		<b-card :class="{'obj': true, 'paneldecent': true, 'mitb5': true, 'warnings': content.warnings.length > 0}" v-else-if="layoutBase === 'panel'" no-body>
 			<div @contextmenu.prevent="contextMenue" slot="header">
 				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
-					<span class="enumerate" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+					<span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 					<span><b>{{ title }}</b></span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
 				</button>
@@ -53,7 +53,7 @@
 
 		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
 			<div @contextmenu.prevent="contextMenue" class="context">
-				<span class="enumerate" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+				<span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 				<b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
 				<slot/>		<!-- Inhalt -->
 			</div>
@@ -190,8 +190,10 @@
 							return this.num2rom(this.content.multipleNr + 1) + '. '
 						} else if (this.content.parserCopyDeep === 1) {
 							return this.content.multipleNr + 1 + '. '
-						} else if (this.content.parserCopyDeep >= 2) {
+						} else if (this.content.parserCopyDeep === 2) {
 							return this.num2abc(this.content.multipleNr + 1) + ') '
+						} else if (this.content.parserCopyDeep >= 3) {
+							return this.num2abc(this.content.multipleNr + 1, 'α', 25) + ') '
 						}
 					}
 					if (this.content.parserObj.options.get('layout.multiple.enumerateRom')) {
@@ -267,13 +269,13 @@
 				}
 				return rom
 			},
-			num2abc (num) {		// Alphabetische Zahlen
-				var bChar = ('a').charCodeAt(0)
+			num2abc (num, char = 'a', max = 26) {		// Alphabetische Zahlen
+				var bChar = (char).charCodeAt(0)
 				var abc = ''
 				do {
 					num -= 1
-					abc = String.fromCharCode(bChar + (num % 26)) + abc
-					num = (num / 26) >> 0
+					abc = String.fromCharCode(bChar + (num % max)) + abc
+					num = (num / max) >> 0
 				} while (num > 0)
 				return abc
 			},
