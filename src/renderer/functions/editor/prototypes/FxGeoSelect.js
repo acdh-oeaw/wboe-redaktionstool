@@ -18,7 +18,28 @@ const localFunctions = {
 			Vue.set(eObj.fxData, 'selected', {})
 		}
 		if (eObj.fxData.placeParser) {
-			// Verarbeiten ...
+			// "placename"s sortieren
+			let sorting = true
+			let sortDg = 0
+			while (sorting && sortDg < 10) {
+				sorting = false
+				eObj.childs.some(function (child, cKey) {
+					if (cKey > 0) {
+						let aChildAttrType = child.orgXmlObj.attributes.type
+						let lChildAttrType = eObj.childs[cKey - 1].orgXmlObj.attributes.type
+						if (aChildAttrType && lChildAttrType) {
+							let aChildPos = eObj.fxData.places.xFields.indexOf(aChildAttrType)
+							let lChildPos = eObj.fxData.places.xFields.indexOf(lChildAttrType)
+							if (aChildPos > -1 && lChildPos > -1 && aChildPos < lChildPos) {
+								child.move(eObj.childs[cKey - 1], false)
+								sorting = true
+							}
+						}
+					}
+				})
+				sortDg += 1
+			}
+			// "placename"s auswerten
 		}
 	},
 	checkParser (eObj) {

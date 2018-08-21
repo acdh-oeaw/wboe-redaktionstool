@@ -10,7 +10,10 @@
 			<span v-if="bundeslandVal" :class="{'warning': !bundeslandVal['Bundesland']}">{{ bundeslandVal['Bundesland'] || bundeslandVal }}</span>
 		</span> -->
 		<!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
-		<span :id="'eo' + child.uId" v-for="child in content.childs"><font-awesome-icon icon="exclamation-triangle" class="text-warning" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0"/></span>
+		<span :id="'eo' + child.uId" v-for="child in content.childs">
+			<span class="error-place" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0">{{ child.orgXmlObj.getValueByOption(child.parserObj.options.get('value'), false) }}&nbsp;</span>
+			<font-awesome-icon icon="exclamation-triangle" class="text-warning" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0"/>
+		</span>
 	</span>
 </template>
 
@@ -105,5 +108,10 @@
 <style scoped>
 	span.warning {
 		background: #fff4b9;
+	}
+	span.error-place {
+		padding: 0 5px;
+		background: #ee6;
+		display: inline-block;
 	}
 </style>

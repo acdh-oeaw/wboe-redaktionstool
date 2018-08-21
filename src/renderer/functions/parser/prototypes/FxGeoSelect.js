@@ -2,10 +2,11 @@ const localFunctions = {
 	fileData (eObj, lFile) {
 		// Einstellungen
 		let pFields = ['Ort', 'Gemeinde', 'Kleinregion', 'Großregion', 'Bundesland']
+		let xFields = ['ort', 'gemeinde', 'kleinregion', 'grossregion', 'bundesland']
 		let pFieldStart = 2
 		// Vorbereitungen
 		let uFields = pFields.slice(pFieldStart)
-		let geoSelect = { 'pFields': pFields, 'uFields': uFields }
+		let geoSelect = { 'pFields': pFields, 'uFields': uFields, 'xFields': xFields }
 		uFields.forEach(function (aField) {
 			geoSelect[aField] = []
 			geoSelect[aField + 'Obj'] = {}
@@ -17,9 +18,9 @@ const localFunctions = {
 					aStartPos += 1
 				}
 				if (aStartPos < pFields.length && aStartPos >= pFieldStart) {
-					let xFields = pFields.slice(aStartPos)
+					let sFields = pFields.slice(aStartPos)
 					let fHit = true
-					xFields.forEach(function (aCol, aPos) {
+					sFields.forEach(function (aCol, aPos) {
 						if (aLine[aCol]) {
 							if (fHit) {
 								let aField = { 'name': aLine[aCol], 'sigle': aLine.Sigle_DB, 'sort': aLineNr, 'parents': {} }
@@ -28,8 +29,8 @@ const localFunctions = {
 								}
 								geoSelect[aCol + 'Obj'][aLine[aCol]].sigle = aLine.Sigle_DB
 								aField.obj = geoSelect[aCol + 'Obj'][aLine[aCol]]
-								if (aPos < xFields.length - 1) {
-									xFields.slice(aPos + 1).forEach(function (xData) {
+								if (aPos < sFields.length - 1) {
+									sFields.slice(aPos + 1).forEach(function (xData) {
 										if (!geoSelect[xData + 'Obj'][aLine[xData]]) {
 											geoSelect[xData + 'Obj'][aLine[xData]] = { 'name': aLine[xData] }
 										}
