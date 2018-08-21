@@ -6,7 +6,7 @@
 			<font-awesome-icon @click="chancelValue" icon="times" class="text-danger"/>
 		</span>
 		<span @click="edit = true" class="geoselect view" v-else>
-			GeoSelect View
+			<span v-for="(place, pKey) in places"><template v-if="pKey > 0">, </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
 			<!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
 			<span :id="'eo' + child.uId" v-for="child in content.childs">
 				<span class="error-place" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0">{{ child.orgXmlObj.getValueByOption(child.parserObj.options.get('value'), false) }}&nbsp;</span>
@@ -34,6 +34,15 @@
 			}
 		},
 		computed: {
+			'places' () {
+				let aPlaces = []
+				this.content.getChilds('all', true).forEach(function (child) {
+					if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.getValue(false)) {
+						aPlaces.push(child)
+					}
+				}, this)
+				return aPlaces
+			},
 		},
 		watch: {
 			'refreshSelect' (nVal) {
