@@ -707,7 +707,7 @@
 										"editor": {
 											"onlyLastElementHasAddButton": true,
 											"fxFunction": {
-												"name": "GeoVerbreitung",
+												"name": "GeoSelect",
 												"filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx"
 											}
 										}

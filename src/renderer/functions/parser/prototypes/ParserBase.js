@@ -98,34 +98,53 @@ const localFunctions = {
 						this.additionalFiles[lFile] = fContent
 					}
 					// Datenvorbereitung für spezielle Funktionen:
-					if (this.additionalFiles[lFile].JSON && aObj.options.get('editor.fxFunction.name') === 'GeoVerbreitung') {		// Daten für GeoVerbreitung vorbereiten
-						let geoVerbreitung = { 'Großregion': [], 'Bundesland': [], 'BundeslandObj': {} }
-						this.additionalFiles[lFile].JSON.forEach(function (aPOS) {
-							if (aPOS.Sigle_DB) {
-								if (!aPOS.Ort && !aPOS.Gemeinde && !aPOS.Kleinregion) {
-									if (aPOS.Großregion) {		// Zeile ist Großregion
-										let gvKey = geoVerbreitung.Großregion.push(JSON.parse(JSON.stringify(aPOS))) - 1
-										geoVerbreitung.Großregion[gvKey].sort = gvKey
-										geoVerbreitung.Großregion[gvKey].title = aPOS.Großregion + ';' + aPOS.Bundesland + ' (' + aPOS.Sigle_DB + ')'
-										if (!geoVerbreitung.BundeslandObj[aPOS.Bundesland]) {
-											geoVerbreitung.BundeslandObj[aPOS.Bundesland] = { 'Bundesland': aPOS.Bundesland }
+					if (!this.additionalFiles[lFile].geoSelect && this.additionalFiles[lFile].JSON && aObj.options.get('editor.fxFunction.name') === 'GeoSelect') {		// Daten für GeoSelect vorbereiten
+						// Einstellungen
+						let pFields = ['Ort', 'Gemeinde', 'Kleinregion', 'Großregion', 'Bundesland']
+						let pFieldStart = 2
+						// Vorbereitungen
+						let uFields = pFields.slice(pFieldStart)
+						let geoSelect = { 'uFields': uFields }
+						uFields.forEach(function (aField) {
+							geoSelect[aField] = []
+							geoSelect[aField + 'Obj'] = {}
+						}, this)
+						this.additionalFiles[lFile].JSON.forEach(function (aLine, aLineNr) {
+							if (aLine.Sigle_DB) {
+								let aStartPos = 0
+								while (!aLine[pFields[aStartPos]] && aStartPos < pFields.length) {
+									aStartPos += 1
+								}
+								if (aStartPos < pFields.length && aStartPos >= pFieldStart) {
+									let xFields = pFields.slice(aStartPos)
+									let fHit = true
+									xFields.forEach(function (aCol, aPos) {
+										if (aLine[aCol]) {
+											if (fHit) {
+												let aField = { 'name': aLine[aCol], 'sigle': aLine.Sigle_DB, 'sort': aLineNr, 'parents': {} }
+												if (!geoSelect[aCol + 'Obj'][aLine[aCol]]) {
+													geoSelect[aCol + 'Obj'][aLine[aCol]] = { 'name': aLine[aCol] }
+												}
+												geoSelect[aCol + 'Obj'][aLine[aCol]].sigle = aLine.Sigle_DB
+												aField.obj = geoSelect[aCol + 'Obj'][aLine[aCol]]
+												if (aPos < xFields.length - 1) {
+													xFields.slice(aPos + 1).forEach(function (xData) {
+														if (!geoSelect[xData + 'Obj'][aLine[xData]]) {
+															geoSelect[xData + 'Obj'][aLine[xData]] = { 'name': aLine[xData] }
+														}
+														aField.parents[xData] = geoSelect[xData + 'Obj'][aLine[xData]]
+													}, this)
+												}
+												geoSelect[aCol].push(aField)
+												fHit = false
+											}
 										}
-										geoVerbreitung.Großregion[gvKey].BundeslandObj = geoVerbreitung.BundeslandObj[aPOS.Bundesland]
-									} else if (aPOS.Bundesland) {		// Zeile ist Bundesland
-										let bvKey = geoVerbreitung.Bundesland.push(JSON.parse(JSON.stringify(aPOS))) - 1
-										geoVerbreitung.Bundesland[bvKey].sort = bvKey
-										geoVerbreitung.Bundesland[bvKey].title = aPOS.Bundesland + ' (' + aPOS.Sigle_DB + ')'
-										if (!geoVerbreitung.BundeslandObj[aPOS.Bundesland]) {
-											geoVerbreitung.BundeslandObj[aPOS.Bundesland] = { 'Bundesland': aPOS.Bundesland }
-										}
-										geoVerbreitung.BundeslandObj[aPOS.Bundesland].Sigle_DB = aPOS.Sigle_DB
-										geoVerbreitung.Bundesland[bvKey].BundeslandObj = geoVerbreitung.BundeslandObj[aPOS.Bundesland]
-									}
+									}, this)
 								}
 							}
 						}, this)
-						this.additionalFiles[lFile].geoVerbreitung = geoVerbreitung
-						// console.log(this.additionalFiles[lFile].JSON.length, geoVerbreitung.length, this.additionalFiles[lFile].JSON, geoVerbreitung)
+						this.additionalFiles[lFile].geoSelect = geoSelect
+						console.log(this.additionalFiles[lFile].JSON.length, geoSelect['Kleinregion'].length + geoSelect['Großregion'].length + geoSelect['Bundesland'].length, this.additionalFiles[lFile].JSON, geoSelect)
 					}
 				}
 			}, this)
