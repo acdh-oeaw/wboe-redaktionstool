@@ -62,6 +62,12 @@ const localFunctions = {
 			if (!child.orgXmlObj.attributes['xml:id'] && child.orgXmlObj.getValue(false)) {
 				warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') ohne "xml:id" Attribut!')
 			}
+			if (child.orgXmlObj.attributes.type) {
+				let aFieldOption = eObj.fxData.fields[stdFunctions.getFirstKeyOfValueInPropertyOfArray(eObj.fxData.fields, 'name', eObj.fxData.places.pFields[eObj.fxData.places.xFields.indexOf(child.orgXmlObj.attributes.type)])]
+				if (!aFieldOption) {
+					warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ((child.orgXmlObj.attributes['xml:id']) ? ', ' + child.orgXmlObj.attributes['xml:id'] : '') + ') Attribut "' + child.orgXmlObj.attributes.type + '" ist im parser nicht vorgesehen!')
+				}
+			}
 		})
 		return warnings
 	},
