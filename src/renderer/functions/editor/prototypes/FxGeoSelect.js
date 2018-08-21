@@ -1,5 +1,6 @@
 import Vue from 'vue'
 // import xmlFunctions from '@/functions/XmlFunctions'
+import stdFunctions from '@/functions/stdFunctions'
 // import Editor from '../Editor'
 
 const localFunctions = {
@@ -39,7 +40,17 @@ const localFunctions = {
 				})
 				sortDg += 1
 			}
-			// "placename"s auswerten
+			eObj.childs.forEach(function (child, cKey) {
+				if (!child.orgXmlObj.attributes['xml:id']) {
+					let aChildPos = eObj.fxData.places.xFields.indexOf(child.orgXmlObj.attributes.type)
+					if (aChildPos > -1) {
+						let aChildValPos = stdFunctions.getFirstKeyOfValueInPropertyOfArray(eObj.fxData.places[eObj.fxData.places.pFields[aChildPos]], 'name', child.orgXmlObj.getValue(false))
+						if (aChildValPos > -1) {
+							child.orgXmlObj.setAttribute('xml:id', eObj.fxData.places[eObj.fxData.places.pFields[aChildPos]][aChildValPos].sigle)
+						}
+					}
+				}
+			})
 		}
 	},
 	checkParser (eObj) {
@@ -47,6 +58,11 @@ const localFunctions = {
 		if (!eObj.fxData.placeParser) {
 			warnings.push('Es konnte kein "placeParser" gefunden werden!')
 		}
+		eObj.childs.forEach(function (child, cKey) {
+			if (!child.orgXmlObj.attributes['xml:id'] && child.orgXmlObj.getValue(false)) {
+				warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') ohne "xml:id" Attribut!')
+			}
+		})
 		return warnings
 	},
 }
