@@ -2,10 +2,10 @@
 	<span v-if="!refreshSelect">
 		<span class="geoselect edit" v-if="edit">
 			GeoSelect Edit
-			<font-awesome-icon @click="setValue" icon="check" class="text-success"/>
-			<font-awesome-icon @click="chancelValue" icon="times" class="text-danger"/>
+			<button @click="setValue" class="btn-none fx-btn"><font-awesome-icon icon="check" class="text-success"/></button>
+			<button @click="chancelValue" class="btn-none fx-btn"><font-awesome-icon icon="times" class="text-danger"/></button>
 		</span>
-		<span @click="edit = true" class="geoselect view" v-else>
+		<button @click="edit = true" class="btn-none geoselect view" v-else>
 			<span v-for="(place, pKey) in places"><template v-if="pKey > 0">, </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
 			<!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
 			<span :id="'eo' + child.uId" v-for="child in content.childs">
@@ -13,7 +13,7 @@
 				<font-awesome-icon icon="exclamation-triangle" class="text-warning" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0"/>
 			</span>
 			<font-awesome-icon icon="map-marked"/>
-		</span>
+		</button>
 	</span>
 </template>
 
@@ -83,5 +83,13 @@
 		padding: 0 5px;
 		background: #ee6;
 		display: inline-block;
+	}
+	button.fx-btn {
+		width: 25px;
+		margin-left: 3px;
+		text-align: center;
+	}
+	button.fx-btn:hover, button.fx-btn:focus {
+		background: #bbb !important;
 	}
 </style>
