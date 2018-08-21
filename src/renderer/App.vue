@@ -132,6 +132,13 @@
 	.ohidden {
 		overflow: hidden;
 	}
+	.mw120px {
+		min-width: 120px;
+	}
+	.mh30vhscroll {
+		max-height: 30vh;
+		overflow-y: auto;
+	}
 	.w100 {
 		width: 100%;
 	}

@@ -1,12 +1,25 @@
 <template>
 	<span v-if="!refreshSelect">
 		<span class="geoselect edit" v-if="edit">
-			GeoSelect Edit
+			<span class="gsel mir10" v-for="(place, pKey) in placesEdit">
+				<span class="field-name">
+					{{ place.fieldName }}
+					<span class="float-right" v-if="!place.option.possible">!</span>
+					<font-awesome-icon :icon="((true) ? 'check-square' : 'square')" :class="'float-right fa-icon' + ((true) ? '' : ' text-warning')" v-else-if="place.option"/>
+					<font-awesome-icon icon="eye-slash" class="float-right fa-icon" v-else/>
+				</span>
+				<b-dropdown variant="val-focus" size="sm" menu-class="mh30vhscroll" no-caret>
+					<template slot="button-content">
+						<span class="select mw120px">{{ 'x' }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
+					</template>
+					<b-dropdown-item :key="aPlace.sigle" v-for="aPlace in place.places">{{ aPlace.name }}</b-dropdown-item>
+				</b-dropdown>
+			</span>
 			<button @click="setValue" class="btn-none fx-btn"><font-awesome-icon icon="check" class="text-success"/></button>
 			<button @click="chancelValue" class="btn-none fx-btn"><font-awesome-icon icon="times" class="text-danger"/></button>
 		</span>
 		<button @click="edit = true" class="btn-none geoselect view" v-else>
-			<span v-for="(place, pKey) in places"><template v-if="pKey > 0">, </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
+			<span v-for="(place, pKey) in placesView"><template v-if="pKey > 0">{{ content.fxData.join }} </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
 			<!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
 			<span :id="'eo' + child.uId" v-for="child in content.childs">
 				<span class="error-place" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0">{{ child.orgXmlObj.getValueByOption(child.parserObj.options.get('value'), false) }}&nbsp;</span>
@@ -19,7 +32,7 @@
 
 <script>
 	import SelectPossibleValues from '../SelectPossibleValues'
-	// import stdFunctions from '@/functions/stdFunctions'
+	import stdFunctions from '@/functions/stdFunctions'
 
 	export default {
 		name: 'GeoSelect',
@@ -34,11 +47,25 @@
 			}
 		},
 		computed: {
-			'places' () {
+			'placesView' () {
 				let aPlaces = []
 				this.content.getChilds('all', true).forEach(function (child) {
 					if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.getValue(false)) {
 						aPlaces.push(child)
+					}
+				}, this)
+				return aPlaces
+			},
+			'placesEdit' () {
+				let aPlaces = []
+				let peRest = false
+				this.content.fxData.places.uFields.forEach(function (aField) {
+					let xmlFieldName = this.content.fxData.places.xFields[this.content.fxData.places.pFields.indexOf(aField)]
+					let aOption = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.content.fxData.fields, 'name', aField)
+					if (peRest || aOption) {
+						peRest = true
+						// ToDo: Aktueller Wert!
+						aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'option': aOption, 'places': this.content.fxData.places[aField]})
 					}
 				}, this)
 				return aPlaces
@@ -73,6 +100,27 @@
 </script>
 
 <style scoped>
+	.select {
+		display: inline-block;
+		position: relative;
+		cursor: pointer;
+		border: none;
+		background: none;
+		border-radius: 5px;
+		padding: 0px 5px;
+		text-align: left;
+	}
+	.select:hover {
+		background: #eef;
+	}
+	.dropdown-item > .fa-icon {
+		position: absolute;
+		left: 5px;
+		margin-top: 4px;
+	}
+	.b-dropdown {
+		margin-top: -3px;
+	}
 	.geoselect.view {
 		cursor: pointer;
 	}
@@ -91,5 +139,22 @@
 	}
 	button.fx-btn:hover, button.fx-btn:focus {
 		background: #bbb !important;
+	}
+	span.gsel {
+		position: relative;
+		display: inline-block;
+	}
+	span.field-name {
+		font-size: 0.6rem;
+		text-align: center;
+		position: absolute;
+		background: #888;
+		color: #fff;
+		padding: 0 5px;
+		padding-top: 2px;
+		border-radius: 3px;
+		top: -15px;
+		left: 1px;
+		right: 1px;
 	}
 </style>

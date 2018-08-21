@@ -697,7 +697,7 @@
 											"frame": "inline",
 											"hideTitle": true,
 											"multiple": {
-											"use": true,
+												"use": true,
 												"header": "Verbreitung",
 												"spaceBefore": 10,
 												"spaceAfter": 5,
@@ -724,7 +724,8 @@
 												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "bundesland"]},
 												"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}
 											}],
-											"tag": ["multiple", "possible"]
+											"tag": ["multiple", "possible"],
+											"layout": {"multiple": { "use": true,"join": "," } }
 										} ?>
 				</placeName>
 			</usg>

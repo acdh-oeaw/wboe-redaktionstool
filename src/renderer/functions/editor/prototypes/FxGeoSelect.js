@@ -10,9 +10,11 @@ const localFunctions = {
 			eObj.fxFunction = 'GeoSelect'
 			eObj.fxData.fields = eObj.parserObj.options.get('editor.fxFunction.fields')
 			eObj.fxData.places = eObj.parserObj.root.additionalFiles[eObj.parserObj.options.get('editor.fxFunction.filename')].geoSelect
+			eObj.fxData.join = ','
 			eObj.parserObj.childs.some(function (aPar) {
 				if (aPar.name === 'placeName') {
 					eObj.fxData.placeParser = aPar
+					eObj.fxData.join = aPar.options.get('layout.multiple.join') || ','
 					return true
 				}
 			})
