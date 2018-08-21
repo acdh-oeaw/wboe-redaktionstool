@@ -30,36 +30,6 @@
 			}
 		},
 		computed: {
-			// 'placeParser' () {		// Aktuellen Parser für "placeName" ermitteln
-			// 	let pParser = null
-			// 	this.content.parserObj.childs.some(function (aPar) {
-			// 		if (aPar.name === 'placeName') {
-			// 			pParser = aPar
-			// 			return true
-			// 		}
-			// 	}, this)
-			// 	return pParser
-			// },
-			// 'grossregionEObj' () {
-			// 	let aGrossregion = null
-			// 	let delList = []
-			// 	this.content.getChilds('all', true).forEach(function (aChild) {
-			// 		if (aChild.parserObj === this.placeParser && (aChild.orgXmlObj.attributes && (aChild.orgXmlObj.attributes.type === 'grossregion' || aChild.orgXmlObj.attributes.type === 'bundesland'))) {
-			// 			if (aChild.orgXmlObj.attributes.type === 'grossregion') {
-			// 				aGrossregion = aChild
-			// 			}
-			// 		} else {
-			// 			delList.push(aChild)
-			// 		}
-			// 	}, this)
-			// 	if (delList.length > 0) {
-			// 		delList.forEach(function (aDel) {
-			// 			aDel.delete(true)
-			// 		}, this)
-			// 		this.content.updateData(true)
-			// 	}
-			// 	return aGrossregion
-			// },
 			// 'bundeslandEObj' () {
 			// 	let aBundesland = null
 			// 	let delList = []
@@ -86,25 +56,6 @@
 			// 		this.content.updateData(true)
 			// 	}
 			// 	return aBundesland
-			// },
-			// 'grossregionVal' () {
-			// 	if (this.grossregionEObj) {
-			// 		if (this.grossregionEObj.orgXmlObj.attributes && this.grossregionEObj.orgXmlObj.attributes['xml:id']) {
-			// 			let iVal = stdFunctions.getFirstKeyOfValueInPropertyOfArray(this.placeList['Großregion'], 'Sigle_DB', this.grossregionEObj.orgXmlObj.attributes['xml:id'])
-			// 			if (iVal > -1) {
-			// 				return this.placeList['Großregion'][iVal]
-			// 			}
-			// 		}
-			// 		let xVal = this.grossregionEObj.orgXmlObj.getValue(false)
-			// 		let iVal = stdFunctions.getFirstKeyOfValueInPropertyOfArray(this.placeList['Großregion'], 'Großregion', xVal)
-			// 		if (iVal > -1) {
-			// 			this.grossregionEObj.orgXmlObj.setAttribute('xml:id', this.placeList['Großregion'][iVal].Sigle_DB)
-			// 			return this.placeList['Großregion'][iVal]
-			// 		} else {
-			// 			return xVal
-			// 		}
-			// 	}
-			// 	return null
 			// },
 			// 'bundeslandVal' () {
 			// 	if (this.bundeslandEObj) {
@@ -140,10 +91,7 @@
 		},
 		mounted () {
 			// console.log('placeList', this.placeList)
-			// console.log('placeParser', this.placeParser)
-			// console.log('grossregionEObj', this.grossregionEObj)
 			// console.log('bundeslandEObj', this.bundeslandEObj)
-			// console.log('grossregionVal', this.grossregionVal)
 			// console.log('bundeslandVal', this.bundeslandVal)
 		},
 		methods: {

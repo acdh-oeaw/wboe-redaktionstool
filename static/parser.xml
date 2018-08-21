@@ -708,7 +708,11 @@
 											"onlyLastElementHasAddButton": true,
 											"fxFunction": {
 												"name": "GeoSelect",
-												"filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx"
+												"filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx",
+												"fields": [
+													{ "name": "Großregion", "possible": true, "inXML": true },
+													{ "name": "Bundesland", "inXML": true }
+												]
 											}
 										}
 									} ?>

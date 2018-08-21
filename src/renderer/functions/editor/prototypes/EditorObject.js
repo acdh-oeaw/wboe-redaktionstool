@@ -2,6 +2,7 @@
 import Vue from 'vue'
 import stdFunctions from '@/functions/stdFunctions'
 import Editor from '../Editor'
+import FxGeoSelect from './FxGeoSelect'
 
 const localFunctions = {
 	init () {
@@ -243,6 +244,12 @@ const localFunctions = {
 			let aNextSibs = this.getSiblings('next', true, false, true)
 			this.multipleLast = !(aNextSibs.length > 0 && aNextSibs[0].parserObj === this.parserObj)
 		}
+		// Spezielle Funktion
+		if (this.parserObj && this.parserObj.options) {
+			if (this.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect') {
+				FxGeoSelect.updateData(this, first)
+			}
+		}
 		// Updates ...
 		if (this.parserObj && !this.isRoot) {
 			this.checkParser(posAsError)
@@ -358,10 +365,17 @@ const localFunctions = {
 			let aAttrCheck = this.parserObj.checkAttributes(this.orgXmlObj.attributes)
 			let aValCheck = this.parserObj.checkValue(this.orgXmlObj)
 			let aPosCheck = this.parserObj.checkPosition(this, true, true)
+			// Spezielle Funktion
+			let aFxCheck = []
+			if (this.parserObj && this.parserObj.options) {
+				if (this.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect') {
+					aFxCheck = FxGeoSelect.checkParser(this)
+				}
+			}
 			aAttrCheck.err.concat(aValCheck.err, ((posAsError) ? aPosCheck : [])).forEach(function (aErr) {
 				this.addError(aErr)
 			}, this)
-			aAttrCheck.warn.concat(aValCheck.warn, ((!posAsError) ? aPosCheck : [])).forEach(function (aWarn) {
+			aAttrCheck.warn.concat(aValCheck.warn, aFxCheck, ((!posAsError) ? aPosCheck : [])).forEach(function (aWarn) {
 				this.addWarning(aWarn)
 			}, this)
 		}

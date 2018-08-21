@@ -38,6 +38,8 @@ const localFunctions = {
 		this.isMultiple = false				// Kann dieses Objekt öfter hinter einander vor kommen?
 		this.isParserCopy = false			// Ist das ParserObject eine Kopie?
 		this.parserCopyDeep = 0				// Tiefe ...
+		this.fxFunction = null				// Spezielle Funktion
+		this.fxData = {}							// Daten für spezielle Funktion
 		// Werte die nach dem Setzen alller "EditorObject"e gesetzt werden. (updateData)
 		this.count = 0								// Das wievielte Elment?
 		this.countParser = 0					// Das wievielte Objekt mit diesem Parser innerhalb dieser Generation ist es?
