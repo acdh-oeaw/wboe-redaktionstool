@@ -46,6 +46,18 @@ const localFunctions = {
 		}
 		return rKey
 	},
+	getFirstObjectOfValueInPropertyOfArray (arr, property, value, returnObj) {
+		let rObj = ((returnObj) ? {} : null)
+		if (Array.isArray(arr)) {
+			arr.some(function (aVal, aKey) {
+				if (aVal[property] && aVal[property] === value) {
+					rObj = aVal
+					return true
+				}
+			}, this)
+		}
+		return rObj
+	},
 }
 
 export default localFunctions
