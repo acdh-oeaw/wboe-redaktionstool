@@ -34,9 +34,13 @@ const actions = {
 			}
 		}
 		if (fileContent) {
-			aParser = new ParserObject.ParserBase(fileContent, aFile)
+			if (fileContent === state.content && aFile === state.file) {
+				aParser = state.parser
+			} else {
+				aParser = new ParserObject.ParserBase(fileContent, aFile)
+			}
 		}
-		console.log('LOAD_PARSER_FILE', aFile)
+		console.log('LOAD_PARSER_FILE', aFile, (fileContent !== state.content))
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })
 	},
 	RELOAD_PARSER_FILE ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"

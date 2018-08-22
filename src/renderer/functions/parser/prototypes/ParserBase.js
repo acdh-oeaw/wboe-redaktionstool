@@ -101,7 +101,7 @@ const localFunctions = {
 					// Datenvorbereitung für spezielle Funktionen:
 					if (!this.additionalFiles[lFile].geoSelect && this.additionalFiles[lFile].JSON && aObj.options.get('editor.fxFunction.name') === 'GeoSelect') {		// Daten für GeoSelect vorbereiten
 						this.additionalFiles[lFile].geoSelect = FxGeoSelect.fileData(this, lFile)
-						console.log(this.additionalFiles[lFile].JSON.length, this.additionalFiles[lFile].geoSelect['Kleinregion'].length + this.additionalFiles[lFile].geoSelect['Großregion'].length + this.additionalFiles[lFile].geoSelect['Bundesland'].length, this.additionalFiles[lFile].JSON, this.additionalFiles[lFile].geoSelect)
+						// console.log(this.additionalFiles[lFile].JSON.length, this.additionalFiles[lFile].geoSelect['Kleinregion'].length + this.additionalFiles[lFile].geoSelect['Großregion'].length + this.additionalFiles[lFile].geoSelect['Bundesland'].length, this.additionalFiles[lFile].JSON, this.additionalFiles[lFile].geoSelect)
 					}
 				}
 			}, this)
