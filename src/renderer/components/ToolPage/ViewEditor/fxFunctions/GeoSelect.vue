@@ -8,7 +8,7 @@
 					<font-awesome-icon @click="togglePlaceUse(place)" :icon="((place.use && place.selectedPlace) ? 'check-square' : 'square')" :class="'float-right fa-icon'+((!place.use && place.selectedPlace) ? ' text-warning' : '')" v-else-if="place.option.possible"/>
 					<font-awesome-icon icon="eye-slash" class="float-right fa-icon" v-else/>
 				</span>
-				<b-dropdown variant="val-focus" size="sm" menu-class="mh30vhscroll" no-caret>
+				<b-dropdown variant="val-focus" size="sm" menu-class="mh30vhscroll" :ref="'dropdown' + pKey" @shown="dropdownFocusActive('dropdown' + pKey)" no-caret>
 					<template slot="button-content">
 						<span :class="{'select': true, 'mw120px': true, 'text-warning': (!place.use && place.selectedPlace), 'error': !isCorrectPlace(place)}">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
 					</template>
@@ -38,7 +38,7 @@
 </template>
 
 <script>
-	import SelectPossibleValues from '../SelectPossibleValues'
+	import _ from 'lodash'
 	import stdFunctions from '@/functions/stdFunctions'
 
 	export default {
@@ -100,16 +100,17 @@
 			setPlace (place, sigle) {
 				if (place.selectedPlace !== sigle) {
 					this.changed = true
-					place.selectedPlace = sigle
-					let selPlace = this.placeBySigle(place.places, sigle)
-					if (selPlace) {
-						Object.keys(selPlace.parents).forEach(function (aParKey) {
-							let peSP = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.placesEdit, 'fieldName', aParKey)
-							if (peSP) {
-								peSP.selectedPlace = selPlace.parents[aParKey].sigle
-							}
-						}, this)
-					}
+				}
+				place.selectedPlace = sigle
+				let selPlace = this.placeBySigle(place.places, sigle)
+				if (selPlace) {
+					Object.keys(selPlace.parents).forEach(function (aParKey) {
+						let peSP = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.placesEdit, 'fieldName', aParKey)
+						if (peSP && peSP.selectedPlace !== selPlace.parents[aParKey].sigle) {
+							this.changed = true
+							peSP.selectedPlace = selPlace.parents[aParKey].sigle
+						}
+					}, this)
 				}
 			},
 			togglePlaceUse (place) {
@@ -194,9 +195,14 @@
 				return aPlaces
 			},
 			getFirstObjectOfValueInPropertyOfArray: stdFunctions.getFirstObjectOfValueInPropertyOfArray,
+			dropdownFocusActive: _.debounce(function (ref) {
+				let aElement = this.$refs[ref][0].$el.getElementsByClassName('dropdown-item active')[0]
+				if (aElement) {
+					aElement.focus()
+				}
+			}, 10),
 		},
 		components: {
-			SelectPossibleValues
 		},
 	}
 </script>

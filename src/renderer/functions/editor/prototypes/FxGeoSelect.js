@@ -6,7 +6,7 @@ import stdFunctions from '@/functions/stdFunctions'
 const localFunctions = {
 	updateData (eObj, first) {
 		if (!eObj.fxFunction) {
-			console.log('GeoSelect - updateData new')
+			// console.log('GeoSelect - updateData new')
 			eObj.fxFunction = 'GeoSelect'
 			eObj.fxData.fields = eObj.parserObj.options.get('editor.fxFunction.fields')
 			eObj.fxData.places = eObj.parserObj.root.additionalFiles[eObj.parserObj.options.get('editor.fxFunction.filename')].geoSelect
