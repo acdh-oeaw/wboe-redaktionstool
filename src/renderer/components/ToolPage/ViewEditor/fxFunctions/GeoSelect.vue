@@ -5,12 +5,12 @@
 				<span class="field-name">
 					{{ place.fieldName }}
 					<span class="float-right" v-if="!place.option.possible">!</span>
-					<font-awesome-icon :icon="((true) ? 'check-square' : 'square')" :class="'float-right fa-icon' + ((true) ? '' : ' text-warning')" v-else-if="place.option"/>
+					<font-awesome-icon @click="togglePlaceUse(place)" :icon="((place.use && place.selectedPlace) ? 'check-square' : 'square')" :class="'float-right fa-icon'+((!place.use && place.selectedPlace) ? ' text-warning' : '')" v-else-if="place.option.possible"/>
 					<font-awesome-icon icon="eye-slash" class="float-right fa-icon" v-else/>
 				</span>
 				<b-dropdown variant="val-focus" size="sm" menu-class="mh30vhscroll" no-caret>
 					<template slot="button-content">
-						<span :class="{'select': true, 'mw120px': true, 'error': !isCorrectPlace(place)}">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
+						<span :class="{'select': true, 'mw120px': true, 'text-warning': (!place.use && place.selectedPlace), 'error': !isCorrectPlace(place)}">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
 					</template>
 					<b-dropdown-item @click="setPlace(place, null)" :class="{'active': (!place.selectedPlace), 'not-possible': !(!place.option || place.option.possible)}">Keiner</b-dropdown-item>
 					<b-dropdown-item :key="aPlace.sigle"
@@ -22,7 +22,7 @@
 					</b-dropdown-item>
 				</b-dropdown>
 			</span>
-			<button @click="setValue" class="btn-none fx-btn"><font-awesome-icon icon="check" class="text-success"/></button>
+			<button @click="saveValue" class="btn-none fx-btn"><font-awesome-icon icon="check" class="text-success"/></button>
 			<button @click="chancelValue" class="btn-none fx-btn"><font-awesome-icon icon="times" class="text-danger"/></button>
 		</span>
 		<button @click="edit = true" class="btn-none geoselect view" v-else>
@@ -100,11 +100,10 @@
 							}
 						}, this)
 						// Objekt der Liste hinzufügen
-						aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'selectedPlace': aSelectedPlace, 'placeObj': aPlaceObj, 'option': aOption, 'places': this.content.fxData.places[aField]})
+						aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'selectedPlace': aSelectedPlace, 'use': true, 'placeObj': aPlaceObj, 'option': aOption, 'places': this.content.fxData.places[aField]})
 						peRest = true
 					}
 				}, this)
-				console.log(aPlaces)
 				return aPlaces
 			},
 			setPlace (place, sigle) {
@@ -122,15 +121,33 @@
 					}
 				}
 			},
-			setValue () {
-				// ToDo!!!!
-				this.edit = false
-				this.refreshSelect = true
+			togglePlaceUse (place) {
+				if (place.selectedPlace) {
+					place.use = !place.use
+				}
+			},
+			saveValue () {
+				let aError = false
+				this.placesEdit.forEach(function (aPlace) {
+					if (!this.isCorrectPlace(aPlace)) {
+						aError = true
+					}
+				}, this)
+				if (!aError || confirm('Die Eingabe ist Fehlerhaft! Trotzdem anwenden?')) {
+					// ToDo: Speichervorgang
+					this.placesEdit.forEach(function (aPlace) {
+						console.log(aPlace)
+					}, this)
+					this.edit = false
+					this.refreshSelect = true
+					this.changed = false
+				}
 			},
 			chancelValue () {
 				if (!this.changed || confirm('Änderung verwerfen?')) {
 					this.edit = false
 					this.refreshSelect = true
+					this.changed = false
 				}
 			},
 			placeBySigle (places, sigle) {
