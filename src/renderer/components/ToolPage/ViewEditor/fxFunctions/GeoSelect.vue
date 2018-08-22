@@ -10,9 +10,16 @@
 				</span>
 				<b-dropdown variant="val-focus" size="sm" menu-class="mh30vhscroll" no-caret>
 					<template slot="button-content">
-						<span class="select mw120px">{{ 'x' }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
+						<span :class="{'select': true, 'mw120px': true, 'error': !isCorrectPlace(place)}">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
 					</template>
-					<b-dropdown-item :key="aPlace.sigle" v-for="aPlace in place.places">{{ aPlace.name }}</b-dropdown-item>
+					<b-dropdown-item @click="setPlace(place, null)" :class="{'active': (!place.selectedPlace), 'not-possible': !(!place.option || place.option.possible)}">Keiner</b-dropdown-item>
+					<b-dropdown-item :key="aPlace.sigle"
+														@click="setPlace(place, aPlace.sigle)"
+														:class="{'active': (place.selectedPlace === aPlace.sigle)}"
+														v-if="Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace)"
+														v-for="aPlace in place.places">
+						{{ aPlace.name }}
+					</b-dropdown-item>
 				</b-dropdown>
 			</span>
 			<button @click="setValue" class="btn-none fx-btn"><font-awesome-icon icon="check" class="text-success"/></button>
@@ -44,6 +51,7 @@
 				'refreshSelect': false,
 				'edit': false,
 				'changed': false,
+				'placesEdit': [],
 			}
 		},
 		computed: {
@@ -56,22 +64,13 @@
 				}, this)
 				return aPlaces
 			},
-			'placesEdit' () {
-				let aPlaces = []
-				let peRest = false
-				this.content.fxData.places.uFields.forEach(function (aField) {
-					let xmlFieldName = this.content.fxData.places.xFields[this.content.fxData.places.pFields.indexOf(aField)]
-					let aOption = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.content.fxData.fields, 'name', aField)
-					if (peRest || aOption) {
-						peRest = true
-						// ToDo: Aktueller Wert!
-						aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'option': aOption, 'places': this.content.fxData.places[aField]})
-					}
-				}, this)
-				return aPlaces
-			},
 		},
 		watch: {
+			'edit' (nVal) {
+				if (nVal) {
+					this.placesEdit = this.getPlacesEdit()
+				}
+			},
 			'refreshSelect' (nVal) {
 				if (nVal) {
 					this.$nextTick(() => {
@@ -83,15 +82,86 @@
 		mounted () {
 		},
 		methods: {
+			getPlacesEdit () {
+				let aPlaces = []
+				let peRest = false
+				this.content.fxData.places.uFields.forEach(function (aField, aFieldKey) {
+					let xmlFieldName = this.content.fxData.places.xFields[this.content.fxData.places.pFields.indexOf(aField)]
+					let aOption = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.content.fxData.fields, 'name', aField)
+					if (peRest || aOption) {
+						// Aktuelle Werte auslesen
+						let aPlaceObj = null
+						let aSelectedPlace = null
+						this.content.getChilds('all', true).some(function (child) {
+							if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.attributes['xml:id'] && child.orgXmlObj.attributes.type === xmlFieldName) {
+								aPlaceObj = child
+								aSelectedPlace = child.orgXmlObj.attributes['xml:id']
+								return true
+							}
+						}, this)
+						// Objekt der Liste hinzufügen
+						aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'selectedPlace': aSelectedPlace, 'placeObj': aPlaceObj, 'option': aOption, 'places': this.content.fxData.places[aField]})
+						peRest = true
+					}
+				}, this)
+				console.log(aPlaces)
+				return aPlaces
+			},
+			setPlace (place, sigle) {
+				if (place.selectedPlace !== sigle) {
+					this.changed = true
+					place.selectedPlace = sigle
+					let selPlace = this.placeBySigle(place.places, sigle)
+					if (selPlace) {
+						Object.keys(selPlace.parents).forEach(function (aParKey) {
+							let peSP = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.placesEdit, 'fieldName', aParKey)
+							if (peSP) {
+								peSP.selectedPlace = selPlace.parents[aParKey].sigle
+							}
+						}, this)
+					}
+				}
+			},
 			setValue () {
 				// ToDo!!!!
 				this.edit = false
+				this.refreshSelect = true
 			},
 			chancelValue () {
 				if (!this.changed || confirm('Änderung verwerfen?')) {
 					this.edit = false
+					this.refreshSelect = true
 				}
 			},
+			placeBySigle (places, sigle) {
+				return stdFunctions.getFirstObjectOfValueInPropertyOfArray(places, 'sigle', sigle)
+			},
+			isCorrectPlace (place) {
+				let isCorrect = true
+				if (place.selectedPlace) {
+					let aPlace = this.placeBySigle(place.places, place.selectedPlace)
+					Object.keys(aPlace.parents).forEach(function (aParKey) {
+						let peSP = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.placesEdit, 'fieldName', aParKey).selectedPlace
+						if (peSP && aPlace.parents[aParKey].sigle !== peSP) {
+							isCorrect = false
+						}
+					}, this)
+				} else if (!place.option.possible) {
+					isCorrect = false
+				}
+				return isCorrect
+			},
+			isVisiblePlace (aPlace) {
+				let isVisible = true
+				Object.keys(aPlace.parents).forEach(function (aParKey) {
+					let peSP = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.placesEdit, 'fieldName', aParKey).selectedPlace
+					if (peSP && aPlace.parents[aParKey].sigle !== peSP) {
+						isVisible = false
+					}
+				}, this)
+				return isVisible
+			},
+			getFirstObjectOfValueInPropertyOfArray: stdFunctions.getFirstObjectOfValueInPropertyOfArray,
 		},
 		components: {
 			SelectPossibleValues
@@ -112,6 +182,10 @@
 	}
 	.select:hover {
 		background: #eef;
+	}
+	.select.error {
+		font-weight: bold;
+		color: #dc3545;
 	}
 	.dropdown-item > .fa-icon {
 		position: absolute;
@@ -156,5 +230,9 @@
 		top: -15px;
 		left: 1px;
 		right: 1px;
+	}
+	.dropdown-item.not-possible {
+		color: #d33;
+		font-style: italic;
 	}
 </style>
