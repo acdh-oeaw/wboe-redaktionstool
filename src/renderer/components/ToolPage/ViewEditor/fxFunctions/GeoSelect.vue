@@ -26,7 +26,7 @@
 			<button @click="chancelValue" class="btn-none fx-btn"><font-awesome-icon icon="times" class="text-danger"/></button>
 		</span>
 		<button @click="edit = true" class="btn-none geoselect view" v-else>
-			<span v-for="(place, pKey) in placesView"><template v-if="pKey > 0">{{ content.fxData.join }} </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
+			<span v-for="(place, pKey) in placesView()"><template v-if="pKey > 0">{{ content.fxData.join }} </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
 			<!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
 			<span :id="'eo' + child.uId" v-for="child in content.childs">
 				<span class="error-place" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0">{{ child.orgXmlObj.getValueByOption(child.parserObj.options.get('value'), false) }}&nbsp;</span>
@@ -55,15 +55,6 @@
 			}
 		},
 		computed: {
-			'placesView' () {
-				let aPlaces = []
-				this.content.getChilds('all', true).forEach(function (child) {
-					if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.getValue(false)) {
-						aPlaces.push(child)
-					}
-				}, this)
-				return aPlaces
-			},
 		},
 		watch: {
 			'edit' (nVal) {
@@ -136,8 +127,23 @@
 				if (!aError || confirm('Die Eingabe ist Fehlerhaft! Trotzdem anwenden?')) {
 					// ToDo: Speichervorgang
 					this.placesEdit.forEach(function (aPlace) {
-						console.log(aPlace)
+						if (!aPlace.option || !aPlace.selectedPlace || !aPlace.use) {
+							if (aPlace.placeObj) {
+								aPlace.placeObj.delete(true)
+							}
+						} else {
+							if (aPlace.placeObj) {
+								if (aPlace.placeObj.orgXmlObj.attributes['xml:id'] !== aPlace.selectedPlace) {
+									aPlace.placeObj.orgXmlObj.setAttribute('xml:id', aPlace.selectedPlace)
+								}
+							} else {
+								let nParser = this.content.add(null, this.content.fxData.placeParser, null, [], [], false, null, null, false)
+								nParser.orgXmlObj.setAttribute('type', aPlace.xmlFieldName)
+								nParser.orgXmlObj.setAttribute('xml:id', aPlace.selectedPlace)
+							}
+						}
 					}, this)
+					this.content.updateData(true)
 					this.edit = false
 					this.refreshSelect = true
 					this.changed = false
@@ -177,6 +183,15 @@
 					}
 				}, this)
 				return isVisible
+			},
+			placesView () {
+				let aPlaces = []
+				this.content.getChilds('all', true).forEach(function (child) {
+					if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.getValue(false)) {
+						aPlaces.push(child)
+					}
+				}, this)
+				return aPlaces
 			},
 			getFirstObjectOfValueInPropertyOfArray: stdFunctions.getFirstObjectOfValueInPropertyOfArray,
 		},

@@ -126,7 +126,7 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	add (pos, aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList, autoCreate) {
+	add (pos, aPar, orgXml, aErrors = [], aWarnings = [], ignoreChilds = false, aParList, autoCreate, updateData = true) {
 		let aKey = pos
 		if (aKey || aKey === 0) {
 			this.childs.splice(aKey, 0, new Editor.EditorObject(this.root, [this, ...this.parents], aPar, orgXml, false, ignoreChilds, true, autoCreate))
@@ -143,7 +143,7 @@ const localFunctions = {
 		aWarnings.forEach(function (aWarn) {
 			this.childs[aKey].addWarning(aWarn)
 		}, this)
-		if (this.root.ready) {
+		if (this.root.ready && updateData) {
 			if (this.parents.length > 0) {
 				this.parents[0].updateData(true)
 			} else {
