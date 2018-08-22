@@ -129,11 +129,17 @@
 		overflow-x: auto;
 		overflow-y: scroll;
 	}
+	.scroll-y {
+		overflow-y: scroll;
+	}
 	.ohidden {
 		overflow: hidden;
 	}
 	.mw120px {
 		min-width: 120px;
+	}
+	.mh30vh {
+		max-height: 30vh;
 	}
 	.mh30vhscroll {
 		max-height: 30vh;
@@ -144,6 +150,9 @@
 	}
 	.h100 {
 		height: 100%;
+	}
+	.h100vh {
+		height: 100vh;
 	}
 	.p0 {
 		padding: 0px;

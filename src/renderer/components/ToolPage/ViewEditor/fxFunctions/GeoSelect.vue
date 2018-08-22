@@ -1,5 +1,5 @@
 <template>
-	<span v-if="!refreshSelect">
+	<span v-if="!refreshSelect" :id="'gs' + content.uId">
 		<span class="geoselect edit" v-if="edit">
 			<span class="gsel mir10" v-for="(place, pKey) in placesEdit">
 				<span class="field-name">
@@ -8,18 +8,22 @@
 					<font-awesome-icon @click="togglePlaceUse(place)" :icon="((place.use && place.selectedPlace) ? 'check-square' : 'square')" :class="'float-right fa-icon'+((!place.use && place.selectedPlace) ? ' text-warning' : '')" v-else-if="place.option.possible"/>
 					<font-awesome-icon icon="eye-slash" class="float-right fa-icon" v-else/>
 				</span>
-				<b-dropdown variant="val-focus" size="sm" menu-class="mh30vhscroll" :ref="'dropdown' + pKey" @shown="dropdownFocusActive('dropdown' + pKey)" no-caret>
+				<b-dropdown variant="val-focus" size="sm" menu-class="mh30vh p-0" ref="dropdown" @shown="dropdownFocusActive(pKey)" @hidden="filter = ''" no-caret>
 					<template slot="button-content">
 						<span :class="{'select': true, 'mw120px': true, 'text-warning': (!place.use && place.selectedPlace), 'error': !isCorrectPlace(place)}">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
 					</template>
-					<b-dropdown-item @click="setPlace(place, null)" :class="{'active': (!place.selectedPlace), 'not-possible': !(!place.option || place.option.possible)}">Keiner</b-dropdown-item>
-					<b-dropdown-item :key="pKey + '-' + apKey + '-' + aPlace.sigle"
-														@click="setPlace(place, aPlace.sigle)"
-														:class="{'active': (place.selectedPlace === aPlace.sigle)}"
-														v-if="Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace)"
-														v-for="(aPlace, apKey) in place.places">
-						{{ aPlace.name }}
-					</b-dropdown-item>
+					<input class="dropdown-filter" type="text" ref="filter" v-model="filter" v-if="filter"/>
+					<div :class="{ 'dropdown-scrollarea': true, 'filter': filter }">
+						<b-dropdown-item @click="setPlace(place, null)" :class="{'active': (!place.selectedPlace), 'not-possible': !(!place.option || place.option.possible)}">Keiner</b-dropdown-item>
+						<b-dropdown-item :key="pKey + '-' + apKey + '-' + aPlace.sigle"
+															@click="setPlace(place, aPlace.sigle)"
+															:class="{'active': (place.selectedPlace === aPlace.sigle)}"
+															v-if="(Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace))
+																		&& (!filter || aPlace.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)"
+															v-for="(aPlace, apKey) in place.places">
+							{{ aPlace.name }}
+						</b-dropdown-item>
+					</div>
 				</b-dropdown>
 			</span>
 			<button @click="saveValue" class="btn-none fx-btn"><font-awesome-icon icon="check" class="text-success"/></button>
@@ -58,6 +62,7 @@
 				'edit': false,
 				'changed': false,
 				'placesEdit': [],
+				'filter': '',
 			}
 		},
 		computed: {
@@ -67,6 +72,9 @@
 				if (nVal) {
 					this.placesEdit = this.getPlacesEdit()
 					this.updateUse()
+					this.$nextTick(() => {
+						this.$refs['dropdown'][0].$el.getElementsByClassName('btn-val-focus')[0].focus()
+					})
 				}
 			},
 			'refreshSelect' (nVal) {
@@ -74,6 +82,21 @@
 					this.$nextTick(() => {
 						this.refreshSelect = false
 					})
+				}
+			},
+			'filter' (nVal) {
+				if (nVal === '') {
+					this.$refs.dropdown.some(function (aDrDo, aKey) {
+						if (aDrDo.visible) {
+							this.$nextTick(() => {
+								let dfEl = aDrDo.$el.getElementsByClassName('dropdown-item active')[0]
+								if (dfEl) {
+									dfEl.focus()
+								}
+							})
+							return true
+						}
+					}, this)
 				}
 			},
 		},
@@ -223,12 +246,38 @@
 				return aPlaces
 			},
 			getFirstObjectOfValueInPropertyOfArray: stdFunctions.getFirstObjectOfValueInPropertyOfArray,
-			dropdownFocusActive: _.debounce(function (ref) {
-				let aElement = this.$refs[ref][0].$el.getElementsByClassName('dropdown-item active')[0]
+			dropdownFocusActive: _.debounce(function (key) {
+				let aElement = this.$refs['dropdown'][key].$el.getElementsByClassName('dropdown-item active')[0]
 				if (aElement) {
 					aElement.focus()
 				}
 			}, 10),
+			keyUp (e) {
+				if (this.edit) {
+					if (document.activeElement.closest('#gs' + this.content.uId) && !document.activeElement.closest('.dropdown-filter')) {
+						if (e.keyCode >= 65 && e.keyCode <= 90) {
+							this.$refs.dropdown.some(function (aDrDo, aKey) {
+								if (aDrDo.visible) {
+									this.filter += e.key
+									this.$nextTick(() => {
+										let dfEl = aDrDo.$el.getElementsByClassName('dropdown-filter')[0]
+										if (dfEl) {
+											dfEl.focus()
+										}
+									})
+									return true
+								}
+							}, this)
+						}
+					}
+				}
+			},
+		},
+		created () {
+			window.addEventListener('keyup', this.keyUp)
+		},
+		beforeDestroy () {
+			window.removeEventListener('keyup', this.keyUp)
 		},
 		components: {
 		},
@@ -300,5 +349,17 @@
 	.dropdown-item.not-possible {
 		color: #d33;
 		font-style: italic;
+	}
+	.dropdown-scrollarea {
+		max-height: calc( 30vh - 2px );
+		margin-right: -1px;
+		overflow-y: auto;
+	}
+	.dropdown-scrollarea.filter {
+		max-height: calc( 30vh - 27px );
+	}
+	.dropdown-filter {
+		height: 25px;
+		width: 100%;
 	}
 </style>
