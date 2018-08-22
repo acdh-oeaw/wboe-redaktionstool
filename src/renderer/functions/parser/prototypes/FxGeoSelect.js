@@ -3,7 +3,7 @@ const localFunctions = {
 		// Einstellungen
 		let pFields = ['Ort', 'Gemeinde', 'Kleinregion', 'Großregion', 'Bundesland']
 		let xFields = ['ort', 'gemeinde', 'kleinregion', 'grossregion', 'bundesland']
-		let pFieldStart = 2
+		let pFieldStart = 1
 		// Vorbereitungen
 		let uFields = pFields.slice(pFieldStart)
 		let geoSelect = { 'pFields': pFields, 'uFields': uFields, 'xFields': xFields }
@@ -13,7 +13,7 @@ const localFunctions = {
 		})
 		eObj.additionalFiles[lFile].JSON.forEach(function (aLine, aLineNr) {
 			if (aLine.Sigle_DB) {
-				let aStartPos = 0
+				let aStartPos = 1		// Spalte "Ort" ignorieren (Widerspricht der Logik von Kleinregion, Großregionen und Bundesländern)
 				while (!aLine[pFields[aStartPos]] && aStartPos < pFields.length) {
 					aStartPos += 1
 				}

@@ -13,17 +13,23 @@
 						<span :class="{'select': true, 'mw120px': true, 'text-warning': (!place.use && place.selectedPlace), 'error': !isCorrectPlace(place)}">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
 					</template>
 					<b-dropdown-item @click="setPlace(place, null)" :class="{'active': (!place.selectedPlace), 'not-possible': !(!place.option || place.option.possible)}">Keiner</b-dropdown-item>
-					<b-dropdown-item :key="aPlace.sigle"
+					<b-dropdown-item :key="pKey + '-' + apKey + '-' + aPlace.sigle"
 														@click="setPlace(place, aPlace.sigle)"
 														:class="{'active': (place.selectedPlace === aPlace.sigle)}"
 														v-if="Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace)"
-														v-for="aPlace in place.places">
+														v-for="(aPlace, apKey) in place.places">
 						{{ aPlace.name }}
 					</b-dropdown-item>
 				</b-dropdown>
 			</span>
 			<button @click="saveValue" class="btn-none fx-btn"><font-awesome-icon icon="check" class="text-success"/></button>
 			<button @click="chancelValue" class="btn-none fx-btn"><font-awesome-icon icon="times" class="text-danger"/></button>
+			<!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
+			<span :id="'eo' + child.uId" v-for="child in content.childs">
+				<span class="error-place" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0">{{ child.orgXmlObj.getValueByOption(child.parserObj.options.get('value'), false) }}&nbsp;</span>
+				<font-awesome-icon icon="exclamation-triangle" class="text-warning" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0"/>
+			</span>
+			<font-awesome-icon icon="map-marked"/>
 		</span>
 		<button @click="edit = true" class="btn-none geoselect view" v-else>
 			<span v-for="(place, pKey) in placesView()"><template v-if="pKey > 0">{{ content.fxData.join }} </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
@@ -60,6 +66,7 @@
 			'edit' (nVal) {
 				if (nVal) {
 					this.placesEdit = this.getPlacesEdit()
+					this.updateUse()
 				}
 			},
 			'refreshSelect' (nVal) {
@@ -81,17 +88,19 @@
 					let aOption = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.content.fxData.fields, 'name', aField)
 					if (peRest || aOption) {
 						// Aktuelle Werte auslesen
+						let aManualUse = false
 						let aPlaceObj = null
 						let aSelectedPlace = null
 						this.content.getChilds('all', true).some(function (child) {
 							if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.attributes['xml:id'] && child.orgXmlObj.attributes.type === xmlFieldName) {
 								aPlaceObj = child
 								aSelectedPlace = child.orgXmlObj.attributes['xml:id']
+								aManualUse = true
 								return true
 							}
 						}, this)
 						// Objekt der Liste hinzufügen
-						aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'selectedPlace': aSelectedPlace, 'use': true, 'placeObj': aPlaceObj, 'option': aOption, 'places': this.content.fxData.places[aField]})
+						aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'selectedPlace': aSelectedPlace, 'use': true, 'manualUse': aManualUse, 'placeObj': aPlaceObj, 'option': aOption, 'places': this.content.fxData.places[aField]})
 						peRest = true
 					}
 				}, this)
@@ -112,10 +121,29 @@
 						}
 					}, this)
 				}
+				this.updateUse()
 			},
 			togglePlaceUse (place) {
 				if (place.selectedPlace) {
 					place.use = !place.use
+					place.manualUse = true
+				}
+			},
+			updateUse () {
+				if (this.content.parserObj.options.get('editor.fxFunction.autoUse') === 'justFirst') {
+					let firstFound = false
+					this.placesEdit.forEach(function (aPlace) {
+						if (!firstFound && aPlace.selectedPlace) {
+							if (!aPlace.manualUse) {
+								aPlace.use = true
+							}
+							firstFound = true
+						} else {
+							if (!aPlace.manualUse) {
+								aPlace.use = false
+							}
+						}
+					}, this)
 				}
 			},
 			saveValue () {

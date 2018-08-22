@@ -24,8 +24,9 @@ const localFunctions = {
 			// "placename"s sortieren
 			let sorting = true
 			let sortDg = 0
-			let lChild
-			while (sorting && sortDg < 10) {
+			while (sorting && sortDg < 25) {
+				let lChild = null
+				sortDg += 1
 				sorting = false
 				eObj.getChilds('all', true).some(function (child) {
 					if (child.orgXmlObj.name === 'placeName') {
@@ -38,13 +39,16 @@ const localFunctions = {
 								if (aChildPos > -1 && lChildPos > -1 && aChildPos < lChildPos) {
 									child.move(lChild, false)
 									sorting = true
+									return true
 								}
 							}
 						}
 						lChild = child
 					}
 				})
-				sortDg += 1
+			}
+			if (sortDg > 1) {
+				console.log('sortDg', sortDg)
 			}
 			let delList = []
 			let placeCount = 0
@@ -71,6 +75,9 @@ const localFunctions = {
 					}
 				}
 			})
+			if (placeCount === 0) {
+				eObj.add(null, eObj.fxData.placeParser)
+			}
 			if (delList.length > 0 && placeCount > 0) {
 				delList.some(function (aObj, aKey) {
 					if (aKey < placeCount - 1) {
@@ -98,6 +105,7 @@ const localFunctions = {
 				}
 			}
 		})
+		// ToDo: Ist Kombination von Kleinregion zu Großregion zu Bundesland korreckt?
 		return warnings
 	},
 }

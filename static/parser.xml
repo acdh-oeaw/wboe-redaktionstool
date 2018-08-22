@@ -744,19 +744,31 @@
 											}
 										},
 										"editor": {
-											"onlyLastElementHasAddButton": true
+											"onlyLastElementHasAddButton": true,
+											"fxFunction": {
+												"name": "GeoSelect",
+												"filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx",
+												"fields": [
+													{ "name": "Gemeinde", "possible": true },
+													{ "name": "Kleinregion", "possible": true },
+													{ "name": "Großregion", "possible": true },
+													{ "name": "Bundesland", "possible": true }
+												],
+												"autoUse": "justFirst"
+											}
 										}
 									} ?>
 				<placeName>
-					<?copyOptions { "fromId": "inlineMultipleJoin", "options": { "editor": { "parentInContext": true } } } ?>
 					<?options {
 											"tagAsTitle": false,
 											"value": ["edit", "required"],
 											"attributes": [{
-												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "region"]},
+												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "bundesland"]},
+												"xml:id": {"type": "variable", "canBeEmpty": {"use": true}},
 												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
-											"tag": ["multiple"]
+											"tag": ["multiple", "possible"],
+											"layout": {"multiple": { "use": true,"join": "," } }
 										} ?>
 				</placeName>
 			</usg>
