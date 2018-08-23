@@ -275,7 +275,7 @@
 						let aFullFileName = fPath.join(aPath, file)
 						if (!fs.statSync(aFullFileName).isDirectory()) {
 							let aExt = file.split('.').pop()
-							if (aExt === 'xml') {
+							if (aExt === 'xml' && file.substr(0, 6) !== 'parser') {
 								let editorObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(fs.readFileSync(aFullFileName, 'utf8')))
 								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length })
 							}

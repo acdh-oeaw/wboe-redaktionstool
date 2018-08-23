@@ -2,6 +2,7 @@ import ParserObject from '@/functions/parser/Parser'
 import { remote } from 'electron'
 import fPath from 'path'
 const fs = remote.require('fs')
+const fse = remote.require('fs-extra')
 const { dialog } = remote
 
 const state = {
@@ -44,26 +45,44 @@ const actions = {
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })
 	},
 	RELOAD_PARSER_FILE ({ commit, dispatch }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
-		var aFile = state.file
-		var fileContent = fs.readFileSync(aFile, 'utf8')
-		var aParser = null
-		if (fileContent) {
-			aParser = new ParserObject.ParserBase(fileContent, aFile)
-		}
-		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })
+		commit('SET_PARSER_FILE', { file: null, content: null, parser: null })
+		dispatch('LOAD_PARSER_FILE')
 	},
 	DIALOG_SAVE_PARSER ({ commit, dispatch, rootState }) {		// Dialog öffnen um aktuellen Parser zu speichern
-		var saveFile = dialog.showSaveDialog({
-			title: 'Parser Datei speichern',
-			defaultPath: fPath.join(rootState.Options.projectPath, '/parser.xml')
+		var saveFolder = dialog.showOpenDialog({
+			title: 'Verzeichniss zum speichern der Parser Dateien auswählen',
+			defaultPath: rootState.Options.projectPath,
+			properties: ['openDirectory']
 		})
-		if (saveFile) {
-			try {
-				fs.writeFileSync(saveFile, state.content, 'utf-8')
-				dispatch('LOAD_PARSER_FILE')
-			} catch (e) {
-				console.log(e)
-				alert('Datei konnte nicht gespeichert werden!')
+		if (saveFolder && saveFolder[0]) {
+			saveFolder = saveFolder[0]
+			var folderState = fs.statSync(saveFolder)
+			if (folderState && folderState.isDirectory) {
+				if (folderState.isDirectory()) {
+					try {
+						if (state.parser) {
+							let aFiles = [{'name': 'parser.xml', 'fullFileName': fPath.join(__static, '/parser.xml')}]
+							Object.keys(state.parser.additionalFiles).forEach(function (addFileKey) {
+								aFiles.push({'name': addFileKey, 'fullFileName': state.parser.additionalFiles[addFileKey].fullFileName})
+							}, this)
+							console.log('Parser speichern ...', saveFolder, aFiles)
+							aFiles.forEach(function (sFile) {
+								console.log(fs)
+								fse.copySync(sFile.fullFileName, fPath.join(saveFolder, sFile.name), {'overwrite': false})
+							}, this)
+							dispatch('RELOAD_PARSER_FILE')
+						} else {
+							alert('Parser nicht geladen!')
+						}
+					} catch (e) {
+						console.log(e)
+						alert('Dateien konnten nicht gespeichert werden!')
+					}
+				} else {
+					alert('Auswahl ist kein Verzeichniss!', 'Fehler!')
+				}
+			} else {
+				alert('Fehler beim auswählen des Verzeichnisses!\n\n' + JSON.stringify(folderState), 'Fehler!')
 			}
 		}
 	}
