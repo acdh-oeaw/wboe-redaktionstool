@@ -113,14 +113,16 @@
 				if (this.newFileName.length === 0) {
 					e.preventDefault()
 					alert('Es muss ein Dateiname eingegeben werden!')
+				} else {
+					let nfn = fPath.join(this.newFilePath, this.newFileName + ((this.newFileName.substr(-4) !== '.xml') ? '.xml' : ''))
+					if (fs.existsSync(nfn)) {
+						e.preventDefault()
+						alert('Dateiname "' + this.newFileName + '" existiert bereits!')
+					} else {
+						this.$store.dispatch('NEW_FILE', {'filename': nfn, 'parser': this.Parser.parser})
+						this.goToTool()
+					}
 				}
-				let nfn = fPath.join(this.newFilePath, this.newFileName + ((this.newFileName.substr(-4) !== '.xml') ? '.xml' : ''))
-				if (fs.existsSync(nfn)) {
-					e.preventDefault()
-					alert('Dateiname "' + this.newFileName + '" existiert bereits!')
-				}
-				this.$store.dispatch('NEW_FILE', {'filename': nfn, 'parser': this.Parser.parser})
-				this.goToTool()
 			},
 		},
 		mounted () {

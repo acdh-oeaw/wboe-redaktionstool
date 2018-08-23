@@ -763,7 +763,7 @@
 											"tagAsTitle": false,
 											"value": ["edit", "required"],
 											"attributes": [{
-												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "bundesland"]},
+												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["ort", "gemeinde", "kleinregion", "grossregion", "bundesland"]},
 												"xml:id": {"type": "variable", "canBeEmpty": {"use": true}},
 												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
