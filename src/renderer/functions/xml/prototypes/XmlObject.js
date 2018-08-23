@@ -23,7 +23,7 @@ const localFunctions = {
 					// Processing Instruction Nodes auswerten
 					this.orgDOM.childNodes.forEach(function (child) {
 						if (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'comment') {		// Kommentare
-							this.comments.push(child.nodeValue)
+							this.comments.push({'val': child.nodeValue})
 						}
 					}, this)
 					// Kinder auswerten
@@ -255,7 +255,7 @@ const localFunctions = {
 				if (!short) { aXML += '>' }
 				if (this.comments.length > 0) {
 					this.comments.forEach(function (aComment) {
-						aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment + '?>'
+						aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment.val + '?>'
 						lChild = { 'type': 'PROCESSING_INSTRUCTION' }
 					}, this)
 				}

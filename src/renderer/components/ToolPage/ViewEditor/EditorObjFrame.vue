@@ -37,8 +37,9 @@
 					</b-list-group-item>
 				</b-list-group>
 				<b-card-body>
-					<div @contextmenu.prevent="contextMenue" class="context">
+					<div @contextmenu.prevent="contextMenue" class="context rel">
 						<slot/>		<!-- Inhalt -->
+						<span class="comment-sym" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
 					</div>
 					<slot name="childs"/>		<!-- Kinder -->
 				</b-card-body>
@@ -52,10 +53,11 @@
 		</b-card>
 
 		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
-			<div @contextmenu.prevent="contextMenue" class="context">
+			<div @contextmenu.prevent="contextMenue" class="context rel">
 				<span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 				<b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
 				<slot/>		<!-- Inhalt -->
+				<span class="comment-sym" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
 			</div>
 			<div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
 					 @mouseenter="showAddableButtons('In')" @mouseleave="hideAddableButtons($event, 'In')"
@@ -113,7 +115,25 @@
 
 
 		<!-- Kontext Menü -->
-		<EditorContextMenu :content="content" ref="contextMenuEditor" v-if="contextMenuCached"/>
+		<EditorContextMenu :content="content" @clickcomment="clickComment" ref="contextMenuEditor" v-if="contextMenuCached"/>
+
+		<!-- Kommentare -->
+		<b-modal ref="commentModal" title="Kommentare" @hidden="commentObj = null" ok-only v-if="commentObj && commentObj.orgXmlObj">
+			<b-input-group size="sm" class="my-3" :key="'co' + commentObj.uId + '-' + aComKey" v-for="(aComment, aComKey) in commentObj.orgXmlObj.comments">
+				<b-form-input v-model="aComment.val"></b-form-input>
+				<b-input-group-append>
+					<b-btn @click="delComment(commentObj, aComKey)" variant="danger"><font-awesome-icon icon="trash-alt"/></b-btn>
+				</b-input-group-append>
+			</b-input-group>
+
+			<b-input-group size="sm" class="my-3">
+				<b-form-input v-model="commentNewVal"></b-form-input>
+				<b-input-group-append>
+					<b-btn @click="addComment(commentObj)" variant="primary" :disabled="!commentNewVal"><font-awesome-icon icon="plus"/></b-btn>
+				</b-input-group-append>
+			</b-input-group>
+
+		</b-modal>
 	</div>
 </template>
 
@@ -131,6 +151,8 @@
 				'contextMenuCached': false,
 				'isOpenAdditionalAddAfterBtn': false,
 				'isOpenAdditionalAddInBtn': false,
+				'commentObj': null,
+				'commentNewVal': '',
 			}
 		},
 		computed: {
@@ -206,6 +228,15 @@
 			}
 		},
 		watch: {
+			'commentObj' (nVal) {
+				if (nVal) {
+					console.log(nVal)
+					this.commentNewVal = ''
+					this.$nextTick(() => {
+						this.$refs.commentModal.show()
+					})
+				}
+			},
 			'isOpenAdditionalAddAfterBtn' (nVal) {
 				if (nVal) {
 					this.$nextTick(() => {
@@ -253,6 +284,22 @@
 					this.content.addAfter(this.content.parserObj.root.family[aParUId])
 				} else if (type === 'In') {
 					this.content.add(0, this.content.parserObj.root.family[aParUId])
+				}
+			},
+			clickComment (cObj) {
+				this.commentObj = cObj
+			},
+			addComment (cObj) {
+				if (this.commentNewVal.trim().length > 0) {
+					cObj.orgXmlObj.comments.push({'val': this.commentNewVal.trim()})
+					this.$store.dispatch('IS_CHANGED')
+				}
+				this.commentNewVal = ''
+			},
+			delComment (cObj, aKey) {
+				if (confirm('Kommentar wirklich löschen?')) {
+					cObj.orgXmlObj.comments.splice(aKey, 1)
+					this.$store.dispatch('IS_CHANGED')
 				}
 			},
 			num2rom (num) {		// Römische Zahlen
@@ -340,5 +387,12 @@
 	}
 	.addable-after-btns > button.first, .addable-in-btns > button.first {
 		font-weight: bolder;
+	}
+	.comment-sym {
+		position: absolute;
+		right: -5px;
+		top: -9px;
+		font-size: 10px;
+		color: #666;
 	}
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div>
-		<div class="context-menu-title clearfix"><b class="mir5" v-if="title">{{ title }}</b><i :class="{'float-right': title}">Tag: {{ this.content.orgXmlObj.name }}</i></div>
+		<div class="context-menu-title clearfix"><b class="mir5" v-if="title">{{ title }}</b><i :class="{'float-right': title}">Tag: {{ content.orgXmlObj.name }}</i></div>
 		<div class="tools">
 			<b-button-group size="sm" class="btn-group-xs d-flex" v-if="moveableLeft || moveableRight || deleteAble">
 				<b-button @click="moveObj('left')" variant="primary" class="w-100" :disabled="!moveableLeft"><font-awesome-icon icon="angle-left" class="fa-icon"/></b-button>
@@ -8,6 +8,9 @@
 				<b-button @click="moveObj('right')" variant="primary" class="w-100" :disabled="!moveableRight"><font-awesome-icon icon="angle-right" class="fa-icon"/></b-button>
 			</b-button-group>
 		</div>
+		<ul>
+			<li @click="clickComment(content)"><font-awesome-icon icon="comment" :class="{'fa-icon': true, 'right': true, 'text-muted': !(content.orgXmlObj && content.orgXmlObj.comments.length > 0)}"/>Kommentare</li>
+		</ul>
 		<template v-if="attributes">
 			<div class="context-menu-subtitle"><b>Attribute:</b></div>
 			<ul>
@@ -35,18 +38,18 @@
 			</ul>
 		</template>
 
-		<template v-if="this.content.addableInner.length > 0 || this.content.addableAfter.length > 0">
+		<template v-if="content.addableInner.length > 0 || content.addableAfter.length > 0">
 			<div class="context-menu-subtitle"><b>Einfügen:</b></div>
 		</template>
 
-		<template v-if="this.content.addableInner.length > 0">
+		<template v-if="content.addableInner.length > 0">
 			<ul>
 				<li @mouseover="subShow = 'addInner'" @mouseleave="subShow = null">
 					<font-awesome-icon icon="circle-notch" class="fa-icon"/>
-					<span>Einfügen in Tag "{{ this.content.orgXmlObj.name }}"</span>
+					<span>Einfügen in Tag "{{ content.orgXmlObj.name }}"</span>
 					<div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="subShow === 'addInner'">
 						<ul>
-							<li @click="addIn(aVal.uId); close()" v-for="(aVal, aKey) in this.content.addableInner" v-if="aVal.cShow">
+							<li @click="addIn(aVal.uId); close()" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.cShow">
 								<font-awesome-icon icon="plus" class="fa-icon"/>
 								{{ aVal.title }}
 							</li>
@@ -56,14 +59,14 @@
 			</ul>
 		</template>
 
-		<template v-if="this.content.addableAfter.length > 0">
+		<template v-if="content.addableAfter.length > 0">
 			<ul>
 				<li @mouseover="subShow = 'addAfter'" @mouseleave="subShow = null">
 					<font-awesome-icon icon="angle-right" class="fa-icon"/>
-					<span>Einfügen nach Tag "{{ this.content.orgXmlObj.name }}"</span>
+					<span>Einfügen nach Tag "{{ content.orgXmlObj.name }}"</span>
 					<div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="subShow === 'addAfter'">
 						<ul>
-							<li @click="addAfter(aVal.uId); close()" v-for="(aVal, aKey) in this.content.addableAfter" v-if="aVal.cShow">
+							<li @click="addAfter(aVal.uId); close()" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.cShow">
 								<font-awesome-icon icon="plus" class="fa-icon"/>
 								{{ aVal.title }}
 							</li>
@@ -73,7 +76,7 @@
 			</ul>
 		</template>
 
-		<EditorContextMenuContent :content="content.parents[0]" :subContextMenuLeft="subContextMenuLeft" @close="close" v-if="content.parents.length > 0 && content.parserObj.options && content.parents.length > 0 && content.parserObj.options.get('editor.parentInContext')"/>
+		<EditorContextMenuContent :content="content.parents[0]" :subContextMenuLeft="subContextMenuLeft" @close="close" @clickcomment="clickComment" v-if="content.parents.length > 0 && content.parserObj.options && content.parents.length > 0 && content.parserObj.options.get('editor.parentInContext')"/>
 	</div>
 </template>
 
@@ -193,6 +196,10 @@
 			},
 			close () {
 				this.$emit('close')
+			},
+			clickComment (aCon) {
+				this.$emit('close')
+				this.$emit('clickcomment', aCon)
 			},
 		},
 		components: {

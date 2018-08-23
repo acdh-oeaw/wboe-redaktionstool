@@ -2,7 +2,7 @@
 	<div :class="{'editorcontextmenu': true, 'left': subContextMenuLeft}" :id="'ecm-' + _uid" v-show="show"
 			:style="{ top: this.top + 'px', left: this.left + 'px' }" tabindex="-1"
 			@contextmenu.capture.prevent>
-		<EditorContextMenuContent :content="content" :subContextMenuLeft="subContextMenuLeft" @close="close"/>
+		<EditorContextMenuContent :content="content" :subContextMenuLeft="subContextMenuLeft" @close="close"  @clickcomment="clickComment"/>
 	</div>
 </template>
 
@@ -34,6 +34,9 @@
 				this.removeEventListeners()
 				this.show = false
 				this.ready = false
+			},
+			clickComment (aCon) {
+				this.$emit('clickcomment', aCon)
 			},
 			open (e) {
 				this.ready = false
