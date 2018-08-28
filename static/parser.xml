@@ -612,7 +612,7 @@
 											"hideTitle": true
 										}
 									} ?>
-				<?copy { "fromId": "text", "options": { "tag": {"possibleTag": false, "anywhere": false}, "layout": { "frame": "inline", "hideTitle": true } } } ?>
+				<?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
 				<oRef>
 					<?options {
 						"id": "oRef",

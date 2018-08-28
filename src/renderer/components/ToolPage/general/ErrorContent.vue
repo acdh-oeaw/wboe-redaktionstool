@@ -5,7 +5,7 @@
 		</li>
 	</ul>
 	<span v-else-if="typeof aError === 'string'">{{ aError }}<br></span>
-	<span  @click="goto(aError.obj, true)" :class="{'clickable': aError.obj}" v-else>
+	<span @click="goto(aError.obj, true)" :class="{'clickable': hasObj}" v-else>
 		<b v-if="aError.obj && !noObj">{{ aError.obj.uId }} - </b>
 		<ErrorContent :error="aError.txt" v-if="aError.txt" @goto="goto"/>
 		<div v-if="aError.sErr">{{ aError.sErr }}</div>
@@ -29,7 +29,12 @@
 				} else {
 					return this.error
 				}
-			}
+			},
+			hasObj () {
+				if (this.aError.obj) {
+					return true
+				}
+			},
 		},
 		methods: {
 			fxUseErrKey (key) {

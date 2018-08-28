@@ -104,8 +104,17 @@ const localFunctions = {
 			}
 			if (neededParsers.length > 0) {		// Sind noch Tags übrig?
 				neededParsers.forEach(function (aVal, aKey) {
-					// console.log('"' + aVal.name + '" automatisch hinzugefügt.')
-					this.add(null, aVal, null, [], [], false, null, true)
+					let aPos = null
+					if (!aVal.options.get('tag.anywhere.use')) {
+						let shouldBefore = aVal.getSiblings('prev', true)
+						if (shouldBefore.length === 0) {
+							aPos = 0
+						} else {
+							// Todo ...
+						}
+					}
+					this.add(aPos, aVal, null, [], [], false, null, true)
+					console.log('"' + aVal.name + '" automatisch hinzugefügt. (' + ((aPos === null) ? 'Ende' : aPos) + ')')
 				}, this)
 			}
 		}
@@ -290,7 +299,7 @@ const localFunctions = {
 						}
 					}, this)
 				}
-				let aParNextSibs = startPos.parserObj.getSiblings('next', true)
+				let aParNextSibs = ((startPos.parserObj) ? startPos.parserObj.getSiblings('next', true) : [])
 				let mHit = false
 				let aNextSibsSP = startPos.getSiblings('next', true)
 				aParNextSibs.forEach(function (aParSib) {
@@ -329,7 +338,7 @@ const localFunctions = {
 				if (acParser.options.get('editor.noAddButton')) {
 					addThis = false
 				}
-				if (!acParser.options.get('tag.anywhere.use') && acParser.name !== '#text') {
+				if (!acParser.options.get('tag.anywhere.use')) {
 					if (mHit) {
 						addThis = false
 					} else {
