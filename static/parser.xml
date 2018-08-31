@@ -98,7 +98,7 @@
 						<?copy { "fromId": "usg-geo-verbreitung" } ?>
 
 						<?copy { "fromId": "form-variant", "options": {
-																														"tag": ["multiple", "possibleTag"],
+																														"tag": ["multiple", "possibleTag", "shouldTag"],
 																														"layout": {
 																															"multiple": {
 																																"use": true,
@@ -111,23 +111,6 @@
 																															"addTitle": "Belegauswahl"
 																														}
 																													} } ?>
-						<form type="lautung">
-							<?options {
-													"title": "Datenbankbbeleg (exempl.)",
-													"attributes": [{
-														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
-													}],
-													"tag": ["possibleTag"],
-													"layout": {
-														"frame": "line",
-														"hideTitle": true,
-														"header": "Datenbankbbeleg (exempl.)",
-														"spaceBefore": 10,
-														"spaceAfter": 5
-													}
-												} ?>
-							<?copy { "fromId": "form-variant", "options": { "tag": ["multiple", "possibleTag"], "editor": { "addTitle": "Form Variant" } } } ?>
-						</form>
 
 						<etym>
 							<?options {
@@ -626,6 +609,9 @@
 							"hideTitle": true,
 							"showAttributeBefore" : {
 								"target": { }
+							},
+							"editor": {
+								"parentInContext": true
 							}
 						}
 					} ?>
@@ -711,8 +697,9 @@
 												"filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx",
 												"fields": [
 													{ "name": "Großregion", "possible": true },
-													{ "name": "Bundesland" }
-												]
+													{ "name": "Bundesland", "possible": true }
+												],
+												"autoUse": "justFirst"
 											}
 										}
 									} ?>

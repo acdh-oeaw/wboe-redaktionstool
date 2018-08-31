@@ -4,8 +4,8 @@
 		<ErrorCard :error="parser.warnings" title="Warnung" variant="warning"/>
 
 		<b-card header="Info" no-body class="mib20 paneldecent" border-variant="primary" header-bg-variant="primary">
-			<div slot="header"><button v-b-toggle="'collapse-header'" class="header-btn-toggle" style="color: #fff;"><b>Info</b><font-awesome-icon :icon="((topInfoOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
-			<b-collapse v-model="topInfoOpen" id="collapse-header">
+			<div slot="header"><button v-b-toggle="'collapse-info'" class="header-btn-toggle" style="color: #fff;"><b>Info</b><font-awesome-icon :icon="((topInfoOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/></button></div>
+			<b-collapse v-model="topInfoOpen" id="collapse-info">
 				<b-card-body>
 					<b>orgFilename:</b> {{ parser.orgFilename }}<br>
 					<b>orgPath:</b> {{ parser.orgPath }}<br>
@@ -69,9 +69,9 @@
 					<!-- <font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/> -->
 					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="content.isCopy"/>
 					<!-- <font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/> -->
-					<font-awesome-icon icon="bars" class="fa-icon icmd" v-if="content.options.get('tag.multiple')"/>
-					<font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="content.options.get('tag.anywhere')"/>
-					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.options.get('tag.possibleTag')"/>
+					<font-awesome-icon icon="bars" class="fa-icon icmd" v-if="content.options.get('tag.multiple.use')"/>
+					<font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="content.options.get('tag.anywhere.use')"/>
+					<font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.options.get('tag.possibleTag.use')"/>
 					<span v-if="content.options.get('title.use')"><b>{{ content.options.get('title.value') }}</b> ({{ content.name }})</span>
 					<span v-else><b>{{ content.name }}</b></span>
 					<span class="val" v-if="content.options.get('value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
