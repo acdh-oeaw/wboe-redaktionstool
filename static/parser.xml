@@ -202,51 +202,8 @@
 																											"addTitle": "Bedeutung 1"
 																										}
 																									} } ?>
-						<re>
-							<?options {
-													"title": "Wortbildung / Redewendung",
-													"tag": ["multiple", "possibleTag"],
-													"layout": {
-														"frame": "box",
-														"hideTitle": true,
-														"multiple": {
-															"use": true,
-															"header": "Wortbildung / Redewendung",
-															"spaceBefore": 10,
-															"spaceAfter": 5
-														}
-													},
-													"editor": {
-														"onlyLastElementHasAddButton": true
-													}
-												} ?>
-							<form>
-								<?options {
-														"title": "Form Lemma/Variable",
-														"attributes": [{
-															"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variable"]},
-															"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["compound", "MWE"]}
-														}],
-														"layout": {
-															"frame": "inline",
-															"hideTitle": true
-														},
-														"tag": ["multiple"]
-													} ?>
-								<?copy { "fromId": "orth", "options": {
-																												"layout": {
-																													"italic": true
-																												},
-																												"editor": {
-																													"parentInContext": true
-																												}
-																											} } ?>
-								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-							</form>
-							<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-							<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-							<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-						</re>
+						<?copy { "fromId": "re-compound", "options": { "tag": ["possibleTag"] } } ?>
+						<?copy { "fromId": "re-MWE", "options": { "tag": ["possibleTag"] } } ?>
 					</entry>
 				</body>
 			</text>
@@ -760,6 +717,99 @@
 				</placeName>
 			</usg>
 
+			<re>
+				<?options {
+										"title": "Wortbildung",
+										"id": "re-compound",
+										"tag": ["multiple", "possibleTag"],
+										"tagHasChildWithAttribute": { "form": { "subtype": "compound" } },
+										"layout": {
+											"frame": "box",
+											"hideTitle": true,
+											"multiple": {
+												"use": true,
+												"header": "Wortbildung",
+												"spaceBefore": 10,
+												"spaceAfter": 5
+											}
+										},
+										"editor": {
+											"onlyLastElementHasAddButton": true
+										}
+									} ?>
+				<form subtype="compound">
+					<?options {
+											"title": "Form Lemma/Variable",
+											"attributes": [{
+												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variable"]}
+											}],
+											"layout": {
+												"frame": "inline",
+												"hideTitle": true
+											},
+											"tag": ["multiple"]
+										} ?>
+					<?copy { "fromId": "orth", "options": {
+																									"layout": {
+																										"italic": true
+																									},
+																									"editor": {
+																										"parentInContext": true
+																									}
+																								} } ?>
+					<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+				</form>
+				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+			</re>
+
+			<re>
+				<?options {
+										"title": "Redewendung",
+										"id": "re-MWE",
+										"tag": ["multiple", "possibleTag"],
+										"tagHasChildWithAttribute": { "form": { "subtype": "MWE" } },
+										"layout": {
+											"frame": "box",
+											"hideTitle": true,
+											"multiple": {
+												"use": true,
+												"header": "Redewendung",
+												"spaceBefore": 10,
+												"spaceAfter": 5
+											}
+										},
+										"editor": {
+											"onlyLastElementHasAddButton": true
+										}
+									} ?>
+				<form subtype="MWE">
+					<?options {
+											"title": "Form Lemma/Variable",
+											"attributes": [{
+												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variable"]}
+											}],
+											"layout": {
+												"frame": "inline",
+												"hideTitle": true
+											},
+											"tag": ["multiple"]
+										} ?>
+					<?copy { "fromId": "orth", "options": {
+																									"layout": {
+																										"italic": true
+																									},
+																									"editor": {
+																										"parentInContext": true
+																									}
+																								} } ?>
+					<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+				</form>
+				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+			</re>
 
 
 

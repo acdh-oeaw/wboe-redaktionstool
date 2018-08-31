@@ -57,7 +57,7 @@ function applyElIpa (el, bindings, vnode) {
 	if (!el[elIpa]) {
 		el[elIpa] = new ExtIpa().$mount()
 		el[elIpa].aElement = el
-		console.log(ipaKeys)
+		// console.log(ipaKeys)
 	} else {
 		el.parentNode.style.position = 'relative'
 		insertAfter(el.parentNode, el[elIpa].$el, el)
@@ -68,7 +68,9 @@ function removeElIpa (el) {
 		return
 	}
 	if (el[elIpa]) {
-		el[elIpa].destroy()
+		if (el[elIpa].destroy) {
+			el[elIpa].destroy()
+		}
 		el[elIpa] = null
 		delete el[elIpa]
 	}

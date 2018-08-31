@@ -198,11 +198,11 @@ const localFunctions = {
 				if (ignoreChilds) {
 					score += 1
 				} else {
-					aErr = this.checkChilds(orgXmlObj)
-					if (aErr.length > 0) {
-						errors.push(aErr)
+					let aCheckChilds = this.checkChilds(orgXmlObj)
+					if (aCheckChilds.err.length > 0) {
+						errors.push(aCheckChilds.err)
 					} else {
-						score += 1
+						score += 1 + ((aCheckChilds.warn.length === 0) ? 0.1 : 0)
 					}
 				}
 			}

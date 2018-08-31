@@ -3,6 +3,7 @@
 const localFunctions = {
 	checkChilds (xmlObj) {		// Kinder überprüfen (simpel: nur Tagnamen)
 		let errors = []
+		let warnings = []
 		let aParserChilds = this.getChilds('all', true)
 		if (xmlObj.childs.length > 0) {		// Kinder vergleichen
 			if (aParserChilds.length === 0) {
@@ -36,7 +37,26 @@ const localFunctions = {
 				errors.push('Kinder: Es wurden mindestens ' + aParserChilds.length + ' Kinder erwartet!')
 			}
 		}
-		return errors
+		if (errors.length === 0) {
+			// "tagHasChildWithAttribute": { "form": { "subtype": "MWE" } }
+			let aThCwA = JSON.parse(JSON.stringify(this.options.get('tagHasChildWithAttribute')))
+			if (aThCwA) {
+				xmlObj.childs.forEach(function (xmlO) {
+					if (xmlO.useable && Object.keys(aThCwA).indexOf(xmlO.name) > -1 && Object.keys(xmlO.attributes).length > 0) {
+						let aFound = 0
+						Object.keys(aThCwA[xmlO.name]).forEach(function (aAttrX) {
+							if (xmlO.attributes[aAttrX] === aThCwA[xmlO.name][aAttrX]) {
+								aFound += 1
+							}
+						}, this)
+						if (Object.keys(aThCwA[xmlO.name]).length !== aFound) {
+							errors.push('Nicht alle "tagHasChildWithAttribute" wurden gefunden! ' + JSON.stringify(aThCwA[xmlO.name]))
+						}
+					}
+				}, this)
+			}
+		}
+		return {'err': errors, 'warn': warnings}
 	},
 	checkPosition (editorObj, eoDirekt = false, exp = false) {
 		let errors = []
