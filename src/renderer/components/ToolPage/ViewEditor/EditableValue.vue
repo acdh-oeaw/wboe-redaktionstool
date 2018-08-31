@@ -7,7 +7,7 @@
 
 	<span :class="{ 'val-obj': true, 'val-txt': true, 'bold': content.parserObj.options.get('layout.bold'), 'italic': content.parserObj.options.get('layout.italic'), 'underline': content.parserObj.options.get('layout.underline') }"
 				v-else>
-		<span :class="{ 'val-edit': true, 'val-focus': true, 'empty': !aValue }" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
+		<span :class="{ 'val-edit': true, 'val-focus': true, 'empty': !aValue }" v-rt-ipa ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
 		<font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
 	</span>
 

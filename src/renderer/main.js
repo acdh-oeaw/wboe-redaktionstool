@@ -7,6 +7,7 @@ import router from './router'
 import store from './store'
 
 import stdFunctions from './functions/stdFunctions'
+import ipaDirectives from './directives/Ipa'
 
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faPlus, faMinus, faAngleDown, faAngleUp, faAngleLeft, faAngleRight, faCaretDown, faCaretUp, faCaretLeft, faCaretRight, faSyncAlt, faLock, faLockOpen, faFont, faEdit, faExclamationTriangle, faFolder, faFolderOpen, faFile, faFileDownload, faProjectDiagram, faComment, faEye, faEyeSlash, faCheck, faTimes, faClipboardCheck, faExternalLinkAlt, faQuestionCircle, faBars, faSitemap, faClone, faIdBadge, faArrowsAltV, faTrashAlt, faCircleNotch, faSave, faMinusCircle, faBookOpen, faAsterisk, faAddressCard, faSearch, faInfo, faMapMarked, faSquare, faCheckSquare } from '@fortawesome/free-solid-svg-icons'
@@ -31,6 +32,8 @@ Vue.mixin({		// Global verfügbare Funktionen
 		isValInArrOfSubProp: stdFunctions.isValInArrOfSubProp,
 	}
 })
+
+Vue.directive('rt-ipa', ipaDirectives)
 
 Vue.filter('prettyBytes', function (num) {		// Byte-Angaben formatieren
 	if (typeof num !== 'number' || isNaN(num)) {
