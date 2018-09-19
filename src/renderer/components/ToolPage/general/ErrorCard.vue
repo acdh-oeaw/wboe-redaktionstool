@@ -15,7 +15,7 @@
 	import ErrorContent from './ErrorContent'
 	export default {
 		name: 'ErrorCard',
-		props: ['error', 'title', 'variant'],
+		props: ['error', 'title', 'variant', 'closed'],
 		data () {
 			return {
 				errorsOpen: true
@@ -32,6 +32,13 @@
 			goto (aObj) {
 				this.$emit('goto', aObj)
 			},
+		},
+		created () {
+			if (this.closed) {
+				this.errorsOpen = false
+			}
+		},
+		mounted () {
 		},
 		components: {
 			ErrorContent

@@ -35,7 +35,7 @@ const actions = {
 		commit('SET_LASTFILE', { 'filename': filename })
 	},
 	GET_SHOW ({ commit }) {
-		commit('SET_SHOW', { 'show': store.get('show', { 'professional': true }) })
+		commit('SET_SHOW', { 'show': store.get('show', { 'professional': true, 'warnings': true }) })
 	},
 	TOGGLE_SHOW ({ commit }, obj) {
 		var aShow = JSON.parse(JSON.stringify(state.show))

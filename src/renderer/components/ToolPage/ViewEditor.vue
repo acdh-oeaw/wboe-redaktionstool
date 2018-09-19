@@ -3,7 +3,7 @@
 		<ErrorCard :error="object.orgXmlObj.errors" title="Kritischer Fehler in XML-Datei!" variant="danger" @goto="goToObject"/>
 		<ErrorCard :error="object.parserObj.errors" title="Kritischer Fehler in Parser-Datei!" variant="danger" @goto="goToObject"/>
 		<ErrorCard :error="object.getCompressedBaseError()" title="Fehler" variant="danger" @goto="goToObject"/>
-		<ErrorCard :error="object.warnings" title="Warnung" variant="warning" @goto="goToObject"/>
+		<ErrorCard :error="object.warnings" title="Warnung" variant="warning" :closed="!Options.show.warnings" @goto="goToObject"/>
 		<div v-if="object.contentObj">
 			<div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
 			<ViewEditor :content="object.contentObj" v-else/>

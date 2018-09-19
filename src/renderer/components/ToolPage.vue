@@ -88,6 +88,10 @@
 						<b-button size="sm" @click="xmlEditorUnset" v-if="aTab === 3" variant="warning" :disabled="!xmlEditorLocked">Verwerfen</b-button>
 						<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
 						<div class="vis-dropdown" v-if="showTabView">
+							<template v-if="aTab === 0">
+								<button @click="$store.dispatch('TOGGLE_SHOW', 'warnings')"><font-awesome-icon :icon="((Options.show.warnings) ? 'eye' : 'eye-slash')"/> Warnungen anzeigen</button>
+								<hr>
+							</template>
 							<template v-if="aTab === 3">
 								<button @click="$store.dispatch('TOGGLE_SHOW', 'monacoDiff')"><font-awesome-icon :icon="((Options.show.monacoDiff) ? 'eye' : 'eye-slash')"/> Änderungen anzeigen</button>
 								<hr>
