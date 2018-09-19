@@ -147,7 +147,7 @@
 																"hideTitle": true
 															}
 														} ?>
-									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"] } } ?>
+									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"], "layout": { "italic": true } } } ?>
 									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
 								</form>
 								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
@@ -316,6 +316,7 @@
 										"layout": {
 											"frame": "inline",
 											"hideTitle": true,
+											"ls1pt": true,
 											"before": "'",
 											"after": "'"
 										}

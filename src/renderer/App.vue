@@ -133,6 +133,9 @@
 	.underline {
 		text-decoration: underline;
 	}
+	.ls1pt {
+		letter-spacing: 1pt;
+	}
 	.hidden {
 		display: none;
 	}
