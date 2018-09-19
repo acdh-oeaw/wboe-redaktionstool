@@ -52,15 +52,6 @@
 														"before": ", "
 													}
 												} ?>
-							<pron>
-								<?options {
-														"title": "Aussprache",
-														"value": ["edit", "required"],
-														"tag": ["possibleTag"],
-														"layout": { "frame": "inline", "hideTitle": true, "italic": true },
-														"editor": { "parentInContext": true }
-													} ?>
-							</pron>
 							<?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
 						</form>
 						<?copy { "fromId": "gramGrp", "options": { "layout": { "frame": "line" } } } ?>
