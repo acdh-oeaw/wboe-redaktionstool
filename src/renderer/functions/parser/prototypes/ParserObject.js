@@ -162,7 +162,7 @@ const localFunctions = {
 		let score = 0
 		let possible = true
 		let ignoreChilds = false
-		if (this.name === orgXmlObj.name) {		// Stimmt der Name überein?
+		if (this.name === orgXmlObj.name || (Array.isArray(this.options.get('oldTag')) && this.options.get('oldTag').indexOf(orgXmlObj.name) > -1)) {		// Stimmt der Name überein?
 			let aErr
 			score += 1
 			// Attribute prüfen

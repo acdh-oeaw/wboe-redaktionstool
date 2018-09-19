@@ -9,6 +9,19 @@ const localFunctions = {
 		if (!(typeof this.uId === 'number') || this.root.family.indexOf[this.uId] === -1) {		// Die "uId" zuweisen falls noch nicht vorhanden
 			this.uId = this.root.family.push(this) - 1
 		}
+		if (this.parserObj && this.orgXmlObj && this.orgXmlObj.name !== this.parserObj.name) {
+			this.orgXmlObj.name = this.parserObj.name
+		}
+		if (this.parserObj && this.orgXmlObj && this.parserObj.options && this.parserObj.options.get('attributes')) {
+			let aAttr = this.parserObj.options.get('attributes') || {}
+			Object.keys(aAttr).forEach(function (aKey) {
+				if (aAttr[aKey].shouldAttribute && aAttr[aKey].shouldAttribute.use) {
+					if (!this.orgXmlObj.attributes[aKey]) {
+						this.orgXmlObj.attributes[aKey] = aAttr[aKey].value || ''
+					}
+				}
+			}, this)
+		}
 		let aParserChilds = stdFunctions.getValOfSubProp(this.parserObj, 'childs') || []
 		let aXmlChilds = stdFunctions.getValOfSubProp(this.orgXmlObj, 'childs') || []
 		if (this.isRoot) {

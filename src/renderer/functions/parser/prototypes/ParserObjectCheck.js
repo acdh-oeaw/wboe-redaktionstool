@@ -19,9 +19,18 @@ const localFunctions = {
 				}, this)
 				if (errors.length === 0) {
 					xmlObj.childs.some(function (xmlO) {		// Vorhandene Tags überprüfen
-						if (xmlO.useable && this.getChildsByName(xmlO.name).length === 0) {
-							errors.push('Kinder: Tag "' + xmlO.name + '" nicht erwartet!')
-							return true
+						if (xmlO.useable && (this.getChildsByName(xmlO.name).length === 0)) {
+							let sWr = true
+							aParserChilds.some(function (aPC) {
+								if (Array.isArray(aPC.options.get('oldTag')) && aPC.options.get('oldTag').indexOf(xmlO.name) > -1) {
+									sWr = false
+									return true
+								}
+							}, this)
+							if (sWr) {
+								errors.push('Kinder: Tag "' + xmlO.name + '" nicht erwartet!')
+								return true
+							}
 						}
 					}, this)
 				}
@@ -193,7 +202,8 @@ const localFunctions = {
 			Object.keys(aParAttrObj).some(function (aKey) {
 				// ToDo: Eventuelle If-Abfrage verarbeiten
 				if (!(aParAttrObj[aKey].canBeEmpty && aParAttrObj[aKey].canBeEmpty.use)
-				&& !attrObj.hasOwnProperty(aKey)) {
+				&& !attrObj.hasOwnProperty(aKey)
+				&& !(aParAttrObj[aKey].shouldAttribute && aParAttrObj[aKey].shouldAttribute.use)) {
 					errors.push({'err': 'Attribut "' + aKey + '" fehlt!'})
 				}
 			}, this)
@@ -208,7 +218,7 @@ const localFunctions = {
 		} else if (!attrObj && aParAttrObj) {		// Überprüfen ob alle Attribute optional sind
 			Object.keys(aParAttrObj).some(function (aKey) {
 				// ToDo: Eventuelle If-Abfrage verarbeiten
-				if (!(aParAttrObj[aKey].canBeEmpty && aParAttrObj[aKey].canBeEmpty.use)) {
+				if (!(aParAttrObj[aKey].canBeEmpty && aParAttrObj[aKey].canBeEmpty.use) && !(aParAttrObj[aKey].shouldAttribute && aParAttrObj[aKey].shouldAttribute.use)) {
 					errors.push({'err': 'Attribute erwartet!'})
 					return true
 				}

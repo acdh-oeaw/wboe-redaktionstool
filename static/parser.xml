@@ -154,12 +154,14 @@
 								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							</cit>
-							<desc>
+							<seg>
 								<?options {
 														"title": "Desc",
 														"attributes": [{
+															"type": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "desc"},
 															"part": {"type": "edit", "canBeEmpty": {"use": true}}
 														}],
+														"oldTag": ["desc"],
 														"tag": ["possibleTag", "multiple", "anywhere"],
 														"layout": {
 															"frame": "inline",
@@ -171,7 +173,7 @@
 								<?copy { "fromId": "ref-sense" } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "lang" } ?>
-							</desc>
+							</seg>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "xr" } ?>
