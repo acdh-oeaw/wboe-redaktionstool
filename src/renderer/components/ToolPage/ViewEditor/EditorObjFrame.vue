@@ -174,7 +174,7 @@
 				}
 			},
 			isDraggable () {
-				return this.content.isMultiple
+				return this.content.isMultiple && this.content.parserObj.options && this.content.parserObj.options.get('editor.draggAble')
 			},
 			layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
 				if (this.content.isRoot) { return 'justChilds' }

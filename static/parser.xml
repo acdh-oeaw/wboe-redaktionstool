@@ -434,6 +434,9 @@
 												"use": true,
 												"enumerateFX": true
 											}
+										},
+										"editor": {
+											"draggAble": true
 										}
 									} ?>
 				<?copy { "fromId": "ref-form" } ?>
