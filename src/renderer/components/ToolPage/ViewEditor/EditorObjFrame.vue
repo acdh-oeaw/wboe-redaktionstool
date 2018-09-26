@@ -1,5 +1,9 @@
 <template>
-	<div :id="'eo' + content.uId" class="inline" :style="'font-size: ' + ((content.parserObj.options && content.parserObj.options.get('layout.fontsize')) ? content.parserObj.options.get('layout.fontsize') : 100) + '%;'">
+	<div :id="'eo' + content.uId" :class="'inline' + ((this.DragNdrop.dragUid === this.content.uId) ? ' dragobj' : '') + ((isDragTarget) ? ' dragtarget' : '') + ((dragDir) ? ' dragpos-' + dragDir : '')"
+			:style="'font-size: ' + ((content.parserObj.options && content.parserObj.options.get('layout.fontsize')) ? content.parserObj.options.get('layout.fontsize') : 100) + '%;'"
+			:draggable="isDraggable"
+			v-on="{dragstart:dragStart, dragend:dragEnd, dragleave:dragLeave, dragover:dragOver, drop:drop}"
+		>
 		<!-- Vor Inhalten -->
 		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
 			<div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceBefore')"></div>
@@ -67,7 +71,7 @@
 									@blur="hideAddableButtons($event, 'In')"
 									ref="addableInButton"
 									:variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"><font-awesome-icon icon="circle-notch" class="fa-icon"/></b-button>
-				<div class="addable-in-btns" v-if="isOpenAdditionalAddInBtn">
+				<div class="addable-in-btns" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
 					<b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
 										:variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableInButtons.length - 1}"
 										:key="aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
@@ -84,7 +88,7 @@
 									@blur="hideAddableButtons($event, 'After')"
 									ref="addableAfterButton"
 									:variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"><font-awesome-icon icon="plus" class="fa-icon"/></b-button>
-				<div class="addable-after-btns" v-if="isOpenAdditionalAddAfterBtn">
+				<div class="addable-after-btns" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
 					<b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
 										:variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableAfterButtons.length - 1}"
 										@keyup.up.prevent=""
@@ -138,6 +142,7 @@
 </template>
 
 <script>
+	import { mapState } from 'vuex'
 	import EditorContextMenu from './EditorContextMenu'
 
 	export default {
@@ -153,9 +158,24 @@
 				'isOpenAdditionalAddInBtn': false,
 				'commentObj': null,
 				'commentNewVal': '',
+				'dragDir': null,
 			}
 		},
 		computed: {
+			...mapState(['DragNdrop']),
+			isDragTarget () {
+				if (this.DragNdrop.dragUid) {
+					if (this.$el && this.$el.closest('.dragobj')) {
+						return false
+					}
+					return this.DragNdrop.dragUid !== this.content.uId && this.DragNdrop.dragParserUid === this.content.parserObj.uId
+				} else {
+					return false
+				}
+			},
+			isDraggable () {
+				return this.content.isMultiple
+			},
 			layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
 				if (this.content.isRoot) { return 'justChilds' }
 				if (this.content.parserObj.options && this.content.parserObj.options.get('layout.frame')) {
@@ -259,6 +279,73 @@
 			},
 		},
 		methods: {
+			dragStart (e) {
+				e.stopPropagation()
+				this.$store.commit('SET_DRAG_UID', this.content.uId)
+				this.$store.commit('SET_DRAG_PARSER_UID', this.content.parserObj.uId)
+				var crt = this.$el.cloneNode(true)
+				crt.classList.add('dragitem')
+				crt.classList.add('delafterdrag')
+				let aElement = null
+				crt.childNodes.forEach(function (aChild) {
+					if (aChild.nodeType === aChild.ELEMENT_NODE && aChild.classList.contains('obj')) {
+						aElement = aChild
+					}
+				}, this)
+				while (crt.firstChild) {
+					crt.removeChild(crt.firstChild)
+				}
+				Array.prototype.forEach.call(aElement.querySelectorAll('.addable-after-btn, .addable-in-btn, svg'), function (node) {
+					node.parentNode.removeChild(node)
+				})
+				crt.appendChild(aElement)
+				document.body.appendChild(crt)
+				e.dataTransfer.setDragImage(crt, 0, 30)
+				e.dataTransfer.setData('uid', this.content.uId)
+			},
+			dragEnd (e) {
+				this.$store.commit('SET_DRAG_UID', null)
+				this.$store.commit('SET_DRAG_PARSER_UID', null)
+				this.dragDir = null
+				var paras = document.getElementsByClassName('delafterdrag')
+				while (paras[0]) {
+					paras[0].parentNode.removeChild(paras[0])
+				}
+			},
+			dragLeave (e) {
+				if (this.isDragTarget) {
+					this.dragDir = null
+				}
+			},
+			dragOver (e) {
+				if (this.isDragTarget) {
+					e.stopPropagation()
+					e.preventDefault()
+					this.dragDir = 'left'
+					let aPos = e.target.closest('.dragtarget')
+					if (aPos) {
+						aPos = (aPos.getBoundingClientRect().left + aPos.offsetWidth / 2) - e.pageX
+						if (aPos < 0) {
+							this.dragDir = 'right'
+						}
+					}
+				}
+			},
+			drop (e) {
+				if (this.isDragTarget) {
+					e.stopPropagation()
+					this.dragDir = 'left'
+					let aPos = e.target.closest('.dragtarget')
+					if (aPos) {
+						aPos = (aPos.getBoundingClientRect().left + aPos.offsetWidth / 2) - e.pageX
+						if (aPos < 0) {
+							this.dragDir = 'right'
+						}
+					}
+					console.log('drop', e.dataTransfer.getData('uid'), this.dragDir, this.content.uId)
+					this.dragDir = null
+				}
+			},
 			showAddableButtons (type) {
 				this['isOpenAdditionalAdd' + type + 'Btn'] = true
 			},
@@ -394,5 +481,42 @@
 		top: -9px;
 		font-size: 10px;
 		color: #666;
+	}
+	.dragobj {
+		opacity: 0.33;
+		background: #555 !important;
+	}
+	.dragtarget {
+		position: relative;
+		background: #ddf !important;
+	}
+	.dragpos-left:after, .dragpos-right:after {
+		content: "";
+		position:absolute;
+		top: -5px;
+		bottom: -5px;
+		min-height: 10px;
+		z-index: 100;
+	}
+	.dragpos-left:after {
+		left: -2px;
+		border-left: 3px solid #0f0;
+	}
+	.dragpos-right:after {
+		right: -2px;
+		border-right: 3px solid #0f0;
+	}
+	.dragitem {
+		position: fixed;
+		transform: translateY(500px);
+		background: #fff;
+		border: 1px solid #000;
+		border-radius: 4px;
+		padding: 0px 5px;
+		font-size: 0.6rem;
+	}
+	.dragitem * {
+		margin: 0px !important;
+		padding: 0px !important;
 	}
 </style>
