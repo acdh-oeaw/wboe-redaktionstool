@@ -342,7 +342,7 @@
 							this.dragDir = 'right'
 						}
 					}
-					console.log('drop', e.dataTransfer.getData('uid'), this.dragDir, this.content.uId)
+					this.content.root.moveTo(parseInt(e.dataTransfer.getData('uid')), this.content.uId, this.dragDir)
 					this.dragDir = null
 				}
 			},

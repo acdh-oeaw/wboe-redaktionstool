@@ -1,4 +1,5 @@
 import xmlFunctions from '@/functions/XmlFunctions'
+import store from '@/store'
 import Xml from '../Xml'
 
 const localFunctions = {
@@ -79,6 +80,18 @@ const localFunctions = {
 		this.content[aKey].ready = true
 		this.content[aKey].parserIgnore = false
 		return this.content[aKey]
+	},
+	moveTo (srcObj, destObj, dir) {
+		let sPos = srcObj.siblings.indexOf(srcObj)
+		let dPos = destObj.siblings.indexOf(destObj)
+		if (sPos > -1 && dPos > -1) {
+			dPos = dPos + ((dir === 'right') ? 1 : 0) + ((srcObj.parents[0] === destObj.parents[0] && sPos < dPos) ? -1 : 0)
+			destObj.siblings.splice(dPos, 0, srcObj.siblings.splice(sPos, 1)[0])
+			srcObj.updateParents([...destObj.parents])
+			store.dispatch('IS_CHANGED')
+		} else {
+			console.log('Fehler! Verschieben kann nicht funktionieren! (XML)')
+		}
 	},
 }
 

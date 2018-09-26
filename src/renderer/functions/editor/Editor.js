@@ -63,6 +63,7 @@ localFunctions.EditorBase.prototype.getCompressedBaseError = prototypeMultiple.g
 localFunctions.EditorBase.prototype.updateFamilyErrors = prototypeMultiple.updateFamilyErrors
 localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 localFunctions.EditorBase.prototype.getXML = prototypeEditorBase.getXML
+localFunctions.EditorBase.prototype.moveTo = prototypeEditorBase.moveTo
 
 // EditorObject Prototypen
 localFunctions.EditorObject.prototype.addError = prototypeMultiple.addError
@@ -79,5 +80,6 @@ localFunctions.EditorObject.prototype.updateAddable = prototypeEditorObject.upda
 localFunctions.EditorObject.prototype.updateData = prototypeEditorObject.updateData
 localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
 localFunctions.EditorObject.prototype.move = prototypeEditorObject.move
+localFunctions.EditorObject.prototype.updateParents = prototypeEditorObject.updateParents
 
 export default localFunctions

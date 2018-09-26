@@ -46,6 +46,7 @@ localFunctions.XmlBase.prototype.updateFamilyErrors = prototypeMultiple.updateFa
 localFunctions.XmlBase.prototype.init = prototypeXmlBase.init
 localFunctions.XmlBase.prototype.getXML = prototypeXmlBase.getXML
 localFunctions.XmlBase.prototype.addByParser = prototypeXmlBase.addByParser
+localFunctions.XmlBase.prototype.moveTo = prototypeXmlBase.moveTo
 
 // XmlObject Prototypen
 localFunctions.XmlObject.prototype.addError = prototypeMultiple.addError
@@ -61,5 +62,6 @@ localFunctions.XmlObject.prototype.delete = prototypeXmlObject.delete
 localFunctions.XmlObject.prototype.move = prototypeXmlObject.move
 localFunctions.XmlObject.prototype.addByParser = prototypeXmlObject.addByParser
 localFunctions.XmlObject.prototype.addAfterByParser = prototypeXmlObject.addAfterByParser
+localFunctions.XmlObject.prototype.updateParents = prototypeXmlObject.updateParents
 
 export default localFunctions

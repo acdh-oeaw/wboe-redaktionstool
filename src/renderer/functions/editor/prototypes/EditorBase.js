@@ -1,5 +1,6 @@
 // import xmlFunctions from '@/functions/XmlFunctions'
 import Editor from '../Editor'
+import store from '@/store'
 
 const localFunctions = {
 	init () {
@@ -21,7 +22,29 @@ const localFunctions = {
 	},
 	getXML () {
 		return (this.parserObj.header || '') + this.orgXmlObj.getXML()
-	}
+	},
+	moveTo (srcUId, destUId, dir = 'left') {
+		let srcObj = this.family[srcUId]
+		let destObj = this.family[destUId]
+		console.log('Editor - moveTo', srcObj, destObj, dir)
+		if (srcObj && destObj) {
+			let sPar = srcObj.parents[0]
+			let dPar = destObj.parents[0]
+			let sPos = srcObj.siblings.indexOf(srcObj)
+			let dPos = destObj.siblings.indexOf(destObj)
+			if (sPos > -1 && dPos > -1) {
+				dPos = dPos + ((dir === 'right') ? 1 : 0) + ((sPar === dPar && sPos < dPos) ? -1 : 0)
+				destObj.siblings.splice(dPos, 0, srcObj.siblings.splice(sPos, 1)[0])
+				srcObj.updateParents([...destObj.parents])
+				srcObj.orgXmlObj.root.moveTo(srcObj.orgXmlObj, destObj.orgXmlObj, dir)
+				sPar.updateData(true)
+				dPar.updateData(true)
+				store.dispatch('IS_CHANGED')
+			} else {
+				console.log('Fehler! Verschieben kann nicht funktionieren! (Editor)')
+			}
+		}
+	},
 }
 
 export default localFunctions

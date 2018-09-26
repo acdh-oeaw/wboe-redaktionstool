@@ -310,6 +310,13 @@ const localFunctions = {
 		}
 		return aChilds
 	},
+	updateParents (aParents) {
+		this.parents = aParents
+		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : [this])
+		this.childs.forEach(function (aChild) {
+			aChild.updateParents([this, ...this.parents])
+		}, this)
+	},
 }
 
 export default localFunctions
