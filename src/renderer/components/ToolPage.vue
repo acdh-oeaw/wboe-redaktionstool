@@ -41,7 +41,7 @@
 
 				<b-tab title="Vorschau" :disabled="tabsLocked">
 					<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
-						<div v-if="editorObject">todo ...</div>
+						<ViewPreview :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 					</div>
 				</b-tab>
@@ -123,6 +123,7 @@
 	import { mapState } from 'vuex'
 	import ViewXML from './ToolPage/ViewXML'
 	import ViewEditor from './ToolPage/ViewEditor'
+	import ViewPreview from './ToolPage/ViewPreview'
 	import ViewParser from './ToolPage/ViewParser'
 	import ViewXmlObject from './ToolPage/ViewXmlObject'
 	import ViewEditorObject from './ToolPage/ViewEditorObject'
@@ -354,6 +355,7 @@
 		},
 		components: {
 			ViewEditor,
+			ViewPreview,
 			ViewXML,
 			ViewParser,
 			ViewXmlObject,
