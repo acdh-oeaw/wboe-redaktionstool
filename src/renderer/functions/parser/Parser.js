@@ -70,6 +70,8 @@ const localFunctions = {
 		this.errors = []							// Liste der Fehler
 		this.warnings = []						// Liste der Warnungen
 		this.orgDOM = dom							// Original DOM
+		this.name = null							// Aktueller nodeName
+		this.attributes = {}					// Aktuelle Attribute
 		this.content = []							// Inhalt: Kann "string" oder "ParserPreviewObject" sein.
 		this.type = null							// Typ des "ParserPreviewObject"s
 		this.init()										// Immer dirket initialisieren
@@ -110,5 +112,6 @@ localFunctions.ParserOptions.prototype.getResult = prototypeParserOptions.getRes
 // ParserOptions Prototypen
 localFunctions.ParserPreviewObject.prototype.addError = prototypeMultiple.addError
 localFunctions.ParserPreviewObject.prototype.init = prototypeParserPreviewObject.init
+localFunctions.ParserPreviewObject.prototype.attributesToText = prototypeParserPreviewObject.attributesToText
 
 export default localFunctions

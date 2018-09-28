@@ -14,24 +14,22 @@ function domDescendantsPIN (dom) {
 	return hasPIN
 }
 
-function attributesToText (attr) {
-	let attrTxt = ''
-	if (attr.length > 0) {
-		for (var i = 0; i < attr.length; i++) {
-			attrTxt += ' ' + attr[i].nodeName + '="' + attr[i].nodeValue + '"'
-		}
-	}
-	return attrTxt
-}
-
 const localFunctions = {
 	init () {
-		// console.log(this.orgDOM)
 		if (this.orgDOM.nodeType === this.orgDOM.PROCESSING_INSTRUCTION_NODE) {
+			this.name = this.orgDOM.nodeName
+			this.type = 'PIN'
 			console.log('xxx')
 		} else {
+			this.type = 'HTML'
 			if (domDescendantsPIN(this.orgDOM)) {
-				this.content.push('<' + this.orgDOM.nodeName + attributesToText(this.orgDOM.attributes) + '>')
+				this.name = this.orgDOM.nodeName
+				let attr = this.orgDOM.attributes
+				if (attr.length > 0) {
+					for (var i = 0; i < attr.length; i++) {
+						this.attributes[attr[i].nodeName] = attr[i].nodeValue
+					}
+				}
 				if (this.orgDOM.childNodes.length > 0) {
 					this.orgDOM.childNodes.forEach(function (previewChild) {
 						let aHTML = previewChild.outerHTML
@@ -50,13 +48,6 @@ const localFunctions = {
 						}
 					}, this)
 				}
-				let aHTML = '</' + this.orgDOM.nodeName + '>'
-				let lPos = this.content.length - 1
-				if (lPos >= 0 && typeof this.content[lPos] === 'string') {
-					this.content[lPos] += ' ' + aHTML
-				} else {
-					this.content.push(aHTML)
-				}
 			} else {
 				let aHTML = this.orgDOM.outerHTML
 				if (this.orgDOM.nodeType === this.orgDOM.TEXT_NODE) {
@@ -70,6 +61,16 @@ const localFunctions = {
 		this.ready = true
 		this.useable = true
 		return true
+	},
+	attributesToText () {
+		let attr = this.orgDOM.attributes
+		let attrTxt = ''
+		if (attr.length > 0) {
+			for (var i = 0; i < attr.length; i++) {
+				attrTxt += ' ' + attr[i].nodeName + '="' + attr[i].nodeValue + '"'
+			}
+		}
+		return attrTxt
 	},
 }
 

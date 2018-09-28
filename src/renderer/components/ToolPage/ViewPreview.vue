@@ -10,9 +10,22 @@
 	</div>
 
 	<div v-else-if="!start && preview && object">
-		<hr>
-		<code style="white-space: pre;">{{ preview }}</code>
-		<hr>
+		<template v-for="aPrev in preview">
+			<VariableTag :tag="aPrev.name" :attributes="aPrev.attributes" v-if="aPrev.type === 'HTML'">
+				<template v-for="aContent in aPrev.content">
+					<template v-if="typeof aContent === 'string'">
+						{{ aContent }}
+					</template>
+					<ViewPreview :object="object" :preview="[aContent]" v-else/>
+				</template>
+			</VariableTag>
+			<template v-else-if="aPrev.type === 'PIN'">
+				<code style="white-space: pre;">{{ aPrev }}</code>
+			</template>
+			<template v-else>
+				<b>UNBEKANNTER TYPE ({{ aPrev.type }})</b>
+			</template>
+		</template>
 	</div>
 
 	<div class="error" v-else>
@@ -22,6 +35,7 @@
 
 <script>
 	import { mapState } from 'vuex'
+	import VariableTag from './general/VariableTag'
 
 	export default {
 		name: 'ViewPreview',
@@ -51,6 +65,7 @@
 			},
 		},
 		components: {
+			VariableTag
 		},
 	}
 </script>
