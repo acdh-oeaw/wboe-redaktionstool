@@ -9,12 +9,12 @@
 		</div>
 	</div>
 
-	<div v-else-if="!start && preview && object">
+	<span v-else-if="!start && preview && object">
 		<template v-for="aPrev in preview">
 			<VariableTag :tag="aPrev.name" :attributes="aPrev.attributes" v-if="aPrev.type === 'HTML'">
 				<template v-for="aContent in aPrev.content">
 					<template v-if="typeof aContent === 'string'">
-						{{ aContent }}
+						<span v-html="aContent"/>
 					</template>
 					<ViewPreview :object="object" :preview="[aContent]" v-else/>
 				</template>
@@ -26,7 +26,7 @@
 				<b>UNBEKANNTER TYPE ({{ aPrev.type }})</b>
 			</template>
 		</template>
-	</div>
+	</span>
 
 	<div class="error" v-else>
 		Kein "object/preview" übergeben !!!!
