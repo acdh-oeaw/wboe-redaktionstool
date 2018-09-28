@@ -3,6 +3,7 @@ import prototypeParserBase from './prototypes/ParserBase'
 import prototypeParserObject from './prototypes/ParserObject'
 import prototypeParserObjectCheck from './prototypes/ParserObjectCheck'
 import prototypeParserOptions from './prototypes/ParserOptions'
+import prototypeParserPreviewObject from './prototypes/ParserPreviewObject'
 
 const localFunctions = {
 	ParserBase (xmlString, aFile) {
@@ -62,6 +63,13 @@ const localFunctions = {
 		// this.extendObj(optionObj)			// Optionen erweitern durch Objekt
 		// this.get('x.y')								// Option nach Pfad ermitteln x -> y -> ...
 	},
+	ParserPreviewObject () {
+		this.ready = false						// Ist das PreviewObject bereit?
+		this.useable = false					// Kann das PreviewObject verwendet werden? (Keine Fehler und Ready)
+		this.errors = []							// Liste der Fehler
+		this.warnings = []						// Liste der Warnungen
+		this.init()										// Immer dirket initialisieren
+	},
 }
 
 // ParserBase Prototypen
@@ -94,5 +102,9 @@ localFunctions.ParserOptions.prototype.extendObj = prototypeParserOptions.extend
 localFunctions.ParserOptions.prototype.combineObj = prototypeParserOptions.combineObj
 localFunctions.ParserOptions.prototype.get = prototypeParserOptions.get
 localFunctions.ParserOptions.prototype.getResult = prototypeParserOptions.getResult
+
+// ParserOptions Prototypen
+localFunctions.ParserPreviewObject.prototype.addError = prototypeMultiple.addError
+localFunctions.ParserPreviewObject.prototype.init = prototypeParserPreviewObject.init
 
 export default localFunctions

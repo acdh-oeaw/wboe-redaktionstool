@@ -1014,10 +1014,10 @@
 			</teiHeader>
 
 		</tags>
-		<preview>
-			<?content {
-									"fromid": "main-content"
-								} ?>
-		</preview>
 	</objParserSystem>
+	<objParserPreview>
+		<?content {
+								"fromid": "main-content"
+							} ?>
+	</objParserPreview>
 </objParser>

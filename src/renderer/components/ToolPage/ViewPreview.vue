@@ -1,20 +1,20 @@
 <template>
-	<div class="start" v-if="!content && object">
+	<div class="start" v-if="start">
 		<div v-if="object.contentObj">
 			<div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
-			<ViewPreview :content="object.contentObj" v-else/>
+			<ViewPreview :object="object" :preview="preview" v-else/>
 		</div>
 		<div v-else>
 			Keine Content-Daten vorhanden
 		</div>
 	</div>
 
-	<div v-else-if="content">
+	<div v-else-if="!start && preview && object">
 		xxx
 	</div>
 
 	<div class="error" v-else>
-		Kein "object" übergeben !!!!
+		Kein "object/preview" übergeben !!!!
 	</div>
 </template>
 
@@ -24,8 +24,9 @@
 	export default {
 		name: 'ViewPreview',
 		props: {
+			start: Boolean,
 			object: Object,
-			content: Object,
+			preview: Object,
 		},
 		data () {
 			return {

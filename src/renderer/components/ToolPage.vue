@@ -41,7 +41,7 @@
 
 				<b-tab title="Vorschau" :disabled="tabsLocked">
 					<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
-						<ViewPreview :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+						<ViewPreview :start="true" :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
 						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 					</div>
 				</b-tab>
@@ -138,7 +138,7 @@
 		name: 'tool-page',
 		data () {
 			return {
-				aTab: ((process.env.NODE_ENV === 'development') ? 0 : 0),
+				aTab: ((process.env.NODE_ENV === 'development') ? 1 : 0),
 				aTabCach: [],
 				showTabView: false,
 				xmlObject: null,
