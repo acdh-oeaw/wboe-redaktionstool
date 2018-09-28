@@ -10,7 +10,10 @@
 			<?options {	"layout": { "frame": "justChilds" } } ?>
 			<?copy { "fromId": "teiHeader" } ?>
 			<text>
-				<?options {	"layout": { "frame": "justChilds" } } ?>
+				<?options {
+										"id": "main-content",
+										"layout": { "frame": "justChilds" }
+									} ?>
 				<body>
 					<?options {	"layout": { "frame": "justChilds" } } ?>
 					<entry>
@@ -1011,6 +1014,10 @@
 			</teiHeader>
 
 		</tags>
-
+		<preview>
+			<?content {
+									"fromid": "main-content"
+								} ?>
+		</preview>
 	</objParserSystem>
 </objParser>
