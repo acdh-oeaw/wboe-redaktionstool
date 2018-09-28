@@ -17,6 +17,7 @@ const localFunctions = {
 		this.family = []							// Alle "ParserObject"e "Key" = "uId"
 		this.idList = {}							// Alle "ParserObject"e mit "id". Property = "id"
 		this.idOptions = {}						// Alle "optionsPreset". Property = "id"
+		this.previewObj = []					// ParserPreviewObject
 		this.orgString = null					// Original String für DOM
 		this.orgFilename = null				// Original Dateiname
 		this.orgPath = null						// Origianl Verzeichniss
@@ -63,11 +64,14 @@ const localFunctions = {
 		// this.extendObj(optionObj)			// Optionen erweitern durch Objekt
 		// this.get('x.y')								// Option nach Pfad ermitteln x -> y -> ...
 	},
-	ParserPreviewObject () {
+	ParserPreviewObject (dom) {
 		this.ready = false						// Ist das PreviewObject bereit?
 		this.useable = false					// Kann das PreviewObject verwendet werden? (Keine Fehler und Ready)
 		this.errors = []							// Liste der Fehler
 		this.warnings = []						// Liste der Warnungen
+		this.orgDOM = dom							// Original DOM
+		this.content = []							// Inhalt: Kann "string" oder "ParserPreviewObject" sein.
+		this.type = null							// Typ des "ParserPreviewObject"s
 		this.init()										// Immer dirket initialisieren
 	},
 }

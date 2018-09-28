@@ -9,7 +9,7 @@ const localFunctions = {
 		}
 		this.options = this.decompressOptions(this.options)
 		this.ready = true
-		this.usable = true
+		this.useable = true
 		return true
 	},
 	get (opt) {

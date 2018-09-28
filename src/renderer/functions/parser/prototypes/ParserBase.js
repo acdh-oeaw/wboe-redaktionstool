@@ -60,10 +60,12 @@ const localFunctions = {
 								} else if (parserChild.nodeName === 'objParserPreview') {		// "this.preview" setzen
 									if (parserChild.childNodes.length > 0) {
 										parserChild.childNodes.forEach(function (previewChild) {
-											if (previewChild.nodeType === previewChild.ELEMENT_NODE
-											|| (previewChild.nodeType === previewChild.PROCESSING_INSTRUCTION_NODE)) {
-												console.log(previewChild)
-												// this.system.push(new Parser.ParserPreviewObject(this, null, previewChild))
+											let aHTML = previewChild.outerHTML
+											if (previewChild.nodeType === previewChild.TEXT_NODE) {
+												aHTML = previewChild.nodeValue
+											}
+											if (aHTML && aHTML.trim().length > 0) {
+												this.previewObj.push(new Parser.ParserPreviewObject(previewChild))
 											}
 										}, this)
 									}
