@@ -80,7 +80,7 @@
 														"multiple": {
 															"spaceBefore": 1,
 															"spaceAfter": 1,
-															"join": ","
+															"join": ", "
 														}
 													}
 												} ?>
@@ -105,9 +105,10 @@
 																														"layout": {
 																															"multiple": {
 																																"use": true,
-																																"header": "Belegauswahl",
+																																"header": "Belegauswahl x",
 																																"spaceBefore": 10,
-																																"spaceAfter": 5
+																																"spaceAfter": 5,
+																																"join": "; "
 																															}
 																														},
 																														"editor": {
@@ -423,7 +424,7 @@
 												"frame": "inline",
 												"italic": true,
 												"hideTitle": true,
-												"before": "– "
+												"before": " – "
 											},
 											"editor": {
 												"parentInContext": true
@@ -656,7 +657,7 @@
 												"header": "Verbreitung",
 												"spaceBefore": 10,
 												"spaceAfter": 5,
-												"join": ";"
+												"join": "; "
 											}
 										},
 										"editor": {
@@ -681,7 +682,7 @@
 												"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}
 											}],
 											"tag": ["multiple", "possible"],
-											"layout": {"multiple": { "use": true,"join": "," } }
+											"layout": {"multiple": { "use": true,"join": ", " } }
 										} ?>
 				</placeName>
 			</usg>
@@ -696,7 +697,7 @@
 											"hideTitle": true,
 											"multiple": {
 												"use": true,
-												"join": ";"
+												"join": "; "
 											}
 										},
 										"editor": {
@@ -724,7 +725,7 @@
 												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
 											"tag": ["multiple", "possible"],
-											"layout": {"multiple": { "use": true,"join": "," } }
+											"layout": {"multiple": { "use": true,"join": ", " } }
 										} ?>
 				</placeName>
 			</usg>

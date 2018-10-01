@@ -1,6 +1,5 @@
 <template>
 	<div :id="'po' + content.uId" :class="'inline'" :style="'font-size: ' + ((content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.fontsize')) ? content.parserObj.options.get('previewLayout.fontsize') : 100) + '%;'">
-
 		<!-- Vor Inhalten -->
 		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.multiple.use')">
 			<div :style="'height: ' + content.parserObj.options.get('previewLayout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('previewLayout.multiple.spaceBefore')"></div>
@@ -15,7 +14,7 @@
 		<!-- Inhalte -->
 		<!-- justChilds -->
 		<div :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
-			<span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+			<span :class="{'enumerate': true, 'enumeraterom': content.parserObj.options.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 			<!-- Kinder -->
 			<template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
 				<PreviewContent ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
@@ -24,7 +23,7 @@
 		<!-- normal -->
 		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
 			<div class="inline rel">
-				<span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+				<span :class="'enumerate' + ((this.content.parserObj.options.get('previewLayout.multiple.enumerateFX'))?' enumeratefx deep' + content.parserCopyDeep:'')" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 				<b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
 				<!-- Inhalt -->
 				<span :class="{ 'val-fix': valueType === 'fix',
@@ -33,10 +32,8 @@
 												'underline': content.parserObj.options.get('previewLayout.underline'),
 												'ls1pt': content.parserObj.options.get('previewLayout.ls1pt')
 											}"
-							v-if="valueType === 'fix' || valueType === 'editable' || (content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect')">
-					<!-- ToDo: GeoSelect -->
-					{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
-				</span>
+							v-if="valueType === 'fix' || valueType === 'editable'">{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}</span>
+				<GeoPreview :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect'"/>
 			</div>
 			<!-- Kinder -->
 			<template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
@@ -45,9 +42,7 @@
 		</div>
 
 		<!-- Nach Inhalten -->
-		<span class="join" v-if="content.isMultiple && !content.multipleLast && content.parserObj && content.parserObj.options.get('previewLayout.multiple.use') && content.parserObj.options.get('previewLayout.multiple.join')">
-			{{ content.parserObj.options.get('previewLayout.multiple.join') }}
-		</span>
+		<span class="join" v-if="content.isMultiple && !content.multipleLast && content.parserObj && content.parserObj.options.get('previewLayout.multiple.use') && content.parserObj.options.get('previewLayout.multiple.join')">{{ content.parserObj.options.get('previewLayout.multiple.join') }}</span>
 
 		<span class="after" v-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.after')">{{ content.parserObj.options.get('previewLayout.after') }}</span>
 		<h4 v-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.footer')">{{ content.parserObj.options.get('previewLayout.footer') }}</h4>
@@ -59,11 +54,14 @@
 			<h4 v-if="content.parserObj.options.get('previewLayout.multiple.footer')">{{ content.parserObj.options.get('previewLayout.multiple.footer') }}</h4>
 			<div :style="'height: ' + content.parserObj.options.get('previewLayout.multiple.spaceAfter') + 'px'" v-if="content.parserObj.options.get('previewLayout.multiple.spaceAfter')"></div>
 		</template>
-
+		<span v-if="valueType === 'fix' || valueType === 'editable'">&nbsp;</span>
 	</div>
 </template>
 
 <script>
+	// fxFunctions
+	import GeoPreview from './fxFunctions/GeoPreview'
+
 	export default {
 		name: 'PreviewContent',
 		props: {
@@ -116,11 +114,11 @@
 						if (this.content.parserCopyDeep === 0) {
 							return this.num2rom(this.content.multipleNr + 1) + '. '
 						} else if (this.content.parserCopyDeep === 1) {
-							return this.content.multipleNr + 1 + '. '
+							return ' ' + (this.content.multipleNr + 1) + '. '
 						} else if (this.content.parserCopyDeep === 2) {
-							return this.num2abc(this.content.multipleNr + 1) + ') '
+							return ' ' + this.num2abc(this.content.multipleNr + 1) + ') '
 						} else if (this.content.parserCopyDeep >= 3) {
-							return this.num2abc(this.content.multipleNr + 1, 'α', 25) + ') '
+							return ' ' + this.num2abc(this.content.multipleNr + 1, 'α', 25) + ') '
 						}
 					}
 					if (this.content.parserObj.options.get('previewLayout.multiple.enumerateRom')) {
@@ -170,6 +168,7 @@
 			},
 		},
 		components: {
+			GeoPreview
 		},
 	}
 </script>

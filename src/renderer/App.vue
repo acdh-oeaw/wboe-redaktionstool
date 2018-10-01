@@ -228,6 +228,10 @@
 		margin-bottom: -13px;
 	}
 
+	svg.fa-w-18 {
+		margin: 0 5px;
+	}
+
 	.tooltip-inner {
 		max-width: 80vw !important;
 	}

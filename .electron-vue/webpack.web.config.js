@@ -50,6 +50,7 @@ let webConfig = {
         use: {
           loader: 'vue-loader',
           options: {
+						preserveWhitespace: false,
             extractCSS: true,
             loaders: {
               sass: 'vue-style-loader!css-loader!sass-loader?indentedSyntax=1',
