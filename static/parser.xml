@@ -43,7 +43,7 @@
 													"previewLayout": {
 														"multiple": {
 															"header": null,
-															"spaceAfter": 0
+															"spaceAfter": 5
 														}
 													},
 													"editor": { "addTitle": "Lemma" }
@@ -105,7 +105,7 @@
 																														"layout": {
 																															"multiple": {
 																																"use": true,
-																																"header": "Belegauswahl x",
+																																"header": "Belegauswahl",
 																																"spaceBefore": 10,
 																																"spaceAfter": 5,
 																																"join": "; "
@@ -549,7 +549,7 @@
 											"layout": {
 												"frame": "inline",
 												"hideTitle": true,
-												"before": ":"
+												"before": ": "
 											}
 										} ?>
 				</citedRange>

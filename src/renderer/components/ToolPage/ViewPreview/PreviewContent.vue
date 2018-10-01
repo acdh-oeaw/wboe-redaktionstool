@@ -24,7 +24,7 @@
 		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
 			<div class="inline rel">
 				<span :class="'enumerate' + ((this.content.parserObj.options.get('previewLayout.multiple.enumerateFX'))?' enumeratefx deep' + content.parserCopyDeep:'')" v-if="enumerate">{{ enumerate }}&nbsp;</span>
-				<b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
+				<b v-if="shownTitle">{{ shownTitle }}: </b><br v-if="shownTitle && layoutBase === 'box'"/>
 				<!-- Inhalt -->
 				<span :class="{ 'val-fix': valueType === 'fix',
 												'bold': content.parserObj.options.get('previewLayout.bold'),
