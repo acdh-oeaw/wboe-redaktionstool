@@ -44,9 +44,14 @@ const localFunctions = {
 		}
 		return true
 	},
+	extendPreviewLayout () {
+		this.options.previewLayout = this.combineObj(this.options.layout || {}, this.options.previewLayout || {})
+	},
 	extendJSON (jsonString, errObj) {
 		try {
-			return this.extendObj(this.decompressOptions(JSON.parse(jsonString)))
+			if (this.extendObj(this.decompressOptions(JSON.parse(jsonString)))) {
+				return true
+			}
 		} catch (err) {
 			console.log(err)
 			if (errObj) {

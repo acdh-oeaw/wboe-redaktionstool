@@ -45,6 +45,17 @@ const localFunctions = {
 			}
 		}
 	},
+	getEditorObjById (aId) {
+		let aObj = null
+		aObj = aId
+		this.family.some(function (eObj) {
+			if (eObj && eObj.parserObj && eObj.parserObj.options && eObj.parserObj.options.get('id') === aId) {
+				aObj = eObj
+				return true
+			}
+		}, this)
+		return aObj
+	},
 }
 
 export default localFunctions

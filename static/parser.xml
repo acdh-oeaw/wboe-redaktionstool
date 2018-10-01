@@ -19,6 +19,9 @@
 					<entry>
 						<?options {
 												"title": "Eintrag",
+												"layout": {
+													"hideTitle": true
+												},
 												"attributes": [{"n": {"type": "edit", "valueType": "num+", "canBeEmpty": {"use": true}}}]
 											} ?>
 						<form type="lemma">
@@ -35,6 +38,12 @@
 														"multiple": {
 															"header": "Lemma-Informationen",
 															"spaceAfter": 5
+														}
+													},
+													"previewLayout": {
+														"multiple": {
+															"header": null,
+															"spaceAfter": 0
 														}
 													},
 													"editor": { "addTitle": "Lemma" }
@@ -192,6 +201,9 @@
 																												"spaceAfter": 5
 																											},
 																											"spaceAfter": 15
+																										},
+																										"previewLayout": {
+																											"spaceAfter": 0
 																										},
 																										"editor": {
 																											"onlyLastElementHasAddButton": true,

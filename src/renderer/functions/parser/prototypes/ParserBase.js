@@ -121,6 +121,12 @@ const localFunctions = {
 		} else {
 			this.addError('Das Verzeichniss des Parsers konnte nicht ermittelt werden!')
 		}
+		// extendPreviewLayout ...
+		this.family.forEach(function (aObj) {
+			if (aObj && aObj.options && aObj.options.options && (aObj.options.options.layout)) {
+				aObj.options.extendPreviewLayout()
+			}
+		})
 		this.ready = true
 		if (Object.keys(this.errors).length > 0) {
 			return false

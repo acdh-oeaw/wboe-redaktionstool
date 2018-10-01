@@ -20,7 +20,8 @@
 				</template>
 			</VariableTag>
 			<template v-else-if="aPrev.type === 'PIN'">
-				<PreviewContent :content="aPrev"/>
+				<PreviewContent :content="object.getEditorObjById(aPrev.options.fromid)" v-if="aPrev.name === 'content' && aPrev.options && aPrev.options.fromid"/>
+				<div v-else><b>Fehler bei "PIN": {{ aPrev.name }}</b></div>
 			</template>
 			<template v-else>
 				<b>UNBEKANNTER TYPE ({{ aPrev.type }})</b>
@@ -75,6 +76,5 @@
 <style scoped>
 	.inline {
 		display: inline;
-		cursor: default;
 	}
 </style>
