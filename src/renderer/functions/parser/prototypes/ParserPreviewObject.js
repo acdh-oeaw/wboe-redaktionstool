@@ -19,7 +19,17 @@ const localFunctions = {
 		if (this.orgDOM.nodeType === this.orgDOM.PROCESSING_INSTRUCTION_NODE) {
 			this.name = this.orgDOM.nodeName
 			this.type = 'PIN'
-			console.log('xxx')
+			try {
+				this.options = JSON.parse(this.orgDOM.nodeValue)
+			} catch (err) {
+				console.log(err)
+				let errArr = [err.toString()]
+				let errRange = errArr[0].match(/position (\d+)/mi)
+				if (errRange.length > 1) {
+					errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
+				}
+				this.addError({'txt': 'Fehler im JSON-String! (preview)', 'err': errArr})
+			}
 		} else {
 			this.type = 'HTML'
 			if (domDescendantsPIN(this.orgDOM)) {

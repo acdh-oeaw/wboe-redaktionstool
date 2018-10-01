@@ -20,7 +20,7 @@
 				</template>
 			</VariableTag>
 			<template v-else-if="aPrev.type === 'PIN'">
-				<code style="white-space: pre;">{{ aPrev }}</code>
+				<PreviewContent :content="aPrev"/>
 			</template>
 			<template v-else>
 				<b>UNBEKANNTER TYPE ({{ aPrev.type }})</b>
@@ -36,6 +36,7 @@
 <script>
 	import { mapState } from 'vuex'
 	import VariableTag from './general/VariableTag'
+	import PreviewContent from './ViewPreview/PreviewContent'
 
 	export default {
 		name: 'ViewPreview',
@@ -65,7 +66,8 @@
 			},
 		},
 		components: {
-			VariableTag
+			VariableTag,
+			PreviewContent
 		},
 	}
 </script>

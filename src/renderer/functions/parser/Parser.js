@@ -72,6 +72,7 @@ const localFunctions = {
 		this.orgDOM = dom							// Original DOM
 		this.name = null							// Aktueller nodeName
 		this.attributes = {}					// Aktuelle Attribute
+		this.options = {}							// Aktuelle Optionen für PIN
 		this.content = []							// Inhalt: Kann "string" oder "ParserPreviewObject" sein.
 		this.type = null							// Typ des "ParserPreviewObject"s
 		this.init()										// Immer dirket initialisieren

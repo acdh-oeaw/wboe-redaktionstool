@@ -1017,11 +1017,9 @@
 	</objParserSystem>
 	<objParserPreview>
 		<div class="artikel-rahmen">
-			Das ist ein <b>Test</b><br/>
 			<?content {
 									"fromid": "main-content"
 								} ?>
-			<p>Test ...</p>
 		</div>
 	</objParserPreview>
 </objParser>
