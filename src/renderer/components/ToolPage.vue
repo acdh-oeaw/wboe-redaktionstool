@@ -138,7 +138,7 @@
 		name: 'tool-page',
 		data () {
 			return {
-				aTab: ((process.env.NODE_ENV === 'development') ? 1 : 0),
+				aTab: ((process.env.NODE_ENV === 'development') ? 0 : 0),
 				aTabCach: [],
 				showTabView: false,
 				xmlObject: null,

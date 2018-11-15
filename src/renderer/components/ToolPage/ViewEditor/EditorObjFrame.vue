@@ -122,7 +122,7 @@
 		<EditorContextMenu :content="content" @clickcomment="clickComment" ref="contextMenuEditor" v-if="contextMenuCached"/>
 
 		<!-- Kommentare -->
-		<b-modal ref="commentModal" title="Kommentare" @hidden="commentObj = null" ok-only v-if="commentObj && commentObj.orgXmlObj">
+		<b-modal ref="commentModal" title="Kommentare" @hidden="closeCommentModal" ok-only v-if="commentObj && commentObj.orgXmlObj">
 			<b-input-group size="sm" class="my-3" :key="'co' + commentObj.uId + '-' + aComKey" v-for="(aComment, aComKey) in commentObj.orgXmlObj.comments">
 				<b-form-input v-model="aComment.val"></b-form-input>
 				<b-input-group-append>
@@ -388,6 +388,12 @@
 					cObj.orgXmlObj.comments.splice(aKey, 1)
 					this.$store.dispatch('IS_CHANGED')
 				}
+			},
+			closeCommentModal () {
+				if (this.commentNewVal.trim().length > 0) {
+					this.addComment(this.commentObj)
+				}
+				this.commentObj = null
 			},
 			num2rom (num) {		// Römische Zahlen
 				var rom = ''
