@@ -779,7 +779,7 @@
 
 			<re>
 				<?options {
-										"title": "Redewendung",
+										"title": "Redewendungen",
 										"id": "re-MWE",
 										"tag": ["multiple", "possibleTag"],
 										"tagHasChildWithAttribute": { "form": { "subtype": "MWE" } },
@@ -788,13 +788,14 @@
 											"hideTitle": true,
 											"multiple": {
 												"use": true,
-												"header": "Redewendung",
+												"header": "Redewendungen",
 												"spaceBefore": 10,
 												"spaceAfter": 5
 											}
 										},
 										"editor": {
-											"onlyLastElementHasAddButton": true
+											"onlyLastElementHasAddButton": true,
+											"addTitle": "Redewendung"
 										}
 									} ?>
 				<form subtype="MWE">
