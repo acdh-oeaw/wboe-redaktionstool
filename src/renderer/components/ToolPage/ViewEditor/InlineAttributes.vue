@@ -119,7 +119,8 @@
 		display: inline-block;
 		color: #eee;
 		background: #444;
-		margin-left: 5px;
+		margin-left: 4px;
+		margin-right: 1px;
 		font-size: 12px;
 		line-height: 1.2;
 		padding: 3px 6px 2px 8px;
@@ -154,5 +155,11 @@
 		display: inline-block;
 		cursor: text;
 		min-width: 5px;
+	}
+	.layout-text > span.title {
+		margin: 0 5px;
+	}
+	.inline-attr > span.title {
+		margin-right: 5px;
 	}
 </style>

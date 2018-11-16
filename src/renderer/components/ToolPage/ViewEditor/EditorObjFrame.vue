@@ -440,6 +440,9 @@
 	.obj.lb-inline:hover {
 		background: #eee;
 	}
+	.obj.lb-inline.warnings:hover {
+		background: #ffe86c;
+	}
 	.obj.lb-hide {
 		display: none;
 	}
