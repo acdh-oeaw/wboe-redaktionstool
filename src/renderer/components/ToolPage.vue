@@ -506,5 +506,15 @@
 		color: #aaa;
 		margin: 0 20px;
 		margin-top: 1px;
+		overflow: hidden;
+		white-space: nowrap;
+		direction: rtl;
+		text-align: left;
+		text-overflow: ellipsis;
+	}
+	.tip-line:after {
+		content: "X";
+		color: #fff;
+		font-size: 2px;
 	}
 </style>
