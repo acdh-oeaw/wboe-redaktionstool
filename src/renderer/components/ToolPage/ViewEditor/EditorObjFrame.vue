@@ -428,7 +428,7 @@
 					aTipLine += this.content.parents.slice(0).reverse().map(function (x) {
 						return x.orgXmlObj.name + ' (' + x.parserObj.uId + ((x.parserObj.options && x.parserObj.options.get('id')) ? ', ' + x.parserObj.options.get('id') : '') + ')'
 					}).slice(1).join(' -> ')
-					aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.content.parserObj.uId + ')'
+					aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.content.parserObj.uId + ((this.content.parserObj.options && this.content.parserObj.options.get('id')) ? ', ' + this.content.parserObj.options.get('id') : '') + ')'
 				}
 				this.$emit('setTipLine', aTipLine)
 			},

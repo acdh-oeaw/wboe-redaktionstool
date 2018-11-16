@@ -508,6 +508,7 @@
 											}
 										} ?>
 				 </pron>
+				 <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "usg-geo", "options": {
 																										"tag": ["possibleTag", "multiple"],
 																										"layout": {
