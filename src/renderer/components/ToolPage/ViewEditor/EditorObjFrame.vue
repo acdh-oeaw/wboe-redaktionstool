@@ -43,7 +43,7 @@
 				<b-card-body>
 					<div @contextmenu.prevent="contextMenue" class="context rel">
 						<slot/>		<!-- Inhalt -->
-						<span class="comment-sym" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
+						<span :class="{'comment-sym': true, 'comment-highlight': Options.show.commentsHighlight}" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
 					</div>
 					<slot name="childs"/>		<!-- Kinder -->
 				</b-card-body>
@@ -61,7 +61,7 @@
 				<span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 				<b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
 				<slot/>		<!-- Inhalt -->
-				<span class="comment-sym" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
+				<span :class="{'comment-sym': true, 'comment-highlight': Options.show.commentsHighlight}" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
 			</div>
 			<div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
 					 @mouseenter="showAddableButtons('In')" @mouseleave="hideAddableButtons($event, 'In')"
@@ -163,6 +163,7 @@
 		},
 		computed: {
 			...mapState(['DragNdrop']),
+			...mapState(['Options']),
 			isDragTarget () {
 				if (this.DragNdrop.dragUid) {
 					if (this.$el && this.$el.closest('.dragobj')) {
@@ -487,6 +488,12 @@
 		top: -9px;
 		font-size: 10px;
 		color: #666;
+	}
+	.comment-sym.comment-highlight {
+		font-size: 15px;
+		top: -16px;
+		right: -9px;
+		color: #ec8d54;
 	}
 	.dragobj {
 		opacity: 0.33;

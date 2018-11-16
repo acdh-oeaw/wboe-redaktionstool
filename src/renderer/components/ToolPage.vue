@@ -90,6 +90,7 @@
 						<div class="vis-dropdown" v-if="showTabView">
 							<template v-if="aTab === 0">
 								<button @click="$store.dispatch('TOGGLE_SHOW', 'warnings')"><font-awesome-icon :icon="((Options.show.warnings) ? 'eye' : 'eye-slash')"/> Warnungen anzeigen</button>
+								<button @click="$store.dispatch('TOGGLE_SHOW', 'commentsHighlight')"><font-awesome-icon :icon="((Options.show.commentsHighlight) ? 'check-square' : 'square')"/> Kommentare hervorheben</button>
 								<hr>
 							</template>
 							<template v-if="aTab === 3">
@@ -450,6 +451,10 @@
 		border-radius: 5px;
 		z-index: 5000;
 	}
+	.vis-dropdown > hr {
+		margin-top: 0.25rem;
+		margin-bottom: 0.25rem;
+	}
 	.vis-dropdown > button {
 		white-space: nowrap;
 		display: block;
@@ -459,6 +464,13 @@
 		margin-bottom: 2px;
 		border: none;
 		cursor: pointer;
+	}
+	.vis-dropdown > button:hover, .vis-dropdown > button:focus {
+		background: #eef;
+	}
+	.vis-dropdown > button > svg {
+		width: 1.25em !important;
+		margin: 0 2px;
 	}
 	p.form-control.file-name {
 		white-space: nowrap;
