@@ -405,6 +405,9 @@
 	li.nav-item.extra > a {
 		border: none !important;
 	}
+	li.nav-item.extra > button {
+		margin-left: 5px;
+	}
 
 	li.nav-item > a {
 		position: relative;

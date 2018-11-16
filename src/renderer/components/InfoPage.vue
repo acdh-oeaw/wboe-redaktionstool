@@ -6,7 +6,7 @@
 			<p>Programmiert von <b>Hans Christian Breuer</b> im Auftrag der <b>WBÖ</b>.</p>
 			<h3>Verwendete Icons</h3>
 			<p>
-				<span class="icons" v-for="aIcon in icons"><font-awesome-icon :icon="aIcon"/><b-badge variant="light">{{ aIcon }}</b-badge></span>
+				<span class="icons" v-for="aIcon in icons"><font-awesome-icon :icon="aIcon"/><b-badge variant="light"> {{ aIcon }} </b-badge></span>
 			</p>
 		</div>
 	</div>
@@ -53,6 +53,7 @@
 		margin-right: 5px;
 		font-size: 1.1rem;
 		position: relative;
+		width: 1.25em;
 		top: 3px;
 	}
 </style>
