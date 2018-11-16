@@ -2,6 +2,8 @@
 	<div :id="'eo' + content.uId" :class="'inline' + ((this.DragNdrop.dragUid === this.content.uId) ? ' dragobj' : '') + ((isDragTarget) ? ' dragtarget' : '') + ((dragDir) ? ' dragpos-' + dragDir : '')"
 			:style="'font-size: ' + ((content.parserObj.options && content.parserObj.options.get('layout.fontsize')) ? content.parserObj.options.get('layout.fontsize') : 100) + '%;'"
 			:draggable="isDraggable"
+			@mouseenter="mouseEnter"
+			@mouseleave="mouseLeave"
 			v-on="{dragstart:dragStart, dragend:dragEnd, dragleave:dragLeave, dragover:dragOver, drop:drop}"
 		>
 		<!-- Vor Inhalten -->
@@ -419,6 +421,19 @@
 					num = (num / max) >> 0
 				} while (num > 0)
 				return abc
+			},
+			mouseEnter () {
+				let aTipLine = ''
+				if (this.content && this.content.orgXmlObj && this.content.orgXmlObj.parents) {
+					aTipLine += this.content.parents.slice(0).reverse().map(function (x) {
+						return x.orgXmlObj.name + ' (' + x.parserObj.uId + ((x.parserObj.options && x.parserObj.options.get('id')) ? ', ' + x.parserObj.options.get('id') : '') + ')'
+					}).slice(1).join(' -> ')
+					aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.content.parserObj.uId + ')'
+				}
+				this.$emit('setTipLine', aTipLine)
+			},
+			mouseLeave () {
+				this.$emit('setTipLine', '')
 			},
 		},
 		components: {

@@ -6,14 +6,14 @@
 		<ErrorCard :error="object.warnings" title="Warnung" variant="warning" :closed="!Options.show.warnings" @goto="goToObject"/>
 		<div v-if="object.contentObj">
 			<div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
-			<ViewEditor :content="object.contentObj" v-else/>
+			<ViewEditor :content="object.contentObj" @setTipLine="setTipLine" v-else/>
 		</div>
 		<div v-else>
 			Keine Content-Daten vorhanden
 		</div>
 	</div>
 
-	<EditorObjFrame :content="content" v-else-if="content">
+	<EditorObjFrame @setTipLine="setTipLine" :content="content" v-else-if="content">
 		<template  v-if="content.parserObj.options && content.parserObj.options.get('layout.showAttributeBefore')">
 			<InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in content.parserObj.options.get('layout.showAttributeBefore')"/>
 		</template>
@@ -30,7 +30,7 @@
 		<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 
 		<template slot="childs" v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
-			<ViewEditor ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+			<ViewEditor ref="childs" :content="aContent" @setTipLine="setTipLine" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 		</template>
 
 		<template  v-if="content.parserObj.options && content.parserObj.options.get('layout.showAttributeAfter')">
@@ -133,6 +133,9 @@
 			scrollToObjectv: _.debounce(function (aElement) {
 				this.$parent.$el.getElementsByClassName('vieweditorobject')[0].scrollTop = aElement.getBoundingClientRect().top - 300
 			}, 250),
+			setTipLine (aTipLine) {
+				this.$emit('setTipLine', aTipLine)
+			},
 		},
 		components: {
 			ErrorContent,

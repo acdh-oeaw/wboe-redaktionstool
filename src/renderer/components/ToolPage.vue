@@ -34,7 +34,7 @@
 
 				<b-tab title="Editor" :disabled="tabsLocked">
 					<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1 && !update">
-						<ViewEditor :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+						<ViewEditor :object="editorObject" @setTipLine="setTipLine" v-if="editorObject && editorObject.contentObj"/>
 						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 					</div>
 				</b-tab>
@@ -117,6 +117,7 @@
 
 			</b-tabs>
 		</div>
+		<div class="tip-line">{{ tipLine }}</div>
 	</div>
 </template>
 
@@ -150,6 +151,7 @@
 				update: false,
 				xmlEditorLocked: false,
 				xmlEditorNewContent: '',
+				tipLine: '',
 			}
 		},
 		computed: {
@@ -181,6 +183,7 @@
 		},
 		watch: {
 			aTab (nVal) {
+				this.tipLine = ''
 				if (this.aTabCach.indexOf(nVal) < 0) {
 					this.aTabCach.push(nVal)
 				}
@@ -341,6 +344,9 @@
 			openDevTool () {
 				currentWindow.webContents.openDevTools()
 			},
+			setTipLine (aTipLine) {
+				this.tipLine = aTipLine
+			},
 		},
 		created () {
 			window.addEventListener('mousedown', this.mousedown)
@@ -482,6 +488,7 @@
 		direction: rtl;
 		text-align: left;
 	}
+
 	a.dropdown-item.warning {
     background: #ffe !important;
 	}
@@ -493,5 +500,11 @@
 	}
 	a.dropdown-item.active.error {
     background: #dc3545 !important;
+	}
+
+	.tip-line {
+		color: #aaa;
+		margin: 0 20px;
+		margin-top: 1px;
 	}
 </style>
