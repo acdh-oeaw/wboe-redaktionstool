@@ -458,7 +458,7 @@
 					 <?options {
 											"title": "Quote",
 											"attributes": [{
-												"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+												"xml:lang": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "bar-AT"}
 											}],
 											"value": ["edit", "required"],
 											"layout": {
