@@ -233,13 +233,19 @@ const localFunctions = {
 		}
 		// ToDo: Eventuelle If-Abfrage verarbeiten
 		if (aParAttrObj.type === 'fixed' && val !== aParAttrObj.value) {
-			return { 'txt': 'Attribut "' + attr + '" hat nicht den erwateten Wert!', 'type': 'error' }
+			if (aParAttrObj.shouldAttribute && aParAttrObj.possibleValues) {
+				if (val && aParAttrObj.possibleValues.indexOf(val) < 0) {
+					return { 'txt': 'Attribut "' + attr + '" hat nicht den erwateten Wert! (sA, pV)', 'type': 'error' }
+				}
+			} else {
+				return { 'txt': 'Attribut "' + attr + '" hat nicht den erwateten Wert!', 'type': 'error' }
+			}
 		}
 		if (!aParAttrObj.canBeEmpty && (!val || val.length === 0)) {
 			return { 'txt': 'Wert von Attribut "' + attr + '" darf nicht leer sein!', 'type': 'warning' }
 		}
 		if (aParAttrObj.type === 'variable') {
-			if (aParAttrObj.possibleValues && aParAttrObj.possibleValues.use) {
+			if (aParAttrObj.possibleValues) {
 				if (val && aParAttrObj.possibleValues.indexOf(val) < 0) {
 					return { 'txt': 'Wert "' + val + '" von Attribut "' + attr + '" nicht in der Liste möglicher Werte!', 'type': 'warning' }
 				}

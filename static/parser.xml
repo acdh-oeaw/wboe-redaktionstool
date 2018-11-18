@@ -100,21 +100,62 @@
 						</form>
 						<?copy { "fromId": "usg-geo-verbreitung" } ?>
 
-						<?copy { "fromId": "form-variant", "options": {
-																														"tag": ["multiple", "possibleTag", "shouldTag"],
-																														"layout": {
-																															"multiple": {
-																																"use": true,
-																																"header": "Belegauswahl",
-																																"spaceBefore": 10,
-																																"spaceAfter": 5,
-																																"join": "; "
-																															}
-																														},
-																														"editor": {
-																															"addTitle": "Belegauswahl"
+						<form>
+							<?options {
+													"id": "form-dialect",
+													"title": "Belegauswahl",
+													"tag": ["multiple", "possibleTag", "shouldTag"],
+													"attributes": [{
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
+														"type": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "dialect", "possibleValues": ["dialect", "variant"]},
+														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive", "inflected"]}
+													}],
+													"layout": {
+														"frame": "inline",
+														"hideTitle": true,
+														"multiple": {
+															"use": true,
+															"header": "Belegauswahl",
+															"spaceBefore": 10,
+															"spaceAfter": 5,
+															"join": "; "
+														}
+													},
+													"editor": {
+														"onlyLastElementHasAddButton": true,
+														"addTitle": "Belegauswahl"
+													}
+												} ?>
+							 <pron xml:lang="bar-AT">
+								 <?options {
+														"tagAsTitle": false,
+														"attributes": [{
+															"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
+														}],
+														"value": ["edit", "required"],
+														"layout": {
+															"frame": "inline",
+															"italic": true
+														},
+														"editor": {
+															"parentInContext": true
+														}
+													} ?>
+							 </pron>
+							 <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
+							 <?copy { "fromId": "usg-geo", "options": {
+																													"tag": ["possibleTag", "multiple"],
+																													"layout": {
+																														"frame": "inline",
+																														"multiple": {
+																															"use": true,
+																															"join": ", ",
+																															"before": "(",
+																															"after": ")"
 																														}
-																													} } ?>
+																													}
+																												} } ?>
+										</form>
 
 						<etym>
 							<?options {
@@ -474,54 +515,6 @@
 																								}
 																							} } ?>
 			</sense>
-
-			<form>
-				<?options {
-										"id": "form-variant",
-										"title": "Variante",
-										"attributes": [{
-											"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
-											"type": {"type": "edit", "possibleValues": ["variant", "dialect"]},
-											"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
-										}],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										},
-										"editor": {
-											"onlyLastElementHasAddButton": true
-										}
-									} ?>
-				 <pron xml:lang="bar-AT">
-					 <?options {
-											"tagAsTitle": false,
-											"attributes": [{
-												"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
-											}],
-											"value": ["edit", "required"],
-											"layout": {
-												"frame": "inline",
-												"italic": true
-											},
-											"editor": {
-												"parentInContext": true
-											}
-										} ?>
-				 </pron>
-				 <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
-				 <?copy { "fromId": "usg-geo", "options": {
-																										"tag": ["possibleTag", "multiple"],
-																										"layout": {
-																											"frame": "inline",
-																											"multiple": {
-																												"use": true,
-																												"join": ", ",
-																												"before": "(",
-																												"after": ")"
-																											}
-																										}
-																									} } ?>
-			</form>
 
 			<ref type="bibl">
 				<?options {
