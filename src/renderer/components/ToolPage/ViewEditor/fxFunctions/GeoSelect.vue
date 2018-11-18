@@ -215,12 +215,16 @@
 				let isCorrect = true
 				if (place.selectedPlace) {
 					let aPlace = this.placeBySigle(place.places, place.selectedPlace)
-					Object.keys(aPlace.parents).forEach(function (aParKey) {
-						let peSP = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.placesEdit, 'fieldName', aParKey).selectedPlace
-						if (peSP && aPlace.parents[aParKey].sigle !== peSP) {
-							isCorrect = false
-						}
-					}, this)
+					if (aPlace) {
+						Object.keys(aPlace.parents).forEach(function (aParKey) {
+							let peSP = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.placesEdit, 'fieldName', aParKey).selectedPlace
+							if (peSP && aPlace.parents[aParKey].sigle !== peSP) {
+								isCorrect = false
+							}
+						}, this)
+					} else {
+						isCorrect = false
+					}
 				} else if (!place.option.possible) {
 					isCorrect = false
 				}

@@ -68,6 +68,9 @@ const localFunctions = {
 							}
 						}
 					} else {
+						if (child.orgXmlObj.attributes['xml:id'][0] !== 'p') {
+							child.orgXmlObj.setAttribute('xml:id', 'p' + child.orgXmlObj.attributes['xml:id'])
+						}
 						let sVal = stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.places[eObj.fxData.places.pFields[eObj.fxData.places.xFields.indexOf(child.orgXmlObj.attributes.type)]], 'sigle', child.orgXmlObj.attributes['xml:id'])
 						if (sVal && child.orgXmlObj.getValue(false) !== sVal.name) {
 							child.orgXmlObj.setValue(sVal.name)
@@ -96,6 +99,16 @@ const localFunctions = {
 			if (child.orgXmlObj.name === 'placeName') {
 				if (!child.orgXmlObj.attributes['xml:id'] && child.orgXmlObj.getValue(false)) {
 					warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') ohne "xml:id" Attribut!')
+				} else if (child.orgXmlObj.attributes['xml:id']) {
+					let foundInPlaces = 0
+					eObj.fxData.places.pFields.forEach(function (val) {
+						if (stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.places[val], 'sigle', child.orgXmlObj.attributes['xml:id'])) {
+							foundInPlaces += 1
+						}
+					}, this)
+					if (foundInPlaces < 1) {
+						warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') hat unbekanntes "xml:id" (' + child.orgXmlObj.attributes['xml:id'] + ') Attribut!')
+					}
 				}
 				if (child.orgXmlObj.attributes.type) {
 					let aFieldOption = stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.fields, 'name', eObj.fxData.places.pFields[eObj.fxData.places.xFields.indexOf(child.orgXmlObj.attributes.type)])

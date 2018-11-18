@@ -23,11 +23,11 @@ const localFunctions = {
 					sFields.forEach(function (aCol, aPos) {
 						if (aLine[aCol]) {
 							if (fHit) {
-								let aField = { 'name': aLine[aCol], 'sigle': aLine.Sigle_DB, 'sort': aLineNr, 'parents': {} }
+								let aField = { 'name': aLine[aCol], 'sigle': (aLine.Sigle_DB[0] === 'p' ? '' : 'p') + aLine.Sigle_DB, 'sort': aLineNr, 'parents': {} }
 								if (!geoSelect[aCol + 'Obj'][aLine[aCol]]) {
 									geoSelect[aCol + 'Obj'][aLine[aCol]] = { 'name': aLine[aCol] }
 								}
-								geoSelect[aCol + 'Obj'][aLine[aCol]].sigle = aLine.Sigle_DB
+								geoSelect[aCol + 'Obj'][aLine[aCol]].sigle = (aLine.Sigle_DB[0] === 'p' ? '' : 'p') + aLine.Sigle_DB
 								aField.obj = geoSelect[aCol + 'Obj'][aLine[aCol]]
 								if (aPos < sFields.length - 1) {
 									sFields.slice(aPos + 1).forEach(function (xData) {
