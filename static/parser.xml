@@ -748,7 +748,7 @@
 					<?options {
 											"title": "Form Lemma/Variable",
 											"attributes": [{
-												"type": {"type": "edit", "possibleValues": ["lemma", "variable"]}
+												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]}
 											}],
 											"layout": {
 												"frame": "inline",
