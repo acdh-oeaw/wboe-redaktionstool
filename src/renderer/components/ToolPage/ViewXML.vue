@@ -30,6 +30,7 @@
 		},
 		computed: {
 			...mapState(['Options']),
+			...mapState(['Misc']),
 		},
 		watch: {
 			'Options.show.monacoDiff' (nVal, oVal) {
@@ -52,15 +53,21 @@
 				}
 			},
 		},
+		methods: {
+			updateContent: _.debounce(function () {
+				this.$emit('changed', this.content)
+			}, 250),
+		},
 		mounted () {
 			this.content = this.xmlString
 			this.orgContent = this.orgXmlString
 			loadMonacoEditor(this)
 		},
-		methods: {
-			updateContent: _.debounce(function () {
-				this.$emit('changed', this.content)
-			}, 250),
+		created () {
+			this.$store.commit('SET_SEARCHLOCK')
+		},
+		beforeDestroy () {
+			this.$store.commit('UNSET_SEARCHLOCK')
 		},
 	}
 

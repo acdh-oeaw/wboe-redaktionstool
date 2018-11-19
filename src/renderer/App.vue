@@ -54,27 +54,35 @@
 			...mapState(['Options']),
 			...mapState(['Parser']),
 			...mapState(['Files']),
+			...mapState(['Misc']),
 		},
 		watch: {
 			'Options.options.zoom' (nVal) {
 				this.zoom = nVal
+			},
+			'Misc.searchLock' (nVal) {
+				if (nVal) {
+					inPageSearch.closeSearchWindow()
+				}
 			}
 		},
 		methods: {
 			keyUp (e) {
-				if (e.ctrlKey && e.key === 'f') {
-					if (!inPageSearch.opened) {
-						inPageSearch.openSearchWindow()
+				if (!this.Misc.searchLock) {
+					if (e.ctrlKey && e.key === 'f') {
+						if (!inPageSearch.opened) {
+							inPageSearch.openSearchWindow()
+						}
 					}
-				}
-				if (e.key === 'F3') {
-					if (!inPageSearch.opened) {
-						inPageSearch.openSearchWindow()
-					} else if (inPageSearch.isSearching()) {
-						if (e.shiftKey) {
-							inPageSearch.findNext(false)
-						} else {
-							inPageSearch.findNext()
+					if (e.key === 'F3') {
+						if (!inPageSearch.opened) {
+							inPageSearch.openSearchWindow()
+						} else if (inPageSearch.isSearching()) {
+							if (e.shiftKey) {
+								inPageSearch.findNext(false)
+							} else {
+								inPageSearch.findNext()
+							}
 						}
 					}
 				}
