@@ -33,7 +33,11 @@
 			<b-tabs v-model="aTab" content-class="tabc" nav-class="rel">
 
 				<b-tab title="Editor" :disabled="tabsLocked">
-					<div class="vieweditorobject scroll p20" v-if="aTabCach.indexOf(0) > -1 && !update">
+					<div class="viewpreview scroll p20 editorpreview w-50" v-if="aTabCach.indexOf(0) > -1 && !update && Options.show.editorPreview">
+						<ViewPreview :start="true" :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
+					</div>
+					<div :class="'vieweditorobject scroll p20' + ((Options.show.editorPreview) ? ' w-50' : '')" v-if="aTabCach.indexOf(0) > -1 && !update">
 						<ViewEditor :object="editorObject" @setTipLine="setTipLine" v-if="editorObject && editorObject.contentObj"/>
 						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 					</div>
@@ -46,7 +50,7 @@
 					</div>
 				</b-tab>
 
-				<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked">
+				<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked" v-if="devMode">
 					<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1 && !update">
 						<div v-if="editorObject">todo ...</div>
 						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
@@ -91,6 +95,7 @@
 							<template v-if="aTab === 0">
 								<button @click="$store.dispatch('TOGGLE_SHOW', 'warnings')"><font-awesome-icon :icon="((Options.show.warnings) ? 'eye' : 'eye-slash')"/> Warnungen anzeigen</button>
 								<button @click="$store.dispatch('TOGGLE_SHOW', 'commentsHighlight')"><font-awesome-icon :icon="((Options.show.commentsHighlight) ? 'check-square' : 'square')"/> Kommentare hervorheben</button>
+								<button @click="$store.dispatch('TOGGLE_SHOW', 'editorPreview')"><font-awesome-icon icon="columns" :class="{'text-secondary': !Options.show.editorPreview}"/> Vorschau anzeigen</button>
 								<hr>
 							</template>
 							<template v-if="aTab === 3">
@@ -380,6 +385,10 @@
 	}
 	.vieweditorobject .btn {
 		font-size: 1.06rem;
+	}
+	.editorpreview {
+		float: right;
+		border-left: 1px solid #eee;
 	}
 	.tabc {
 		border: 1px solid #eee;
