@@ -12,9 +12,10 @@
 				<p>
 					<!-- Projektpfad -->
 					<font-awesome-icon icon="project-diagram" class="mir10"/> {{ Options.projectPath }}
-					<button @click="selectFolder"><font-awesome-icon icon="edit"/></button>
-					<button @click="showFolder" title="Ordner in Explorer öffnen" class="mir5"><font-awesome-icon icon="external-link-alt"/></button>
-					<button @click="updateFolder" title="Projektpfad neu laden" class="mir5"><font-awesome-icon icon="sync-alt"/></button>
+					<button @click="selectFolder" title="Verzeichniss ändern"><font-awesome-icon icon="edit" class="mil5 mir5"/></button>
+					<button @click="showFolder" title="Ordner in Explorer öffnen"><font-awesome-icon icon="external-link-alt" class="mil5 mir5"/></button>
+					<button @click="updateFolder" title="Projektpfad neu laden"><font-awesome-icon icon="sync-alt" class="mil5 mir5"/></button>
+					<button @click="infoFolder" title="Angezeigte Dateien überprüfen" :disabled="infoFolderUpdating"><font-awesome-icon icon="bars" class="mil5 mir5"/></button>
 					<!-- Parser -->
 					<button @click="reloadParser" title="Parser-Datei neu laden" class="float-right mir5"><font-awesome-icon icon="sync-alt"/></button>
 					<button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Parser.file" class="float-right mir5" v-if="Parser.file && !(Parser.file.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
@@ -54,6 +55,7 @@
 				loading: false,
 				newFilePath: '',
 				newFileName: '',
+				infoFolderUpdating: false,
 			}
 		},
 		computed: {
@@ -124,6 +126,17 @@
 					}
 				}
 			},
+			infoFolder () {
+				if (!this.infoFolderUpdating) {
+					this.infoFolderUpdating = true
+					this.debouncedInfoFolder()
+				}
+			},
+			debouncedInfoFolder: _.debounce(function () {
+				this.$store.dispatch('UPDATE_PATHS')
+				this.$store.dispatch('UPDATE_PATHS_INFOS', this.Parser.parser)
+				this.infoFolderUpdating = false
+			}, 50),
 		},
 		mounted () {
 			this.loading = true

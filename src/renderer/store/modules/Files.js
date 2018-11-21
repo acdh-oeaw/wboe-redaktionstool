@@ -16,13 +16,16 @@ const mutations = {
 	CLEAN_CONTENT: (state) => {		// Cache für Verzeichnissstruktur löschen
 		state.paths = {}
 	},
-	SET_CONTENT: (state, { path, files, paths }) => {		// Werte für Verzeichnissstruktur setzen
-		Vue.set(state.paths, path, {'paths': paths, 'files': files, 'isOpen': false})
+	SET_CONTENT: (state, { path, files, paths, open }) => {		// Werte für Verzeichnissstruktur setzen
+		Vue.set(state.paths, path, {'paths': paths, 'files': files, 'isOpen': open})
 	},
-	UPDATE_CONTENT: (state, { path, files, paths }) => {		// Werte für Verzeichnissstruktur updaten
+	UPDATE_CONTENT: (state, { path, files, paths, open }) => {		// Werte für Verzeichnissstruktur updaten
 		// ToDo!
 		Vue.set(state.paths[path], 'paths', paths)
 		Vue.set(state.paths[path], 'files', files)
+	},
+	SET_PATHS_INFO: (state, { path, fileIndex, info }) => {
+		Vue.set(state.paths[path].files[fileIndex], 'info', info)
 	},
 	TOGGLE_PATH_OPEN: (state, { path }) => {		// Anzeige Pfad offen/geschlossen wechseln
 		state.paths[path].isOpen = !state.paths[path].isOpen
@@ -94,7 +97,7 @@ const actions = {
 	CLEAN_PATH ({ commit }) {		// Cache für Verzeichnissstruktur löschen
 		commit('CLEAN_CONTENT')
 	},
-	GET_PATH ({ commit }, { path, update = false }) {		// Inhalt für das Verzeichniss "path" cachen
+	GET_PATH ({ commit, dispatch, rootState }, { path, update = false }) {		// Inhalt für das Verzeichniss "path" cachen
 		console.log('GET_PATH:', ((update) ? 'Update - ' : 'Neu - '), path)
 		let files = []
 		let paths = []
@@ -128,7 +131,8 @@ const actions = {
 							'ext': aExt,
 							'fullFileName': aFullFileName,
 							'path': path,
-							'size': stats.size
+							'size': stats.size,
+							'info': null
 						})
 					}
 				}
@@ -136,12 +140,25 @@ const actions = {
 		}, this)
 		files = files.slice().sort(lowerSort)
 		paths = paths.slice().sort(lowerSort)
-		commit(((update) ? 'UPDATE_CONTENT' : 'SET_CONTENT'), { 'path': path, 'files': files, 'paths': paths })
+		commit(((update) ? 'UPDATE_CONTENT' : 'SET_CONTENT'), { 'path': path, 'files': files, 'paths': paths, 'open': (rootState.Options.projectPath === path) })
 	},
 	UPDATE_PATHS ({ commit, dispatch }) {		// Gecachte Inhalt für "Verzeichnisse" updaten
 		Object.keys(state.paths).forEach(function (aDir) {
 			dispatch('GET_PATH', { 'path': aDir, 'update': true })
 		}, this)
+	},
+	UPDATE_PATHS_INFOS ({ commit }, parser) {
+		let t0 = performance.now()
+		Object.keys(state.paths).forEach(function (aDir) {
+			state.paths[aDir].files.forEach(function (aFile, aFileIndex) {
+				if (aFile.ext === 'xml') {
+					let editorFile = fs.readFileSync(aFile.fullFileName, 'utf8')
+					let editorObj = new EditorObject.EditorBase(parser, new XmlObject.XmlBase(editorFile))
+					commit('SET_PATHS_INFO', {'path': aDir, 'fileIndex': aFileIndex, 'info': {'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML() !== editorFile)}})
+				}
+			}, this)
+		}, this)
+		console.log('UPDATE_PATHS_INFOS', Math.ceil(performance.now() - t0) + ' ms.')
 	},
 }
 

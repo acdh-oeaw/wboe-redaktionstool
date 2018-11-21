@@ -21,6 +21,7 @@
 			<button @click="loadFile()" :title="file.fullFileName" :class="{'active': isActiveFile, 'italic': isParser}">
 				<span class="file"><font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5"/>{{ file.file }}</span>
 				<span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
+				<span class="info" v-if="file.info"><span v-if="file.info.changed" style="color:#9a0000;"><b>Anpassen!</b></span> <span>Fehler: <b>{{ file.info.errors }}</b></span> <span>Warnungen: <b>{{ file.info.warnings }}</b></span></span>
 			</button>
 		</div>
 
@@ -118,9 +119,20 @@
 	button:not([disabled]) {
 		cursor: pointer;
 	}
+	.fileline .info {
+		float: right;
+		font-size: 12px;
+		margin: 0 10px;
+	}
+	.fileline .info > span {
+		width: 100px;
+		display: inline-block;
+		margin: 0 5px;
+	}
 	.filesize, .foldercontent {
 		float: right;
 		font-size: 12px;
+		min-width: 100px;
 	}
 	.foldercontent.unknown {
 		color: #999;
