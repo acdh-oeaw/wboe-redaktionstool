@@ -3,22 +3,23 @@
 
 		<div class="pathline" v-if="path">
 			<button @click="toggleMe()" :title="path.fullFileName" :class="{'active': (Files.file && Files.file.indexOf(path.fullFileName) === 0)}">
-				<font-awesome-icon :icon="((isOpen) ? 'folder-open' : 'folder')" class="mir5" style="width:20px;"/>
-				<span>{{ path.file }}</span>
-				<span class="foldercontent" v-if="Files.paths[path.fullFileName]">{{ Files.paths[path.fullFileName].files.length.toLocaleString() }} <font-awesome-icon icon="file" style="margin-right:5px;"/> {{ Files.paths[path.fullFileName].paths.length.toLocaleString() }} <font-awesome-icon icon="folder"/></span>
-				<span class="foldercontent unknown" v-else>? <font-awesome-icon icon="file" style="margin-right:5px;"/> ? <font-awesome-icon icon="folder"/></span>
+				<span class="path"><font-awesome-icon :icon="((isOpen) ? 'folder-open' : 'folder')" class="mir5"/>{{ path.file }}</span>
+				<span class="foldercontent" v-if="Files.paths[path.fullFileName]">
+					<span class="info">{{ Files.paths[path.fullFileName].files.length.toLocaleString() }} <font-awesome-icon icon="file"/></span>
+					<span class="info">{{ Files.paths[path.fullFileName].paths.length.toLocaleString() }} <font-awesome-icon icon="folder"/></span>
+				</span>
+				<span class="foldercontent unknown" v-else><span class="info">? <font-awesome-icon icon="file"/></span><span class="info">? <font-awesome-icon icon="folder"/></span></span>
 			</button>
 			<div class="subdata" v-if="isOpen && Files.paths[path.fullFileName]">
 				<FileLine :path="sPath" @loading="loading" @new="newFile" v-for="(sPath, fKey) in Files.paths[path.fullFileName].paths" :key="'path-' + fKey" :base="path.fullFileName"/>
-				<button @click="$emit('new', path.fullFileName)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk" class="mir5" style="width:20px;"/><span>Neue Datei erstellen ...</span></button>
+				<button @click="$emit('new', path.fullFileName)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk"/><span>Neue Datei erstellen ...</span></button>
 				<FileLine :file="sFile" @loading="loading" @new="newFile" v-for="(sFile, fKey) in Files.paths[path.fullFileName].files" :key="'file-' + fKey" :base="path.fullFileName"/>
 			</div>
 		</div>
 
 		<div class="fileline" v-if="file">
 			<button @click="loadFile()" :title="file.fullFileName" :class="{'active': isActiveFile, 'italic': isParser}">
-				<font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5" style="width:20px;"/>
-				<span>{{ file.file }}</span>
+				<span class="file"><font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5"/>{{ file.file }}</span>
 				<span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
 			</button>
 		</div>
@@ -94,12 +95,22 @@
 		color: #666;
 		font-style: italic;
 	}
+	.fileline .file > svg, .pathline .path > svg, .fileline-btn > svg {
+		width: 1.125em;
+		margin: 0 5px;
+	}
 	.pathline > button.active, .fileline > button.active, .fileline-btn.active {
 		color: #33f;
 	}
 	.pathline > button:hover, .fileline > button:hover, .fileline-btn:hover {
 		color: #000;
 		background: #eee;
+	}
+	.foldercontent > .info {
+    margin-left: 6px;
+	}
+	.foldercontent > .info > svg {
+		margin-left: 2px;
 	}
 	.subdata {
     margin-left: 25px;

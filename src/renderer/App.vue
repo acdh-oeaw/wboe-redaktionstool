@@ -313,4 +313,7 @@
 		line-height: 1.4 !important;
 		border-radius: 0.1rem !important;
 	}
+	a.disabled {
+		cursor: not-allowed;
+	}
 </style>

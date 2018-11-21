@@ -22,7 +22,7 @@
 				</p>
 				<div v-if="Files.paths[Options.projectPath]">
 					<FileLine :path="path" @loading="loading = true" @new="newFile" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
-					<button @click="newFile(Options.projectPath)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk" class="mir5" style="width:20px;"/><span>Neue Datei erstellen ...</span></button>
+					<button @click="newFile(Options.projectPath)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk" class="mil5 mir5" style="width:1.125em;"/><span>Neue Datei erstellen ...</span></button>
 					<FileLine :file="file" @loading="loading = true" @new="newFile" v-for="(file, fKey) in Files.paths[Options.projectPath].files" :key="'file-' + fKey" :base="Options.projectPath"/>
 				</div>
 			</div>
