@@ -198,6 +198,7 @@ const localFunctions = {
 		let aParAttrObj = this.options.get('attributes')
 		aParAttrObj = ((aParAttrObj && Object.keys(aParAttrObj).length > 0) ? aParAttrObj : null)
 		if (attrObj && aParAttrObj) {		// Attribute testen
+			// ToDo: renameTo bei der Überprüfung beachten!
 			// Überprüfen ob Attribute fehlen
 			Object.keys(aParAttrObj).some(function (aKey) {
 				// ToDo: Eventuelle If-Abfrage verarbeiten

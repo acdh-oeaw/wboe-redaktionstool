@@ -115,9 +115,9 @@
 						let aPlaceObj = null
 						let aSelectedPlace = null
 						this.content.getChilds('all', true).some(function (child) {
-							if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.attributes['xml:id'] && child.orgXmlObj.attributes.type === xmlFieldName) {
+							if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.attributes['ref'] && child.orgXmlObj.attributes.type === xmlFieldName) {
 								aPlaceObj = child
-								aSelectedPlace = child.orgXmlObj.attributes['xml:id']
+								aSelectedPlace = child.orgXmlObj.attributes['ref']
 								aManualUse = true
 								return true
 							}
@@ -185,13 +185,13 @@
 							}
 						} else {
 							if (aPlace.placeObj) {
-								if (aPlace.placeObj.orgXmlObj.attributes['xml:id'] !== aPlace.selectedPlace) {
-									aPlace.placeObj.orgXmlObj.setAttribute('xml:id', aPlace.selectedPlace)
+								if (aPlace.placeObj.orgXmlObj.attributes['ref'] !== aPlace.selectedPlace) {
+									aPlace.placeObj.orgXmlObj.setAttribute('ref', aPlace.selectedPlace)
 								}
 							} else {
 								let nParser = this.content.add(null, this.content.fxData.placeParser, null, [], [], false, null, null, false)
 								nParser.orgXmlObj.setAttribute('type', aPlace.xmlFieldName)
-								nParser.orgXmlObj.setAttribute('xml:id', aPlace.selectedPlace)
+								nParser.orgXmlObj.setAttribute('ref', aPlace.selectedPlace)
 							}
 						}
 					}, this)

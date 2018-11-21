@@ -673,7 +673,8 @@
 											"value": ["edit", "required"],
 											"attributes": [{
 												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "bundesland"]},
-												"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}
+												"xml:id": {"type": "variable", "renameTo": "ref", "canBeEmpty": {"use": true}},
+												"ref": {"type": "variable", "canBeEmpty": {"use": true}}
 											}],
 											"tag": ["multiple", "possible"],
 											"layout": {"multiple": { "use": true,"join": ", " } }
@@ -715,7 +716,8 @@
 											"value": ["edit", "required"],
 											"attributes": [{
 												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["ort", "gemeinde", "kleinregion", "grossregion", "bundesland"]},
-												"xml:id": {"type": "variable", "canBeEmpty": {"use": true}},
+												"xml:id": {"type": "variable", "renameTo": "ref", "canBeEmpty": {"use": true}},
+												"ref": {"type": "variable", "canBeEmpty": {"use": true}},
 												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
 											}],
 											"tag": ["multiple", "possible"],
