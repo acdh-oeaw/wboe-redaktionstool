@@ -50,7 +50,7 @@
 					</div>
 				</b-tab>
 
-				<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0))}" :disabled="tabsLocked" v-if="devMode">
+				<b-tab title="Objekt" :title-item-class="{'error': (!editorObject || (editorObject.errors && Object.keys(editorObject.errors).length > 0)), 'hidden': !devMode}" :disabled="tabsLocked">
 					<div class="viewobject scroll p20" v-if="aTabCach.indexOf(2) > -1 && !update">
 						<div v-if="editorObject">todo ...</div>
 						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
