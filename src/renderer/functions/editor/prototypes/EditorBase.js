@@ -20,6 +20,14 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
+	checkXmlIds () {		// Nach doppelten "xml:id" scannen.
+		this.xmlIds = {}
+		this.family.forEach(function (aObj) {
+			if (aObj) {
+				aObj.checkXmlId()
+			}
+		}, this)
+	},
 	getXML () {
 		return (this.parserObj.header || '') + this.orgXmlObj.getXML()
 	},

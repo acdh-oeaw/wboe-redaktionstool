@@ -245,6 +245,7 @@ const localFunctions = {
 				if (this.parents.length > 0) {
 					this.parents[0].updateData()
 				}
+				this.root.checkXmlIds()
 			}
 		} else {
 			console.log('Editor - Kann nicht gelöscht werden!', this)
@@ -421,8 +422,22 @@ const localFunctions = {
 			aAttrCheck.warn.concat(aValCheck.warn, aFxCheck, ((!posAsError) ? aPosCheck : [])).forEach(function (aWarn) {
 				this.addWarning(aWarn)
 			}, this)
+			this.checkXmlId()
 		}
 		this.refresh = true
+	},
+	checkXmlId () {
+		if (this.orgXmlObj && this.orgXmlObj.attributes) {
+			if (this.orgXmlObj.attributes['xml:id']) {
+				if (this.root.xmlIds[this.orgXmlObj.attributes['xml:id']]) {
+					if (this.root.xmlIds[this.orgXmlObj.attributes['xml:id']] !== this.uId) {
+						this.addWarning('xml:id = "' + this.orgXmlObj.attributes['xml:id'] + '" bereits vorhanden!')
+					}
+				} else {
+					this.root.xmlIds[this.orgXmlObj.attributes['xml:id']] = this.uId
+				}
+			}
+		}
 	},
 	getSiblings (mode = 'all', useable = false, inclSelf = false, withParser = false) {
 		let rObj = []

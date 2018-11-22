@@ -12,6 +12,7 @@ const localFunctions = {
 		this.family = []							// Alle "EditorObject"e "Key" = "uId"
 		this.parserObj = parserObj || null	// parserObj
 		this.orgXmlObj = xmlObj || null			// Original von xmlObj
+		this.xmlIds = {}							// Verwendete "xml:id"s auflisten
 		this.init()										// Immer dirket initialisieren
 		this.updateFamilyErrors()
 	},
@@ -40,7 +41,7 @@ const localFunctions = {
 		this.parserCopyDeep = 0				// Tiefe ...
 		this.fxFunction = null				// Spezielle Funktion
 		this.fxData = {}							// Daten für spezielle Funktion
-		// Werte die nach dem Setzen alller "EditorObject"e gesetzt werden. (updateData)
+		// Werte die nach dem Setzen aller "EditorObject"e gesetzt werden. (updateData)
 		this.count = 0								// Das wievielte Elment?
 		this.countParser = 0					// Das wievielte Objekt mit diesem Parser innerhalb dieser Generation ist es?
 		this.multipleNr = 0						// Position in der aktuellen "multiple"-Gruppe
@@ -65,6 +66,7 @@ localFunctions.EditorBase.prototype.init = prototypeEditorBase.init
 localFunctions.EditorBase.prototype.getXML = prototypeEditorBase.getXML
 localFunctions.EditorBase.prototype.moveTo = prototypeEditorBase.moveTo
 localFunctions.EditorBase.prototype.getEditorObjById = prototypeEditorBase.getEditorObjById
+localFunctions.EditorBase.prototype.checkXmlIds = prototypeEditorBase.checkXmlIds
 
 // EditorObject Prototypen
 localFunctions.EditorObject.prototype.addError = prototypeMultiple.addError
@@ -82,5 +84,6 @@ localFunctions.EditorObject.prototype.updateData = prototypeEditorObject.updateD
 localFunctions.EditorObject.prototype.delete = prototypeEditorObject.delete
 localFunctions.EditorObject.prototype.move = prototypeEditorObject.move
 localFunctions.EditorObject.prototype.updateParents = prototypeEditorObject.updateParents
+localFunctions.EditorObject.prototype.checkXmlId = prototypeEditorObject.checkXmlId
 
 export default localFunctions
