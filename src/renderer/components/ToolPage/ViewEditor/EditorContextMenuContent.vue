@@ -111,10 +111,13 @@
 						} else if (!aAttributes[aAttr].canBeEmpty || !aAttributes[aAttr].canBeEmpty.use) {
 							aIcon = 'exclamation-triangle'
 						}
-						oAttr[aAttr] = {'value': aVal, 'options': aAttributes[aAttr], 'icon': aIcon, 'editable': (aAttributes[aAttr].type === 'edit'), 'editType': ((aAttributes[aAttr].possibleValues) ? 'select' : 'text')}
+						if (!aAttributes[aAttr].remove || !aAttributes[aAttr].remove.use) {
+							oAttr[aAttr] = {'value': aVal, 'options': aAttributes[aAttr], 'icon': aIcon, 'editable': (aAttributes[aAttr].type === 'edit'), 'editType': ((aAttributes[aAttr].possibleValues) ? 'select' : 'text')}
+						}
 					}, this)
-					// console.log(oAttr)
-					return oAttr
+					if (Object.keys(oAttr).length > 0) {
+						return oAttr
+					}
 				}
 				return null
 			},

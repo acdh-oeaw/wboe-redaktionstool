@@ -56,7 +56,8 @@
 													"title": "Variante (Aussprache/Orth)",
 													"tagAsTitle": false,
 													"attributes": [{
-														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
 													}],
 													"tag": ["possibleTag"],
 													"layout": {
@@ -751,8 +752,7 @@
 					<?options {
 											"title": "Form Lemma/Variable",
 											"attributes": [{
-												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]},
-												"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]}
 											}],
 											"layout": {
 												"frame": "inline",
@@ -800,8 +800,7 @@
 					<?options {
 											"title": "Form Lemma/Variable",
 											"attributes": [{
-												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]},
-												"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]}
 											}],
 											"layout": {
 												"frame": "inline",
@@ -863,18 +862,18 @@
 							<name>
 								<?options {
 														"title": "Editor",
-														"attributes": [{"xml:id": {"type": "variable", "canBeEmpty": {"use": true}}}],
+														"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "remove": {"use": true}}}],
 														"value": ["edit", "required", {"is": {
 															"possibleValues": [
-																{"value": "Alexandra N. Lenz", "attribute": {"xml:id": "AL"}},
-																{"value": "Philipp Stöckle", "attribute": {"xml:id": "PhS"}},
-																{"value": "Andreas Gellan", "attribute": {"xml:id": "AG"}},
-																{"value": "Patrick Zeitlhuber", "attribute": {"xml:id": "PZ"}},
-																{"value": "Sabine Wahl", "attribute": {"xml:id": "SW"}},
-																{"value": "Sonja Schwaiger", "attribute": {"xml:id": "SS"}},
-																{"value": "Jan Braun", "attribute": {"xml:id": "JD"}},
-																{"value": "Angela Bergermayer", "attribute": {"xml:id": "AB"}},
-																{"title": "Eva Wahlmüller", "value": "EW"}
+																{"value": "Alexandra N. Lenz"},
+																{"value": "Philipp Stöckle"},
+																{"value": "Andreas Gellan"},
+																{"value": "Patrick Zeitlhuber"},
+																{"value": "Sabine Wahl"},
+																{"value": "Sonja Schwaiger"},
+																{"value": "Jan Braun"},
+																{"value": "Angela Bergermayer"},
+																{"value": "Eva Wahlmüller"}
 															]
 														}}],
 														"layout": { "frame": "line" }

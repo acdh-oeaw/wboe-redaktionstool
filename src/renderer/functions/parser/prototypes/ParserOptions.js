@@ -38,7 +38,7 @@ const localFunctions = {
 					if (xVal && xVal[0]) {
 						xVal = xVal[0].getValue(false)
 						if (xVal.trim().length > 0) {
-							nVal = xVal.trim().replace(/ /g, '_')
+							nVal = xVal.trim().replace(/[^a-zA-Z0-9._]/g, '_').replace(/^[^a-zA-Z]/g, '')
 						}
 					}
 				}

@@ -15,6 +15,12 @@ const localFunctions = {
 		if (this.parserObj && this.orgXmlObj && this.parserObj.options && this.parserObj.options.get('attributes')) {
 			// Attribute überarbeiten
 			let aAttr = this.parserObj.options.get('attributes') || {}
+			// "remove" überprüfen/entfernen
+			Object.keys(aAttr).forEach(function (aKey) {
+				if (aAttr[aKey].remove && this.orgXmlObj.attributes[aKey]) {
+					delete this.orgXmlObj.attributes[aKey]
+				}
+			}, this)
 			// "renameTo" überprüfen/umbenennen
 			Object.keys(aAttr).forEach(function (aKey) {
 				if (aAttr[aKey].renameTo && this.orgXmlObj.attributes[aKey]) {
