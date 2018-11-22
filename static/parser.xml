@@ -30,7 +30,8 @@
 													"id": "lemma-base",
 													"title": "Lemma",
 													"attributes": [{
-														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]}
+														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
 													}],
 													"tag": ["multiple"],
 													"layout": {
@@ -750,7 +751,8 @@
 					<?options {
 											"title": "Form Lemma/Variable",
 											"attributes": [{
-												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]}
+												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]},
+												"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
 											}],
 											"layout": {
 												"frame": "inline",
@@ -798,7 +800,8 @@
 					<?options {
 											"title": "Form Lemma/Variable",
 											"attributes": [{
-												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["lemma", "variable"]}
+												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]},
+												"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
 											}],
 											"layout": {
 												"frame": "inline",

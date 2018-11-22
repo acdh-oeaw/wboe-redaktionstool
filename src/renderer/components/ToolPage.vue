@@ -232,7 +232,9 @@
 					if (this.dataStatus === 'ok'
 					|| (this.dataStatus === 'error' && confirm('Daten enthalten Fehler! Wiklich speichern?'))
 					|| (this.dataStatus === 'warning' && confirm('Daten enthalten Warnungen! Wiklich speichern?'))) {
-						this.$store.dispatch('SAVE_FILE', this.editorObject.getXML())
+						let aXML = this.editorObject.getXML()
+						let sXML = (new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aXML))).getXML()	// Doppelt parsen für "xml:id" init
+						this.$store.dispatch('SAVE_FILE', sXML)
 						this.loadData()
 					}
 				}

@@ -79,8 +79,8 @@ const localFunctions = {
 		if (pAttr) {
 			Object.keys(pAttr).forEach(function (attrKey) {
 				let aAttr = pAttr[attrKey]
-				let aVal = pObj.options.getOptionValue(aAttr.value)
-				if (aVal || aVal === '') {
+				let aVal = pObj.options.getOptionValue(aAttr.value, this.orgXmlObj)
+				if (aVal || (aVal === '' && (aAttr.canBeEmpty && aAttr.canBeEmpty.use))) {
 					Vue.set(this.childs[aKey].attributes, attrKey, aVal)
 				} else if ((!aAttr.canBeEmpty || !aAttr.canBeEmpty.use) && aAttr.possibleValues && aAttr.possibleValues[0]) {
 					Vue.set(this.childs[aKey].attributes, attrKey, (aAttr.possibleValues[0].value || aAttr.possibleValues[0]))

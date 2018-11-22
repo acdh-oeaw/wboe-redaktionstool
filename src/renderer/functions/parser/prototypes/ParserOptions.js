@@ -15,20 +15,35 @@ const localFunctions = {
 	get (opt) {
 		return stdFunctions.getValOfSubProp(this.options, opt)
 	},
-	getOptionValue (parserOptionValue) {
+	getOptionValue (parserOptionValue, aOrgXmObj) {
 		let aVal = ((typeof parserOptionValue === 'object') ? JSON.parse(JSON.stringify(parserOptionValue)) : parserOptionValue)
-		if (aVal && aVal.fx === 'now') {
-			let aDate = new Date()
-			aVal = aDate.getFullYear() + '-' + ((aDate.getMonth() < 10) ? '0' : '') + aDate.getMonth() + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
-		}
-		if (aVal && aVal.fx === 'random') {
-			let nVal = ''
-			let pChr = aVal.fxCharset || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
-			let vLen = aVal.fxLen || 7
-			for (var i = 0; i < vLen; i++) {
-				nVal += pChr.charAt(Math.floor(Math.random() * pChr.length))
+		if (typeof aVal === 'object') {
+			if (aVal.fx === 'now') {
+				let aDate = new Date()
+				aVal = aDate.getFullYear() + '-' + ((aDate.getMonth() < 10) ? '0' : '') + aDate.getMonth() + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
 			}
-			aVal = nVal
+			if (aVal.fx === 'random') {
+				let nVal = ''
+				let pChr = aVal.fxCharset || 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'
+				let vLen = aVal.fxLen || 7
+				for (var i = 0; i < vLen; i++) {
+					nVal += pChr.charAt(Math.floor(Math.random() * pChr.length))
+				}
+				aVal = nVal
+			}
+			if (aVal.fx === 'orthId') {
+				let nVal = ''
+				if (aOrgXmObj) {
+					let xVal = aOrgXmObj.getChildsByName('orth')
+					if (xVal && xVal[0]) {
+						xVal = xVal[0].getValue(false)
+						if (xVal.trim().length > 0) {
+							nVal = xVal.trim().replace(/ /g, '_')
+						}
+					}
+				}
+				aVal = nVal
+			}
 		}
 		return aVal
 	},
