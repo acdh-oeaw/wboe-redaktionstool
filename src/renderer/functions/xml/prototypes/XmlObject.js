@@ -79,11 +79,7 @@ const localFunctions = {
 		if (pAttr) {
 			Object.keys(pAttr).forEach(function (attrKey) {
 				let aAttr = pAttr[attrKey]
-				let aVal = ((typeof aAttr.value === 'object') ? JSON.parse(JSON.stringify(aAttr.value)) : aAttr.value)
-				if (aVal && aVal.fx === 'now') {
-					let aDate = new Date()
-					aVal = aDate.getFullYear() + '-' + ((aDate.getMonth() < 10) ? '0' : '') + aDate.getMonth() + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
-				}
+				let aVal = pObj.options.getOptionValue(aAttr.value)
 				if (aVal || aVal === '') {
 					Vue.set(this.childs[aKey].attributes, attrKey, aVal)
 				} else if ((!aAttr.canBeEmpty || !aAttr.canBeEmpty.use) && aAttr.possibleValues && aAttr.possibleValues[0]) {

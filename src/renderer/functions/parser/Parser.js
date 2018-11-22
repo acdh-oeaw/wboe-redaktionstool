@@ -110,6 +110,7 @@ localFunctions.ParserOptions.prototype.combineObj = prototypeParserOptions.combi
 localFunctions.ParserOptions.prototype.get = prototypeParserOptions.get
 localFunctions.ParserOptions.prototype.getResult = prototypeParserOptions.getResult
 localFunctions.ParserOptions.prototype.extendPreviewLayout = prototypeParserOptions.extendPreviewLayout
+localFunctions.ParserOptions.prototype.getOptionValue = prototypeParserOptions.getOptionValue
 
 // ParserOptions Prototypen
 localFunctions.ParserPreviewObject.prototype.addError = prototypeMultiple.addError
