@@ -73,7 +73,7 @@
 							<?options {
 													"title": "Diminutiv",
 													"attributes": [{
-														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
 													}],
 													"tag": ["multiple", "possibleTag"],
 													"layout": {
@@ -86,7 +86,7 @@
 														}
 													}
 												} ?>
-							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true } } } ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
 							<gramGrp>
 								<?options {
 														"title": "grammatische Information",
