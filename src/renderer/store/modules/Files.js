@@ -152,7 +152,7 @@ const actions = {
 		Object.keys(state.paths).forEach(function (aDir) {
 			state.paths[aDir].files.forEach(function (aFile, aFileIndex) {
 				if (aFile.ext === 'xml') {
-					let editorFile = fs.readFileSync(aFile.fullFileName, 'utf8')
+					let editorFile = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
 					let editorObj = new EditorObject.EditorBase(parser, new XmlObject.XmlBase(editorFile))
 					commit('SET_PATHS_INFO', {'path': aDir, 'fileIndex': aFileIndex, 'info': {'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML() !== editorFile)}})
 				}

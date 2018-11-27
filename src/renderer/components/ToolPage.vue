@@ -7,7 +7,8 @@
 					<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
 					<b-dropdown-divider></b-dropdown-divider>
 					<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : aFile.errors, 'warning': aFile.warnings}" :key="aKey" v-for="(aFile, aKey) in devFiles">
-						{{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ((aFile.changed) ? ', C' : '') + ')' : '') }}
+						{{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ')' : '')}}
+						<span class="float-right bg-warning filechanged" v-if="aFile.changed">C</span>
 					</b-dropdown-item>
 				</b-dropdown>
 				<b-button-group size="sm" class="mx-1" v-if="devMode">
@@ -291,7 +292,7 @@
 						if (!fs.statSync(aFullFileName).isDirectory()) {
 							let aExt = file.split('.').pop()
 							if (aExt === 'xml' && file.substr(0, 6) !== 'parser') {
-								let aFileContent = fs.readFileSync(aFullFileName, 'utf8')
+								let aFileContent = fs.readFileSync(aFullFileName, 'utf8').replace(/\r/gmi, '')
 								let editorObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aFileContent))
 								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML() !== aFileContent) })
 							}
@@ -531,5 +532,9 @@
 		content: "X";
 		color: #fff;
 		font-size: 2px;
+	}
+	.filechanged {
+    margin-right: -24px;
+    padding: 0 0.3rem;
 	}
 </style>
