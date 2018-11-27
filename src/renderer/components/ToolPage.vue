@@ -362,7 +362,10 @@
 			this.updateTimer = performance.now()
 		},
 		updated () {
-			console.log('updated: ' + Math.ceil(performance.now() - this.updateTimer) + ' ms.')
+			let aUpdDur = Math.ceil(performance.now() - this.updateTimer)
+			if (aUpdDur > 50) {
+				console.log('updated: ' + aUpdDur + ' ms.')
+			}
 		},
 		beforeDestroy () {
 			window.removeEventListener('mousedown', this.mousedown)
