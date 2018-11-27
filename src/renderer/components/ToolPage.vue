@@ -7,7 +7,7 @@
 					<b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
 					<b-dropdown-divider></b-dropdown-divider>
 					<b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : aFile.errors, 'warning': aFile.warnings}" :key="aKey" v-for="(aFile, aKey) in devFiles">
-						{{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ')' : '') }}
+						{{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ((aFile.changed) ? ', C' : '') + ')' : '') }}
 					</b-dropdown-item>
 				</b-dropdown>
 				<b-button-group size="sm" class="mx-1" v-if="devMode">
@@ -23,9 +23,9 @@
 				</b-input-group>
 				<b-button-group size="sm" class="mr-1 mil-auto">
 					<b-btn @click="saveFile()"
-								:title="((!Files.changed) ? '' : ((dataStatus === 'ok') ? 'Datei kann gespeichert werden.' : ((dataStatus === 'error') ? 'Datei enthält Fehler!' : 'Datei enthält Warnungen!')))"
+								:title="((!Files.changed) ? 'Datei unverändert.' : ((dataStatus === 'ok') ? 'Datei kann gespeichert werden.' : ((dataStatus === 'error') ? 'Datei enthält Fehler!' : 'Datei enthält Warnungen!')))"
 								:variant="((!Files.changed) ? 'secondary' : ((dataStatus === 'ok') ? 'success' : ((dataStatus === 'error') ? 'danger' : 'warning')))" v-b-tooltip.hover.html :disabled="tabsLocked"><font-awesome-icon icon="save"/></b-btn>
-					<b-btn @click="discardChanges" title="Änderungen verwerfen und zurück zur Auswahl!" variant="warning" v-b-tooltip.hover.html v-if="Files.changed"><font-awesome-icon icon="minus-circle"/></b-btn>
+					<b-btn @click="discardChanges" :title="((Files.changed) ? 'Änderungen verwerfen und zurück zur Auswahl!' : 'Zurück zur Auswahl')" :variant="((Files.changed) ? 'warning' : 'secondary')" v-b-tooltip.hover.html><font-awesome-icon icon="minus-circle"/></b-btn>
 				</b-button-group>
 			</b-button-toolbar>
 
@@ -90,7 +90,7 @@
 					<li class="nav-item extra">
 						<b-button size="sm" @click="xmlEditorSet" v-if="aTab === 3" variant="primary" :disabled="!xmlEditorLocked">Anwenden</b-button>
 						<b-button size="sm" @click="xmlEditorUnset" v-if="aTab === 3" variant="warning" :disabled="!xmlEditorLocked">Verwerfen</b-button>
-						<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button"><font-awesome-icon icon="eye"/></b-button>
+						<b-button size="sm" @click="showTabView = !showTabView" class="vis-dropdown-button" title="Ansicht"><font-awesome-icon icon="eye"/></b-button>
 						<div class="vis-dropdown" v-if="showTabView">
 							<template v-if="aTab === 0">
 								<button @click="$store.dispatch('TOGGLE_SHOW', 'warnings')"><font-awesome-icon :icon="((Options.show.warnings) ? 'eye' : 'eye-slash')"/> Warnungen anzeigen</button>
@@ -240,7 +240,7 @@
 				}
 			},
 			discardChanges () {
-				if (confirm('Aktuelle Änderungen wirklich verwerfen?')) {
+				if (!this.Files.changed || confirm('Aktuelle Änderungen wirklich verwerfen?')) {
 					this.$store.dispatch('NOT_CHANGED')
 					this.$router.push('/home')
 				}
@@ -291,8 +291,9 @@
 						if (!fs.statSync(aFullFileName).isDirectory()) {
 							let aExt = file.split('.').pop()
 							if (aExt === 'xml' && file.substr(0, 6) !== 'parser') {
-								let editorObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(fs.readFileSync(aFullFileName, 'utf8')))
-								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length })
+								let aFileContent = fs.readFileSync(aFullFileName, 'utf8')
+								let editorObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aFileContent))
+								aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML() !== aFileContent) })
 							}
 						}
 					}, this)

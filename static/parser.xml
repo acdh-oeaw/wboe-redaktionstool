@@ -298,12 +298,12 @@
 
 		<tags>
 
-			<xr>		<!-- ToDo!? -->
+			<xr>		<!-- ToDo! -->
 				<?options {
 										"id": "xr",
 										"title": "Querverweis auf Artikel",
 										"value": ["variable", "required", "innerXML"],
-										"attributes": [{"type": {"type": "variable", "canBeEmpty": {"use": true}}}],
+										"attributes": [{"type": { "type": "edit", "possibleValues": ["cf", "lemma", "variant"] }}],
 										"tag": ["possibleTag"],
 										"layout": {
 											"frame": "inline",
