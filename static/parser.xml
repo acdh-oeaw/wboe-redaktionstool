@@ -208,7 +208,6 @@
 								</form>
 								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-								<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							</cit>
 							<seg>
 								<?options {
@@ -231,7 +230,6 @@
 								<?copy { "fromId": "lang" } ?>
 							</seg>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-							<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 							<?copy { "fromId": "xr" } ?>
 						</etym>
 						<?copy { "fromId": "sense", "options": {
@@ -326,25 +324,6 @@
 										}
 									} ?>
 			</lang>
-
-			<bibl>		<!-- ToDo!? Zusätzlich zu "ref-bibl" ? -->
-				<?options {
-										"id": "bibl",
-										"title": "Bibl",
-										"value": ["variable", "required", "innerXML"],
-										"attributes": [{"type": {"type": "edit", "canBeEmpty": {"use": true}}}],
-										"tag": ["possibleTag"]
-									} ?>
-			</bibl>
-
-			<lbl>		<!-- ToDo!? -->
-				<?options {
-										"id": "lbl",
-										"title": "lbl",
-										"value": ["edit", "required"],
-										"tag": ["possibleTag"]
-									} ?>
-			</lbl>
 
 			<?text {
 				"options": {
@@ -476,7 +455,6 @@
 				 </quote>
 				 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
-				 <?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
 			</cit>
 
@@ -503,7 +481,6 @@
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "bibl", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "sense", "options": {
 																								"tagAsTitle": false,
 																								"title": "Bedeutung (sub)",
@@ -535,7 +512,15 @@
 											}
 										}
 									} ?>
-				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+				<lbl>		<!-- ToDo!? -->
+					<?options {
+											"id": "lbl",
+											"title": "lbl",
+											"value": ["edit", "required"],
+											"tag": ["possibleTag"],
+											"layout": { "frame": "inline" }
+										} ?>
+				</lbl>
 				<?copy { "fromId": "text", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 				<citedRange>
 					<?options {

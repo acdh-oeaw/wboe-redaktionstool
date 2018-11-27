@@ -385,7 +385,7 @@ const localFunctions = {
 						}, this)
 					}
 				} else {
-					if ((acParser.name === '#text' && eChilds.length > 0 && eChilds[0].parserObj.name === '#text') || (!acParser.options.get('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
+					if ((acParser.name === '#text' && eChilds.length > 0 && (eChilds[0] && eChilds[0].parserObj && eChilds[0].parserObj.name === '#text')) || (!acParser.options.get('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
 						addThis = false
 					}
 				}
