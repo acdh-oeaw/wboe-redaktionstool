@@ -302,14 +302,24 @@
 				<?options {
 										"id": "xr",
 										"title": "Querverweis auf Artikel",
-										"value": ["variable", "required", "innerXML"],
-										"attributes": [{"type": {"type": "edit", "possibleValues": ["cf", "lemma", "variant"]}}],
+										"attributes": [{
+											"type": {"type": "edit", "possibleValues": ["cf", "lemma", "variant"]},
+											"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "multiWordExpression", "diminutive", "movierung", "shortform"]}
+										}],
 										"tag": ["possibleTag"],
 										"layout": {
 											"frame": "inline",
-											"hideTitle": true
+											"hideTitle": true,
+											"before": "(",
+											"after": ")",
+											"showAttributeBefore" : {
+												"type": { },
+												"subtype": { }
+											}
 										}
 									} ?>
+				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"] } } ?>
+				
 			</xr>
 
 			<lang>
@@ -512,7 +522,7 @@
 											}
 										}
 									} ?>
-				<lbl>		<!-- ToDo!? -->
+				<lbl>
 					<?options {
 											"id": "lbl",
 											"title": "lbl",
