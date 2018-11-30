@@ -4,7 +4,7 @@
 		<span class="title" v-if="!attrOpt.hideTitle">{{ attrOpt.title || attrKey }}</span>
 		<template v-if="parserOptions && parserOptions.type === 'edit'">
 			<span class="value" v-if="parserOptions.possibleValues">
-				<SelectPossibleValues @select="setSelected" :selected="getSelected()" :empty="this.parserOptions.canBeEmpty" :selectedText="attrValue" :values="this.parserOptions.possibleValues" v-if="!refreshSelect"/>
+				<SelectPossibleValues @select="setSelected" :selected="getSelected()" :empty="(this.parserOptions.canBeEmpty && this.parserOptions.canBeEmpty.use)" :selectedText="attrValue" :values="this.parserOptions.possibleValues" v-if="!refreshSelect"/>
 			</span>
 			<span class="value" v-else>
 				<span class="attr-edit" ref="attrEdit" @input="valAttrUpdate" @focus="valAttrUpdate" @blur="valAttrUpdateValue" @keyup.enter="valAttrUpdateValue" @keydown.enter.prevent contenteditable>{{ attrValue }}</span>

@@ -45,10 +45,10 @@ const localFunctions = {
 		this.useable = true
 		return true
 	},
-	getXML () {
+	getXML (oEditor) {
 		let aXML = ''
 		this.content.forEach(function (aCont) {
-			aXML += aCont.getXML()
+			aXML += aCont.getXML(oEditor)
 		}, this)
 		return aXML
 	},

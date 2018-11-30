@@ -90,7 +90,7 @@ const actions = {
 		aXmlObj.useable = true
 		let aEditorObj = new EditorObject.EditorBase(parser, aXmlObj)
 		console.log(aEditorObj)
-		aCont = aEditorObj.getXML()
+		aCont = aEditorObj.getXML(aEditorObj)
 		commit('SET_FILE', { 'file': filename, 'content': aCont })
 		dispatch('SAVE_FILE', aCont)
 	},
@@ -154,7 +154,7 @@ const actions = {
 				if (aFile.ext === 'xml') {
 					let editorFile = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
 					let editorObj = new EditorObject.EditorBase(parser, new XmlObject.XmlBase(editorFile))
-					commit('SET_PATHS_INFO', {'path': aDir, 'fileIndex': aFileIndex, 'info': {'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML() !== editorFile)}})
+					commit('SET_PATHS_INFO', {'path': aDir, 'fileIndex': aFileIndex, 'info': {'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML(editorObj) !== editorFile)}})
 				}
 			}, this)
 		}, this)

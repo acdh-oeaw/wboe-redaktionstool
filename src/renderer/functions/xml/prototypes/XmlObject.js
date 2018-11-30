@@ -147,7 +147,7 @@ const localFunctions = {
 	},
 	getValueByOption (parOptVal, asArray = true, flat = true) {
 		if (parOptVal && parOptVal.innerXML && parOptVal.innerXML.use === true) {
-			return this.getXML(false, false, false, true)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
+			return this.getXML(null, false, false, false, true)		// 1. PROCESSING_INSTRUCTION, COMMENT, UNKNOWN | 2. Formatiert
 		} else {
 			return this.getValue(asArray, flat)
 		}
@@ -220,7 +220,17 @@ const localFunctions = {
 		}
 		return { 'attribute': attr, 'value': aVal }
 	},
-	getXML (all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {
+	getXML (oEditor = null, all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {
+		// Aktuelles EditorObject ermitteln
+		let oEditorObj = null
+		if (oEditor) {
+			oEditor.family.some(function (aEditorObj) {
+				if (aEditorObj.orgXmlObj === this) {
+					oEditorObj = aEditorObj
+					return true
+				}
+			}, this)
+		}
 		let aXML = ''
 		if (this.type === 'TEXT') {
 			if (prvXmlObj && (['COMMENT', 'PROCESSING_INSTRUCTION', 'UNKNOWN'].indexOf(prvXmlObj.type) > -1)) {
@@ -244,7 +254,16 @@ const localFunctions = {
 						if (this.attributes[aKey]) {
 							aXML += ' ' + aKey + '="' + this.attributes[aKey] + '"'
 						} else {
-							aXML += ' ' + aKey + '=""'
+							let removeAttribute = false
+							if (oEditorObj && oEditorObj.parserObj && oEditorObj.parserObj.options) {
+								let pOptAttr = oEditorObj.parserObj.options.get('attributes')
+								if (pOptAttr && pOptAttr[aKey] && pOptAttr[aKey].removeIfEmpty && pOptAttr[aKey].removeIfEmpty.use) {
+									removeAttribute = true
+								}
+							}
+							if (!removeAttribute) {
+								aXML += ' ' + aKey + '=""'
+							}
 						}
 					}, this)
 				}
@@ -258,7 +277,7 @@ const localFunctions = {
 			}
 			if (this.childs.length > 0) {
 				this.childs.forEach(function (aChild) {
-					aChildCont += aChild.getXML(all, lb, short, false, deep + 1, lChild)
+					aChildCont += aChild.getXML(oEditor, all, lb, short, false, deep + 1, lChild)
 					lChild = aChild
 				}, this)
 			}
