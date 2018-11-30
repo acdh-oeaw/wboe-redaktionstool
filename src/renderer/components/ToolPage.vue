@@ -393,7 +393,7 @@
 	.vieweditorobject .btn {
 		font-size: 1.06rem;
 	}
-	.inline-attr .btn {
+	.layout-attr .btn {
 		font-size: 12px !important;
 		line-height: 1.4 !important;
 	}

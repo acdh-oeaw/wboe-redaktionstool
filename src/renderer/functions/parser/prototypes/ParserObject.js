@@ -173,7 +173,7 @@ const localFunctions = {
 			if (aCheckAttr.err.length > 0) {
 				errors.push(aCheckAttr.err)
 			} else {
-				score += 1
+				score += ((aCheckAttr.warn.length === 0) ? 1.1 : 1)
 			}
 			// Value prüfen
 			let aCheckVal = this.checkValue(orgXmlObj)
