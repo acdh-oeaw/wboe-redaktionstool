@@ -230,7 +230,8 @@
 								<?copy { "fromId": "lang" } ?>
 							</seg>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-							<?copy { "fromId": "xr" } ?>
+							<?copy { "fromId": "xr-int" } ?>
+							<?copy { "fromId": "xr-ext" } ?>
 						</etym>
 						<?copy { "fromId": "sense", "options": {
 																										"hideTitle": true,
@@ -298,12 +299,32 @@
 
 		<tags>
 
-			<xr>		<!-- ToDo! -->
+			<xr>		<!-- ToDo! Extern: cf -->
 				<?options {
-										"id": "xr",
+										"id": "xr-ext",
+										"title": "Querverweis auf Extern",
+										"attributes": [{
+											"type": {"type": "fixed", "value": "cf"}
+										}],
+										"tag": ["possibleTag"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true,
+											"before": "(",
+											"after": ")"
+										}
+									} ?>
+				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"] } } ?>
+				<!-- ToDo! ref(?bibl, !target): ptr, date -->
+				<!-- ToDo! ref(lang) -->
+			</xr>
+
+			<xr>		<!-- ToDo! Intern: lemma & variant -->
+				<?options {
+										"id": "xr-int",
 										"title": "Querverweis auf Artikel",
 										"attributes": [{
-											"type": {"type": "edit", "possibleValues": ["cf", "lemma", "variant"]},
+											"type": {"type": "variable", "possibleValues": ["lemma", "variant"]},
 											"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "multiWordExpression", "diminutive", "movierung", "shortform"]}
 										}],
 										"tag": ["possibleTag"],
@@ -319,7 +340,7 @@
 										}
 									} ?>
 				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"] } } ?>
-				
+				<!-- ToDo! ref(!target): target-Titel -->
 			</xr>
 
 			<lang>
@@ -528,7 +549,10 @@
 											"title": "lbl",
 											"value": ["edit", "required"],
 											"tag": ["possibleTag"],
-											"layout": { "frame": "inline" }
+											"layout": { "frame": "inline" },
+											"editor": {
+												"parentInContext": true
+											}
 										} ?>
 				</lbl>
 				<?copy { "fromId": "text", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
