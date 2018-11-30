@@ -303,7 +303,7 @@
 										"id": "xr",
 										"title": "Querverweis auf Artikel",
 										"value": ["variable", "required", "innerXML"],
-										"attributes": [{"type": { "type": "edit", "possibleValues": ["cf", "lemma", "variant"] }}],
+										"attributes": [{"type": {"type": "edit", "possibleValues": ["cf", "lemma", "variant"]}}],
 										"tag": ["possibleTag"],
 										"layout": {
 											"frame": "inline",
@@ -847,18 +847,21 @@
 							<name>
 								<?options {
 														"title": "Editor",
-														"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "remove": {"use": true}}}],
+														"attributes": [{
+															"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "remove": {"use": true}},
+															"ref": {"type": "variable", "canBeEmpty": {"use": true}}
+														}],
 														"value": ["edit", "required", {"is": {
 															"possibleValues": [
-																{"value": "Alexandra N. Lenz"},
-																{"value": "Philipp Stöckle"},
-																{"value": "Andreas Gellan"},
-																{"value": "Patrick Zeitlhuber"},
-																{"value": "Sabine Wahl"},
-																{"value": "Sonja Schwaiger"},
-																{"value": "Jan Braun"},
-																{"value": "Angela Bergermayer"},
-																{"value": "Eva Wahlmüller"}
+																{"value": "Alexandra N. Lenz", "attribute": {"ref": "#AL"}},
+																{"value": "Philipp Stöckle", "attribute": {"ref": "#PhS"}},
+																{"value": "Andreas Gellan", "attribute": {"ref": "#AG"}},
+																{"value": "Patrick Zeitlhuber", "attribute": {"ref": "#PZ"}},
+																{"value": "Sabine Wahl", "attribute": {"ref": "#SW"}},
+																{"value": "Sonja Schwaiger", "attribute": {"ref": "#SS"}},
+																{"value": "Jan Braun", "attribute": {"ref": "#JD"}},
+																{"value": "Angela Bergermayer", "attribute": {"ref": "#AB"}},
+																{"value": "Eva Wahlmüller", "attribute": {"ref": "#EW"}}
 															]
 														}}],
 														"layout": { "frame": "line" }
