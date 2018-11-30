@@ -12,36 +12,38 @@ const localFunctions = {
 		if (this.parserObj && this.orgXmlObj && this.orgXmlObj.name !== this.parserObj.name) {
 			this.orgXmlObj.name = this.parserObj.name
 		}
-		if (this.parserObj && this.orgXmlObj && this.parserObj.options && this.parserObj.options.get('attributes')) {
-			// Attribute überarbeiten
-			let aAttr = this.parserObj.options.get('attributes') || {}
-			// "remove" überprüfen/entfernen
-			Object.keys(aAttr).forEach(function (aKey) {
-				if (aAttr[aKey].remove && this.orgXmlObj.attributes[aKey]) {
-					delete this.orgXmlObj.attributes[aKey]
-				}
-			}, this)
-			// "renameTo" überprüfen/umbenennen
-			Object.keys(aAttr).forEach(function (aKey) {
-				if (aAttr[aKey].renameTo && this.orgXmlObj.attributes[aKey]) {
-					if (!this.orgXmlObj.attributes[aAttr[aKey].renameTo]) {
-						this.orgXmlObj.setAttribute(aAttr[aKey].renameTo, this.orgXmlObj.attributes[aKey])
+		if (this.parserObj && this.orgXmlObj && this.parserObj.options) {
+			if (this.parserObj.options.get('attributes')) {
+				// Attribute überarbeiten
+				let aAttr = this.parserObj.options.get('attributes') || {}
+				// "remove" überprüfen/entfernen
+				Object.keys(aAttr).forEach(function (aKey) {
+					if (aAttr[aKey].remove && this.orgXmlObj.attributes[aKey]) {
+						delete this.orgXmlObj.attributes[aKey]
 					}
-					delete this.orgXmlObj.attributes[aKey]
-				}
-			}, this)
-			// "shouldAttribute" überprüfen/hinzufügen
-			Object.keys(aAttr).forEach(function (aKey) {
-				if (aAttr[aKey].shouldAttribute && aAttr[aKey].shouldAttribute.use) {
-					if (!this.orgXmlObj.attributes[aKey]
-					|| (aAttr[aKey] && aAttr[aKey].possibleValues && this.orgXmlObj.attributes[aKey] && aAttr[aKey].possibleValues.indexOf(this.orgXmlObj.attributes[aKey]) > -1)) {
-						let nVal = this.parserObj.options.getOptionValue(aAttr[aKey].value, this.orgXmlObj)
-						if (nVal || (!aAttr[aKey].canBeEmpty || !aAttr[aKey].canBeEmpty.use)) {
-							this.orgXmlObj.attributes[aKey] = nVal
+				}, this)
+				// "renameTo" überprüfen/umbenennen
+				Object.keys(aAttr).forEach(function (aKey) {
+					if (aAttr[aKey].renameTo && this.orgXmlObj.attributes[aKey]) {
+						if (!this.orgXmlObj.attributes[aAttr[aKey].renameTo]) {
+							this.orgXmlObj.setAttribute(aAttr[aKey].renameTo, this.orgXmlObj.attributes[aKey])
+						}
+						delete this.orgXmlObj.attributes[aKey]
+					}
+				}, this)
+				// "shouldAttribute" überprüfen/hinzufügen
+				Object.keys(aAttr).forEach(function (aKey) {
+					if (aAttr[aKey].shouldAttribute && aAttr[aKey].shouldAttribute.use) {
+						if (!this.orgXmlObj.attributes[aKey]
+						|| (aAttr[aKey] && aAttr[aKey].possibleValues && this.orgXmlObj.attributes[aKey] && aAttr[aKey].possibleValues.indexOf(this.orgXmlObj.attributes[aKey]) > -1)) {
+							let nVal = this.parserObj.options.getOptionValue(aAttr[aKey].value, this.orgXmlObj)
+							if (nVal || (!aAttr[aKey].canBeEmpty || !aAttr[aKey].canBeEmpty.use)) {
+								this.orgXmlObj.attributes[aKey] = nVal
+							}
 						}
 					}
-				}
-			}, this)
+				}, this)
+			}
 		}
 		let aParserChilds = stdFunctions.getValOfSubProp(this.parserObj, 'childs') || []
 		let aXmlChilds = stdFunctions.getValOfSubProp(this.orgXmlObj, 'childs') || []
