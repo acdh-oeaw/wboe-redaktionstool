@@ -5,10 +5,10 @@
 		</template>
 		<!-- ToDo: canBeEmpty !?! -->
 		<b-dropdown-item @click="select(-1)" :active="selected === -1" v-if="empty">
-			<font-awesome-icon icon="check" class="fa-icon" v-if="selected === -1"/></span> Kein Wert!
+			<font-awesome-icon icon="check" class="fa-icon" v-if="selected === -1"/> Kein Wert!
 		</b-dropdown-item>
 		<b-dropdown-item @click="select(aKey)" :active="selected === aKey" :key="aKey" v-for="(aVal, aKey) in aValues">
-			<font-awesome-icon icon="check" class="fa-icon" v-if="aKey === selected"/></span> {{ aVal }}
+			<font-awesome-icon icon="check" class="fa-icon" v-if="aKey === selected"/> {{ aVal }}
 		</b-dropdown-item>
 	</b-dropdown>
 </template>

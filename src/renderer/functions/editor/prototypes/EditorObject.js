@@ -12,9 +12,32 @@ const localFunctions = {
 		if (this.parserObj && this.orgXmlObj && this.orgXmlObj.name !== this.parserObj.name) {
 			this.orgXmlObj.name = this.parserObj.name
 		}
+		// Notwendige Überarbeitungen durchführen
 		if (this.parserObj && this.orgXmlObj && this.parserObj.options) {
+			// Auswahlen aktuallisieren
+			if (this.parserObj.options.get('value.is.possibleValues')) {
+				// Aktuelle Auswahl ermitteln
+				let sVal = this.orgXmlObj.getValue(false)
+				let oKey = -1
+				this.parserObj.options.get('value.is.possibleValues').some(function (aVal, aKey) {
+					if ((aVal.value || aVal) === sVal) {
+						oKey = aKey
+						return true
+					}
+				}, this)
+				// Aktuell Auswahl neu setzen
+				if (oKey >= 0) {
+					let aVal = this.parserObj.options.get('value.is.possibleValues')[oKey]
+					this.orgXmlObj.setValue(aVal.value || aVal)
+					if (aVal.attribute && Object.keys(aVal.attribute).length > 0) {
+						Object.keys(aVal.attribute).forEach(function (aKey) {
+							this.orgXmlObj.setAttribute(aKey, aVal.attribute[aKey])
+						}, this)
+					}
+				}
+			}
+			// Attribute überarbeiten
 			if (this.parserObj.options.get('attributes')) {
-				// Attribute überarbeiten
 				let aAttr = this.parserObj.options.get('attributes') || {}
 				// "remove" überprüfen/entfernen
 				Object.keys(aAttr).forEach(function (aKey) {
