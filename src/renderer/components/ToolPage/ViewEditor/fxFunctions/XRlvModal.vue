@@ -26,7 +26,7 @@
 				<div class="col-7">
 					<div class="card anchorselect">
   					<div class="card-body">
-							<ViewPreview :start="true" :showAnchors="true" @setAnchor="setAnchor" :object="selFileEditObj" v-if="selFileEditObj && selFileEditObj.contentObj"/>
+							<ViewPreview :start="true" :showAnchors="true" :selectableAnchors="true" @setAnchor="setAnchor" :object="selFileEditObj" v-if="selFileEditObj && selFileEditObj.contentObj"/>
 						</div>
 					</div>
 				</div>

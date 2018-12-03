@@ -2,7 +2,7 @@
 	<div class="start" v-if="start">
 		<div v-if="object.contentObj">
 			<div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
-			<ViewPreview :object="object" :preview="object.parserObj.previewObj" v-else/>
+			<ViewPreview :object="object" :preview="object.parserObj.previewObj" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
 		</div>
 		<div v-else>
 			Keine Content-Daten vorhanden
@@ -16,11 +16,11 @@
 					<template v-if="typeof aContent === 'string'">
 						<span v-html="aContent"/>
 					</template>
-					<ViewPreview :object="object" :preview="[aContent]" v-else/>
+					<ViewPreview :object="object" :preview="[aContent]" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
 				</template>
 			</VariableTag>
 			<template v-else-if="aPrev.type === 'PIN'">
-				<PreviewContent :content="object.getEditorObjById(aPrev.options.fromid)" v-if="aPrev.name === 'content' && aPrev.options && aPrev.options.fromid"/>
+				<PreviewContent :content="object.getEditorObjById(aPrev.options.fromid)" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-if="aPrev.name === 'content' && aPrev.options && aPrev.options.fromid"/>
 				<div v-else><b>Fehler bei "PIN": {{ aPrev.name }}</b></div>
 			</template>
 			<template v-else>
@@ -45,6 +45,8 @@
 			start: Boolean,
 			object: Object,
 			preview: Array,
+			showAnchors: Boolean,
+			selectableAnchors: Boolean,
 		},
 		data () {
 			return {
@@ -65,6 +67,10 @@
 					return Object.keys(val).length
 				}
 			},
+			setAnchor (data) {
+				this.$emit('setAnchor', data)
+			},
+
 		},
 		components: {
 			VariableTag,

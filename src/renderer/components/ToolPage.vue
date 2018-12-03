@@ -46,7 +46,7 @@
 
 				<b-tab title="Vorschau" :disabled="tabsLocked">
 					<div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
-						<ViewPreview :start="true" :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+						<ViewPreview :start="true" :object="editorObject" :showAnchors="Options.show.showAnchors" v-if="editorObject && editorObject.contentObj"/>
 						<div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
 					</div>
 				</b-tab>
@@ -97,6 +97,10 @@
 								<button @click="$store.dispatch('TOGGLE_SHOW', 'warnings')"><font-awesome-icon :icon="((Options.show.warnings) ? 'eye' : 'eye-slash')"/> Warnungen anzeigen</button>
 								<button @click="$store.dispatch('TOGGLE_SHOW', 'commentsHighlight')"><font-awesome-icon :icon="((Options.show.commentsHighlight) ? 'check-square' : 'square')"/> Kommentare hervorheben</button>
 								<button @click="$store.dispatch('TOGGLE_SHOW', 'editorPreview')"><font-awesome-icon icon="columns" :class="{'text-secondary': !Options.show.editorPreview}"/> Vorschau anzeigen</button>
+								<hr>
+							</template>
+							<template v-if="aTab === 1">
+								<button @click="$store.dispatch('TOGGLE_SHOW', 'showAnchors')"><font-awesome-icon :icon="((Options.show.showAnchors) ? 'eye' : 'eye-slash')"/> Anker anzeigen</button>
 								<hr>
 							</template>
 							<template v-if="aTab === 3">

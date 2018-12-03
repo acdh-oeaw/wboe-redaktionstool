@@ -1,5 +1,14 @@
 <template>
-	<div :id="'po' + content.uId" :class="'inline'" :style="'font-size: ' + ((content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.fontsize')) ? content.parserObj.options.get('previewLayout.fontsize') : 100) + '%;'">
+	<div :id="'po' + content.uId"
+			 :class="'inline'
+			 				 + ((showAnchors && hasAnchor) ? ' hasanchor' : '')
+							 + ((selectableAnchors && hasAnchor) ? ' hasselanchor' : '')
+							"
+			 :title="((valAnchor) ? valAnchor + ' -> ' + content.orgXmlObj.getValue()[0] : '')"
+			 v-b-tooltip.hover.left
+			 @click="setAnchor"
+			 :style="'font-size: ' + ((content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.fontsize')) ? content.parserObj.options.get('previewLayout.fontsize') : 100) + '%;'"
+			 >
 		<!-- Vor Inhalten -->
 		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.multiple.use')">
 			<div :style="'height: ' + content.parserObj.options.get('previewLayout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('previewLayout.multiple.spaceBefore')"></div>
@@ -17,7 +26,7 @@
 			<span :class="{'enumerate': true, 'enumeraterom': content.parserObj.options.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 			<!-- Kinder -->
 			<template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
-				<PreviewContent ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+				<PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 			</template>
 		</div>
 		<!-- normal -->
@@ -37,7 +46,7 @@
 			</div>
 			<!-- Kinder -->
 			<template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
-				<PreviewContent ref="childs" :content="aContent" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+				<PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 			</template>
 		</div>
 
@@ -66,12 +75,29 @@
 		name: 'PreviewContent',
 		props: {
 			content: Object,
+			showAnchors: Boolean,
+			selectableAnchors: Boolean,
 		},
 		data () {
 			return {
+				pSubtypes: ['compound', 'MWE', 'diminutive', 'movierung', 'shortform'],
 			}
 		},
 		computed: {
+			hasAnchor () {
+				let hA = (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id'])
+							|| (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['subtype'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['subtype']) > -1)
+				return hA
+			},
+			valAnchor () {
+				if (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id']) {
+					return '#' + this.content.orgXmlObj.attributes['xml:id']
+				}
+				if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['subtype'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['subtype']) > -1)) {
+					return this.content.orgXmlObj.attributes['subtype']
+				}
+				return null
+			},
 			valueType () {		// Ist der aktuelle Wert 'fix', 'editable' oder 'none'?
 				if (this.content.parserObj && this.content.parserObj.options && this.content.parserObj.options.get('value')) {
 					if (!this.content.parserObj.options.get('value.edit.use')) {
@@ -166,6 +192,14 @@
 				}
 				return false
 			},
+			setAnchor () {
+				if (this.selectableAnchors && this.hasAnchor) {
+					this.$emit('setAnchor', [this.valAnchor, this.content.orgXmlObj.getValue()[0]])
+				}
+			},
+			setAnchorX (data) {
+				this.$emit('setAnchor', data)
+			},
 		},
 		components: {
 			GeoPreview
@@ -185,5 +219,17 @@
 	}
 	.obj.lb-hide {
 		display: none;
+	}
+	.hasanchor {
+    background: rgba(0, 0, 255, 0.11);
+	}
+	.selanchor {
+		background: rgba(0, 255, 0, 0.25);
+	}
+	.hasselanchor {
+		cursor: pointer;
+	}
+	.hasselanchor:hover {
+		background: rgba(0, 0, 255, 0.11);
 	}
 </style>

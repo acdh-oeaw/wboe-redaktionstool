@@ -377,7 +377,7 @@
 										"title": "Querverweis auf Artikel",
 										"attributes": [{
 											"type": {"type": "variable", "possibleValues": ["lemma", "variant"]},
-											"subtype": {"type": "variable", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "multiWordExpression", "diminutive", "movierung", "shortform"]}
+											"subtype": {"type": "variable", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "MWE", "diminutive", "movierung", "shortform"]}
 										}],
 										"tag": ["possibleTag"],
 										"layout": {
