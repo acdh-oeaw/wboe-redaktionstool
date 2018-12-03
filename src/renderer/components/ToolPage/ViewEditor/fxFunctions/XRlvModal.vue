@@ -6,20 +6,27 @@
 		</button>
 		<b-modal v-if="edit" ref="editmodal" :id="'xrlvmodal' + content.uId" title="Querverweis auf Artikel" @hidden="edit = false" @hide="chancelValue" size="lg">
 			<div class="row">
-				<div class="col-6">
+				<div class="col-5">
 					<div class="card fileselect">
   					<div class="card-body">
-							<button @click="selFile = ''" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((!selFile) ? 'primary' : 'secondary')">{{ cFile }} (Diese Datei)</button>
-							<button @click="selFile = aFile.file" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((selFile === aFile.file) ? 'primary' : 'secondary')" :key="'fl' + aKey" v-for="(aFile, aKey) in filelist">
+							<button @click="selFile = ''" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((!selFile) ? 'success' : 'primary')">{{ cFile }} (Diese Datei)</button>
+							<button @click="selFile = aFile.file" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((selFile === aFile.file) ? 'success' : ((aFile.loaded) ? 'primary' : 'secondary'))" :key="'fl' + aKey" v-for="(aFile, aKey) in filelist">
 								{{ aFile.file }}
+								<span class="float-right">
+									{{
+										((aFile.errors > 0 ) ? aFile.errors + ' F' : '')
+										+ ((aFile.warnings > 0 ) ? ((aFile.errors > 0) ? ', ' : '') + aFile.warnings + ' W' : '')
+										+ ((aFile.changed > 0 ) ? ((aFile.errors > 0 || aFile.warnings > 0) ? ' ,'  : '') + 'C' : '')
+									}}
+								</span>
 							</button>
 						</div>
 					</div>
 				</div>
-				<div class="col-6">
+				<div class="col-7">
 					<div class="card anchorselect">
   					<div class="card-body">
-							xxx
+							<ViewPreview :start="true" :showAnchors="true" @setAnchor="setAnchor" :object="selFileEditObj" v-if="selFileEditObj && selFileEditObj.contentObj"/>
 						</div>
 					</div>
 				</div>
@@ -36,8 +43,11 @@
 <script>
 	import { remote } from 'electron'
 	import { mapState } from 'vuex'
+	import ViewPreview from '../../ViewPreview'
 	// import _ from 'lodash'
 	// import stdFunctions from '@/functions/stdFunctions'
+	import XmlObject from '@/functions/xml/Xml'
+	import EditorObject from '@/functions/editor/Editor'
 	import fPath from 'path'
 	const fs = remote.require('fs')
 
@@ -53,6 +63,7 @@
 				'filelist': [],
 				'cFile': '',
 				'selFile': '',
+				'selFileEditObj': null
 			}
 		},
 		computed: {
@@ -60,8 +71,26 @@
 			...mapState(['Files']),
 		},
 		watch: {
-			'selFile' () {
-				// ToDo ...
+			'selFile' (nVal) {
+				if (!nVal) {
+					this.selFileEditObj = this.content.root
+				} else {
+					let aFile = null
+					this.filelist.some(function (af, i) {
+						if (af.file === this.selFile) {
+							aFile = af
+							return true
+						}
+					}, this)
+					if (aFile) {
+						let aFileContent = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
+						this.selFileEditObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aFileContent))
+						this.$set(aFile, 'errors', Object.keys(this.selFileEditObj.errors).length)
+						this.$set(aFile, 'warnings', Object.keys(this.selFileEditObj.warnings).length)
+						this.$set(aFile, 'changed', (this.selFileEditObj.getXML() !== aFileContent))
+						this.$set(aFile, 'loaded', true)
+					}
+				}
 			},
 			'edit' (nVal) {
 				if (nVal) {
@@ -96,8 +125,14 @@
 					e.preventDefault()
 				}
 			},
+			setAnchor (aAnchor) {
+				// ToDo ...
+				console.log(aAnchor)
+			},
 			getBaseData () {
+				// ToDo ...
 				this.selFile = ''
+				this.selFileEditObj = this.content.root
 			},
 			updateFileList () {
 				this.filelist = []
@@ -108,7 +143,7 @@
 						if (!fs.statSync(aFullFileName).isDirectory()) {
 							let aExt = file.split('.').pop()
 							if (aExt === 'xml' && file.substr(0, 6) !== 'parser' && file !== this.cFile) {
-								this.filelist.push({ 'file': file, 'fullFileName': aFullFileName, 'title': null, 'anchors': [], 'show': true, 'errors': 0, 'warnings': 0, 'changed': false })
+								this.filelist.push({ 'file': file, 'fullFileName': aFullFileName, 'title': null, 'anchors': [], 'show': true, 'errors': 0, 'warnings': 0, 'changed': false, 'loaded': false })
 							}
 						}
 					}, this)
@@ -120,6 +155,7 @@
 		beforeDestroy () {
 		},
 		components: {
+			ViewPreview,
 		},
 	}
 </script>
@@ -135,5 +171,8 @@
 		height: calc( 100vh - 240px );
 		min-height: 300px;
 		overflow-y: auto;
+	}
+	.btn-sm {
+		font-size: 0.875rem;
 	}
 </style>
