@@ -314,9 +314,61 @@
 											"after": ")"
 										}
 									} ?>
-				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"] } } ?>
-				<!-- ToDo! ref(?bibl, !target): ptr, date -->
-				<!-- ToDo! ref(lang) -->
+				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true } } } ?>
+				<ref type="bibl">
+					<?options {
+											"id": "xr-ref-bibl",
+											"title": "Verweis auf Literatur",
+											"attributes": [{
+												"target": {"type": "edit", "canBeEmpty": {"use": true}}
+											}],
+											"layout": {
+												"frame": "inline",
+												"hideTitle": true,
+												"showAttributeBefore" : {
+													"target": { }
+												}
+											},
+											"editor": { "parentInContext": true }
+										} ?>
+					<ptr>
+						<?options {
+							"id": "xr-cf-ptr",
+							"title": "ptr",
+							"attributes": [{
+								"target": {"type": "edit", "canBeEmpty": {"use": true}}
+							}],
+							"layout": {
+								"frame": "inline",
+								"hideTitle": true,
+								"showAttributeBefore" : {
+									"target": { "title": "target (URL)" }
+								}
+							},
+							"editor": { "parentInContext": true }
+						} ?>
+					</ptr>
+					<?copy { "fromId": "date", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true } } } ?>
+					<?copy { "fromId": "citedRange", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true } } } ?>
+				</ref>
+				<ref>
+					<?options {
+							"id": "ref-lang",
+							"title": "Sprache",
+							"attributes": [{
+								"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}}
+							}],
+							"layout": {
+								"frame": "inline",
+								"hideTitle": true,
+								"before": ": ",
+								"showAttributeBefore" : {
+									"xml:lang": { }
+								}
+							},
+							"editor": { "parentInContext": true }
+						} ?>
+				</ref>
 			</xr>
 
 			<xr>		<!-- ToDo! Intern: lemma & variant -->
@@ -339,9 +391,41 @@
 											}
 										}
 									} ?>
-				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"] } } ?>
-				<!-- ToDo! ref(!target): target-Titel -->
+				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true } } } ?>
+				<ref>
+					<?options {
+							"id": "xr-lv-ref-target",
+							"title": "Artikel",
+							"value": ["edit", "required"],
+							"attributes": [{
+								"target": {"type": "edit", "canBeEmpty": {"use": true}}
+							}],
+							"layout": {
+								"frame": "inline",
+								"hideTitle": true,
+								"before": ": ",
+								"showAttributeBefore" : {
+									"target": { }
+								}
+							},
+							"editor": { "parentInContext": true }
+						} ?>
+				</ref>
 			</xr>
+
+			<citedRange>
+				<?options {
+										"title": "Cited Range",
+										"id": "citedRange",
+										"value": ["edit", "required"],
+										"tag": ["possibleTag"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true,
+											"before": ": "
+										}
+									} ?>
+			</citedRange>
 
 			<lang>
 				<?options {
