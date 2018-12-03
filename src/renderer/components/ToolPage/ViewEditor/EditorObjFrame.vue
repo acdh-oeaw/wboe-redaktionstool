@@ -4,7 +4,11 @@
 			:draggable="isDraggable"
 			@mouseenter="mouseEnter"
 			@mouseleave="mouseLeave"
-			v-on="{dragstart:dragStart, dragend:dragEnd, dragleave:dragLeave, dragover:dragOver, drop:drop}"
+			v-on:dragstart="dragStart"
+			v-on:dragend="dragEnd"
+			v-on:dragleave="dragLeave"
+			v-on:dragover="dragOver"
+			v-on:drop="drop"
 		>
 		<!-- Vor Inhalten -->
 		<template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
