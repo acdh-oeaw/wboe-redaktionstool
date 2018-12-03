@@ -377,7 +377,7 @@
 										"title": "Querverweis auf Artikel",
 										"attributes": [{
 											"type": {"type": "variable", "possibleValues": ["lemma", "variant"]},
-											"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "multiWordExpression", "diminutive", "movierung", "shortform"]}
+											"subtype": {"type": "variable", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "multiWordExpression", "diminutive", "movierung", "shortform"]}
 										}],
 										"tag": ["possibleTag"],
 										"layout": {
@@ -388,7 +388,7 @@
 										},
 										"editor": {
 											"fxFunction": {
-												"name": "XRlvSelect"
+												"name": "XRlvModal"
 											}
 										}
 									} ?>
