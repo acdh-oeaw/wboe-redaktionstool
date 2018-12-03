@@ -316,4 +316,7 @@
 	a.disabled {
 		cursor: not-allowed;
 	}
+	.modal-xl > div {
+		max-width: 1200px !important;
+	}
 </style>

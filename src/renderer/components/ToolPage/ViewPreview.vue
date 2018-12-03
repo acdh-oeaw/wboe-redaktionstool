@@ -70,7 +70,6 @@
 			setAnchor (data) {
 				this.$emit('setAnchor', data)
 			},
-
 		},
 		components: {
 			VariableTag,

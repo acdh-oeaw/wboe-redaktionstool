@@ -4,13 +4,23 @@
 			view
 			<font-awesome-icon icon="external-link-alt"/>
 		</button>
-		<b-modal v-if="edit" ref="editmodal" :id="'xrlvmodal' + content.uId" title="Querverweis auf Artikel" @hidden="edit = false" @hide="chancelValue" size="lg">
+		<b-modal v-if="edit" ref="editmodal" :id="'xrlvmodal' + content.uId" title="Querverweis auf Artikel" @hidden="edit = false" @hide="chancelValue" size="lg" modal-class="modal-xl">
 			<div class="row">
 				<div class="col-5">
 					<div class="card fileselect">
   					<div class="card-body">
-							<button @click="selFile = ''" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((!selFile) ? 'success' : 'primary')">{{ cFile }} (Diese Datei)</button>
-							<button @click="selFile = aFile.file" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((selFile === aFile.file) ? 'success' : ((aFile.loaded) ? 'primary' : 'secondary'))" :key="'fl' + aKey" v-for="(aFile, aKey) in filelist">
+							<div class="input-group mb-3">
+								<input type="text" class="form-control" v-model="search">
+								<div class="input-group-append">
+									<button class="btn btn-primary" type="button" @click="debouncedSearching"><font-awesome-icon icon="search"/></button>
+								</div>
+							</div>
+							<button @click="selFile = ''" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((!selFile) ? 'success' : 'primary')">{{ cFile }}<span class="float-right"><b>(Diese Datei)</b></span></button>
+							<button @click="selFile = aFile.file"
+															:class="'btn btn-sm w-100 mb-1 text-left btn-' + ((selFile === aFile.file) ? 'success' : ((aFile.loaded) ? 'primary' : 'secondary'))"
+															v-if="aFile.show || selFile === aFile.file"
+															:key="'fl' + aKey"
+															v-for="(aFile, aKey) in filelist">
 								{{ aFile.file }}
 								<span class="float-right">
 									{{
@@ -32,9 +42,58 @@
 				</div>
 			</div>
 			<div slot="modal-footer" class="w-100">
-         <p class="my-2 float-left">{{ selFile }}</p>
-				 <button type="button" @click="saveValue(); $refs.editmodal.hide();" class="btn btn-primary float-right ml-2">OK</button>
-				 <button type="button" @click="$refs.editmodal.hide()" class="btn btn-secondary float-right">Cancel</button>
+				<div class="form-row align-items-center">
+					<div class="col-2">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">lbl</div>
+							</div>
+							<input type="text" class="form-control">
+						</div>
+					</div>
+					<div class="col-2">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">Text</div>
+							</div>
+							<input type="text" class="form-control">
+						</div>
+					</div>
+					<div class="col-2">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">Datei</div>
+							</div>
+							<input type="text" class="form-control" v-model="selFile">
+						</div>
+					</div>
+					<div class="col-2">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">#</div>
+							</div>
+							<input type="text" class="form-control">
+						</div>
+					</div>
+					<div class="col-2">
+						<div class="input-group mb-2">
+							<div class="input-group-prepend">
+								<div class="input-group-text">@</div>
+							</div>
+							<select class="form-control">
+								<option value="compound">compound</option>
+								<option value="MWE">MWE</option>
+								<option value="diminutive">diminutive</option>
+								<option value="movierung">movierung</option>
+								<option value="shortform">shortform</option>
+							</select>
+						</div>
+					</div>
+					<div class="col-2">
+						<button type="button" @click="saveValue(); $refs.editmodal.hide();" class="btn btn-primary float-right ml-2 mb-2">OK</button>
+						<button type="button" @click="$refs.editmodal.hide()" class="btn btn-secondary float-right mb-2">Cancel</button>
+					</div>
+				</div>
 			</div>
 		</b-modal>
 	</span>
@@ -44,7 +103,7 @@
 	import { remote } from 'electron'
 	import { mapState } from 'vuex'
 	import ViewPreview from '../../ViewPreview'
-	// import _ from 'lodash'
+	import _ from 'lodash'
 	// import stdFunctions from '@/functions/stdFunctions'
 	import XmlObject from '@/functions/xml/Xml'
 	import EditorObject from '@/functions/editor/Editor'
@@ -63,7 +122,8 @@
 				'filelist': [],
 				'cFile': '',
 				'selFile': '',
-				'selFileEditObj': null
+				'selFileEditObj': null,
+				'search': '',
 			}
 		},
 		computed: {
@@ -71,7 +131,11 @@
 			...mapState(['Files']),
 		},
 		watch: {
+			'search' (nVal) {
+				this.debouncedSearching()
+			},
 			'selFile' (nVal) {
+				this.selFileEditObj = null
 				if (!nVal) {
 					this.selFileEditObj = this.content.root
 				} else {
@@ -143,12 +207,24 @@
 						if (!fs.statSync(aFullFileName).isDirectory()) {
 							let aExt = file.split('.').pop()
 							if (aExt === 'xml' && file.substr(0, 6) !== 'parser' && file !== this.cFile) {
-								this.filelist.push({ 'file': file, 'fullFileName': aFullFileName, 'title': null, 'anchors': [], 'show': true, 'errors': 0, 'warnings': 0, 'changed': false, 'loaded': false })
+								this.filelist.push({ 'file': file, 'fullFileName': aFullFileName, 'searchval': file.substr(0, file.length - 4).toLowerCase(), 'anchors': [], 'show': true, 'errors': 0, 'warnings': 0, 'changed': false, 'loaded': false })
 							}
 						}
 					}, this)
 				}
+				this.debouncedSearching()
 			},
+			debouncedSearching: _.debounce(function () {		// Verzögert suchen
+				if (this.search.trim().length < 1) {
+					this.filelist.forEach(function (aFile) {
+						aFile.show = true
+					}, this)
+				} else {
+					this.filelist.forEach(function (aFile) {
+						aFile.show = (aFile.file.indexOf(this.search.trim().toLowerCase()) > -1)
+					}, this)
+				}
+			}, 250),
 		},
 		created () {
 		},
