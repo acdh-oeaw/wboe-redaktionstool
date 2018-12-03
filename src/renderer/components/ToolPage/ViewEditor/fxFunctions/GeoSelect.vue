@@ -177,7 +177,7 @@
 					}
 				}, this)
 				if (!aError || confirm('Die Eingabe ist Fehlerhaft! Trotzdem anwenden?')) {
-					// ToDo: Speichervorgang
+					// Speichervorgang
 					this.placesEdit.forEach(function (aPlace) {
 						if (!aPlace.option || !aPlace.selectedPlace || !aPlace.use) {
 							if (aPlace.placeObj) {

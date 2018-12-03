@@ -231,7 +231,7 @@
 							</seg>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<?copy { "fromId": "xr-int" } ?>
-							<?copy { "fromId": "xr-ext" } ?>
+							<!-- <?copy { "fromId": "xr-ext" } ?> -->
 						</etym>
 						<?copy { "fromId": "sense", "options": {
 																										"hideTitle": true,
@@ -384,10 +384,11 @@
 											"frame": "inline",
 											"hideTitle": true,
 											"before": "(",
-											"after": ")",
-											"showAttributeBefore" : {
-												"type": { },
-												"subtype": { }
+											"after": ")"
+										},
+										"editor": {
+											"fxFunction": {
+												"name": "XRlvSelect"
 											}
 										}
 									} ?>

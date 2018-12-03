@@ -395,7 +395,8 @@ const localFunctions = {
 			let mHit = false
 			this.parserObj.childs.forEach(function (acParser) {
 				let addThis = true
-				if (acParser.options.get('editor.noAddButton')) {
+				if (acParser.options.get('editor.noAddButton')
+					|| (this.parserObj && this.parserObj.options && this.parserObj.options.get('editor.fxFunction'))) {
 					addThis = false
 				}
 				if (!acParser.options.get('tag.anywhere.use')) {
@@ -410,12 +411,19 @@ const localFunctions = {
 						}, this)
 					}
 				} else {
-					if ((acParser.name === '#text' && eChilds.length > 0 && (eChilds[0] && eChilds[0].parserObj && eChilds[0].parserObj.name === '#text')) || (!acParser.options.get('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
+					if ((acParser.name === '#text' && eChilds.length > 0 && (eChilds[0] && eChilds[0].parserObj && eChilds[0].parserObj.name === '#text'))
+						|| (!acParser.options.get('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
 						addThis = false
 					}
 				}
 				if (addThis) {
-					this.addableInner.push({ 'uId': acParser.uId, 'type': (acParser.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'), 'title': acParser.options.get('editor.addTitle') || acParser.options.get('title.value') || acParser.name, 'cShow': true, 'bShow': true })
+					this.addableInner.push({
+						'uId': acParser.uId,
+						'type': (acParser.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'),
+						'title': acParser.options.get('editor.addTitle') || acParser.options.get('title.value') || acParser.name,
+						'cShow': true,
+						'bShow': true
+					})
 				}
 			}, this)
 			this.addableInner = this.addableInner.slice().sort(AddableSort)

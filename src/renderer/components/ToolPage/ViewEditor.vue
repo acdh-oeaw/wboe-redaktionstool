@@ -26,7 +26,8 @@
 									}" v-if="valueType === 'fix'">
 			{{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
 		</span>
-		<GeoSelect :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect'"/>
+		<GeoSelect  :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect'"/>
+		<XRlvSelect :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'XRlvSelect'"/>
 		<EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 
 		<template slot="childs" v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
@@ -52,6 +53,7 @@
 	import InlineAttributes from './ViewEditor/InlineAttributes'
 	// fxFunctions
 	import GeoSelect from './ViewEditor/fxFunctions/GeoSelect'
+	import XRlvSelect from './ViewEditor/fxFunctions/XRlvSelect'
 
 	import _ from 'lodash'
 
@@ -144,6 +146,7 @@
 			EditableValue,
 			InlineAttributes,
 			GeoSelect,
+			XRlvSelect,
 		},
 	}
 </script>
