@@ -225,7 +225,7 @@ const localFunctions = {
 		let oEditorObj = null
 		if (oEditor) {
 			oEditor.family.some(function (aEditorObj) {
-				if (aEditorObj.orgXmlObj === this) {
+				if (aEditorObj && aEditorObj.orgXmlObj === this) {
 					oEditorObj = aEditorObj
 					return true
 				}

@@ -87,7 +87,8 @@
 		computed: {
 			hasAnchor () {
 				let hA = (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id'])
-							|| (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['subtype'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['subtype']) > -1)
+							|| ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['subtype'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['subtype']) > -1)
+								&& !(this.content.orgXmlObj && this.content.orgXmlObj.name === 'xr'))
 				return hA
 			},
 			valAnchor () {

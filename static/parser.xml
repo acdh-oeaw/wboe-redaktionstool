@@ -390,7 +390,21 @@
 											}
 										}
 									} ?>
-				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true }, "layout": { "hideTitle": true } } } ?>
+				<lbl>
+					<?options {
+											"id": "xr-int-lbl",
+											"title": "lbl",
+											"value": ["edit", "required"],
+											"tag": ["possibleTag"],
+											"layout": {
+												"hideTitle": true,
+												"frame": "inline"
+											},
+											"editor": {
+												"parentInContext": true
+											}
+										} ?>
+				</lbl>
 				<ref>
 					<?options {
 							"id": "xr-lv-ref-target",

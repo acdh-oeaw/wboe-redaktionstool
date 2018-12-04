@@ -143,6 +143,7 @@
 				this.debouncedSearching()
 			},
 			'selFile' (nVal) {
+				this.changed = true
 				this.selFileEditObj = null
 				if (!nVal) {
 					this.selFileEditObj = this.content.root
@@ -164,6 +165,11 @@
 					}
 				}
 			},
+			'lbl' () { this.changed = true },
+			'txtAnchor' () { this.changed = true },
+			'valAnchor' () { this.changed = true },
+			'typAnchor' () { this.changed = true },
+			'subTypAnchor' () { this.changed = true },
 			'edit' (nVal) {
 				if (nVal) {
 					this.getBaseData()
@@ -171,6 +177,13 @@
 					this.$nextTick(() => {
 						this.$refs.editmodal.show()
 					})
+				} else {
+					this.selFile = ''
+					this.lbl = ''
+					this.txtAnchor = ''
+					this.valAnchor = ''
+					this.typAnchor = ''
+					this.subTypAnchor = ''
 				}
 			},
 			'refreshSelect' (nVal) {
@@ -186,8 +199,36 @@
 			console.log('XRlvModal', this.content)
 		},
 		methods: {
-			saveValue () {
-				// ToDo: Speichervorgang
+			saveValue () {	// Speichervorgang
+				let aChilds = this.content.getChilds('all', true)
+				let aLbl = null
+				let aRef = null
+				this.content.orgXmlObj.attributes.type = this.typAnchor
+				this.content.orgXmlObj.attributes.subtype = this.subTypAnchor
+				aChilds.forEach(function (aChild) {
+					if (aChild.orgXmlObj) {
+						if (aChild.orgXmlObj.name === 'lbl') {
+							aLbl = aChild
+						} else if (aChild.orgXmlObj.name === 'ref') {
+							aRef = aChild
+						}
+					}
+				}, this)
+				if (this.lbl) {
+					if (!aLbl) {
+						aLbl = this.content.add(0, this.content.parserObj.root.idList['xr-int-lbl'])
+					}
+					aLbl.orgXmlObj.setValue(this.lbl)
+				} else {
+					if (aLbl) {
+						aLbl.delete(true)
+					}
+				}
+				if (!aRef) {
+					aRef = this.content.add(null, this.content.parserObj.root.idList['xr-lv-ref-target'])
+				}
+				aRef.orgXmlObj.attributes.target = this.selFile + ((this.valAnchor) ? '#' + this.valAnchor : '')
+				aRef.orgXmlObj.setValue(this.txtAnchor)
 				this.changed = false
 			},
 			chancelValue (e) {
