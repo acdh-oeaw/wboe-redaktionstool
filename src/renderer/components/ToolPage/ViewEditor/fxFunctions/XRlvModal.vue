@@ -45,7 +45,7 @@
 				<div class="form-row align-items-center">
 					<div class="col-1">
 						<div class="input-group mb-2">
-							<input type="text" class="form-control" placeholder="lbl">
+							<input type="text" class="form-control" placeholder="lbl" v-model="lbl">
 						</div>
 					</div>
 					<div class="col-2">
@@ -127,6 +127,7 @@
 				'selFile': '',
 				'selFileEditObj': null,
 				'search': '',
+				'lbl': '',
 				'txtAnchor': '',
 				'valAnchor': '',
 				'typAnchor': '',
@@ -203,9 +204,32 @@
 				this.subTypAnchor = aAnchor[3]
 			},
 			getBaseData () {
-				// ToDo ...
 				this.selFile = ''
-				this.selFileEditObj = this.content.root
+				this.lbl = ''
+				this.txtAnchor = ''
+				this.valAnchor = ''
+				this.typAnchor = ''
+				this.subTypAnchor = ''
+				if (this.content.orgXmlObj && this.content.orgXmlObj.attributes) {
+					this.typAnchor = this.content.orgXmlObj.attributes.type || ''
+					this.subTypAnchor = this.content.orgXmlObj.attributes.subtype || ''
+				}
+				let aChilds = this.content.getChilds('all', true)
+				aChilds.forEach(function (aChild) {
+					if (aChild.orgXmlObj) {
+						if (aChild.orgXmlObj.name === 'lbl') {
+							this.lbl = aChild.orgXmlObj.getValue(false) || ''
+						} else if (aChild.orgXmlObj.name === 'ref') {
+							this.txtAnchor = aChild.orgXmlObj.getValue(false) || ''
+							if (aChild.orgXmlObj && aChild.orgXmlObj.attributes) {
+								let aTarget = (aChild.orgXmlObj.attributes.target || '').split('#')
+								this.selFile = aTarget[0] || ''
+								this.valAnchor = aTarget[1] || ''
+							}
+						}
+					}
+				}, this)
+				this.selFileEditObj = ((this.selFile === '') ? this.content.root : null)
 			},
 			updateFileList () {
 				this.filelist = []
