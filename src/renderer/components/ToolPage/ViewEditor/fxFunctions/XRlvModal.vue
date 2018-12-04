@@ -1,7 +1,7 @@
 <template>
 	<span :id="'xrlv' + content.uId" class="xrlvmodal">
 		<button @click="edit = true" class="btn-none xrlvmodalbtn view">
-			view
+			<PreviewContent :content="content"/>
 			<font-awesome-icon icon="external-link-alt"/>
 		</button>
 		<b-modal v-if="edit" ref="editmodal" :id="'xrlvmodal' + content.uId" title="Querverweis auf Artikel" @hidden="edit = false" @hide="chancelValue" size="lg" modal-class="modal-xl">
@@ -26,7 +26,7 @@
 									{{
 										((aFile.errors > 0 ) ? aFile.errors + ' F' : '')
 										+ ((aFile.warnings > 0 ) ? ((aFile.errors > 0) ? ', ' : '') + aFile.warnings + ' W' : '')
-										+ ((aFile.changed > 0 ) ? ((aFile.errors > 0 || aFile.warnings > 0) ? ' ,'  : '') + 'C' : '')
+										+ ((aFile.changed > 0 ) ? ((aFile.errors > 0 || aFile.warnings > 0) ? ' ,'  : '') + 'A' : '')
 									}}
 								</span>
 							</button>
@@ -43,12 +43,9 @@
 			</div>
 			<div slot="modal-footer" class="w-100">
 				<div class="form-row align-items-center">
-					<div class="col-2">
+					<div class="col-1">
 						<div class="input-group mb-2">
-							<div class="input-group-prepend">
-								<div class="input-group-text">lbl</div>
-							</div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" placeholder="lbl">
 						</div>
 					</div>
 					<div class="col-2">
@@ -56,7 +53,7 @@
 							<div class="input-group-prepend">
 								<div class="input-group-text">Text</div>
 							</div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="txtAnchor">
 						</div>
 					</div>
 					<div class="col-2">
@@ -64,7 +61,7 @@
 							<div class="input-group-prepend">
 								<div class="input-group-text">Datei</div>
 							</div>
-							<input type="text" class="form-control" v-model="selFile">
+							<input type="text" class="form-control" v-model="selFile" placeholder="Diese Datei">
 						</div>
 					</div>
 					<div class="col-2">
@@ -72,15 +69,20 @@
 							<div class="input-group-prepend">
 								<div class="input-group-text">#</div>
 							</div>
-							<input type="text" class="form-control">
+							<input type="text" class="form-control" v-model="valAnchor">
 						</div>
 					</div>
-					<div class="col-2">
+					<div class="col-3">
 						<div class="input-group mb-2">
 							<div class="input-group-prepend">
 								<div class="input-group-text">@</div>
 							</div>
-							<select class="form-control">
+							<select class="form-control" v-model="typAnchor">
+								<option value="lemma">lemma</option>
+								<option value="variant">variant</option>
+							</select>
+							<select class="form-control input-group-append" v-model="subTypAnchor">
+								<option value="">Kein Subtype</option>
 								<option value="compound">compound</option>
 								<option value="MWE">MWE</option>
 								<option value="diminutive">diminutive</option>
@@ -103,6 +105,7 @@
 	import { remote } from 'electron'
 	import { mapState } from 'vuex'
 	import ViewPreview from '../../ViewPreview'
+	import PreviewContent from '../../ViewPreview/PreviewContent'
 	import _ from 'lodash'
 	// import stdFunctions from '@/functions/stdFunctions'
 	import XmlObject from '@/functions/xml/Xml'
@@ -124,6 +127,10 @@
 				'selFile': '',
 				'selFileEditObj': null,
 				'search': '',
+				'txtAnchor': '',
+				'valAnchor': '',
+				'typAnchor': '',
+				'subTypAnchor': '',
 			}
 		},
 		computed: {
@@ -190,8 +197,10 @@
 				}
 			},
 			setAnchor (aAnchor) {
-				// ToDo ...
-				console.log(aAnchor)
+				this.txtAnchor = aAnchor[0]
+				this.valAnchor = aAnchor[1]
+				this.typAnchor = aAnchor[2]
+				this.subTypAnchor = aAnchor[3]
 			},
 			getBaseData () {
 				// ToDo ...
@@ -232,6 +241,7 @@
 		},
 		components: {
 			ViewPreview,
+			PreviewContent,
 		},
 	}
 </script>

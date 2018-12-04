@@ -4,7 +4,7 @@
 			 				 + ((showAnchors && hasAnchor) ? ' hasanchor' : '')
 							 + ((selectableAnchors && hasAnchor) ? ' hasselanchor' : '')
 							"
-			 :title="((valAnchor) ? valAnchor + ' -> ' + content.orgXmlObj.getValue()[0] : '')"
+			 :title="((valAnchor || subTypAnchor) ? '#' + valAnchor + ' (' + typAnchor + ((subTypAnchor) ? ', ' + subTypAnchor : '') + ')' + ' -> ' + content.orgXmlObj.getValue()[0] : '')"
 			 v-b-tooltip.hover.left
 			 @click="setAnchor"
 			 :style="'font-size: ' + ((content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.fontsize')) ? content.parserObj.options.get('previewLayout.fontsize') : 100) + '%;'"
@@ -25,7 +25,7 @@
 		<div :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
 			<span :class="{'enumerate': true, 'enumeraterom': content.parserObj.options.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 			<!-- Kinder -->
-			<template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
+			<template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && childlessFxFunctions.indexOf(content.parserObj.options.get('editor.fxFunction.name')) > -1)">
 				<PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 			</template>
 		</div>
@@ -45,7 +45,7 @@
 				<GeoPreview :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect'"/>
 			</div>
 			<!-- Kinder -->
-			<template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
+			<template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && childlessFxFunctions.indexOf(content.parserObj.options.get('editor.fxFunction.name')) > -1)">
 				<PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
 			</template>
 		</div>
@@ -80,6 +80,7 @@
 		},
 		data () {
 			return {
+				childlessFxFunctions: ['GeoSelect'],
 				pSubtypes: ['compound', 'MWE', 'diminutive', 'movierung', 'shortform'],
 			}
 		},
@@ -91,12 +92,25 @@
 			},
 			valAnchor () {
 				if (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id']) {
-					return '#' + this.content.orgXmlObj.attributes['xml:id']
+					return this.content.orgXmlObj.attributes['xml:id']
 				}
+				return ''
+			},
+			typAnchor () {
+				if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['type'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['type']) > -1)) {
+					return this.content.orgXmlObj.attributes['type']
+				}
+				if (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id']) {
+					return 'lemma'
+				} else {
+					return 'variant'
+				}
+			},
+			subTypAnchor () {
 				if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['subtype'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['subtype']) > -1)) {
 					return this.content.orgXmlObj.attributes['subtype']
 				}
-				return null
+				return ''
 			},
 			valueType () {		// Ist der aktuelle Wert 'fix', 'editable' oder 'none'?
 				if (this.content.parserObj && this.content.parserObj.options && this.content.parserObj.options.get('value')) {
@@ -194,7 +208,7 @@
 			},
 			setAnchor () {
 				if (this.selectableAnchors && this.hasAnchor) {
-					this.$emit('setAnchor', [this.valAnchor, this.content.orgXmlObj.getValue()[0]])
+					this.$emit('setAnchor', [this.content.orgXmlObj.getValue()[0], this.valAnchor, this.typAnchor, this.subTypAnchor])
 				}
 			},
 			setAnchorX (data) {

@@ -382,9 +382,7 @@
 										"tag": ["possibleTag"],
 										"layout": {
 											"frame": "inline",
-											"hideTitle": true,
-											"before": "(",
-											"after": ")"
+											"hideTitle": true
 										},
 										"editor": {
 											"fxFunction": {
@@ -392,19 +390,18 @@
 											}
 										}
 									} ?>
-				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true } } } ?>
+				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true }, "layout": { "hideTitle": true } } } ?>
 				<ref>
 					<?options {
 							"id": "xr-lv-ref-target",
 							"title": "Artikel",
 							"value": ["edit", "required"],
 							"attributes": [{
-								"target": {"type": "edit", "canBeEmpty": {"use": true}}
+								"target": {"type": "edit", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}}
 							}],
 							"layout": {
 								"frame": "inline",
 								"hideTitle": true,
-								"before": ": ",
 								"showAttributeBefore" : {
 									"target": { }
 								}
