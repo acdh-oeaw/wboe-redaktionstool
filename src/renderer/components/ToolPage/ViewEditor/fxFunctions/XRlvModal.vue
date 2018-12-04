@@ -271,6 +271,9 @@
 					}
 				}, this)
 				this.selFileEditObj = ((this.selFile === '') ? this.content.root : null)
+				this.$nextTick(() => {
+					this.changed = false
+				})
 			},
 			updateFileList () {
 				this.filelist = []

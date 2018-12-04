@@ -189,6 +189,7 @@
 													} ?>
 								<?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 								<?copy { "fromId": "lang" } ?>
 								<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 								<form>
@@ -227,10 +228,11 @@
 								<?copy { "fromId": "date" } ?>
 								<?copy { "fromId": "ref-sense" } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "lang" } ?>
 							</seg>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-							<?copy { "fromId": "xr-int" } ?>
+							<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<!-- <?copy { "fromId": "xr-ext" } ?> -->
 						</etym>
 						<?copy { "fromId": "sense", "options": {
@@ -582,6 +584,7 @@
 				 </quote>
 				 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+				 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
 			</cit>
 
