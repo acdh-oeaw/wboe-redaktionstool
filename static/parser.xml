@@ -50,6 +50,7 @@
 													"editor": { "addTitle": "Lemma" }
 												} ?>
 							<?copy { "fromId": "orth", "options": { "layout": { "frame": "inline", "bold": true, "fontsize": 120 }, "editor": { "parentInContext": true } } } ?>
+							<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lemma"}}] } } ?>
 						</form>
 						<form type="variant">
 							<?options {
@@ -157,7 +158,8 @@
 																														}
 																													}
 																												} } ?>
-										</form>
+							<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}] } } ?>
+						</form>
 
 						<etym>
 							<?options {
@@ -372,7 +374,7 @@
 				</ref>
 			</xr>
 
-			<xr>		<!-- ToDo! Intern: lemma & variant -->
+			<xr>		<!-- Intern: lemma & variant -->
 				<?options {
 										"id": "xr-int",
 										"title": "Querverweis auf Artikel",
@@ -425,6 +427,25 @@
 						} ?>
 				</ref>
 			</xr>
+
+			<ptr type="collection">		<!-- subtype = "lemma", "lautung", "bedeutung", "wortbildung", "MWE" ; target = "/collections-wboe.xml#c?" -->
+				<?options {
+						"id": "ptr-col",
+						"title": "Quellenangabe für Collection",
+						"attributes": [{
+							"subtype": {"type": "fixed", "value": "xxx"},
+							"target": {"type": "edit", "canBeEmpty": {"use": true}, "prefix": "/collections-wboe.xml#c"}
+						}],
+						"tag": ["possibleTag"],
+						"layout": {
+							"frame": "inline",
+							"hideTitle": true,
+							"showAttributeBefore" : {
+								"target": { "title": "Collection ID" }
+							}
+						}
+					} ?>
+			</ptr>
 
 			<citedRange>
 				<?options {
@@ -610,6 +631,7 @@
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
+				<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "bedeutung"}}] } } ?>
 				<?copy { "fromId": "sense", "options": {
 																								"tagAsTitle": false,
 																								"title": "Bedeutung (sub)",
@@ -879,6 +901,7 @@
 				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+				<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "wortbildung"}}] } } ?>
 			</re>
 
 			<re>
@@ -927,6 +950,7 @@
 				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
 				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+				<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "MWE"}}] } } ?>
 			</re>
 
 
@@ -1082,6 +1106,11 @@
 								<?options {	"layout": { "frame": "justChilds" } } ?>
 								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Slips</label>
 								<ref xml:id="slips-WBOE" target="../slips-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+							</item>
+							<item>
+								<?options {	"layout": { "frame": "justChilds" } } ?>
+								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Collections</label>
+								<ref xml:id="collections-WBOE" target="../collections-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
 							</item>
 						</list>
 					</sourceDesc>

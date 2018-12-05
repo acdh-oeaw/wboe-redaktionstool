@@ -46,6 +46,13 @@
 							aVal = pv[xVal].title
 						}
 					}
+					if (this.parserOptions && this.parserOptions.prefix) {
+						let pfVal = this.parserOptions.prefix
+						console.log(pfVal, aVal, aVal.indexOf(pfVal))
+						if (aVal.indexOf(pfVal) > -1) {
+							aVal = aVal.substr(pfVal.length)
+						}
+					}
 					return aVal
 				}
 			},
@@ -84,7 +91,14 @@
 				}
 			},
 			valAttrUpdateValue (e) {
-				this.content.orgXmlObj.setAttribute(this.attrKey, e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, ''))
+				let nVal = e.target.innerText.replace(/(\r\n\t|\n|\r\t)/gm, '')
+				if (this.parserOptions && this.parserOptions.prefix) {
+					let pfVal = this.parserOptions.prefix
+					if (nVal.indexOf(pfVal) === -1) {
+						nVal = pfVal + nVal
+					}
+				}
+				this.content.orgXmlObj.setAttribute(this.attrKey, nVal)
 				this.content.checkParser()
 			},
 			valAttrUpdate: _.debounce(function (e) {
