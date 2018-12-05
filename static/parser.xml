@@ -226,7 +226,6 @@
 													} ?>
 								<?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
 								<?copy { "fromId": "date" } ?>
-								<?copy { "fromId": "ref-sense" } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "lang" } ?>
@@ -700,17 +699,6 @@
 						}
 					} ?>
 				</oRef>
-			</ref>
-
-			<ref type="sense">
-				<?options {
-										"id": "ref-sense",
-										"title": "Verweis (Bedeutung)",
-										"attributes": [{
-											"target": {"type": "edit", "canBeEmpty": {"use": true}}
-										}],
-										"tag": ["possibleTag"]
-									} ?>
 			</ref>
 
 			<gramGrp>
