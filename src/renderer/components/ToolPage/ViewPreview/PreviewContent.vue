@@ -1,12 +1,8 @@
 <template>
 	<div :id="'po' + content.uId"
-			 :class="'inline'
-			 				 + ((showAnchors && hasAnchor) ? ' hasanchor' : '')
-							 + ((selectableAnchors && hasAnchor) ? ' hasselanchor' : '')
-							"
+			 :class="'inline'"
 			 :title="((valAnchor || subTypAnchor) ? '#' + valAnchor + ' (' + typAnchor + ((subTypAnchor) ? ', ' + subTypAnchor : '') + ')' + ' -> ' + content.orgXmlObj.getValue()[0] : '')"
 			 v-b-tooltip.hover.left
-			 @click="setAnchor"
 			 :style="'font-size: ' + ((content.parserObj && content.parserObj.options && content.parserObj.options.get('previewLayout.fontsize')) ? content.parserObj.options.get('previewLayout.fontsize') : 100) + '%;'"
 			 >
 		<!-- Vor Inhalten -->
@@ -30,7 +26,12 @@
 			</template>
 		</div>
 		<!-- normal -->
-		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
+		<div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')
+								+ ((showAnchors && hasAnchor) ? ' hasanchor' : '')
+								+ ((selectableAnchors && hasAnchor) ? ' hasselanchor' : '')
+							"
+			@click="setAnchor"
+			v-else>
 			<div class="inline rel">
 				<span :class="'enumerate' + ((this.content.parserObj.options.get('previewLayout.multiple.enumerateFX'))?' enumeratefx deep' + content.parserCopyDeep:'')" v-if="enumerate">{{ enumerate }}&nbsp;</span>
 				<b v-if="shownTitle">{{ shownTitle }}: </b><br v-if="shownTitle && layoutBase === 'box'"/>

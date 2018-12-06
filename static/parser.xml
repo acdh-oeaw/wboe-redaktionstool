@@ -79,7 +79,7 @@
 													}],
 													"tag": ["multiple", "possibleTag"],
 													"layout": {
-														"frame": "inline",
+														"frame": "line",
 														"hideTitle": true,
 														"multiple": {
 															"spaceBefore": 1,
@@ -111,14 +111,15 @@
 													}],
 													"tag": ["multiple", "possibleTag"],
 													"layout": {
-														"frame": "inline",
+														"frame": "line",
 														"hideTitle": true,
 														"multiple": {
 															"spaceBefore": 1,
 															"spaceAfter": 1,
 															"join": ", "
 														}
-													}
+													},
+													"previewLayout": { "frame": "hide" }
 												} ?>
 							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
 							<gramGrp>
@@ -143,7 +144,7 @@
 													}],
 													"tag": ["multiple", "possibleTag"],
 													"layout": {
-														"frame": "inline",
+														"frame": "line",
 														"hideTitle": true,
 														"multiple": {
 															"spaceBefore": 1,
@@ -461,7 +462,8 @@
 										"tag": ["possibleTag"],
 										"layout": {
 											"frame": "inline",
-											"hideTitle": true
+											"hideTitle": true,
+											"italic": true
 										},
 										"editor": {
 											"fxFunction": {
@@ -477,7 +479,8 @@
 											"tag": ["possibleTag"],
 											"layout": {
 												"hideTitle": true,
-												"frame": "inline"
+												"frame": "inline",
+												"italic": true
 											},
 											"editor": {
 												"parentInContext": true
@@ -495,6 +498,7 @@
 							"layout": {
 								"frame": "inline",
 								"hideTitle": true,
+								"italic": true,
 								"showAttributeBefore" : {
 									"target": { }
 								}
@@ -691,9 +695,10 @@
 											"draggAble": true
 										}
 									} ?>
+				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
 				<?copy { "fromId": "ref-form" } ?>
+				<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
 				<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "bedeutung"}}] } } ?>
