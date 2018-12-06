@@ -70,6 +70,7 @@
 							<?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
 						</form>
 						<?copy { "fromId": "gramGrp", "options": { "layout": { "frame": "line" } } } ?>
+						<!-- Diminutiv -->
 						<form type="variant" subtype="diminutive">
 							<?options {
 													"title": "Diminutiv",
@@ -101,6 +102,71 @@
 								<?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
 							</gramGrp>
 						</form>
+						<!-- Movierung -->
+						<form type="variant" subtype="movierung">
+							<?options {
+													"title": "Movierung",
+													"attributes": [{
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+													}],
+													"tag": ["multiple", "possibleTag"],
+													"layout": {
+														"frame": "inline",
+														"hideTitle": true,
+														"multiple": {
+															"spaceBefore": 1,
+															"spaceAfter": 1,
+															"join": ", "
+														}
+													}
+												} ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+							<gramGrp>
+								<?options {
+														"title": "grammatische Information",
+														"layout": {
+															"frame": "inline",
+															"hideTitle": true,
+															"before": "(Movierung, ",
+															"after": ")"
+														}
+													} ?>
+								<?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+							</gramGrp>
+						</form>
+						<!-- Shortform -->
+						<form type="variant" subtype="shortform">
+							<?options {
+													"title": "Shortform",
+													"attributes": [{
+														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+													}],
+													"tag": ["multiple", "possibleTag"],
+													"layout": {
+														"frame": "inline",
+														"hideTitle": true,
+														"multiple": {
+															"spaceBefore": 1,
+															"spaceAfter": 1,
+															"join": ", "
+														}
+													}
+												} ?>
+							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+							<gramGrp>
+								<?options {
+														"title": "grammatische Information",
+														"layout": {
+															"frame": "inline",
+															"hideTitle": true,
+															"before": "(Shortform, ",
+															"after": ")"
+														}
+													} ?>
+								<?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+							</gramGrp>
+						</form>
+
 						<?copy { "fromId": "usg-geo-verbreitung" } ?>
 
 						<form>
@@ -304,7 +370,7 @@
 
 		<tags>
 
-			<xr>		<!-- ToDo! Extern: cf -->
+			<xr>		<!-- Extern: cf -->
 				<?options {
 										"id": "xr-ext",
 										"title": "Querverweis auf Extern",
@@ -552,18 +618,6 @@
 									} ?>
 			</gram>
 
-			<gram type="number">
-				<?options {
-										"id": "gram-number",
-										"title": "Gram Number",
-										"value": ["edit", "required"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										}
-									} ?>
-			</gram>
-
 			<usg>
 				<?options {
 										"id": "usg-drg",
@@ -751,7 +805,7 @@
 				<gram type="pos">
 					<?options {
 											"title": "Gram Pos",
-											"value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb"]}}],
+											"value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb", "Adverb", "Artikel", "Pronomen", "Konjunktion", "Präposition", "Partikel", "Interjektion"]}}],
 											"tag": ["possibleTag"],
 											"layout": {
 																"frame": "inline",
@@ -764,7 +818,12 @@
 											"title": "Verbflektion",
 											"value": ["edit", "required", {"is": {"possibleValues": ["stark", "schwach", "gemischt"]}}],
 											"tag": ["possibleTag"],
-											"layout": { "frame": "inline" }
+											"layout": {
+												"frame": "inline",
+												"hideTitle": true,
+												"before": "(",
+												"after": ")"
+											}
 										} ?>
 				</iType>
 				<?copy {"fromId": "gram-gender", "options": {
@@ -780,7 +839,18 @@
 																											}
 																										} } ?>
 				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "gram-number", "options": { "tag": ["possibleTag"] } } ?>
+				<gram type="number">
+					<?options {
+										"id": "gram-number",
+										"title": "Gram Number - Pluralwort",
+										"value": ["edit", "required", {"is": {"value": "Pluralwort"}}],
+										"tag": ["possibleTag"],
+										"layout": {
+											"frame": "inline",
+											"hideTitle": true
+										}
+									} ?>
+				</gram>
 			</gramGrp>
 
 			<usg type="geo">
