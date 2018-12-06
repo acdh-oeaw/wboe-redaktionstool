@@ -20,6 +20,7 @@
 					<button @click="reloadParser" title="Parser-Datei neu laden" class="float-right mir5"><font-awesome-icon icon="sync-alt"/></button>
 					<button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Parser.file" class="float-right mir5" v-if="Parser.file && !(Parser.file.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
 					<button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right mir5" v-else-if="Parser.content && Parser.content.length > 0"><font-awesome-icon icon="file-download"/></button>
+					<button @click="exportAdditionalFilesParser" title="Zusätzliche Parser-Dateien für Portal als JSON speichern" class="float-right mir5" v-if="Options.show.develope"><font-awesome-icon icon="save"/></button>
 				</p>
 				<div v-if="Files.paths[Options.projectPath]">
 					<FileLine :path="path" @loading="loading = true" @new="newFile" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
@@ -47,6 +48,7 @@
 
 	const { shell, remote } = require('electron')
 	const fs = remote.require('fs')
+	const { dialog } = remote
 
 	export default {
 		name: 'start-page',
@@ -101,6 +103,47 @@
 			saveParser () {		// Parser-Datei speichern unter ...
 				this.$store.dispatch('DIALOG_SAVE_PARSER')	// Speicher Dialog
 				this.updateFolder()
+			},
+			exportAdditionalFilesParser () {
+				console.log('exportAdditionalFilesParser', this.Parser && this.Parser.parser && this.Parser.parser.additionalFiles)
+				if (this.Parser && this.Parser.parser && this.Parser.parser.additionalFiles) {
+					let saveFolder = dialog.showOpenDialog({
+						title: 'Verzeichniss zum speichern der Dateien auswählen',
+						defaultPath: this.Options.projectPath,
+						properties: ['openDirectory']
+					})
+					if (saveFolder) {
+						saveFolder = saveFolder[0]
+						Object.keys(this.Parser.parser.additionalFiles).forEach(function (aFileObj) {
+							let aAdFile = this.Parser.parser.additionalFiles[aFileObj]
+							if (aAdFile.geoSelect && aAdFile.geoSelect.uFields) {
+								let jsonExport = {}
+								jsonExport.uFields = aAdFile.geoSelect.uFields
+								aAdFile.geoSelect.uFields.forEach(function (aObj) {
+									let cObj = JSON.parse(JSON.stringify(aAdFile.geoSelect[aObj]))
+									cObj.forEach(function (aPlace) {
+										delete aPlace.obj
+										aPlace.sigle = aPlace.sigle_raw
+										delete aPlace.sigle_raw
+										Object.keys(aPlace.parents).forEach(function (aPar) {
+											aPlace.parents[aPar] = aPlace.parents[aPar].sigle_raw
+										}, this)
+									}, this)
+									jsonExport[aObj] = cObj
+								}, this)
+								// Speichern
+								let aFileName = fPath.join(saveFolder, aFileObj.substr(0, aFileObj.length - 5) + '.json')
+								console.log(aFileName)
+								try {
+									fs.writeFileSync(aFileName, JSON.stringify(jsonExport), 'utf8')
+								} catch (e) {
+									console.log(e)
+									alert('Beim speichern kam es zu einem Fehler!\nDatei NICHT gespeichert!')
+								}
+							}
+						}, this)
+					}
+				}
 			},
 			reloadParser () {
 				this.$store.dispatch('RELOAD_PARSER_FILE')	// "parser.xml" neu laden
