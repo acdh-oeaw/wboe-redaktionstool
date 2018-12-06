@@ -88,9 +88,9 @@ const localFunctions = {
 			}, this)
 		}
 		if (autoCreate && pObj.options.get('value.autoCreateValue')) {
-			this.childs[aKey].setValue(pObj.options.get('value.autoCreateValue'))
+			this.childs[aKey].setValue(pObj.options.getOptionValue(pObj.options.get('value.autoCreateValue'), this.orgXmlObj))
 		} else if (pObj.options.get('value.is.use') && pObj.options.get('value.is.value')) {
-			this.childs[aKey].setValue(pObj.options.get('value.is.value'))
+			this.childs[aKey].setValue(pObj.options.getOptionValue(pObj.options.get('value.is.value'), this.orgXmlObj))
 		}
 		this.childs[aKey].useable = true
 		this.childs[aKey].ready = true

@@ -39,7 +39,7 @@
 			attrValue () {
 				if (this.parserOptions) {
 					let pv = this.parserOptions.possibleValues
-					let aVal = this.content.orgXmlObj.attributes[this.attrKey]
+					let aVal = this.content.orgXmlObj.attributes[this.attrKey] || ''
 					if (pv && pv.length > 0 && pv[0].value) {
 						let xVal = stdFunctions.getFirstKeyOfValueInPropertyOfArray(pv, 'value', aVal)
 						if (xVal >= 0 && pv[xVal].title) {
@@ -48,7 +48,7 @@
 					}
 					if (this.parserOptions && this.parserOptions.prefix) {
 						let pfVal = this.parserOptions.prefix
-						console.log(pfVal, aVal, aVal.indexOf(pfVal))
+						// console.log(pfVal, aVal, aVal.indexOf(pfVal))
 						if (aVal.indexOf(pfVal) > -1) {
 							aVal = aVal.substr(pfVal.length)
 						}

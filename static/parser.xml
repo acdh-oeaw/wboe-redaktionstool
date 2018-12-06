@@ -192,6 +192,7 @@
 								<?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+								<?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 								<?copy { "fromId": "lang" } ?>
 								<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
 								<form>
@@ -230,11 +231,12 @@
 								<?copy { "fromId": "date" } ?>
 								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 								<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag"] } } ?>
+								<?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 								<?copy { "fromId": "lang" } ?>
 							</seg>
 							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 							<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-							<!-- <?copy { "fromId": "xr-ext" } ?> -->
+							<?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 						</etym>
 						<?copy { "fromId": "sense", "options": {
 																										"hideTitle": true,
@@ -313,11 +315,12 @@
 										"layout": {
 											"frame": "inline",
 											"hideTitle": true,
+											"bold": true,
 											"before": "(",
 											"after": ")"
 										}
 									} ?>
-				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true } } } ?>
+				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
 				<ref type="bibl">
 					<?options {
 											"id": "xr-ref-bibl",
@@ -328,12 +331,14 @@
 											"layout": {
 												"frame": "inline",
 												"hideTitle": true,
+												"bold": true,
 												"showAttributeBefore" : {
 													"target": { }
 												}
 											},
 											"editor": { "parentInContext": true }
 										} ?>
+					<?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
 					<ptr>
 						<?options {
 							"id": "xr-cf-ptr",
@@ -344,6 +349,7 @@
 							"layout": {
 								"frame": "inline",
 								"hideTitle": true,
+								"bold": true,
 								"showAttributeBefore" : {
 									"target": { "title": "target (URL)" }
 								}
@@ -351,19 +357,23 @@
 							"editor": { "parentInContext": true }
 						} ?>
 					</ptr>
-					<?copy { "fromId": "date", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true } } } ?>
-					<?copy { "fromId": "citedRange", "options": { "tag": ["possibleTag"], "editor": { "parentInContext": true } } } ?>
+
+					<?copy { "fromId": "date", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
+					<?copy { "fromId": "citedRange", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
 				</ref>
 				<ref>
 					<?options {
 							"id": "ref-lang",
 							"title": "Sprache",
+							"value": ["edit", "required"],
 							"attributes": [{
 								"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}}
 							}],
 							"layout": {
 								"frame": "inline",
 								"hideTitle": true,
+								"italic": true,
+								"bold": true,
 								"before": ": ",
 								"showAttributeBefore" : {
 									"xml:lang": { }
@@ -487,7 +497,7 @@
 				<?options {
 										"id": "date",
 										"title": "Date",
-										"value": ["edit", "required"],
+										"value": ["edit", "required", {"is": {"value": { "fx": "now" }}}],
 										"tag": ["possibleTag"],
 										"layout": {
 											"frame": "inline",
@@ -605,6 +615,7 @@
 				 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
 				 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+				 <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
 				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
 			</cit>
 
@@ -669,7 +680,12 @@
 											"title": "lbl",
 											"value": ["edit", "required"],
 											"tag": ["possibleTag"],
-											"layout": { "frame": "inline" },
+											"layout": {
+												"frame": "inline"
+											},
+											"previewLayout": {
+												"hideTitle": true
+											},
 											"editor": {
 												"parentInContext": true
 											}
