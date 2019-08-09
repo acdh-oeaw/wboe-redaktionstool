@@ -21,7 +21,7 @@
 					<span><b>{{ content.name }}</b></span>
 					<span class="val" v-if="content.value"> = <i>{{ tranculatedValue }}</i></span>
 					<span class="attribut" v-for="(attrOpt, attr) in content.attributes">
-						{{ attr + ((attrOpt) ? ':' : '') }}
+						{{ attr + ((attrOpt) ? ':' : '') }}&nbsp;
 						<span v-if="attrOpt">{{ attrOpt }}</span>
 					</span>
 					<font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>

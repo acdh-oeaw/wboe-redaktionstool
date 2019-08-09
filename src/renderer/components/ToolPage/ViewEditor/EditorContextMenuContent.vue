@@ -68,7 +68,7 @@
 						<ul>
 							<li @click="addAfter(aVal.uId); close()" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.cShow">
 								<font-awesome-icon icon="plus" class="fa-icon"/>
-								{{ aVal.title }}
+								<span class="mwellips">{{ aVal.title }}</span>
 							</li>
 						</ul>
 					</div>
@@ -253,6 +253,13 @@
 		font-size: 14px;
 	}
 	.editorcontextmenu ul li > span {
+		display: block;
+		max-width: 100%;
+		white-space: nowrap;
+		overflow: hidden;
+		text-overflow: ellipsis;
+	}
+	.mwellips {
 		display: block;
 		max-width: 100%;
 		white-space: nowrap;

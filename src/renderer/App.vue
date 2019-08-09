@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<b-navbar toggleable type="light" variant="light">
+		<b-navbar toggleable="md" type="light" variant="light">
 				<div class="container">
 					<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 					<b-navbar-brand>

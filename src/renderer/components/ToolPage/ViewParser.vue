@@ -54,7 +54,7 @@
 						<ViewParser2 :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in parser.system"/>
 					</div>
 					<div v-else>
-						Keine Header-Daten vorhanden
+						Keine System-Daten vorhanden
 					</div>
 				</b-card-body>
 			</b-collapse>
@@ -65,7 +65,7 @@
 	<div class="obj" v-else-if="content">
 		<b-card :header="content.name" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
 			<div slot="header">
-				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
+				<button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle fx-btn" :style="'color: ' + pHeaderColor + ';'">
 					<!-- <font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/> -->
 					<font-awesome-icon icon="clone" class="fa-icon icmd" v-if="content.isCopy"/>
 					<!-- <font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/> -->
@@ -79,7 +79,7 @@
 					<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('value.possibleValues'))"/>
 					<font-awesome-icon :icon="((content.options.get('value.edit.use')) ? 'edit' : ((content.options.get('value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>
 					<span class="attribut" v-for="(attrOpt, attr) in content.options.get('attributes')">
-						{{ attr + ((attrOpt.value) ? ':' : '') }}
+						{{ attr + ((attrOpt.value) ? ':' : '') }}&nbsp;
 						<span v-if="attrOpt.value">{{ attrOpt.value }}</span>
 						<font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('attributes.' + attr + '.possibleValues'))"/>
 						<font-awesome-icon :icon="((attrOpt.type === 'fixed' || !attrOpt.type) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
@@ -310,5 +310,17 @@
 		overflow: auto;
 		padding: 8px 10px;
 		margin: -8px;
+	}
+	.fx-btn .fa-icon {
+		margin-left: 3px;
+		margin-right: 3px;
+	}
+	.fx-btn .fa-icon:first-child {
+		margin-left: 0px;
+	}
+	.fx-btn .fa-icon:last-child {
+		margin-right: 0px;
+	}
+	.fx-btn .fa-icon.float-right {
 	}
 </style>

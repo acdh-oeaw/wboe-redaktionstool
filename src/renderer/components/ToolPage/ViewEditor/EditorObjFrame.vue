@@ -150,6 +150,7 @@
 <script>
 	import { mapState } from 'vuex'
 	import EditorContextMenu from './EditorContextMenu'
+	var _ = require('lodash')
 
 	export default {
 		name: 'EditorObjFrame',
@@ -356,16 +357,14 @@
 			showAddableButtons (type) {
 				this['isOpenAdditionalAdd' + type + 'Btn'] = true
 			},
-			hideAddableButtons (e, type) {
-				this.$nextTick(() => {
-					if (e.type === 'blur') {
-						if (this.$refs['addable' + type + 'Button'] === document.activeElement || this.$refs['addable' + type + 'Buttons'].indexOf(document.activeElement) > -1) {
-							return false
-						}
+			hideAddableButtons: _.debounce(function (e, type) {
+				if (e.type === 'blur') {
+					if (this.$refs['addable' + type + 'Button'] === document.activeElement || this.$refs['addable' + type + 'Buttons'].indexOf(document.activeElement) > -1) {
+						return false
 					}
-					this['isOpenAdditionalAdd' + type + 'Btn'] = false
-				})
-			},
+				}
+				this['isOpenAdditionalAdd' + type + 'Btn'] = false
+			}, 50),
 			contextMenue (e) {
 				this.contextMenuCached = true
 				this.$nextTick(() => {
@@ -500,6 +499,7 @@
 		width: 100%;
 		margin: 3px 0;
 		text-align: left;
+		white-space: nowrap;
 	}
 	.addable-after-btns > button.first, .addable-in-btns > button.first {
 		font-weight: bolder;

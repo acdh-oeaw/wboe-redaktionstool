@@ -18,7 +18,7 @@
 					<span><b>{{ objName }}</b></span>
 					<span class="val" v-if="aValue"> = <i>{{ tranculatedValue }}</i></span>
 					<span class="attribut" v-for="(attrOpt, attr) in content.orgXmlObj.attributes">
-						{{ attr + ((attrOpt) ? ':' : '') }}
+						{{ attr + ((attrOpt) ? ':' : '') }}&nbsp;
 						<span v-if="attrOpt">{{ attrOpt }}</span>
 					</span>
 					<span>count: {{ content.count }}, countParser: {{  content.countParser }}<b v-if="content.isMultiple">, multipleNr: {{ content.multipleNr }}, multipleLast: {{ content.multipleLast }}</b><b v-if="content.isParserCopy">, parserCopyDeep: {{ content.parserCopyDeep }}</b></span>
