@@ -20,14 +20,11 @@ const localFunctions = {
 				}
 				// Kinder auswerten
 				if (this.orgDOM.childNodes.length > 0) {
-					// Processing Instruction Nodes auswerten
 					this.orgDOM.childNodes.forEach(function (child) {
+						// Processing Instruction Nodes auswerten
 						if (child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'comment') {		// Kommentare
 							this.comments.push({'val': child.nodeValue})
 						}
-					}, this)
-					// Kinder auswerten
-					this.orgDOM.childNodes.forEach(function (child) {
 						if (!(child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'comment')
 						&& !(child.nodeType === child.TEXT_NODE && child.nodeValue.trim().length < 1)) {		// Leere Text Felder ignorieren
 							this.childs.push(new Xml.XmlObject(this.root, [this, ...this.parents], child))
