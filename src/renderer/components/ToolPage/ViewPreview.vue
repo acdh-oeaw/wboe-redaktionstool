@@ -14,7 +14,7 @@
       <VariableTag :tag="aPrev.name" :attributes="aPrev.attributes" v-if="aPrev.type === 'HTML'">
         <template v-for="aContent in aPrev.content">
           <template v-if="typeof aContent === 'string'">
-            <span v-html="aContent"/>
+            <span v-html="aContent" />
           </template>
           <ViewPreview :object="object" :preview="[aContent]" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
         </template>

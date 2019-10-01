@@ -20,7 +20,7 @@
           <font-awesome-icon icon="project-diagram" class="fa-icon icmd" v-if="content.type === 'PROCESSING_INSTRUCTION'"/>
           <span><b>{{ content.name }}</b></span>
           <span class="val" v-if="content.value"> = <i>{{ tranculatedValue }}</i></span>
-          <span class="attribut" v-for="(attrOpt, attr) in content.attributes">
+          <span class="attribut" v-for="(attrOpt, attr) in content.attributes" :key="'a-' + attr">
             {{ attr + ((attrOpt) ? ':' : '') }}&nbsp;
             <span v-if="attrOpt">{{ attrOpt }}</span>
           </span>
@@ -48,11 +48,11 @@
           </b-button-toolbar>
           <div>
             <code class="lb val" v-if="infoOpen === 'value'">{{ content.value }}</code>
-            <code class="lb" v-if="infoOpen === 'comment'"><ul><li v-for="comment in content.comments">{{ comment }}</li></ul></code>
+            <code class="lb" v-if="infoOpen === 'comment'"><ul><li v-for="(comment, aKey) in content.comments" :key="'c' + aKey">{{ comment }}</li></ul></code>
           </div>
           <div v-if="content.childs.length > 0">
             <b>Kinder:</b><br>
-            <ViewXmlObject ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"
+            <ViewXmlObject ref="childs" :content="aContent" :key="'vxo' + aKey" v-for="(aContent, aKey) in content.childs"
               v-if="!(aContent.type === 'UNKNOWN' || aContent.type === 'COMMENT' || aContent.type === 'PROCESSING_INSTRUCTION') || Options.show.xmlObjectUselessTypes"
             />
           </div>
@@ -222,8 +222,8 @@
     border-radius: 0px 10px 10px 0px;
     margin-right: -5px;
   }
-  .item > .value {
-  }
+  /* .item > .value {
+  } */
   .item > .value:before {
     content: "> ";
   }

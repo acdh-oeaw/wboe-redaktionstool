@@ -14,7 +14,7 @@ const localFunctions = {
       return false
     }
     this.orgString = xmlString.trim()
-    // "this.orgString" in DOM Objekt umwanden, überprüfen und in "this.orgDOM" setzen
+    // "this.orgString" in DOM Objekt umwandeln, überprüfen und in "this.orgDOM" setzen
     this.orgDOM = new DOMParser().parseFromString(this.orgString, 'application/xml')
     var xmlStringError = xmlFunctions.xmlDomCheck(this.orgDOM)		// Prüfen ob es Fehler gab
     if (xmlStringError.length > 0) {
