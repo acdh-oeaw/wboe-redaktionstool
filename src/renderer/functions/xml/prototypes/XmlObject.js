@@ -231,21 +231,21 @@ const localFunctions = {
     let aXML = ''
     if (this.type === 'TEXT') {
       if (prvXmlObj && (['COMMENT', 'PROCESSING_INSTRUCTION', 'UNKNOWN'].indexOf(prvXmlObj.type) > -1)) {
-        aXML += '\n' + '	'.repeat(deep) + (this.value || '') + '\n' + '	'.repeat(deep - 1)
+        aXML += '\n' + '  '.repeat(deep) + (this.value || '') + '\n' + '  '.repeat(deep - 1)
       } else {
         aXML += this.value || ''
       }
     } else if (this.type === 'COMMENT' && all) {
-      aXML += '\n' + '	'.repeat(deep) + '<!-- ' + (this.value || '') + ' -->'
+      aXML += '\n' + '  '.repeat(deep) + '<!-- ' + (this.value || '') + ' -->'
     } else if (this.type === 'PROCESSING_INSTRUCTION' && all) {
-      aXML += '\n' + '	'.repeat(deep) + '<?' + (this.name || '') + ' ' + (this.value || '') + '?>'
+      aXML += '\n' + '  '.repeat(deep) + '<?' + (this.name || '') + ' ' + (this.value || '') + '?>'
     } else if (this.type === 'UNKNOWN' && all) {
       aXML += (this.value || '')
     } else if (this.type === 'ELEMENT') {
       let aChildCont = ''
       let lChild = null
       if (!inner) {
-        aXML += '\n' + '	'.repeat(deep) + '<' + this.name
+        aXML += '\n' + '  '.repeat(deep) + '<' + this.name
         if (Object.keys(this.attributes).length > 0) {
           Object.keys(this.attributes).forEach(function (aKey) {
             if (this.attributes[aKey]) {
@@ -267,7 +267,7 @@ const localFunctions = {
         if (!short) { aXML += '>' }
         if (this.comments.length > 0) {
           this.comments.forEach(function (aComment) {
-            aChildCont += '\n' + '	'.repeat(deep + 1) + '<?comment ' + aComment.val + '?>'
+            aChildCont += '\n' + '  '.repeat(deep + 1) + '<?comment ' + aComment.val + '?>'
             lChild = { 'type': 'PROCESSING_INSTRUCTION' }
           }, this)
         }
@@ -284,7 +284,7 @@ const localFunctions = {
         if (!inner && short && (aChildCont.length > 0 || this.value)) { aXML += '>' }
         if (aChildCont.length > 0) {
           if (this.getChildsOfType(['ELEMENT', 'COMMENT'], false, false).length > 0) {
-            aXML += aChildCont + '\n' + '	'.repeat(deep)
+            aXML += aChildCont + '\n' + '  '.repeat(deep)
           } else {
             aXML += aChildCont
           }
