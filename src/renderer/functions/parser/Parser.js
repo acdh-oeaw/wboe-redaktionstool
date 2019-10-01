@@ -6,77 +6,77 @@ import prototypeParserOptions from './prototypes/ParserOptions'
 import prototypeParserPreviewObject from './prototypes/ParserPreviewObject'
 
 const localFunctions = {
-	ParserBase (xmlString, aFile) {
-		this.ready = false						// Ist das Objekt bereit?
-		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
-		this.errors = {}							// Fehler. Property = "ParserObject.uId" oder "-1" für "ParserBase"
-		this.warnings = {}						// Warnungen. Property = "ParserObject.uId" oder "-1" für "ParserBase"
-		this.content = []							// Enthaltene "ParserObject" Kinder
-		this.system = []							// Enthaltene "ParserObject" Kinder
-		this.header = null						// Wird als String bei der ausgegebenen XML-Datei eingefügt
-		this.family = []							// Alle "ParserObject"e "Key" = "uId"
-		this.idList = {}							// Alle "ParserObject"e mit "id". Property = "id"
-		this.idOptions = {}						// Alle "optionsPreset". Property = "id"
-		this.previewObj = []					// ParserPreviewObject
-		this.orgString = null					// Original String für DOM
-		this.orgFilename = null				// Original Dateiname
-		this.orgPath = null						// Origianl Verzeichniss
-		this.orgDOM = null						// Original DOM über init generiert
-		this.additionalFiles = {}			// Zusätzliche, benötigte Dateien
-		if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
-			this.init(xmlString, aFile)
-			this.updateFamilyErrors()
-		}
-	},
-	ParserObject (root, parents, dom) {
-		this.ready = false						// Ist das Objekt bereit?
-		this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
-		this.errors = []							// Liste der Fehler
-		this.warnings = []						// Liste der Warnungen
-		this.childsWithErrors = false		// Gibt es Kinder mit Fehlern
-		this.descendantsWithErrors = false		// Gibt es Nachfahren mit Fehlern
-		this.uId = null								// Individuelle Nummer des ParserObjects
-		this.name = null							// Tagname
-		this.attributes = {}					// Attribute des Tags
-		this.childs = []							// Enthaltene "ParserObject" Kinder
-		this.parents = parents || []	// Liste der Eltern
-		this.root = root							// Enthält die "ParserBase"
-		this.options = new localFunctions.ParserOptions()	// Aktuelle Optionen als "ParserOptions"
-		this.orgDOM = dom							// Original DOM
-		this.isCopy = false						// Hanelt es sich um eine Kopie?
-		this.copyOptions = []					// Optionen die im zweiten Durchlauf angewendet werden müssen.
-		this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : this.root.content)		// Geschwister
-		this.init()										// Immer dirket initialisieren
-		// this.hasToBeHere(EditorObject)		// Ermitteln ob es sich um ein notwendiges Kind des "EditorObject"s handelt
-		// this.match(XmlObject)					// Ermittelt die Übereinstimmung zwischen "ParserObjekt" und "XmlObjekt"
-		// this.checkAttributes(attributes)	// Überprüft Attribute [{'attribut': 'value'}] -> gibt Array mit Fehlern zurück
-		// this.checkAttribute(attribute, value)		// Überprüft Attribut	-> gibt Fehler zurück
-	},
-	ParserOptions () {
-		this.ready = false						// Ist die Option bereit?
-		this.useable = false					// Kann die Option zum parsen verwendet werden? (Keine Fehler und Ready)
-		this.errors = []							// Liste der Fehler
-		this.warnings = []						// Liste der Warnungen
-		this.options = {}							// Aktuelle Optionen
-		this.init()										// Immer dirket initialisieren
-		// this.initFromParserObject(ParserObject)	// Startwerte von "ParserObject" ermitteln
-		// this.extendJSON(jsonString, errObj)		// Optionen erweitern durch JSON String
-		// this.extendObj(optionObj)			// Optionen erweitern durch Objekt
-		// this.get('x.y')								// Option nach Pfad ermitteln x -> y -> ...
-	},
-	ParserPreviewObject (dom) {
-		this.ready = false						// Ist das PreviewObject bereit?
-		this.useable = false					// Kann das PreviewObject verwendet werden? (Keine Fehler und Ready)
-		this.errors = []							// Liste der Fehler
-		this.warnings = []						// Liste der Warnungen
-		this.orgDOM = dom							// Original DOM
-		this.name = null							// Aktueller nodeName
-		this.attributes = {}					// Aktuelle Attribute
-		this.options = {}							// Aktuelle Optionen für PIN
-		this.content = []							// Inhalt: Kann "string" oder "ParserPreviewObject" sein.
-		this.type = null							// Typ des "ParserPreviewObject"s
-		this.init()										// Immer dirket initialisieren
-	},
+  ParserBase (xmlString, aFile) {
+    this.ready = false						// Ist das Objekt bereit?
+    this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
+    this.errors = {}							// Fehler. Property = "ParserObject.uId" oder "-1" für "ParserBase"
+    this.warnings = {}						// Warnungen. Property = "ParserObject.uId" oder "-1" für "ParserBase"
+    this.content = []							// Enthaltene "ParserObject" Kinder
+    this.system = []							// Enthaltene "ParserObject" Kinder
+    this.header = null						// Wird als String bei der ausgegebenen XML-Datei eingefügt
+    this.family = []							// Alle "ParserObject"e "Key" = "uId"
+    this.idList = {}							// Alle "ParserObject"e mit "id". Property = "id"
+    this.idOptions = {}						// Alle "optionsPreset". Property = "id"
+    this.previewObj = []					// ParserPreviewObject
+    this.orgString = null					// Original String für DOM
+    this.orgFilename = null				// Original Dateiname
+    this.orgPath = null						// Origianl Verzeichniss
+    this.orgDOM = null						// Original DOM über init generiert
+    this.additionalFiles = {}			// Zusätzliche, benötigte Dateien
+    if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
+      this.init(xmlString, aFile)
+      this.updateFamilyErrors()
+    }
+  },
+  ParserObject (root, parents, dom) {
+    this.ready = false						// Ist das Objekt bereit?
+    this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
+    this.errors = []							// Liste der Fehler
+    this.warnings = []						// Liste der Warnungen
+    this.childsWithErrors = false		// Gibt es Kinder mit Fehlern
+    this.descendantsWithErrors = false		// Gibt es Nachfahren mit Fehlern
+    this.uId = null								// Individuelle Nummer des ParserObjects
+    this.name = null							// Tagname
+    this.attributes = {}					// Attribute des Tags
+    this.childs = []							// Enthaltene "ParserObject" Kinder
+    this.parents = parents || []	// Liste der Eltern
+    this.root = root							// Enthält die "ParserBase"
+    this.options = new localFunctions.ParserOptions()	// Aktuelle Optionen als "ParserOptions"
+    this.orgDOM = dom							// Original DOM
+    this.isCopy = false						// Hanelt es sich um eine Kopie?
+    this.copyOptions = []					// Optionen die im zweiten Durchlauf angewendet werden müssen.
+    this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : this.root.content)		// Geschwister
+    this.init()										// Immer dirket initialisieren
+    // this.hasToBeHere(EditorObject)		// Ermitteln ob es sich um ein notwendiges Kind des "EditorObject"s handelt
+    // this.match(XmlObject)					// Ermittelt die Übereinstimmung zwischen "ParserObjekt" und "XmlObjekt"
+    // this.checkAttributes(attributes)	// Überprüft Attribute [{'attribut': 'value'}] -> gibt Array mit Fehlern zurück
+    // this.checkAttribute(attribute, value)		// Überprüft Attribut	-> gibt Fehler zurück
+  },
+  ParserOptions () {
+    this.ready = false						// Ist die Option bereit?
+    this.useable = false					// Kann die Option zum parsen verwendet werden? (Keine Fehler und Ready)
+    this.errors = []							// Liste der Fehler
+    this.warnings = []						// Liste der Warnungen
+    this.options = {}							// Aktuelle Optionen
+    this.init()										// Immer dirket initialisieren
+    // this.initFromParserObject(ParserObject)	// Startwerte von "ParserObject" ermitteln
+    // this.extendJSON(jsonString, errObj)		// Optionen erweitern durch JSON String
+    // this.extendObj(optionObj)			// Optionen erweitern durch Objekt
+    // this.get('x.y')								// Option nach Pfad ermitteln x -> y -> ...
+  },
+  ParserPreviewObject (dom) {
+    this.ready = false						// Ist das PreviewObject bereit?
+    this.useable = false					// Kann das PreviewObject verwendet werden? (Keine Fehler und Ready)
+    this.errors = []							// Liste der Fehler
+    this.warnings = []						// Liste der Warnungen
+    this.orgDOM = dom							// Original DOM
+    this.name = null							// Aktueller nodeName
+    this.attributes = {}					// Aktuelle Attribute
+    this.options = {}							// Aktuelle Optionen für PIN
+    this.content = []							// Inhalt: Kann "string" oder "ParserPreviewObject" sein.
+    this.type = null							// Typ des "ParserPreviewObject"s
+    this.init()										// Immer dirket initialisieren
+  },
 }
 
 // ParserBase Prototypen

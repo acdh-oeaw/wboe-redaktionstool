@@ -1,339 +1,337 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <objParser>
-	<xmlParserHeader>
-		&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-		&lt;?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?&gt;
-		&lt;?xml-model href="../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?&gt;
-	</xmlParserHeader>
-	<objParserContent>
-		<TEI xmlns="http://www.tei-c.org/ns/1.0">
-			<?options {	"layout": { "frame": "justChilds" } } ?>
-			<?copy { "fromId": "teiHeader" } ?>
-			<text>
-				<?options {
-										"id": "main-content",
-										"layout": { "frame": "justChilds" }
-									} ?>
-				<body>
-					<?options {	"layout": { "frame": "justChilds" } } ?>
-					<entry>
-						<?options {
-												"title": "Eintrag",
-												"layout": {
-													"hideTitle": true
-												},
-												"attributes": [{"n": {"type": "edit", "valueType": "num+", "canBeEmpty": {"use": true}}}]
-											} ?>
-						<form type="lemma">
-							<?copyOptions { "fromId": "inlineMultipleJoin" } ?>
-							<?options {
-													"id": "lemma-base",
-													"title": "Lemma",
-													"attributes": [{
-														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
-														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
-													}],
-													"tag": ["multiple"],
-													"layout": {
-														"hideTitle": true,
-														"multiple": {
-															"header": "Lemma-Informationen",
-															"spaceAfter": 5
-														}
-													},
-													"previewLayout": {
-														"multiple": {
-															"header": null,
-															"spaceAfter": 5
-														}
-													},
-													"editor": { "addTitle": "Lemma" }
-												} ?>
-							<?copy { "fromId": "orth", "options": { "layout": { "frame": "inline", "bold": true, "fontsize": 120 }, "editor": { "parentInContext": true } } } ?>
-							<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lemma"}}] } } ?>
-						</form>
-						<form type="variant">
-							<?options {
-													"title": "Variante (Aussprache/Orth)",
-													"tagAsTitle": false,
-													"attributes": [{
-														"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
-														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
-													}],
-													"tag": ["possibleTag"],
-													"layout": {
-														"frame": "inline",
-														"hideTitle": true,
-														"before": ", "
-													}
-												} ?>
-							<?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
-						</form>
-						<?copy { "fromId": "gramGrp", "options": { "layout": { "frame": "line" } } } ?>
-						<!-- Diminutiv -->
-						<form type="variant" subtype="diminutive">
-							<?options {
-													"title": "Diminutiv",
-													"attributes": [{
-														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
-													}],
-													"tag": ["multiple", "possibleTag"],
-													"layout": {
-														"frame": "line",
-														"hideTitle": true,
-														"multiple": {
-															"spaceBefore": 1,
-															"spaceAfter": 1,
-															"join": ", "
-														}
-													}
-												} ?>
-							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
-							<gramGrp>
-								<?options {
-														"title": "grammatische Information",
-														"layout": {
-															"frame": "inline",
-															"hideTitle": true,
-															"before": "(Diminutiv, ",
-															"after": ")"
-														}
-													} ?>
-								<?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
-							</gramGrp>
-						</form>
-						<!-- Movierung -->
-						<form type="variant" subtype="movierung">
-							<?options {
-													"title": "Movierung",
-													"attributes": [{
-														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
-													}],
-													"tag": ["multiple", "possibleTag"],
-													"layout": {
-														"frame": "line",
-														"hideTitle": true,
-														"multiple": {
-															"spaceBefore": 1,
-															"spaceAfter": 1,
-															"join": ", "
-														}
-													},
-													"previewLayout": { "frame": "hide" }
-												} ?>
-							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
-							<gramGrp>
-								<?options {
-														"title": "grammatische Information",
-														"layout": {
-															"frame": "inline",
-															"hideTitle": true,
-															"before": "(Movierung, ",
-															"after": ")"
-														}
-													} ?>
-								<?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": { "hideTitle": true, "frame": "inline" } } } ?>
-							</gramGrp>
-						</form>
-						<!-- Shortform -->
-						<form type="variant" subtype="shortform">
-							<?options {
-													"title": "Shortform",
-													"attributes": [{
-														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
-													}],
-													"tag": ["multiple", "possibleTag"],
-													"layout": {
-														"frame": "line",
-														"hideTitle": true,
-														"multiple": {
-															"spaceBefore": 1,
-															"spaceAfter": 1,
-															"join": ", "
-														}
-													}
-												} ?>
-							<?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
-							<gramGrp>
-								<?options {
-														"title": "grammatische Information",
-														"layout": {
-															"frame": "inline",
-															"hideTitle": true,
-															"before": "(Shortform, ",
-															"after": ")"
-														}
-													} ?>
-								<?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
-							</gramGrp>
-						</form>
+  <xmlParserHeader>
+    &lt;?xml version="1.0" encoding="UTF-8"?&gt;
+    &lt;?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?&gt;
+    &lt;?xml-model href="../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?&gt;
+  </xmlParserHeader>
+  <objParserContent>
+    <TEI xmlns="http://www.tei-c.org/ns/1.0">
+      <?options { "layout": { "frame": "justChilds" } } ?>
+      <?copy { "fromId": "teiHeader" } ?>
+      <text>
+        <?options {
+                    "id": "main-content",
+                    "layout": { "frame": "justChilds" }
+                  } ?>
+        <body>
+          <?options { "layout": { "frame": "justChilds" } } ?>
+          <entry>
+            <?options {
+                        "title": "Eintrag",
+                        "layout": {
+                          "hideTitle": true
+                        },
+                        "attributes": [{"n": {"type": "edit", "valueType": "num+", "canBeEmpty": {"use": true}}}]
+                      } ?>
+            <form type="lemma">
+              <?copyOptions { "fromId": "inlineMultipleJoin" } ?>
+              <?options {
+                          "id": "lemma-base",
+                          "title": "Lemma",
+                          "attributes": [{
+                            "xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["multiple"],
+                          "layout": {
+                            "hideTitle": true,
+                            "multiple": {
+                              "header": "Lemma-Informationen",
+                              "spaceAfter": 5
+                            }
+                          },
+                          "previewLayout": {
+                            "multiple": {
+                              "header": null,
+                              "spaceAfter": 5
+                            }
+                          },
+                          "editor": { "addTitle": "Lemma" }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "layout": { "frame": "inline", "bold": true, "fontsize": 120 }, "editor": { "parentInContext": true } } } ?>
+              <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lemma"}}] } } ?>
+            </form>
+            <form type="variant">
+              <?options {
+                          "title": "Variante (Aussprache/Orth)",
+                          "tagAsTitle": false,
+                          "attributes": [{
+                            "xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["possibleTag"],
+                          "layout": {
+                            "frame": "inline",
+                            "hideTitle": true,
+                            "before": ", "
+                          }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
+            </form>
+            <?copy { "fromId": "gramGrp", "options": { "layout": { "frame": "line" } } } ?>
+            <!-- Diminutiv -->
+            <form type="variant" subtype="diminutive">
+              <?options {
+                          "title": "Diminutiv",
+                          "attributes": [{
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["multiple", "possibleTag"],
+                          "layout": {
+                            "frame": "line",
+                            "hideTitle": true,
+                            "multiple": {
+                              "spaceBefore": 1,
+                              "spaceAfter": 1,
+                              "join": ", "
+                            }
+                          }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+              <gramGrp>
+                <?options {
+                            "title": "grammatische Information",
+                            "layout": {
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "before": "(Diminutiv, ",
+                              "after": ")"
+                            }
+                          } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+              </gramGrp>
+            </form>
+            <!-- Movierung -->
+            <form type="variant" subtype="movierung">
+              <?options {
+                          "title": "Movierung",
+                          "attributes": [{
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["multiple", "possibleTag"],
+                          "layout": {
+                            "frame": "line",
+                            "hideTitle": true,
+                            "multiple": {
+                              "spaceBefore": 1,
+                              "spaceAfter": 1,
+                              "join": ", "
+                            }
+                          },
+                          "previewLayout": { "frame": "hide" }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+              <gramGrp>
+                <?options {
+                            "title": "grammatische Information",
+                            "layout": {
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "before": "(Movierung, ",
+                              "after": ")"
+                            }
+                          } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+              </gramGrp>
+            </form>
+            <!-- Shortform -->
+            <form type="variant" subtype="shortform">
+              <?options {
+                          "title": "Shortform",
+                          "attributes": [{
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["multiple", "possibleTag"],
+                          "layout": {
+                            "frame": "line",
+                            "hideTitle": true,
+                            "multiple": {
+                              "spaceBefore": 1,
+                              "spaceAfter": 1,
+                              "join": ", "
+                            }
+                          }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+              <gramGrp>
+                <?options {
+                            "title": "grammatische Information",
+                            "layout": {
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "before": "(Shortform, ",
+                              "after": ")"
+                            }
+                          } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+              </gramGrp>
+            </form>
 
-						<?copy { "fromId": "usg-geo-verbreitung" } ?>
+            <?copy { "fromId": "usg-geo-verbreitung" } ?>
 
-						<form>
-							<?options {
-													"id": "form-dialect",
-													"title": "Belegauswahl",
-													"tag": ["multiple", "possibleTag", "shouldTag"],
-													"attributes": [{
-														"xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
-														"type": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "dialect", "possibleValues": ["dialect", "variant"]},
-														"subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive", "inflected"]}
-													}],
-													"layout": {
-														"frame": "inline",
-														"hideTitle": true,
-														"multiple": {
-															"use": true,
-															"header": "Belegauswahl",
-															"spaceBefore": 10,
-															"spaceAfter": 5,
-															"join": "; "
-														}
-													},
-													"editor": {
-														"onlyLastElementHasAddButton": true,
-														"addTitle": "Belegauswahl"
-													}
-												} ?>
-							 <pron xml:lang="bar-AT">
-								 <?options {
-														"tagAsTitle": false,
-														"attributes": [{
-															"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
-														}],
-														"value": ["edit", "required"],
-														"layout": {
-															"frame": "inline",
-															"italic": true
-														},
-														"editor": {
-															"parentInContext": true
-														}
-													} ?>
-							 </pron>
-							 <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
-							 <?copy { "fromId": "usg-geo", "options": {
-																													"tag": ["possibleTag", "multiple"],
-																													"layout": {
-																														"frame": "inline",
-																														"multiple": {
-																															"use": true,
-																															"join": ", ",
-																															"before": "(",
-																															"after": ")"
-																														}
-																													}
-																												} } ?>
-							<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}] } } ?>
-						</form>
+            <form>
+              <?options {
+                          "id": "form-dialect",
+                          "title": "Belegauswahl",
+                          "tag": ["multiple", "possibleTag", "shouldTag"],
+                          "attributes": [{
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
+                            "type": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "dialect", "possibleValues": ["dialect", "variant"]},
+                            "subtype": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive", "inflected"]}
+                          }],
+                          "layout": {
+                            "frame": "inline",
+                            "hideTitle": true,
+                            "multiple": {
+                              "use": true,
+                              "header": "Belegauswahl",
+                              "spaceBefore": 10,
+                              "spaceAfter": 5,
+                              "join": "; "
+                            }
+                          },
+                          "editor": {
+                            "onlyLastElementHasAddButton": true,
+                            "addTitle": "Belegauswahl"
+                          }
+                        } ?>
+               <pron xml:lang="bar-AT">
+                 <?options {
+                            "tagAsTitle": false,
+                            "attributes": [{
+                              "extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]}
+                            }],
+                            "value": ["edit", "required"],
+                            "layout": {
+                              "frame": "inline",
+                              "italic": true
+                            },
+                            "editor": {
+                              "parentInContext": true
+                            }
+                          } ?>
+               </pron>
+               <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
+               <?copy { "fromId": "usg-geo", "options": {
+                                                          "tag": ["possibleTag", "multiple"],
+                                                          "layout": {
+                                                            "frame": "inline",
+                                                            "multiple": {
+                                                              "use": true,
+                                                              "join": ", ",
+                                                              "before": "(",
+                                                              "after": ")"
+                                                            }
+                                                          }
+                                                        } } ?>
+              <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}] } } ?>
+            </form>
 
-						<etym>
-							<?options {
-													"title": "Etymologie",
-													"tagAsTitle": false,
-													"layout": {
-														"frame": "line",
-														"hideTitle": true,
-														"header": "Etymologie",
-														"spaceBefore": 10,
-														"spaceAfter": 5
-													},
-													"editor": {
-														"addTitle": "Etym hinzufügen"
-													}
-												} ?>
-							<?copy { "fromId": "date" } ?>
-							<cit type="etymon">
-								<?options {
-														"title": "Cit Etymon",
-														"attributes": [{
-															"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
-														}],
-														"tag": ["multiple", "possibleTag", "anywhere"],
-														"layout": {
-															"frame": "inline",
-															"hideTitle": true
-														}
-													} ?>
-								<?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
-								<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-								<?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-								<?copy { "fromId": "lang" } ?>
-								<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
-								<form>
-									<?options {
-															"title": "Form",
-															"attributes": [{
-																"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
-															}],
-															"tag": ["possibleTag", "multiple"],
-															"layout": {
-																"frame": "inline",
-																"hideTitle": true
-															}
-														} ?>
-									 <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"], "layout": { "italic": true } } } ?>
-									 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-								</form>
-								<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-								<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-							</cit>
-							<seg>
-								<?options {
-														"title": "Desc",
-														"attributes": [{
-															"type": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "desc"},
-															"part": {"type": "edit", "canBeEmpty": {"use": true}}
-														}],
-														"oldTag": ["desc"],
-														"tag": ["possibleTag", "multiple", "anywhere"],
-														"layout": {
-															"frame": "inline",
-															"hideTitle": true
-														}
-													} ?>
-								<?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
-								<?copy { "fromId": "date" } ?>
-								<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
-								<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag"] } } ?>
-								<?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-								<?copy { "fromId": "lang" } ?>
-							</seg>
-							<?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-							<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-							<?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-						</etym>
-						<?copy { "fromId": "sense", "options": {
-																										"hideTitle": true,
-																										"layout": {
-																											"frame": "line",
-																											"multiple": {
-																												"use": true,
-																												"header": "Bedeutung",
-																												"spaceBefore": 10,
-																												"spaceAfter": 5
-																											},
-																											"spaceAfter": 15
-																										},
-																										"previewLayout": {
-																											"spaceAfter": 0
-																										},
-																										"editor": {
-																											"onlyLastElementHasAddButton": true,
-																											"addTitle": "Bedeutung 1"
-																										}
-																									} } ?>
-						<?copy { "fromId": "re-compound", "options": { "tag": ["possibleTag"] } } ?>
-						<?copy { "fromId": "re-MWE", "options": { "tag": ["possibleTag"] } } ?>
-					</entry>
-				</body>
-			</text>
-		</TEI>
-	</objParserContent>
-
-
+            <etym>
+              <?options {
+                          "title": "Etymologie",
+                          "tagAsTitle": false,
+                          "layout": {
+                            "frame": "line",
+                            "hideTitle": true,
+                            "header": "Etymologie",
+                            "spaceBefore": 10,
+                            "spaceAfter": 5
+                          },
+                          "editor": {
+                            "addTitle": "Etym hinzufügen"
+                          }
+                        } ?>
+              <?copy { "fromId": "date" } ?>
+              <cit type="etymon">
+                <?options {
+                            "title": "Cit Etymon",
+                            "attributes": [{
+                              "xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["nds-x-NHD"]}
+                            }],
+                            "tag": ["multiple", "possibleTag", "anywhere"],
+                            "layout": {
+                              "frame": "inline",
+                              "hideTitle": true
+                            }
+                          } ?>
+                <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
+                <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+                <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+                <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+                <?copy { "fromId": "lang" } ?>
+                <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
+                <form>
+                  <?options {
+                              "title": "Form",
+                              "attributes": [{
+                                "type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["diminutive"]}
+                              }],
+                              "tag": ["possibleTag", "multiple"],
+                              "layout": {
+                                "frame": "inline",
+                                "hideTitle": true
+                              }
+                            } ?>
+                   <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"], "layout": { "italic": true } } } ?>
+                   <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
+                </form>
+                <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+                <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+              </cit>
+              <seg>
+                <?options {
+                            "title": "Desc",
+                            "attributes": [{
+                              "type": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "desc"},
+                              "part": {"type": "edit", "canBeEmpty": {"use": true}}
+                            }],
+                            "oldTag": ["desc"],
+                            "tag": ["possibleTag", "multiple", "anywhere"],
+                            "layout": {
+                              "frame": "inline",
+                              "hideTitle": true
+                            }
+                          } ?>
+                <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+                <?copy { "fromId": "date" } ?>
+                <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+                <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag"] } } ?>
+                <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+                <?copy { "fromId": "lang" } ?>
+              </seg>
+              <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+              <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+              <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+            </etym>
+            <?copy { "fromId": "sense", "options": {
+                                                    "hideTitle": true,
+                                                    "layout": {
+                                                      "frame": "line",
+                                                      "multiple": {
+                                                        "use": true,
+                                                        "header": "Bedeutung",
+                                                        "spaceBefore": 10,
+                                                        "spaceAfter": 5
+                                                      },
+                                                      "spaceAfter": 15
+                                                    },
+                                                    "previewLayout": {
+                                                      "spaceAfter": 0
+                                                    },
+                                                    "editor": {
+                                                      "onlyLastElementHasAddButton": true,
+                                                      "addTitle": "Bedeutung 1"
+                                                    }
+                                                  } } ?>
+            <?copy { "fromId": "re-compound", "options": { "tag": ["possibleTag"] } } ?>
+            <?copy { "fromId": "re-MWE", "options": { "tag": ["possibleTag"] } } ?>
+          </entry>
+        </body>
+      </text>
+    </TEI>
+  </objParserContent>
 
 
 
@@ -344,923 +342,925 @@
 
 
 
-	<!-- Element Vorlagen: -->
-	<objParserSystem>
-
-		<options>
-			<?optionsPreset {
-												"id": "nameSimple",
-												"tagAsTitle": false, "layout": { "frame": "inline", "after": ", " }
-											} ?>
-			<?optionsPreset {
-												"id": "inlineMultipleJoin",
-												"tagAsTitle": false,
-												"layout": {
-													"frame": "inline",
-													"multiple": {
-														"use": true,
-														"join": ", "
-													}
-												},
-												"editor": {
-													"onlyLastElementHasAddButton": true
-												}
-											} ?>
-
-		</options>
-
-		<tags>
-
-			<xr>		<!-- Extern: cf -->
-				<?options {
-										"id": "xr-ext",
-										"title": "Querverweis auf Extern",
-										"attributes": [{
-											"type": {"type": "fixed", "value": "cf"}
-										}],
-										"tag": ["possibleTag"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true,
-											"bold": true,
-											"before": "(",
-											"after": ")"
-										}
-									} ?>
-				<?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
-				<ref type="bibl">
-					<?options {
-											"id": "xr-ref-bibl",
-											"title": "Verweis auf Literatur",
-											"attributes": [{
-												"target": {"type": "edit", "canBeEmpty": {"use": true}}
-											}],
-											"layout": {
-												"frame": "inline",
-												"hideTitle": true,
-												"bold": true,
-												"showAttributeBefore" : {
-													"target": { }
-												}
-											},
-											"editor": { "parentInContext": true }
-										} ?>
-					<?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
-					<ptr>
-						<?options {
-							"id": "xr-cf-ptr",
-							"title": "ptr",
-							"attributes": [{
-								"target": {"type": "edit", "canBeEmpty": {"use": true}}
-							}],
-							"layout": {
-								"frame": "inline",
-								"hideTitle": true,
-								"bold": true,
-								"showAttributeBefore" : {
-									"target": { "title": "target (URL)" }
-								}
-							},
-							"editor": { "parentInContext": true }
-						} ?>
-					</ptr>
-
-					<?copy { "fromId": "date", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
-					<?copy { "fromId": "citedRange", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
-				</ref>
-				<ref>
-					<?options {
-							"id": "ref-lang",
-							"title": "Sprache",
-							"value": ["edit", "required"],
-							"attributes": [{
-								"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}}
-							}],
-							"layout": {
-								"frame": "inline",
-								"hideTitle": true,
-								"italic": true,
-								"bold": true,
-								"before": ": ",
-								"showAttributeBefore" : {
-									"xml:lang": { }
-								}
-							},
-							"editor": { "parentInContext": true }
-						} ?>
-				</ref>
-			</xr>
-
-			<xr>		<!-- Intern: lemma & variant -->
-				<?options {
-										"id": "xr-int",
-										"title": "Querverweis auf Artikel",
-										"attributes": [{
-											"type": {"type": "variable", "possibleValues": ["lemma", "variant"]},
-											"subtype": {"type": "variable", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "MWE", "diminutive", "movierung", "shortform"]}
-										}],
-										"tag": ["possibleTag"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true,
-											"italic": true
-										},
-										"editor": {
-											"fxFunction": {
-												"name": "XRlvModal"
-											}
-										}
-									} ?>
-				<lbl>
-					<?options {
-											"id": "xr-int-lbl",
-											"title": "lbl",
-											"value": ["edit", "required"],
-											"tag": ["possibleTag"],
-											"layout": {
-												"hideTitle": true,
-												"frame": "inline",
-												"italic": true
-											},
-											"editor": {
-												"parentInContext": true
-											}
-										} ?>
-				</lbl>
-				<ref>
-					<?options {
-							"id": "xr-lv-ref-target",
-							"title": "Artikel",
-							"value": ["edit", "required"],
-							"attributes": [{
-								"target": {"type": "edit", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}}
-							}],
-							"layout": {
-								"frame": "inline",
-								"hideTitle": true,
-								"italic": true,
-								"showAttributeBefore" : {
-									"target": { }
-								}
-							},
-							"editor": { "parentInContext": true }
-						} ?>
-				</ref>
-			</xr>
-
-			<ptr type="collection">		<!-- subtype = "lemma", "lautung", "bedeutung", "wortbildung", "MWE" ; target = "/collections-wboe.xml#c?" -->
-				<?options {
-						"id": "ptr-col",
-						"title": "Quellenangabe für Collection",
-						"attributes": [{
-							"subtype": {"type": "fixed", "value": "xxx"},
-							"target": {"type": "edit", "canBeEmpty": {"use": true}, "prefix": "/collections-wboe.xml#c"}
-						}],
-						"tag": ["possibleTag"],
-						"layout": {
-							"frame": "inline",
-							"hideTitle": true,
-							"showAttributeBefore" : {
-								"target": { "title": "Collection ID" }
-							}
-						}
-					} ?>
-			</ptr>
-
-			<citedRange>
-				<?options {
-										"title": "Cited Range",
-										"id": "citedRange",
-										"value": ["edit", "required"],
-										"tag": ["possibleTag"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true,
-											"before": ": "
-										}
-									} ?>
-			</citedRange>
-
-			<lang>
-				<?options {
-										"id": "lang",
-										"title": "Lang",
-										"value": ["edit", "required"],
-										"tag": ["possibleTag"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										}
-									} ?>
-			</lang>
-
-			<?text {
-				"options": {
-					"id": "text",
-					"title": "Text",
-					"value": ["edit", "required"],
-					"tag": ["possibleTag", "multiple", "anywhere"]
-				}
-			} ?>
-
-			<date>
-				<?options {
-										"id": "date",
-										"title": "Date",
-										"value": ["edit", "required", {"is": {"value": { "fx": "now" }}}],
-										"tag": ["possibleTag"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										}
-									} ?>
-			</date>
-
-			<def>
-				<?options {
-										"id": "def",
-										"title": "Definition",
-										"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
-										"value": ["edit", "required"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true,
-											"ls1pt": true,
-											"before": "'",
-											"after": "'"
-										}
-									} ?>
-			</def>
-
-			<orth>
-				<?options {
-										"id": "orth",
-										"title": "Orth",
-										"value": ["edit", "required"],
-										"attributes": [{
-											"extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]},
-											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
-										}],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										}
-									} ?>
-			</orth>
-
-			<gram type="gender">
-				<?options {
-										"id": "gram-gender",
-										"title": "Genus",
-										"value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}],
-										"tag": ["multiple"],
-										"layout": { "frame": "line", "hideTitle": true },
-										"editor": {
-											"onlyLastElementHasAddButton": true,
-											"addTitle": "Gender"
-										}
-									} ?>
-			</gram>
-
-			<usg>
-				<?options {
-										"id": "usg-drg",
-										"title": "Gebrauch (dom, reg, gram / cert)",
-										"attributes": [{
-											"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg", "gram"]},
-											"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
-										}],
-										"value": ["edit", "required"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										}
-									} ?>
-			</usg>
-
-			<cit type="example">
-				<?options {
-										"id": "cit-example",
-										"title": "Beispiel-Beleg",
-										"attributes": [{
-											"xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
-											"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
-										}],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										},
-										"tag": ["multiple", "possibleTag"]
-									} ?>
-				 <quote>
-					 <?options {
-											"title": "Quote",
-											"attributes": [{
-												"xml:lang": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "bar-AT"}
-											}],
-											"value": ["edit", "required"],
-											"layout": {
-												"frame": "inline",
-												"italic": true,
-												"hideTitle": true,
-												"before": " – "
-											},
-											"editor": {
-												"parentInContext": true
-											}
-										} ?>
-				 </quote>
-				 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-				 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
-				 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-				 <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-				 <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
-			</cit>
-
-			<sense>
-				<?options {
-										"id": "sense",
-										"title": "Bedeutung",
-										"attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
-										"tag": ["multiple"],
-										"layout": {
-											"frame": "line",
-											"hideTitle": true,
-											"multiple": {
-												"use": true,
-												"enumerateFX": true
-											}
-										},
-										"editor": {
-											"draggAble": true
-										}
-									} ?>
-				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-				<?copy { "fromId": "ref-form" } ?>
-				<?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-				<?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
-				<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "bedeutung"}}] } } ?>
-				<?copy { "fromId": "sense", "options": {
-																								"tagAsTitle": false,
-																								"title": "Bedeutung (sub)",
-																								"tag": ["possibleTag"],
-																								"layout": {
-																									"frame": "inline"
-																								},
-																								"editor": {
-																									"onlyLastElementHasAddButton": true,
-																									"addTitle": "Bedeutung Sub."
-																								}
-																							} } ?>
-			</sense>
-
-			<ref type="bibl">
-				<?options {
-										"id": "ref-bibl",
-										"title": "Verweis auf Literatur",
-										"attributes": [{
-											"target": {"type": "edit", "canBeEmpty": {"use": true}}
-										}],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true,
-											"before": "(",
-											"after": ")",
-											"showAttributeAfter" : {
-												"target": { }
-											}
-										}
-									} ?>
-				<lbl>
-					<?options {
-											"id": "lbl",
-											"title": "lbl",
-											"value": ["edit", "required"],
-											"tag": ["possibleTag"],
-											"layout": {
-												"frame": "inline"
-											},
-											"previewLayout": {
-												"hideTitle": true
-											},
-											"editor": {
-												"parentInContext": true
-											}
-										} ?>
-				</lbl>
-				<?copy { "fromId": "text", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-				<citedRange>
-					<?options {
-											"title": "Cited Range",
-											"value": ["edit", "required"],
-											"tag": ["possibleTag"],
-											"layout": {
-												"frame": "inline",
-												"hideTitle": true,
-												"before": ": "
-											}
-										} ?>
-				</citedRange>
-			</ref>
-
-			<ref type="form">
-				<?options {
-										"id": "ref-form",
-										"title": "Verweis (form)",
-										"tag": ["possibleTag"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										}
-									} ?>
-				<?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
-				<oRef>
-					<?options {
-						"id": "oRef",
-						"attributes": [{
-							"target": {"type": "edit", "canBeEmpty": {"use": true}}
-						}],
-						"tag": ["possibleTag"],
-						"layout": {
-							"frame": "inline",
-							"italic": true,
-							"hideTitle": true,
-							"showAttributeBefore" : {
-								"target": { }
-							},
-							"editor": {
-								"parentInContext": true
-							}
-						}
-					} ?>
-				</oRef>
-			</ref>
-
-			<gramGrp>
-				<?options {
-										"id": "gramGrp",
-										"title": "grammatische Information",
-										"layout": {
-															"frame": "line",
-															"hideTitle": true
-										}
-									} ?>
-				<gram type="pos">
-					<?options {
-											"title": "Gram Pos",
-											"value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb", "Adverb", "Artikel", "Pronomen", "Konjunktion", "Präposition", "Partikel", "Interjektion"]}}],
-											"tag": ["possibleTag"],
-											"layout": {
-																"frame": "inline",
-																"hideTitle": true
-											}
-										} ?>
-				</gram>
-				<iType>
-					<?options {
-											"title": "Verbflektion",
-											"value": ["edit", "required", {"is": {"possibleValues": ["stark", "schwach", "gemischt"]}}],
-											"tag": ["possibleTag"],
-											"layout": {
-												"frame": "inline",
-												"hideTitle": true,
-												"before": "(",
-												"after": ")"
-											}
-										} ?>
-				</iType>
-				<?copy {"fromId": "gram-gender", "options": {
-																											"tag": ["possibleTag"],
-																											"layout": {
-																												"frame": "inline",
-																												"multiple": {
-																													"use": true,
-																													"join": ", ",
-																													"before": "(",
-																													"after": ")"
-																												}
-																											}
-																										} } ?>
-				<?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
-				<gram type="number">
-					<?options {
-										"id": "gram-number",
-										"title": "Gram Number - Pluralwort",
-										"value": ["edit", "required", {"is": {"value": "Pluralwort"}}],
-										"tag": ["possibleTag"],
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true
-										}
-									} ?>
-				</gram>
-			</gramGrp>
-
-			<usg type="geo">
-				<?options {
-										"id": "usg-geo-verbreitung",
-										"title": "Verbreitung",
-										"tag": ["multiple"],
-										"tagAsTitle": false,
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true,
-											"multiple": {
-												"use": true,
-												"header": "Verbreitung",
-												"spaceBefore": 10,
-												"spaceAfter": 5,
-												"join": "; "
-											}
-										},
-										"editor": {
-											"onlyLastElementHasAddButton": true,
-											"fxFunction": {
-												"name": "GeoSelect",
-												"filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx",
-												"fields": [
-													{ "name": "Großregion", "possible": true },
-													{ "name": "Bundesland", "possible": true }
-												],
-												"autoUse": "justFirst"
-											}
-										}
-									} ?>
-				<placeName>
-					<?options {
-											"tagAsTitle": false,
-											"value": ["edit", "required"],
-											"attributes": [{
-												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "bundesland"]},
-												"xml:id": {"type": "variable", "renameTo": "ref", "canBeEmpty": {"use": true}},
-												"ref": {"type": "variable", "canBeEmpty": {"use": true}}
-											}],
-											"tag": ["multiple", "possible"],
-											"layout": {"multiple": { "use": true,"join": ", " } }
-										} ?>
-				</placeName>
-			</usg>
-
-			<usg type="geo">
-				<?options {
-										"id": "usg-geo",
-										"title": "Lokation",
-										"tagAsTitle": false,
-										"layout": {
-											"frame": "inline",
-											"hideTitle": true,
-											"multiple": {
-												"use": true,
-												"join": "; "
-											}
-										},
-										"editor": {
-											"onlyLastElementHasAddButton": true,
-											"fxFunction": {
-												"name": "GeoSelect",
-												"filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx",
-												"fields": [
-													{ "name": "Gemeinde", "possible": true },
-													{ "name": "Kleinregion", "possible": true },
-													{ "name": "Großregion", "possible": true },
-													{ "name": "Bundesland", "possible": true }
-												],
-												"autoUse": "justFirst"
-											}
-										}
-									} ?>
-				<placeName>
-					<?options {
-											"tagAsTitle": false,
-											"value": ["edit", "required"],
-											"attributes": [{
-												"type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["ort", "gemeinde", "kleinregion", "grossregion", "bundesland"]},
-												"xml:id": {"type": "variable", "renameTo": "ref", "canBeEmpty": {"use": true}},
-												"ref": {"type": "variable", "canBeEmpty": {"use": true}},
-												"cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
-											}],
-											"tag": ["multiple", "possible"],
-											"layout": {"multiple": { "use": true,"join": ", " } }
-										} ?>
-				</placeName>
-			</usg>
-
-			<re>
-				<?options {
-										"title": "Wortbildung",
-										"id": "re-compound",
-										"tag": ["multiple", "possibleTag"],
-										"tagHasChildWithAttribute": { "form": { "subtype": "compound" } },
-										"layout": {
-											"frame": "box",
-											"hideTitle": true,
-											"multiple": {
-												"use": true,
-												"header": "Wortbildung",
-												"spaceBefore": 10,
-												"spaceAfter": 5
-											}
-										},
-										"editor": {
-											"onlyLastElementHasAddButton": true
-										}
-									} ?>
-				<form subtype="compound">
-					<?options {
-											"title": "Form Lemma/Variable",
-											"attributes": [{
-												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]}
-											}],
-											"layout": {
-												"frame": "inline",
-												"hideTitle": true
-											},
-											"tag": ["multiple"]
-										} ?>
-					<?copy { "fromId": "orth", "options": {
-																									"layout": {
-																										"italic": true
-																									},
-																									"editor": {
-																										"parentInContext": true
-																									}
-																								} } ?>
-					<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-				</form>
-				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-				<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "wortbildung"}}] } } ?>
-			</re>
-
-			<re>
-				<?options {
-										"title": "Redewendungen",
-										"id": "re-MWE",
-										"tag": ["multiple", "possibleTag"],
-										"tagHasChildWithAttribute": { "form": { "subtype": "MWE" } },
-										"layout": {
-											"frame": "box",
-											"hideTitle": true,
-											"multiple": {
-												"use": true,
-												"header": "Redewendungen",
-												"spaceBefore": 10,
-												"spaceAfter": 5
-											}
-										},
-										"editor": {
-											"onlyLastElementHasAddButton": true,
-											"addTitle": "Redewendung"
-										}
-									} ?>
-				<form subtype="MWE">
-					<?options {
-											"title": "Form Lemma/Variable",
-											"attributes": [{
-												"type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]}
-											}],
-											"layout": {
-												"frame": "inline",
-												"hideTitle": true
-											},
-											"tag": ["multiple"]
-										} ?>
-					<?copy { "fromId": "orth", "options": {
-																									"layout": {
-																										"italic": true
-																									},
-																									"editor": {
-																										"parentInContext": true
-																									}
-																								} } ?>
-					<?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-				</form>
-				<?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-				<?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-				<?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-				<?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "MWE"}}] } } ?>
-			</re>
 
 
+  <!-- Element Vorlagen: -->
+  <objParserSystem>
+
+    <options>
+      <?optionsPreset {
+                        "id": "nameSimple",
+                        "tagAsTitle": false, "layout": { "frame": "inline", "after": ", " }
+                      } ?>
+      <?optionsPreset {
+                        "id": "inlineMultipleJoin",
+                        "tagAsTitle": false,
+                        "layout": {
+                          "frame": "inline",
+                          "multiple": {
+                            "use": true,
+                            "join": ", "
+                          }
+                        },
+                        "editor": {
+                          "onlyLastElementHasAddButton": true
+                        }
+                      } ?>
+
+    </options>
+
+    <tags>
+
+      <xr>    <!-- Extern: cf -->
+        <?options {
+                    "id": "xr-ext",
+                    "title": "Querverweis auf Extern",
+                    "attributes": [{
+                      "type": {"type": "fixed", "value": "cf"}
+                    }],
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "bold": true,
+                      "before": "(",
+                      "after": ")"
+                    }
+                  } ?>
+        <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
+        <ref type="bibl">
+          <?options {
+                      "id": "xr-ref-bibl",
+                      "title": "Verweis auf Literatur",
+                      "attributes": [{
+                        "target": {"type": "edit", "canBeEmpty": {"use": true}}
+                      }],
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true,
+                        "bold": true,
+                        "showAttributeBefore" : {
+                          "target": { }
+                        }
+                      },
+                      "editor": { "parentInContext": true }
+                    } ?>
+          <?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+          <ptr>
+            <?options {
+              "id": "xr-cf-ptr",
+              "title": "ptr",
+              "attributes": [{
+                "target": {"type": "edit", "canBeEmpty": {"use": true}}
+              }],
+              "layout": {
+                "frame": "inline",
+                "hideTitle": true,
+                "bold": true,
+                "showAttributeBefore" : {
+                  "target": { "title": "target (URL)" }
+                }
+              },
+              "editor": { "parentInContext": true }
+            } ?>
+          </ptr>
+
+          <?copy { "fromId": "date", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
+          <?copy { "fromId": "citedRange", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
+        </ref>
+        <ref>
+          <?options {
+              "id": "ref-lang",
+              "title": "Sprache",
+              "value": ["edit", "required"],
+              "attributes": [{
+                "xml:lang": {"type": "edit", "canBeEmpty": {"use": true}}
+              }],
+              "layout": {
+                "frame": "inline",
+                "hideTitle": true,
+                "italic": true,
+                "bold": true,
+                "before": ": ",
+                "showAttributeBefore" : {
+                  "xml:lang": { }
+                }
+              },
+              "editor": { "parentInContext": true }
+            } ?>
+        </ref>
+      </xr>
+
+      <xr>    <!-- Intern: lemma & variant -->
+        <?options {
+                    "id": "xr-int",
+                    "title": "Querverweis auf Artikel",
+                    "attributes": [{
+                      "type": {"type": "variable", "possibleValues": ["lemma", "variant"]},
+                      "subtype": {"type": "variable", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "MWE", "diminutive", "movierung", "shortform"]}
+                    }],
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "italic": true
+                    },
+                    "editor": {
+                      "fxFunction": {
+                        "name": "XRlvModal"
+                      }
+                    }
+                  } ?>
+        <lbl>
+          <?options {
+                      "id": "xr-int-lbl",
+                      "title": "lbl",
+                      "value": ["edit", "required"],
+                      "tag": ["possibleTag"],
+                      "layout": {
+                        "hideTitle": true,
+                        "frame": "inline",
+                        "italic": true
+                      },
+                      "editor": {
+                        "parentInContext": true
+                      }
+                    } ?>
+        </lbl>
+        <ref>
+          <?options {
+              "id": "xr-lv-ref-target",
+              "title": "Artikel",
+              "value": ["edit", "required"],
+              "attributes": [{
+                "target": {"type": "edit", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}}
+              }],
+              "layout": {
+                "frame": "inline",
+                "hideTitle": true,
+                "italic": true,
+                "showAttributeBefore" : {
+                  "target": { }
+                }
+              },
+              "editor": { "parentInContext": true }
+            } ?>
+        </ref>
+      </xr>
+
+      <ptr type="collection">    <!-- subtype = "lemma", "lautung", "bedeutung", "wortbildung", "MWE" ; target = "/collections-wboe.xml#c?" -->
+        <?options {
+            "id": "ptr-col",
+            "title": "Quellenangabe für Collection",
+            "attributes": [{
+              "subtype": {"type": "fixed", "value": "xxx"},
+              "target": {"type": "edit", "canBeEmpty": {"use": true}, "prefix": "/collections-wboe.xml#c"}
+            }],
+            "tag": ["possibleTag"],
+            "layout": {
+              "frame": "inline",
+              "hideTitle": true,
+              "showAttributeBefore" : {
+                "target": { "title": "Collection ID" }
+              }
+            }
+          } ?>
+      </ptr>
+
+      <citedRange>
+        <?options {
+                    "title": "Cited Range",
+                    "id": "citedRange",
+                    "value": ["edit", "required"],
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "before": ": "
+                    }
+                  } ?>
+      </citedRange>
+
+      <lang>
+        <?options {
+                    "id": "lang",
+                    "title": "Lang",
+                    "value": ["edit", "required"],
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true
+                    }
+                  } ?>
+      </lang>
+
+      <?text {
+        "options": {
+          "id": "text",
+          "title": "Text",
+          "value": ["edit", "required"],
+          "tag": ["possibleTag", "multiple", "anywhere"]
+        }
+      } ?>
+
+      <date>
+        <?options {
+                    "id": "date",
+                    "title": "Date",
+                    "value": ["edit", "required", {"is": {"value": { "fx": "now" }}}],
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true
+                    }
+                  } ?>
+      </date>
+
+      <def>
+        <?options {
+                    "id": "def",
+                    "title": "Definition",
+                    "attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
+                    "value": ["edit", "required"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "ls1pt": true,
+                      "before": "'",
+                      "after": "'"
+                    }
+                  } ?>
+      </def>
+
+      <orth>
+        <?options {
+                    "id": "orth",
+                    "title": "Orth",
+                    "value": ["edit", "required"],
+                    "attributes": [{
+                      "extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["suff"]},
+                      "xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["gmh"]}
+                    }],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true
+                    }
+                  } ?>
+      </orth>
+
+      <gram type="gender">
+        <?options {
+                    "id": "gram-gender",
+                    "title": "Genus",
+                    "value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}],
+                    "tag": ["multiple"],
+                    "layout": { "frame": "line", "hideTitle": true },
+                    "editor": {
+                      "onlyLastElementHasAddButton": true,
+                      "addTitle": "Gender"
+                    }
+                  } ?>
+      </gram>
+
+      <usg>
+        <?options {
+                    "id": "usg-drg",
+                    "title": "Gebrauch (dom, reg, gram / cert)",
+                    "attributes": [{
+                      "type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["dom", "reg", "gram"]},
+                      "cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+                    }],
+                    "value": ["edit", "required"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true
+                    }
+                  } ?>
+      </usg>
+
+      <cit type="example">
+        <?options {
+                    "id": "cit-example",
+                    "title": "Beispiel-Beleg",
+                    "attributes": [{
+                      "xml:lang": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["bar-AT"]},
+                      "cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+                    }],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true
+                    },
+                    "tag": ["multiple", "possibleTag"]
+                  } ?>
+         <quote>
+           <?options {
+                      "title": "Quote",
+                      "attributes": [{
+                        "xml:lang": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "bar-AT"}
+                      }],
+                      "value": ["edit", "required"],
+                      "layout": {
+                        "frame": "inline",
+                        "italic": true,
+                        "hideTitle": true,
+                        "before": " – "
+                      },
+                      "editor": {
+                        "parentInContext": true
+                      }
+                    } ?>
+         </quote>
+         <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+         <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+         <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
+      </cit>
+
+      <sense>
+        <?options {
+                    "id": "sense",
+                    "title": "Bedeutung",
+                    "attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
+                    "tag": ["multiple"],
+                    "layout": {
+                      "frame": "line",
+                      "hideTitle": true,
+                      "multiple": {
+                        "use": true,
+                        "enumerateFX": true
+                      }
+                    },
+                    "editor": {
+                      "draggAble": true
+                    }
+                  } ?>
+        <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
+        <?copy { "fromId": "ref-form" } ?>
+        <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+        <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
+        <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "bedeutung"}}] } } ?>
+        <?copy { "fromId": "sense", "options": {
+                                                "tagAsTitle": false,
+                                                "title": "Bedeutung (sub)",
+                                                "tag": ["possibleTag"],
+                                                "layout": {
+                                                  "frame": "inline"
+                                                },
+                                                "editor": {
+                                                  "onlyLastElementHasAddButton": true,
+                                                  "addTitle": "Bedeutung Sub."
+                                                }
+                                              } } ?>
+      </sense>
+
+      <ref type="bibl">
+        <?options {
+                    "id": "ref-bibl",
+                    "title": "Verweis auf Literatur",
+                    "attributes": [{
+                      "target": {"type": "edit", "canBeEmpty": {"use": true}}
+                    }],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "before": "(",
+                      "after": ")",
+                      "showAttributeAfter" : {
+                        "target": { }
+                      }
+                    }
+                  } ?>
+        <lbl>
+          <?options {
+                      "id": "lbl",
+                      "title": "lbl",
+                      "value": ["edit", "required"],
+                      "tag": ["possibleTag"],
+                      "layout": {
+                        "frame": "inline"
+                      },
+                      "previewLayout": {
+                        "hideTitle": true
+                      },
+                      "editor": {
+                        "parentInContext": true
+                      }
+                    } ?>
+        </lbl>
+        <?copy { "fromId": "text", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+        <citedRange>
+          <?options {
+                      "title": "Cited Range",
+                      "value": ["edit", "required"],
+                      "tag": ["possibleTag"],
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true,
+                        "before": ": "
+                      }
+                    } ?>
+        </citedRange>
+      </ref>
+
+      <ref type="form">
+        <?options {
+                    "id": "ref-form",
+                    "title": "Verweis (form)",
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true
+                    }
+                  } ?>
+        <?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+        <oRef>
+          <?options {
+            "id": "oRef",
+            "attributes": [{
+              "target": {"type": "edit", "canBeEmpty": {"use": true}}
+            }],
+            "tag": ["possibleTag"],
+            "layout": {
+              "frame": "inline",
+              "italic": true,
+              "hideTitle": true,
+              "showAttributeBefore" : {
+                "target": { }
+              },
+              "editor": {
+                "parentInContext": true
+              }
+            }
+          } ?>
+        </oRef>
+      </ref>
+
+      <gramGrp>
+        <?options {
+                    "id": "gramGrp",
+                    "title": "grammatische Information",
+                    "layout": {
+                              "frame": "line",
+                              "hideTitle": true
+                    }
+                  } ?>
+        <gram type="pos">
+          <?options {
+                      "title": "Gram Pos",
+                      "value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb", "Adverb", "Artikel", "Pronomen", "Konjunktion", "Präposition", "Partikel", "Interjektion"]}}],
+                      "tag": ["possibleTag"],
+                      "layout": {
+                                "frame": "inline",
+                                "hideTitle": true
+                      }
+                    } ?>
+        </gram>
+        <iType>
+          <?options {
+                      "title": "Verbflektion",
+                      "value": ["edit", "required", {"is": {"possibleValues": ["stark", "schwach", "gemischt"]}}],
+                      "tag": ["possibleTag"],
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true,
+                        "before": "(",
+                        "after": ")"
+                      }
+                    } ?>
+        </iType>
+        <?copy {"fromId": "gram-gender", "options": {
+                                                      "tag": ["possibleTag"],
+                                                      "layout": {
+                                                        "frame": "inline",
+                                                        "multiple": {
+                                                          "use": true,
+                                                          "join": ", ",
+                                                          "before": "(",
+                                                          "after": ")"
+                                                        }
+                                                      }
+                                                    } } ?>
+        <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
+        <gram type="number">
+          <?options {
+                    "id": "gram-number",
+                    "title": "Gram Number - Pluralwort",
+                    "value": ["edit", "required", {"is": {"value": "Pluralwort"}}],
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true
+                    }
+                  } ?>
+        </gram>
+      </gramGrp>
+
+      <usg type="geo">
+        <?options {
+                    "id": "usg-geo-verbreitung",
+                    "title": "Verbreitung",
+                    "tag": ["multiple"],
+                    "tagAsTitle": false,
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "multiple": {
+                        "use": true,
+                        "header": "Verbreitung",
+                        "spaceBefore": 10,
+                        "spaceAfter": 5,
+                        "join": "; "
+                      }
+                    },
+                    "editor": {
+                      "onlyLastElementHasAddButton": true,
+                      "fxFunction": {
+                        "name": "GeoSelect",
+                        "filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx",
+                        "fields": [
+                          { "name": "Großregion", "possible": true },
+                          { "name": "Bundesland", "possible": true }
+                        ],
+                        "autoUse": "justFirst"
+                      }
+                    }
+                  } ?>
+        <placeName>
+          <?options {
+                      "tagAsTitle": false,
+                      "value": ["edit", "required"],
+                      "attributes": [{
+                        "type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["grossregion", "bundesland"]},
+                        "xml:id": {"type": "variable", "renameTo": "ref", "canBeEmpty": {"use": true}},
+                        "ref": {"type": "variable", "canBeEmpty": {"use": true}}
+                      }],
+                      "tag": ["multiple", "possible"],
+                      "layout": {"multiple": { "use": true,"join": ", " } }
+                    } ?>
+        </placeName>
+      </usg>
+
+      <usg type="geo">
+        <?options {
+                    "id": "usg-geo",
+                    "title": "Lokation",
+                    "tagAsTitle": false,
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "multiple": {
+                        "use": true,
+                        "join": "; "
+                      }
+                    },
+                    "editor": {
+                      "onlyLastElementHasAddButton": true,
+                      "fxFunction": {
+                        "name": "GeoSelect",
+                        "filename": "Ortsdatenbank_Orte-Gemeinden-Kleinregionen-Großregionen-Bundesländer_nur+Ö+STir.xlsx",
+                        "fields": [
+                          { "name": "Gemeinde", "possible": true },
+                          { "name": "Kleinregion", "possible": true },
+                          { "name": "Großregion", "possible": true },
+                          { "name": "Bundesland", "possible": true }
+                        ],
+                        "autoUse": "justFirst"
+                      }
+                    }
+                  } ?>
+        <placeName>
+          <?options {
+                      "tagAsTitle": false,
+                      "value": ["edit", "required"],
+                      "attributes": [{
+                        "type": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["ort", "gemeinde", "kleinregion", "grossregion", "bundesland"]},
+                        "xml:id": {"type": "variable", "renameTo": "ref", "canBeEmpty": {"use": true}},
+                        "ref": {"type": "variable", "canBeEmpty": {"use": true}},
+                        "cert": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["low", "medium"]}
+                      }],
+                      "tag": ["multiple", "possible"],
+                      "layout": {"multiple": { "use": true,"join": ", " } }
+                    } ?>
+        </placeName>
+      </usg>
+
+      <re>
+        <?options {
+                    "title": "Wortbildung",
+                    "id": "re-compound",
+                    "tag": ["multiple", "possibleTag"],
+                    "tagHasChildWithAttribute": { "form": { "subtype": "compound" } },
+                    "layout": {
+                      "frame": "box",
+                      "hideTitle": true,
+                      "multiple": {
+                        "use": true,
+                        "header": "Wortbildung",
+                        "spaceBefore": 10,
+                        "spaceAfter": 5
+                      }
+                    },
+                    "editor": {
+                      "onlyLastElementHasAddButton": true
+                    }
+                  } ?>
+        <form subtype="compound">
+          <?options {
+                      "title": "Form Lemma/Variable",
+                      "attributes": [{
+                        "type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]}
+                      }],
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true
+                      },
+                      "tag": ["multiple"]
+                    } ?>
+          <?copy { "fromId": "orth", "options": {
+                                                  "layout": {
+                                                    "italic": true
+                                                  },
+                                                  "editor": {
+                                                    "parentInContext": true
+                                                  }
+                                                } } ?>
+          <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+        </form>
+        <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+        <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "wortbildung"}}] } } ?>
+      </re>
+
+      <re>
+        <?options {
+                    "title": "Redewendungen",
+                    "id": "re-MWE",
+                    "tag": ["multiple", "possibleTag"],
+                    "tagHasChildWithAttribute": { "form": { "subtype": "MWE" } },
+                    "layout": {
+                      "frame": "box",
+                      "hideTitle": true,
+                      "multiple": {
+                        "use": true,
+                        "header": "Redewendungen",
+                        "spaceBefore": 10,
+                        "spaceAfter": 5
+                      }
+                    },
+                    "editor": {
+                      "onlyLastElementHasAddButton": true,
+                      "addTitle": "Redewendung"
+                    }
+                  } ?>
+        <form subtype="MWE">
+          <?options {
+                      "title": "Form Lemma/Variable",
+                      "attributes": [{
+                        "type": {"type": "edit", "shouldAttribute": {"use": true}, "value": "lemma", "possibleValues": ["lemma", "variable"]}
+                      }],
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true
+                      },
+                      "tag": ["multiple"]
+                    } ?>
+          <?copy { "fromId": "orth", "options": {
+                                                  "layout": {
+                                                    "italic": true
+                                                  },
+                                                  "editor": {
+                                                    "parentInContext": true
+                                                  }
+                                                } } ?>
+          <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+        </form>
+        <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+        <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "MWE"}}] } } ?>
+      </re>
 
 
 
-			<!-- Kopfzeile -->
-			<teiHeader>
-				<?options {
-										"id": "teiHeader",
-										"title": "Kopfzeile"
-									} ?>
-				<fileDesc>
-					<?options {	"layout": { "frame": "justChilds" } } ?>
-					<titleStmt>
-						<?options {	"layout": { "frame": "justChilds" } } ?>
-						<title>
-							<?options {
-													"id": "title",
-													"title": "Titel",
-													"value": ["edit", {"required": {"use": true}}],
-													"layout": { "frame": "line" }
-												} ?>
-						</title>
-						<respStmt>
-							<?options {	"layout": { "frame": "justChilds" } } ?>
-							<resp>
-								<?options {
-									"value": {
-										"is": {
-											"shouldValue": "Editor",
-											"use": true,
-											"possibleValues": ["Editor", "article editor"]
-										}
-									},
-									"layout": ["hidden"]
-								} ?>
-							</resp>
-							<name>
-								<?options {
-														"title": "Editor",
-														"attributes": [{
-															"xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "remove": {"use": true}},
-															"ref": {"type": "variable", "canBeEmpty": {"use": true}}
-														}],
-														"value": ["edit", "required", {"is": {
-															"possibleValues": [
-																{"value": "Alexandra N. Lenz", "attribute": {"ref": "#AL"}},
-																{"value": "Philipp Stöckle", "attribute": {"ref": "#PhS"}},
-																{"value": "Andreas Gellan", "attribute": {"ref": "#AG"}},
-																{"value": "Patrick Zeitlhuber", "attribute": {"ref": "#PZ"}},
-																{"value": "Sabine Wahl", "attribute": {"ref": "#SW"}},
-																{"value": "Sonja Schwaiger", "attribute": {"ref": "#SS"}},
-																{"value": "Jan Braun", "attribute": {"ref": "#JD"}},
-																{"value": "Angela Bergermayer", "attribute": {"ref": "#AB"}},
-																{"value": "Eva Wahlmüller", "attribute": {"ref": "#EW"}}
-															]
-														}}],
-														"layout": { "frame": "line" }
-													} ?>
-							</name>
-						</respStmt>
-						<respStmt>
-							<?options { "title": "Encoding Scheme", "layout": { "frame": "hide" } } ?>
-							<resp>
-								<?options {
-									"value": {
-										"is": {
-											"shouldValue": "Encoding Scheme",
-											"use": true,
-											"possibleValues": ["Encoding Scheme", "encoding"]
-										}
-									},
-									"layout": ["hidden"]
-								} ?>
-							</resp>
-							<name><?copyOptions { "fromId": "nameSimple" } ?>Jack Bowers</name>
-							<name><?copyOptions { "fromId": "nameSimple" } ?>Daniel Schopper</name>
-							<name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Omar Siam</name>
-						</respStmt>
-						<respStmt>
-							<?options { "title": "DBOE Team", "layout": { "frame": "hide" } } ?>
-							<resp><?options {	"layout": ["hidden"] } ?>DBOE Team</resp>
-							<name xml:id="AL"><?copyOptions { "fromId": "nameSimple" } ?>Alexandra N. Lenz</name>
-							<name xml:id="PhS"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Philipp Stöckle", "use": true, "possibleValues": ["Philipp Stöckle", "Philip Stöckle"] } } } } ?></name>
-							<name xml:id="AG"><?copyOptions { "fromId": "nameSimple" } ?>Andreas Gellan</name>
-							<name xml:id="PZ"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Patrick Zeitlhuber", "use": true, "possibleValues": ["Patrick Zeitlhuber", "Patrick Zeithuber"] } } } } ?></name>
-							<name xml:id="SW"><?copyOptions { "fromId": "nameSimple" } ?>Sabine Wahl</name>
-							<name xml:id="SS"><?copyOptions { "fromId": "nameSimple" } ?>Sonja Schwaiger</name>
-							<name xml:id="JD"><?copyOptions { "fromId": "nameSimple" } ?>Jan Braun</name>
-							<name xml:id="AB"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Angela Bergermayer", "use": true, "possibleValues": ["Angela Bergermayer", "Angela Bergmayer"] } } } } ?></name>
-							<name xml:id="EW"><?copyOptions { "fromId": "nameSimple", "options": { "tag": ["possibleTag", "shouldTag"], "layout": { "after": null } } } ?>Eva Wahlmüller</name>
-						</respStmt>
-						<respStmt>
-							<?options { "title": "Student assistants", "layout": { "frame": "hide" } } ?>
-							<resp>
-								<?options {
-									"value": {
-										"is": {
-											"shouldValue": "Student assistants",
-											"use": true,
-											"possibleValues": ["Student assistants", "student assistants"]
-										}
-									},
-									"layout": ["hidden"]
-								} ?>
-							</resp>
-							<name><?copyOptions { "fromId": "nameSimple" } ?>Eva Wahlmüller</name>
-							<name><?copyOptions { "fromId": "nameSimple" } ?>Susanna Muhr</name>
-							<name><?copyOptions { "fromId": "nameSimple" } ?>Alexandra Grohe</name>
-							<name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Klemens Wagner</name>
-						</respStmt>
-					</titleStmt>
-					<publicationStmt>
-						<?options { "title": "Publication Information", "layout": { "frame": "panelClosed" } } ?>
-						<p>
-							<?options {
-								"value": ["edit", "canBeEmpty"],
-								"tagAsTitle": false,
-								"layout": { "frame": "box" }
-							} ?>
-						</p>
-					</publicationStmt>
-					<sourceDesc>
-						<?options { "title": "Information about the source", "layout": { "frame": "panelClosed" } } ?>
-						<p>
-							<?options {
-									"value": ["edit", "canBeEmpty"],
-									"tagAsTitle": false,
-									"layout": { "frame": "box" },
-									"tag": ["possibleTag"],
-									"editor": {
-										"noAddButton": true
-									}
-							} ?>
-						</p>
-						<list>
-							<?options {
-													"tag": ["possibleTag", "shouldTag"],
-													"layout": { "frame": "justChilds" }
-												} ?>
-							<item>
-								<?options {	"layout": { "frame": "justChilds" } } ?>
-								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>Geo-data</label>
-								<ref xml:id="geo-inventory-WBOE" target="../geodata-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
-							</item>
-							<item>
-								<?options {	"layout": { "frame": "justChilds" } } ?>
-								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>Bibliography</label>
-								<ref xml:id="bibliography-WBOE" target="../bibl-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
-							</item>
-							<item>
-								<?options {	"layout": { "frame": "justChilds" } } ?>
-								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Slips</label>
-								<ref xml:id="slips-WBOE" target="../slips-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
-							</item>
-							<item>
-								<?options {	"layout": { "frame": "justChilds" } } ?>
-								<label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Collections</label>
-								<ref xml:id="collections-WBOE" target="../collections-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
-							</item>
-						</list>
-					</sourceDesc>
-					<revisionDesc>
-						<?options {
-												"title": "Informationen über Änderungen!",
-												"attributes": [{
-													"status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] }
-												}],
-												"tag": ["possibleTag", "shouldTag"],
-												"layout": { "bold": true, "frame": "panel" }
-											} ?>
-						<change>
-							<?options {
-													"title": "Änderung",
-													"value": ["edit", "required", {"autoCreateValue": "Datensatz erstellt"}],
-													"attributes": [{
-														"status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] },
-														"when": { "type": "edit", "value": { "fx": "now" } },
-														"who": { "type": "edit", "value": "", "possibleValues": [
-																																											{"title": "Alexandra N. Lenz", "value": "AL"},
-																																											{"title": "Philipp Stöckle", "value": "PhS"},
-																																											{"title": "Andreas Gellan", "value": "AG"},
-																																											{"title": "Patrick Zeitlhuber", "value": "PZ"},
-																																											{"title": "Sabine Wahl", "value": "SW"},
-																																											{"title": "Sonja Schwaiger", "value": "SS"},
-																																											{"title": "Jan Braun", "value": "JD"},
-																																											{"title": "Angela Bergermayer", "value": "AB"},
-																																											{"title": "Eva Wahlmüller", "value": "EW"}
-																																										]}
-													}],
-													"tag": ["multiple", "possibleTag", "shouldTag"],
-													"layout": {
-														"bold": true,
-														"frame": "line",
-														"showAttributeBefore" : {
-															"status": { "hideTitle": true, "class": "box" },
-															"who": { "title": "Von", "class": "text", "after": " - " }
-														},
-														"showAttributeAfter" : {
-															"when": { "title": "am", "class": "text" }
-														}
-													},
-													"editor": {
-														"onlyLastElementHasAddButton": true
-													}
-												} ?>
-						</change>
-					</revisionDesc>
-				</fileDesc>
-			</teiHeader>
 
-		</tags>
-	</objParserSystem>
-	<objParserPreview>
-		<div class="artikel-rahmen">
-			<?content {
-									"fromid": "main-content"
-								} ?>
-		</div>
-	</objParserPreview>
+
+      <!-- Kopfzeile -->
+      <teiHeader>
+        <?options {
+                    "id": "teiHeader",
+                    "title": "Kopfzeile"
+                  } ?>
+        <fileDesc>
+          <?options {  "layout": { "frame": "justChilds" } } ?>
+          <titleStmt>
+            <?options {  "layout": { "frame": "justChilds" } } ?>
+            <title>
+              <?options {
+                          "id": "title",
+                          "title": "Titel",
+                          "value": ["edit", {"required": {"use": true}}],
+                          "layout": { "frame": "line" }
+                        } ?>
+            </title>
+            <respStmt>
+              <?options {  "layout": { "frame": "justChilds" } } ?>
+              <resp>
+                <?options {
+                  "value": {
+                    "is": {
+                      "shouldValue": "Editor",
+                      "use": true,
+                      "possibleValues": ["Editor", "article editor"]
+                    }
+                  },
+                  "layout": ["hidden"]
+                } ?>
+              </resp>
+              <name>
+                <?options {
+                            "title": "Editor",
+                            "attributes": [{
+                              "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "remove": {"use": true}},
+                              "ref": {"type": "variable", "canBeEmpty": {"use": true}}
+                            }],
+                            "value": ["edit", "required", {"is": {
+                              "possibleValues": [
+                                {"value": "Alexandra N. Lenz", "attribute": {"ref": "#AL"}},
+                                {"value": "Philipp Stöckle", "attribute": {"ref": "#PhS"}},
+                                {"value": "Andreas Gellan", "attribute": {"ref": "#AG"}},
+                                {"value": "Patrick Zeitlhuber", "attribute": {"ref": "#PZ"}},
+                                {"value": "Sabine Wahl", "attribute": {"ref": "#SW"}},
+                                {"value": "Sonja Schwaiger", "attribute": {"ref": "#SS"}},
+                                {"value": "Jan Braun", "attribute": {"ref": "#JD"}},
+                                {"value": "Angela Bergermayer", "attribute": {"ref": "#AB"}},
+                                {"value": "Eva Wahlmüller", "attribute": {"ref": "#EW"}}
+                              ]
+                            }}],
+                            "layout": { "frame": "line" }
+                          } ?>
+              </name>
+            </respStmt>
+            <respStmt>
+              <?options { "title": "Encoding Scheme", "layout": { "frame": "hide" } } ?>
+              <resp>
+                <?options {
+                  "value": {
+                    "is": {
+                      "shouldValue": "Encoding Scheme",
+                      "use": true,
+                      "possibleValues": ["Encoding Scheme", "encoding"]
+                    }
+                  },
+                  "layout": ["hidden"]
+                } ?>
+              </resp>
+              <name><?copyOptions { "fromId": "nameSimple" } ?>Jack Bowers</name>
+              <name><?copyOptions { "fromId": "nameSimple" } ?>Daniel Schopper</name>
+              <name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Omar Siam</name>
+            </respStmt>
+            <respStmt>
+              <?options { "title": "DBOE Team", "layout": { "frame": "hide" } } ?>
+              <resp><?options {  "layout": ["hidden"] } ?>DBOE Team</resp>
+              <name xml:id="AL"><?copyOptions { "fromId": "nameSimple" } ?>Alexandra N. Lenz</name>
+              <name xml:id="PhS"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Philipp Stöckle", "use": true, "possibleValues": ["Philipp Stöckle", "Philip Stöckle"] } } } } ?></name>
+              <name xml:id="AG"><?copyOptions { "fromId": "nameSimple" } ?>Andreas Gellan</name>
+              <name xml:id="PZ"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Patrick Zeitlhuber", "use": true, "possibleValues": ["Patrick Zeitlhuber", "Patrick Zeithuber"] } } } } ?></name>
+              <name xml:id="SW"><?copyOptions { "fromId": "nameSimple" } ?>Sabine Wahl</name>
+              <name xml:id="SS"><?copyOptions { "fromId": "nameSimple" } ?>Sonja Schwaiger</name>
+              <name xml:id="JD"><?copyOptions { "fromId": "nameSimple" } ?>Jan Braun</name>
+              <name xml:id="AB"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Angela Bergermayer", "use": true, "possibleValues": ["Angela Bergermayer", "Angela Bergmayer"] } } } } ?></name>
+              <name xml:id="EW"><?copyOptions { "fromId": "nameSimple", "options": { "tag": ["possibleTag", "shouldTag"], "layout": { "after": null } } } ?>Eva Wahlmüller</name>
+            </respStmt>
+            <respStmt>
+              <?options { "title": "Student assistants", "layout": { "frame": "hide" } } ?>
+              <resp>
+                <?options {
+                  "value": {
+                    "is": {
+                      "shouldValue": "Student assistants",
+                      "use": true,
+                      "possibleValues": ["Student assistants", "student assistants"]
+                    }
+                  },
+                  "layout": ["hidden"]
+                } ?>
+              </resp>
+              <name><?copyOptions { "fromId": "nameSimple" } ?>Eva Wahlmüller</name>
+              <name><?copyOptions { "fromId": "nameSimple" } ?>Susanna Muhr</name>
+              <name><?copyOptions { "fromId": "nameSimple" } ?>Alexandra Grohe</name>
+              <name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Klemens Wagner</name>
+            </respStmt>
+          </titleStmt>
+          <publicationStmt>
+            <?options { "title": "Publication Information", "layout": { "frame": "panelClosed" } } ?>
+            <p>
+              <?options {
+                "value": ["edit", "canBeEmpty"],
+                "tagAsTitle": false,
+                "layout": { "frame": "box" }
+              } ?>
+            </p>
+          </publicationStmt>
+          <sourceDesc>
+            <?options { "title": "Information about the source", "layout": { "frame": "panelClosed" } } ?>
+            <p>
+              <?options {
+                  "value": ["edit", "canBeEmpty"],
+                  "tagAsTitle": false,
+                  "layout": { "frame": "box" },
+                  "tag": ["possibleTag"],
+                  "editor": {
+                    "noAddButton": true
+                  }
+              } ?>
+            </p>
+            <list>
+              <?options {
+                          "tag": ["possibleTag", "shouldTag"],
+                          "layout": { "frame": "justChilds" }
+                        } ?>
+              <item>
+                <?options {  "layout": { "frame": "justChilds" } } ?>
+                <label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>Geo-data</label>
+                <ref xml:id="geo-inventory-WBOE" target="../geodata-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+              </item>
+              <item>
+                <?options {  "layout": { "frame": "justChilds" } } ?>
+                <label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>Bibliography</label>
+                <ref xml:id="bibliography-WBOE" target="../bibl-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+              </item>
+              <item>
+                <?options {  "layout": { "frame": "justChilds" } } ?>
+                <label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Slips</label>
+                <ref xml:id="slips-WBOE" target="../slips-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+              </item>
+              <item>
+                <?options {  "layout": { "frame": "justChilds" } } ?>
+                <label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Collections</label>
+                <ref xml:id="collections-WBOE" target="../collections-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+              </item>
+            </list>
+          </sourceDesc>
+          <revisionDesc>
+            <?options {
+                        "title": "Informationen über Änderungen!",
+                        "attributes": [{
+                          "status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] }
+                        }],
+                        "tag": ["possibleTag", "shouldTag"],
+                        "layout": { "bold": true, "frame": "panel" }
+                      } ?>
+            <change>
+              <?options {
+                          "title": "Änderung",
+                          "value": ["edit", "required", {"autoCreateValue": "Datensatz erstellt"}],
+                          "attributes": [{
+                            "status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] },
+                            "when": { "type": "edit", "value": { "fx": "now" } },
+                            "who": { "type": "edit", "value": "", "possibleValues": [
+                                                                                      {"title": "Alexandra N. Lenz", "value": "AL"},
+                                                                                      {"title": "Philipp Stöckle", "value": "PhS"},
+                                                                                      {"title": "Andreas Gellan", "value": "AG"},
+                                                                                      {"title": "Patrick Zeitlhuber", "value": "PZ"},
+                                                                                      {"title": "Sabine Wahl", "value": "SW"},
+                                                                                      {"title": "Sonja Schwaiger", "value": "SS"},
+                                                                                      {"title": "Jan Braun", "value": "JD"},
+                                                                                      {"title": "Angela Bergermayer", "value": "AB"},
+                                                                                      {"title": "Eva Wahlmüller", "value": "EW"}
+                                                                                    ]}
+                          }],
+                          "tag": ["multiple", "possibleTag", "shouldTag"],
+                          "layout": {
+                            "bold": true,
+                            "frame": "line",
+                            "showAttributeBefore" : {
+                              "status": { "hideTitle": true, "class": "box" },
+                              "who": { "title": "Von", "class": "text", "after": " - " }
+                            },
+                            "showAttributeAfter" : {
+                              "when": { "title": "am", "class": "text" }
+                            }
+                          },
+                          "editor": {
+                            "onlyLastElementHasAddButton": true
+                          }
+                        } ?>
+            </change>
+          </revisionDesc>
+        </fileDesc>
+      </teiHeader>
+
+    </tags>
+  </objParserSystem>
+  <objParserPreview>
+    <div class="artikel-rahmen">
+      <?content {
+                  "fromid": "main-content"
+                } ?>
+    </div>
+  </objParserPreview>
 </objParser>
