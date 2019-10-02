@@ -17,7 +17,7 @@
           <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
           <span><b>{{ objName }}</b></span>
           <span class="val" v-if="aValue"> = <i>{{ tranculatedValue }}</i></span>
-          <span class="attribut" v-for="(attrOpt, attr) in content.orgXmlObj.attributes">
+          <span class="attribut" v-for="(attrOpt, attr) in content.orgXmlObj.attributes" :key="'a' + attr">
             {{ attr + ((attrOpt) ? ':' : '') }}&nbsp;
             <span v-if="attrOpt">{{ attrOpt }}</span>
           </span>
@@ -58,7 +58,9 @@
           </div>
           <div v-if="content.childs.length > 0">
             <b>Kinder:</b><br>
-            <ViewEditorObject ref="childs" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"
+            <ViewEditorObject ref="childs" :content="aContent"
+              v-for="(aContent, aKey) in content.childs"
+              :key="aKey"
               v-if="!(aContent.errors.length === 0 && !aContent.parserObj) || Options.show.editorObjectWithoutParser"
             />
           </div>
@@ -267,8 +269,8 @@
     border-radius: 0px 10px 10px 0px;
     margin-right: -5px;
   }
-  .item > .value {
-  }
+  /* .item > .value {
+  } */
   .item > .value:before {
     content: "> ";
   }

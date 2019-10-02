@@ -22,7 +22,7 @@
         <b-card-body>
           <div v-if="parser.header">
             <ul class="mi0 pl20">
-              <li v-for="line in parser.header.split('\n')">{{ line }}</li>
+              <li v-for="(line, aKey) in parser.header.split('\n')" :key="'phl' + aKey">{{ line }}</li>
             </ul>
           </div>
           <div v-else>
@@ -78,7 +78,7 @@
           <span> (uId: {{ content.uId }}<span v-if="content.options && content.options.get('id')">, id: <b>{{ content.options.get('id') }}</b></span>)</span>
           <font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('value.possibleValues'))"/>
           <font-awesome-icon :icon="((content.options.get('value.edit.use')) ? 'edit' : ((content.options.get('value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>
-          <span class="attribut" v-for="(attrOpt, attr) in content.options.get('attributes')">
+          <span class="attribut" v-for="(attrOpt, attr) in content.options.get('attributes')" :key="'attr' + attr">
             {{ attr + ((attrOpt.value) ? ':' : '') }}&nbsp;
             <span v-if="attrOpt.value">{{ attrOpt.value }}</span>
             <font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('attributes.' + attr + '.possibleValues'))"/>
@@ -112,7 +112,11 @@
           </div>
           <div v-if="content.childs.length > 0">
             <b>Kinder:</b><br>
-            <ViewParser2 ref="childs" :parser="parser" :content="aContent" :key="aKey" v-for="(aContent, aKey) in content.childs"  v-if="!content.isCopy || isOpen"/>
+            <ViewParser2 ref="childs" :parser="parser" :content="aContent"
+              v-for="(aContent, aKey) in content.childs"
+              :key="aKey"
+              v-if="!content.isCopy || isOpen"
+            />
           </div>
         </b-card-body>
       </b-collapse>
@@ -270,8 +274,8 @@
     border-radius: 0px 10px 10px 0px;
     margin-right: -5px;
   }
-  .item > .value {
-  }
+  /* .item > .value {
+  } */
   .item > .value:before {
     content: "> ";
   }
@@ -321,6 +325,6 @@
   .fx-btn .fa-icon:last-child {
     margin-right: 0px;
   }
-  .fx-btn .fa-icon.float-right {
-  }
+  /* .fx-btn .fa-icon.float-right {
+  } */
 </style>

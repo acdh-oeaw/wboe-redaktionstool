@@ -14,7 +14,7 @@
     <template v-if="attributes">
       <div class="context-menu-subtitle"><b>Attribute:</b></div>
       <ul>
-        <li v-for="(aVal, aKey) in attributes" @mouseover="subShow = aKey" @mouseleave="subShow = null">
+        <li v-for="(aVal, aKey) in attributes" @mouseover="subShow = aKey" :key="'a' + aKey" @mouseleave="subShow = null">
           <font-awesome-icon :icon="aVal.icon" class="fa-icon" v-if="aVal.icon"/>
           <font-awesome-icon :icon="((aVal.editable) ? 'edit' : 'lock')" class="fa-icon right"/>
           <span>{{ aKey + ((aVal.value) ? ' = ' + aVal.value : '') }}</span>
@@ -24,7 +24,7 @@
                 <font-awesome-icon icon="check" class="fa-icon" v-if="!aVal.value"/>
                 Kein Wert!
               </button>
-              <button @click="selectAttr(aKey, attrKey)" class="sel-obj" v-for="(attrVal, attrKey) in aVal.options.possibleValues">
+              <button @click="selectAttr(aKey, attrKey)" class="sel-obj" v-for="(attrVal, attrKey) in aVal.options.possibleValues" :key="'a' + aKey + 'b' + attrKey">
                 <font-awesome-icon icon="check" class="fa-icon" v-if="(attrVal.value || attrVal) === aVal.value"/>
                 {{ attrVal.title || attrVal }}
               </button>
@@ -49,7 +49,7 @@
           <span>Einfügen in Tag "{{ content.orgXmlObj.name }}"</span>
           <div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="subShow === 'addInner'">
             <ul>
-              <li @click="addIn(aVal.uId); close()" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.cShow">
+              <li @click="addIn(aVal.uId); close()" v-for="(aVal, aKey) in contentAddableInnerCShow" :key="'caics' + aKey">
                 <font-awesome-icon icon="plus" class="fa-icon"/>
                 {{ aVal.title }}
               </li>
@@ -66,7 +66,7 @@
           <span>Einfügen nach Tag "{{ content.orgXmlObj.name }}"</span>
           <div class="subContext" ref="subContext" :style="'top:' + subContextMenuTopPx + 'px;'" v-if="subShow === 'addAfter'">
             <ul>
-              <li @click="addAfter(aVal.uId); close()" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.cShow">
+              <li @click="addAfter(aVal.uId); close()" v-for="(aVal, aKey) in contentAddableAfterCShow" :key="'caacs' + aKey">
                 <font-awesome-icon icon="plus" class="fa-icon"/>
                 <span class="mwellips">{{ aVal.title }}</span>
               </li>
@@ -143,6 +143,24 @@
         // ToDo: Komplexere Abfrage!
         return this.content.isMultiple && !this.content.multipleLast
       },
+      contentAddableInnerCShow () {
+        let aOut = []
+        this.content.addableInner.forEach((aObj) => {
+          if (aObj.cShow) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      },
+      contentAddableAfterCShow () {
+        let aOut = []
+        this.content.addableAfter.forEach((aObj) => {
+          if (aObj.cShow) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      }
     },
     watch: {
       subShow (nVal, oVal) {

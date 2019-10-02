@@ -31,7 +31,11 @@
     <EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 
     <template slot="childs" v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
-      <ViewEditor ref="childs" :content="aContent" @setTipLine="setTipLine" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+      <ViewEditor ref="childs" :content="aContent" @setTipLine="setTipLine"
+        v-for="(aContent, aKey) in content.childs"
+        :key="aContent.uId + '-' + aKey"
+        v-if="showObj(aContent)"
+      />
     </template>
 
     <template  v-if="content.parserObj.options && content.parserObj.options.get('layout.showAttributeAfter')">

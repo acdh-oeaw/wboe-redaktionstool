@@ -1,7 +1,7 @@
 <template>
   <span v-if="!refreshSelect" :id="'gs' + content.uId">
     <span class="geoselect edit" v-if="edit">
-      <span class="gsel mir10" v-for="(place, pKey) in placesEdit">
+      <span class="gsel mir10" v-for="(place, pKey) in placesEdit" :key="'gselp' + pKey">
         <span class="field-name">
           {{ place.fieldName }}
           <span class="float-right" v-if="!place.option.possible">!</span>
@@ -15,12 +15,12 @@
           <input class="dropdown-filter" type="text" ref="filter" v-model="filter" v-if="filter"/>
           <div :class="{ 'dropdown-scrollarea': true, 'filter': filter }">
             <b-dropdown-item @click="setPlace(place, null)" :class="{'active': (!place.selectedPlace), 'not-possible': !(!place.option || place.option.possible)}">Keiner</b-dropdown-item>
-            <b-dropdown-item :key="pKey + '-' + apKey + '-' + aPlace.sigle"
-                              @click="setPlace(place, aPlace.sigle)"
-                              :class="{'active': (place.selectedPlace === aPlace.sigle)}"
-                              v-if="(Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace))
-                                    && (!filter || aPlace.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)"
-                              v-for="(aPlace, apKey) in place.places">
+            <b-dropdown-item @click="setPlace(place, aPlace.sigle)" :class="{'active': (place.selectedPlace === aPlace.sigle)}"
+              v-for="(aPlace, apKey) in place.places"
+              :key="pKey + '-' + apKey + '-' + aPlace.sigle"
+              v-if="(Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace))
+                    && (!filter || aPlace.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)"
+            >
               {{ aPlace.name }}
             </b-dropdown-item>
           </div>
@@ -29,16 +29,16 @@
       <button @click="saveValue" class="btn-none fx-btn"><font-awesome-icon icon="check" class="text-success"/></button>
       <button @click="chancelValue" class="btn-none fx-btn"><font-awesome-icon icon="times" class="text-danger"/></button>
       <!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
-      <span :id="'eo' + child.uId" v-for="child in content.childs">
+      <span :id="'eo' + child.uId" v-for="child in content.childs" :key="'eo' + child.uId">
         <span class="error-place" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0">{{ child.orgXmlObj.getValueByOption(child.parserObj.options.get('value'), false) }}&nbsp;</span>
         <font-awesome-icon icon="exclamation-triangle" class="text-warning" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0"/>
       </span>
       <font-awesome-icon icon="map-marked"/>
     </span>
     <button @click="edit = true" class="btn-none geoselect view" v-else>
-      <span v-for="(place, pKey) in placesView()"><template v-if="pKey > 0">{{ content.fxData.join }} </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
+      <span v-for="(place, pKey) in placesView()" :key="'pl' + pKey"><template v-if="pKey > 0">{{ content.fxData.join }} </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
       <!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
-      <span :id="'eo' + child.uId" v-for="child in content.childs">
+      <span :id="'eo' + child.uId" v-for="child in content.childs" :key="'eo' + child.uId">
         <span class="error-place" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0">{{ child.orgXmlObj.getValueByOption(child.parserObj.options.get('value'), false) }}&nbsp;</span>
         <font-awesome-icon icon="exclamation-triangle" class="text-warning" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0"/>
       </span>

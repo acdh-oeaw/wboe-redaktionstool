@@ -22,7 +22,11 @@
       <span :class="{'enumerate': true, 'enumeraterom': content.parserObj.options.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
       <!-- Kinder -->
       <template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && childlessFxFunctions.indexOf(content.parserObj.options.get('editor.fxFunction.name')) > -1)">
-        <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+        <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
+          v-for="(aContent, aKey) in content.childs"
+          :key="aContent.uId + '-' + aKey"
+          v-if="showObj(aContent)"
+        />
       </template>
     </div>
     <!-- normal -->
@@ -47,7 +51,11 @@
       </div>
       <!-- Kinder -->
       <template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && childlessFxFunctions.indexOf(content.parserObj.options.get('editor.fxFunction.name')) > -1)">
-        <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors" :key="aContent.uId + '-' + aKey" v-for="(aContent, aKey) in content.childs" v-if="showObj(aContent)"/>
+        <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
+          v-for="(aContent, aKey) in content.childs"
+          :key="aContent.uId + '-' + aKey"
+          v-if="showObj(aContent)"
+        />
       </template>
     </div>
 

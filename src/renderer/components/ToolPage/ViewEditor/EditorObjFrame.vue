@@ -40,7 +40,11 @@
         <b-list-group @contextmenu.prevent="contextMenue" flush v-if="content.addableInner.length > 0">
           <b-list-group-item style="background: #eee;">
             <div style="margin: -8px -9px;">
-              <b-button @click="addTag(aVal.uId, 'In')" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableInner" v-if="aVal.bShow">
+              <b-button @click="addTag(aVal.uId, 'In')" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5"
+                v-for="(aVal, aKey) in content.addableInner"
+                :key="'bi' + aKey"
+                v-if="aVal.bShow"
+              >
                 <font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
               </b-button>
             </div>
@@ -55,7 +59,11 @@
         </b-card-body>
       </b-collapse>
       <div @contextmenu.prevent="contextMenue" slot="footer" style="margin: -8px -9px;" v-if="content.addableAfter.length > 0">
-        <b-button @click="addTag(aVal.uId, 'After')" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5" :key="aKey" v-for="(aVal, aKey) in content.addableAfter" v-if="aVal.bShow">
+        <b-button @click="addTag(aVal.uId, 'After')" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5"
+          v-for="(aVal, aKey) in content.addableAfter"
+          :key="'ba' + aKey"
+          v-if="aVal.bShow"
+        >
           <font-awesome-icon icon="plus" class="fa-icon"/>
           {{ aVal.title }}
         </b-button>
@@ -66,7 +74,7 @@
       <div @contextmenu.prevent="contextMenue" class="context rel">
         <span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
         <b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
-        <slot/>		<!-- Inhalt -->
+        <slot />		<!-- Inhalt -->
         <span :class="{'comment-sym': true, 'comment-highlight': Options.show.commentsHighlight}" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
       </div>
       <div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"

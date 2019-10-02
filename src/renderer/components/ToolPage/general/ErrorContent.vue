@@ -1,6 +1,6 @@
 <template>
   <ul v-if="base || Array.isArray(aError)">
-    <li v-for="(errorObj, errKey) in aError">
+    <li v-for="(errorObj, errKey) in aError" :key="'el' + errKey">
       <b v-if="fxUseErrKey(errKey)">{{ fxErrKey(errKey) }}</b><ErrorContent :error="errorObj" :noObj="fxUseErrKey(errKey)" @goto="goto"/>
     </li>
   </ul>
