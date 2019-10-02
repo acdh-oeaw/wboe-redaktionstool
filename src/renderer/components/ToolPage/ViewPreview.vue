@@ -10,21 +10,26 @@
   </div>
 
   <span v-else-if="!start && preview && object">
-    <template v-for="aPrev in preview">
-      <VariableTag :tag="aPrev.name" :attributes="aPrev.attributes" v-if="aPrev.type === 'HTML'">
-        <template v-for="aContent in aPrev.content">
+    <template v-for="(aPrev, aPrevKey) in preview">
+      <VariableTag :tag="aPrev.name" :attributes="aPrev.attributes" :key="'vt' + aPrevKey" v-if="aPrev.type === 'HTML'">
+        <template v-for="(aContent, aConKey) in aPrev.content">
           <template v-if="typeof aContent === 'string'">
-            <span v-html="aContent" />
+            <span v-html="aContent" :key="'sc' + aPrevKey + '-' + aConKey" />
           </template>
-          <ViewPreview :object="object" :preview="[aContent]" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
+          <ViewPreview :object="object" :preview="[aContent]" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" :key="'vp' + aPrevKey + '-' + aConKey" v-else/>
         </template>
       </VariableTag>
       <template v-else-if="aPrev.type === 'PIN'">
-        <PreviewContent :content="object.getEditorObjById(aPrev.options.fromid)" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-if="aPrev.name === 'content' && aPrev.options && aPrev.options.fromid"/>
-        <div v-else><b>Fehler bei "PIN": {{ aPrev.name }}</b></div>
+        <PreviewContent :content="object.getEditorObjById(aPrev.options.fromid)"
+          :showAnchors="showAnchors" @setAnchor="setAnchor"
+          :selectableAnchors="selectableAnchors"
+          :key="'pc' + aPrevKey"
+          v-if="aPrev.name === 'content' && aPrev.options && aPrev.options.fromid"
+        />
+        <div :key="'fbPIN' + aPrevKey" v-else><b>Fehler bei "PIN": {{ aPrev.name }}</b></div>
       </template>
       <template v-else>
-        <b>UNBEKANNTER TYPE ({{ aPrev.type }})</b>
+        <b :key="'ut' + aPrevKey">UNBEKANNTER TYPE ({{ aPrev.type }})</b>
       </template>
     </template>
   </span>

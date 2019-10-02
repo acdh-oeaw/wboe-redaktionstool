@@ -16,11 +16,10 @@
                 </div>
               </div>
               <button @click="selFile = ''" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((!selFile) ? 'success' : 'primary')">{{ cFile }}<span class="float-right"><b>(Diese Datei)</b></span></button>
-              <button @click="selFile = aFile.file"
-                              :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((selFile === aFile.file) ? 'success' : ((aFile.loaded) ? 'primary' : 'secondary'))"
-                              v-if="aFile.show || selFile === aFile.file"
-                              :key="'fl' + aKey"
-                              v-for="(aFile, aKey) in filelist">
+              <button @click="selFile = aFile.file" :class="'btn btn-sm w-100 mb-1 text-left btn-' + ((selFile === aFile.file) ? 'success' : ((aFile.loaded) ? 'primary' : 'secondary'))"
+                :key="'fl' + aKey"
+                v-for="(aFile, aKey) in filelistShownOrActive"
+              >
                 {{ aFile.file }}
                 <span class="float-right">
                   {{
@@ -137,6 +136,15 @@
     computed: {
       ...mapState(['Parser']),
       ...mapState(['Files']),
+      filelistShownOrActive () {
+        let aOut = []
+        this.filelist.forEach((aObj) => {
+          if (aObj.show || this.selFile === aObj.file) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      }
     },
     watch: {
       'search' (nVal) {

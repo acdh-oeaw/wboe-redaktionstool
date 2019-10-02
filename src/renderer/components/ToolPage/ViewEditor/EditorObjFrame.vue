@@ -41,9 +41,8 @@
           <b-list-group-item style="background: #eee;">
             <div style="margin: -8px -9px;">
               <b-button @click="addTag(aVal.uId, 'In')" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5"
-                v-for="(aVal, aKey) in content.addableInner"
+                v-for="(aVal, aKey) in contentAddableInnerBShow"
                 :key="'bi' + aKey"
-                v-if="aVal.bShow"
               >
                 <font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
               </b-button>
@@ -60,9 +59,8 @@
       </b-collapse>
       <div @contextmenu.prevent="contextMenue" slot="footer" style="margin: -8px -9px;" v-if="content.addableAfter.length > 0">
         <b-button @click="addTag(aVal.uId, 'After')" size="sm" :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" class="mir5"
-          v-for="(aVal, aKey) in content.addableAfter"
+          v-for="(aVal, aKey) in contentAddableAfterBShow"
           :key="'ba' + aKey"
-          v-if="aVal.bShow"
         >
           <font-awesome-icon icon="plus" class="fa-icon"/>
           {{ aVal.title }}
@@ -261,6 +259,24 @@
             return this.content.multipleNr + 1 + '. '
           }
         }
+      },
+      contentAddableInnerBShow () {
+        let aOut = []
+        this.content.addableInner.forEach((aObj) => {
+          if (aObj.bShow) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      },
+      contentAddableAfterBShow () {
+        let aOut = []
+        this.content.addableAfter.forEach((aObj) => {
+          if (aObj.bShow) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
       }
     },
     watch: {

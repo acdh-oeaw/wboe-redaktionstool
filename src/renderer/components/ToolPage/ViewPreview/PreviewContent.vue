@@ -23,9 +23,8 @@
       <!-- Kinder -->
       <template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && childlessFxFunctions.indexOf(content.parserObj.options.get('editor.fxFunction.name')) > -1)">
         <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
-          v-for="(aContent, aKey) in content.childs"
+          v-for="(aContent, aKey) in contentChildsShown"
           :key="aContent.uId + '-' + aKey"
-          v-if="showObj(aContent)"
         />
       </template>
     </div>
@@ -52,9 +51,8 @@
       <!-- Kinder -->
       <template v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && childlessFxFunctions.indexOf(content.parserObj.options.get('editor.fxFunction.name')) > -1)">
         <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
-          v-for="(aContent, aKey) in content.childs"
+          v-for="(aContent, aKey) in contentChildsShown"
           :key="aContent.uId + '-' + aKey"
-          v-if="showObj(aContent)"
         />
       </template>
     </div>
@@ -179,6 +177,15 @@
           }
         }
       },
+      contentChildsShown () {
+        let aOut = []
+        this.content.childs.forEach((aObj) => {
+          if (this.showObj(aObj)) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      }
     },
     watch: {
     },

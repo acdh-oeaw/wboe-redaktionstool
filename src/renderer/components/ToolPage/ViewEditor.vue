@@ -32,9 +32,8 @@
 
     <template slot="childs" v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
       <ViewEditor ref="childs" :content="aContent" @setTipLine="setTipLine"
-        v-for="(aContent, aKey) in content.childs"
+        v-for="(aContent, aKey) in contentChildsShown"
         :key="aContent.uId + '-' + aKey"
-        v-if="showObj(aContent)"
       />
     </template>
 
@@ -84,6 +83,15 @@
           return 'editable'
         }
         return 'none'
+      },
+      contentChildsShown () {
+        let aOut = []
+        this.content.childs.forEach((aObj) => {
+          if (this.showObj(aObj)) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
       }
     },
     watch: {

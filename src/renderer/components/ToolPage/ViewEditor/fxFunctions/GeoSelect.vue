@@ -15,14 +15,15 @@
           <input class="dropdown-filter" type="text" ref="filter" v-model="filter" v-if="filter"/>
           <div :class="{ 'dropdown-scrollarea': true, 'filter': filter }">
             <b-dropdown-item @click="setPlace(place, null)" :class="{'active': (!place.selectedPlace), 'not-possible': !(!place.option || place.option.possible)}">Keiner</b-dropdown-item>
-            <b-dropdown-item @click="setPlace(place, aPlace.sigle)" :class="{'active': (place.selectedPlace === aPlace.sigle)}"
-              v-for="(aPlace, apKey) in place.places"
-              :key="pKey + '-' + apKey + '-' + aPlace.sigle"
-              v-if="(Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace))
-                    && (!filter || aPlace.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)"
-            >
-              {{ aPlace.name }}
-            </b-dropdown-item>
+            <template v-for="(aPlace, apKey) in place.places">
+              <b-dropdown-item @click="setPlace(place, aPlace.sigle)" :class="{'active': (place.selectedPlace === aPlace.sigle)}"
+                :key="pKey + '-' + apKey + '-' + aPlace.sigle"
+                v-if="(Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace))
+                      && (!filter || aPlace.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)"
+              >
+                {{ aPlace.name }}
+              </b-dropdown-item>
+            </template>
           </div>
         </b-dropdown>
       </span>

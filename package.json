@@ -1,7 +1,7 @@
 {
-  "name": "Redaktionstool",
-  "version": "0.5.00",
-  "author": "",
+  "name": "redaktionstool",
+  "version": "0.5.01",
+  "author": "HCB",
   "description": "Redaktionstool",
   "license": null,
   "main": "./dist/electron/main.js",
@@ -23,7 +23,7 @@
   },
   "build": {
     "productName": "redaktionstool-electron-vue",
-    "appId": "org.simulatedgreg.electron-vue",
+    "appId": "org.redaktionstool.electron-vue",
     "directories": {
       "output": "build"
     },

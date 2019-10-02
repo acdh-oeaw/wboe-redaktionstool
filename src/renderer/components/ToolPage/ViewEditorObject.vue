@@ -59,9 +59,8 @@
           <div v-if="content.childs.length > 0">
             <b>Kinder:</b><br>
             <ViewEditorObject ref="childs" :content="aContent"
-              v-for="(aContent, aKey) in content.childs"
-              :key="aKey"
-              v-if="!(aContent.errors.length === 0 && !aContent.parserObj) || Options.show.editorObjectWithoutParser"
+              v-for="(aContent, aKey) in contentChildsOk"
+              :key="'veo' + aKey + '-' + aContent.uId"
             />
           </div>
         </b-card-body>
@@ -158,6 +157,15 @@
         }
         return '???'
       },
+      contentChildsOk () {
+        let aOut = []
+        this.content.childs.forEach((aObj) => {
+          if (!(aObj.errors.length === 0 && !aObj.parserObj) || this.Options.show.editorObjectWithoutParser) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      }
     },
     methods: {
       showChilds (state) {

@@ -112,11 +112,12 @@
           </div>
           <div v-if="content.childs.length > 0">
             <b>Kinder:</b><br>
-            <ViewParser2 ref="childs" :parser="parser" :content="aContent"
-              v-for="(aContent, aKey) in content.childs"
-              :key="aKey"
-              v-if="!content.isCopy || isOpen"
-            />
+            <template v-if="!content.isCopy || isOpen">
+              <ViewParser2 ref="childs" :parser="parser" :content="aContent"
+                v-for="(aContent, aKey) in content.childs"
+                :key="aKey"
+              />
+            </template>
           </div>
         </b-card-body>
       </b-collapse>

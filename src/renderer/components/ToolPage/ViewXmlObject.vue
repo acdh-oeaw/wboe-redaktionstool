@@ -14,10 +14,7 @@
     <b-card :header="content.name" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
       <div slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
-          <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
-          <font-awesome-icon icon="font" class="fa-icon icmd" v-if="content.type === 'TEXT'"/>
-          <font-awesome-icon icon="comment" class="fa-icon icmd" v-if="content.type === 'COMMENT'"/>
-          <font-awesome-icon icon="project-diagram" class="fa-icon icmd" v-if="content.type === 'PROCESSING_INSTRUCTION'"/>
+          <font-awesome-icon :icon="contentIcon" class="fa-icon icmd" v-if="contentIcon"/>
           <span><b>{{ content.name }}</b></span>
           <span class="val" v-if="content.value"> = <i>{{ tranculatedValue }}</i></span>
           <span class="attribut" v-for="(attrOpt, attr) in content.attributes" :key="'a-' + attr">
@@ -52,9 +49,7 @@
           </div>
           <div v-if="content.childs.length > 0">
             <b>Kinder:</b><br>
-            <ViewXmlObject ref="childs" :content="aContent" :key="'vxo' + aKey" v-for="(aContent, aKey) in content.childs"
-              v-if="!(aContent.type === 'UNKNOWN' || aContent.type === 'COMMENT' || aContent.type === 'PROCESSING_INSTRUCTION') || Options.show.xmlObjectUselessTypes"
-            />
+            <ViewXmlObject ref="childs" :content="aContent" :key="'vxo' + aKey" v-for="(aContent, aKey) in contentChildsUseableTypes" />
           </div>
         </b-card-body>
       </b-collapse>
@@ -114,6 +109,23 @@
           return ''
         }
       },
+      contentIcon () {
+        return {
+          'UNKNOWN': 'question-circle',
+          'TEXT': 'font',
+          'COMMENT': 'comment',
+          'PROCESSING_INSTRUCTION': 'project-diagram'
+        }[this.content.type]
+      },
+      contentChildsUseableTypes () {
+        let aOut = []
+        this.content.childs.forEach((aObj) => {
+          if (!(aObj.type === 'UNKNOWN' || aObj.type === 'COMMENT' || aObj.type === 'PROCESSING_INSTRUCTION') || this.Options.show.xmlObjectUselessTypes) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      }
     },
     methods: {
       showChilds (state) {
