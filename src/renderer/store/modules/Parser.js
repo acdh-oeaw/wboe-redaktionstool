@@ -21,7 +21,8 @@ const mutations = {
 
 const actions = {
 	LOAD_PARSER_FILE ({ commit, dispatch, rootState }) {		// Aktuellen Parser aus Projektpfad laden bzw. aus "__static"
-		var aFile = fPath.join(rootState.Options.projectPath, '/parser.xml')
+		var aPath = rootState.Options.projectPath
+		var aFile = fPath.join(aPath, '/parser.xml')
 		let fileContent = null
 		var aParser = null
 		try {
@@ -30,9 +31,13 @@ const actions = {
 			try {
 				aFile = fPath.join(__static, '/parser.xml')
 				fileContent = fs.readFileSync(aFile, 'utf8')
+				aPath = __static
 			} catch (e) {
 				console.log(e)
 			}
+		}
+		if (fileContent) {
+			fileContent = local.loadImportFiles(fileContent, aPath)[1]
 		}
 		if (fileContent) {
 			if (fileContent === state.content && aFile === state.file) {
@@ -85,6 +90,37 @@ const actions = {
 				alert('Fehler beim auswählen des Verzeichnisses!\n\n' + JSON.stringify(folderState), 'Fehler!')
 			}
 		}
+	}
+}
+
+const local = {
+	loadImportFiles (fileContent, aPath) {
+		let imported = false
+		fileContent = fileContent.replace(/<\?import ".+" \?>/gi, function (imp) {
+			let impFile = imp.match(/<\?import "(.+\.xml)" \?>/)[1]
+			if (impFile) {
+				let nFileContent = null
+				try {
+					impFile = fPath.join(aPath, '/' + impFile)
+					nFileContent = fs.readFileSync(impFile, 'utf8')
+				} catch (e) {
+					console.log(e)
+				}
+				if (nFileContent) {
+					imp = nFileContent.replace(/<\?xml.+\?>/, '')
+					imported = true
+				} else {
+					console.log('Fehler!', 'Konnte Datei "' + impFile + '" nicht laden ...')
+				}
+			} else {
+				console.log('Fehler!', 'Keine Datei gefunden!', imp, impFile)
+			}
+			return imp
+		})
+		if (imported) {
+			fileContent = local.loadImportFiles(fileContent, aPath)[1]
+		}
+		return [imported, fileContent]
 	}
 }
 
