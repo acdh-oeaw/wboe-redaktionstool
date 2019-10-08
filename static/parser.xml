@@ -3,7 +3,7 @@
   <xmlParserHeader>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?&gt;
-    &lt;?xml-model href="../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?&gt;
+    &lt;?xml-model href="../../803_RNG-schematron/WBOE-ODD.rnc" type="application/relax-ng-compact-syntax"?&gt;
   </xmlParserHeader>
   <objParserContent>
     <TEI xmlns="http://www.tei-c.org/ns/1.0">
@@ -1205,15 +1205,17 @@
               </item>
             </list>
           </sourceDesc>
-          <revisionDesc>
-            <?options {
-                        "title": "Informationen über Änderungen!",
-                        "attributes": [{
-                          "status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] }
-                        }],
-                        "tag": ["possibleTag", "shouldTag"],
-                        "layout": { "bold": true, "frame": "panel" }
-                      } ?>
+        </fileDesc>
+        <revisionDesc>
+          <?options {
+                      "title": "Informationen über Änderungen!",
+                      "attributes": [{
+                        "status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"], "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true} }
+                      }],
+                      "tag": ["possibleTag", "shouldTag"],
+                      "layout": { "bold": true, "frame": "panel" }
+                    } ?>
+          <listChange>
             <change>
               <?options {
                           "title": "Änderung",
@@ -1250,8 +1252,8 @@
                           }
                         } ?>
             </change>
-          </revisionDesc>
-        </fileDesc>
+          </listChange>
+        </revisionDesc>
       </teiHeader>
 
     </tags>
