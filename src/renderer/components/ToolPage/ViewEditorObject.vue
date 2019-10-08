@@ -15,7 +15,7 @@
       <div slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
           <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
-          <span><b>{{ objName }}</b></span>
+          <span><b>{{ objName }}</b>&nbsp;</span>
           <span class="val" v-if="aValue"> = <i>{{ tranculatedValue }}</i></span>
           <span class="attribut" v-for="(attrOpt, attr) in content.orgXmlObj.attributes" :key="'a' + attr">
             {{ attr + ((attrOpt) ? ':' : '') }}&nbsp;

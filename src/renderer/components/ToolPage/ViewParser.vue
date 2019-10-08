@@ -72,8 +72,8 @@
           <font-awesome-icon icon="bars" class="fa-icon icmd" v-if="content.options.get('tag.multiple.use')"/>
           <font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="content.options.get('tag.anywhere.use')"/>
           <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.options.get('tag.possibleTag.use')"/>
-          <span v-if="content.options.get('title.use')"><b>{{ content.options.get('title.value') }}</b> ({{ content.name }})</span>
-          <span v-else><b>{{ content.name }}</b></span>
+          <span v-if="content.options.get('title.use')"><b>{{ content.options.get('title.value') }}</b> ({{ content.name }})&nbsp;</span>
+          <span v-else><b>{{ content.name }}</b>&nbsp;</span>
           <span class="val" v-if="content.options.get('value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
           <span> (uId: {{ content.uId }}<span v-if="content.options && content.options.get('id')">, id: <b>{{ content.options.get('id') }}</b></span>)</span>
           <font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('value.possibleValues'))"/>

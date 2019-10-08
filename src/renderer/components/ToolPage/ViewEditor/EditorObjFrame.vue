@@ -32,7 +32,7 @@
       <div @contextmenu.prevent="contextMenue" slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
           <span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
-          <span><b>{{ title }}</b></span>
+          <span><b>{{ title }}</b>&nbsp;</span>
           <font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
         </button>
       </div>
