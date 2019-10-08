@@ -228,6 +228,55 @@
               <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}] } } ?>
             </form>
 
+            <note type="kommentar">
+              <?options {
+                          "title": "Kommentar",
+                          "tagAsTitle": false,
+                          "tag": ["possibleTag"],
+                          "layout": {
+                            "frame": "inline"
+                          },
+                          "editor": {
+                            "addTitle": "Kommentar hinzufügen"
+                          }
+                        } ?>
+              <?copy { "fromId": "text", "options": { "layout": { "frame": "inline" } } } ?>
+              <c>
+                <?options {
+                            "value": ["edit", "required"],
+                            "tag": ["multiple", "possibleTag", "anywhere"],
+                            "layout": {
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "italic": true
+                            }
+                          } ?>
+              </c>
+              <xr>
+                <?options {
+                            "tag": ["multiple", "possibleTag", "anywhere"],
+                            "layout": {
+                              "frame": "inline",
+                              "hideTitle": true
+                            }
+                          } ?>
+                <ref>
+                  <?options {
+                            "value": ["edit", "required"],
+                            "tag": {"possibleTag": {"use": true}},
+                            "shouldTag": {"use": true},
+                            "layout": {
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "italic": true,
+                              "before": "(",
+                              "after": ")"
+                            }
+                          } ?>
+                </ref>
+              </xr>
+            </note>
+
             <etym>
               <?options {
                           "title": "Etymologie",
