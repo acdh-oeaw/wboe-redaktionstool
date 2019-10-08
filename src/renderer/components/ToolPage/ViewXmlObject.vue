@@ -16,7 +16,7 @@
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
           <font-awesome-icon :icon="contentIcon" class="fa-icon icmd" v-if="contentIcon"/>
           <span><b>{{ content.name }}</b>&nbsp;</span>
-          <span class="val" v-if="content.value"> = <i>{{ tranculatedValue }}</i></span>
+          <span class="val" v-if="content.value"> = <i>{{ tranculatedValue }}</i>&nbsp;</span>
           <span class="attribut" v-for="(attrOpt, attr) in content.attributes" :key="'a-' + attr">
             {{ attr + ((attrOpt) ? ':' : '') }}&nbsp;
             <span v-if="attrOpt">{{ attrOpt }}</span>

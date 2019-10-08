@@ -240,7 +240,7 @@
                             "addTitle": "Kommentar hinzufügen"
                           }
                         } ?>
-              <?copy { "fromId": "text", "options": { "layout": { "frame": "inline" } } } ?>
+              <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true } } } ?>
               <c>
                 <?options {
                             "value": ["edit", "required"],
@@ -730,14 +730,19 @@
         <?options {
                     "id": "sense",
                     "title": "Bedeutung",
-                    "attributes": [{"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}],
+                    "attributes": [
+                      {"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}},
+                      {"n": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}}}
+                    ],
                     "tag": ["multiple"],
                     "layout": {
                       "frame": "line",
                       "hideTitle": true,
                       "multiple": {
-                        "use": true,
-                        "enumerateFX": true
+                        "use": true
+                      },
+                      "showAttributeBefore" : {
+                        "n": { }
                       }
                     },
                     "editor": {

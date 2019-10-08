@@ -74,7 +74,7 @@
           <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.options.get('tag.possibleTag.use')"/>
           <span v-if="content.options.get('title.use')"><b>{{ content.options.get('title.value') }}</b> ({{ content.name }})&nbsp;</span>
           <span v-else><b>{{ content.name }}</b>&nbsp;</span>
-          <span class="val" v-if="content.options.get('value.is.use')"> = <i>{{ tranculatedValue }}</i></span>
+          <span class="val" v-if="content.options.get('value.is.use')"> = <i>{{ tranculatedValue }}</i>&nbsp;</span>
           <span> (uId: {{ content.uId }}<span v-if="content.options && content.options.get('id')">, id: <b>{{ content.options.get('id') }}</b></span>)</span>
           <font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('value.possibleValues'))"/>
           <font-awesome-icon :icon="((content.options.get('value.edit.use')) ? 'edit' : ((content.options.get('value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>

@@ -16,12 +16,12 @@
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
           <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>
           <span><b>{{ objName }}</b>&nbsp;</span>
-          <span class="val" v-if="aValue"> = <i>{{ tranculatedValue }}</i></span>
+          <span class="val" v-if="aValue"> = <i>{{ tranculatedValue }}</i>&nbsp;</span>
           <span class="attribut" v-for="(attrOpt, attr) in content.orgXmlObj.attributes" :key="'a' + attr">
             {{ attr + ((attrOpt) ? ':' : '') }}&nbsp;
             <span v-if="attrOpt">{{ attrOpt }}</span>
           </span>
-          <span>count: {{ content.count }}, countParser: {{  content.countParser }}<b v-if="content.isMultiple">, multipleNr: {{ content.multipleNr }}, multipleLast: {{ content.multipleLast }}</b><b v-if="content.isParserCopy">, parserCopyDeep: {{ content.parserCopyDeep }}</b></span>
+          <span>&nbsp;count: {{ content.count }}, countParser: {{  content.countParser }}<b v-if="content.isMultiple">, multipleNr: {{ content.multipleNr }}, multipleLast: {{ content.multipleLast }}</b><b v-if="content.isParserCopy">, parserCopyDeep: {{ content.parserCopyDeep }}</b></span>
           <font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
           <font-awesome-icon icon="exclamation-triangle" class="float-right fa-icon mir5" style="color: #d33;" v-if="length(content.errors) > 0"/>
         </button>
