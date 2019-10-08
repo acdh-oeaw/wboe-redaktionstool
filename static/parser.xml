@@ -361,8 +361,8 @@
                           "attributes": [
                             {"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}
                           ],
-                          "hideTitle": true,
                           "layout": {
+                            "hideTitle": true,
                             "frame": "line",
                             "header": "Bedeutung",
                             "spaceBefore": 10,
@@ -370,8 +370,8 @@
                           }
                         } ?>
                 <?copy { "fromId": "sense", "options": {
-                                                        "hideTitle": true,
                                                         "layout": {
+                                                          "hideTitle": true,
                                                           "frame": "line",
                                                           "multiple": {
                                                             "use": true
@@ -1110,12 +1110,6 @@
         <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "MWE"}}] } } ?>
       </re>
-
-
-
-
-
-      
 
     </tags>
   </objParserSystem>
