@@ -354,26 +354,39 @@
               <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
               <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
             </etym>
-            <?copy { "fromId": "sense", "options": {
-                                                    "hideTitle": true,
-                                                    "layout": {
-                                                      "frame": "line",
-                                                      "multiple": {
-                                                        "use": true,
-                                                        "header": "Bedeutung",
-                                                        "spaceBefore": 10,
-                                                        "spaceAfter": 5
-                                                      },
-                                                      "spaceAfter": 15
-                                                    },
-                                                    "previewLayout": {
-                                                      "spaceAfter": 0
-                                                    },
-                                                    "editor": {
-                                                      "onlyLastElementHasAddButton": true,
-                                                      "addTitle": "Bedeutung 1"
-                                                    }
-                                                  } } ?>
+            <sense>
+              <?options {
+                          "id": "senseMain",
+                          "title": "Bedeutung",
+                          "attributes": [
+                            {"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}
+                          ],
+                          "hideTitle": true,
+                          "layout": {
+                            "frame": "line",
+                            "header": "Bedeutung",
+                            "spaceBefore": 10,
+                            "spaceAfter": 5
+                          }
+                        } ?>
+                <?copy { "fromId": "sense", "options": {
+                                                        "hideTitle": true,
+                                                        "layout": {
+                                                          "frame": "line",
+                                                          "multiple": {
+                                                            "use": true
+                                                          },
+                                                          "spaceAfter": 15
+                                                        },
+                                                        "previewLayout": {
+                                                          "spaceAfter": 0
+                                                        },
+                                                        "editor": {
+                                                          "onlyLastElementHasAddButton": true,
+                                                          "addTitle": "Bedeutung 1"
+                                                        }
+                                                      } } ?>
+            </sense>
             <?copy { "fromId": "re-compound", "options": { "tag": ["possibleTag"] } } ?>
             <?copy { "fromId": "re-MWE", "options": { "tag": ["possibleTag"] } } ?>
           </entry>
@@ -742,7 +755,7 @@
                         "use": true
                       },
                       "showAttributeBefore" : {
-                        "n": { }
+                        "n": { "hideTitle": true, "class": "text" }
                       }
                     },
                     "editor": {
