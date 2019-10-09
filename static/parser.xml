@@ -856,10 +856,10 @@
               "hideTitle": true,
               "showAttributeBefore" : {
                 "target": { }
-              },
-              "editor": {
-                "parentInContext": true
               }
+            },
+            "editor": {
+              "parentInContext": true
             }
           } ?>
         </oRef>
