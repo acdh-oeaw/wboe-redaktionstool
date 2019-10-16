@@ -212,6 +212,7 @@
                             }
                           } ?>
                </pron>
+               <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
                <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
                <?copy { "fromId": "usg-geo", "options": {
                                                           "tag": ["possibleTag", "multiple"],
@@ -762,6 +763,7 @@
                       "draggAble": true
                     }
                   } ?>
+        <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag", "anywhere"], "editor": { "parentInContext": true } } } ?>
         <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
         <?copy { "fromId": "ref-form" } ?>
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
