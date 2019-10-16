@@ -1058,13 +1058,23 @@
                                                 } } ?>
           <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
         </form>
-        <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+        <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag", "anywhere"], "editor": { "parentInContext": true } } } ?>
+        <sense>
+          <?options {
+                    "tag": ["possibleTag"],
+                    "attributes": [
+                      {"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}
+                    ],
+                    "layout": { "frame": "inline" }
+                  } ?>
+          <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+        </sense>
         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "wortbildung"}}] } } ?>
       </re>
 
-      <re>
+      <re type="redenwendung">
         <?options {
                     "title": "Redewendungen",
                     "id": "re-MWE",
@@ -1085,6 +1095,7 @@
                       "addTitle": "Redewendung"
                     }
                   } ?>
+        <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <form subtype="MWE">
           <?options {
                       "title": "Form Lemma/Variable",
@@ -1111,6 +1122,7 @@
         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "MWE"}}] } } ?>
+        <?copy { "fromId": "re-MWE", "options": { "title": "Unter Redewendung",  "tag": ["possibleTag", "multiple"], "editor": {"onlyLastElementHasAddButton": true, "addTitle": "Unter Redewendung"} } } ?>
       </re>
 
     </tags>
