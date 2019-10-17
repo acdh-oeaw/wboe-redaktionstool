@@ -318,4 +318,9 @@
 	.modal-xl > div {
 		max-width: 1200px !important;
 	}
+	.btn-grey {
+    color: #000;
+    background-color: #eee;
+    border-color: #eee;
+	}
 </style>
