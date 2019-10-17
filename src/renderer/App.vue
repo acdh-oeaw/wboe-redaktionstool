@@ -7,21 +7,20 @@
 						<span class="navbar-brand"><img alt="WBÖ" title="WBÖ" width="100" height="55" src="~@/assets//wboelogo100.png"> Redaktionstool</span>
 					 </b-navbar-brand>
 					<b-collapse is-nav id="nav_collapse">
-							<b-navbar-nav class="ml-auto">
-								<b-nav-item to="/home" :disabled="Files.changed">Home</b-nav-item>
-								<b-nav-item to="/tool" :disabled="!Files.file">Tool</b-nav-item>
-								<b-nav-item-dropdown right>
-									<template slot="button-content"><font-awesome-icon icon="address-card"/></template>
-									<div class="d-flex bd-highlight">
-										<label @dblclick="zoom = 1; setZoom();" title="Doppelklick für 100%"  v-b-tooltip.hover for="options-zoom" class="px-2 py-1 m-0"><font-awesome-icon icon="search"/></label>
-										<b-form-input v-model="zoom" @change="setZoom" id="options-zoom" type="range" class="p-0 mx-2 custom-range border-0" min="0.75" max="1.25" step="0.01"></b-form-input>
-										<b-tooltip target="options-zoom">
-											{{ parseInt(this.zoom * 100) }} %
-										</b-tooltip>
-									</div>
-								</b-nav-item-dropdown>
-								<b-nav-item to="/info" :disabled="Files.changed"><font-awesome-icon icon="info"/></b-nav-item>
-							</b-navbar-nav>
+						<b-navbar-nav class="ml-auto">
+							<b-nav-item to="/home" :disabled="Files.changed">Home</b-nav-item>
+							<b-nav-item to="/tool" :disabled="!Files.file">Tool</b-nav-item>
+							<b-nav-item-dropdown right>
+								<template slot="button-content"><font-awesome-icon icon="address-card"/></template>
+								<div class="d-flex bd-highlight">
+									<label @dblclick="zoom = 1; setZoom();" title="Doppelklick für 100%"  v-b-tooltip.hover for="options-zoom" class="px-2 py-1 m-0"><font-awesome-icon icon="search"/></label>
+									<b-form-input v-model="zoom" @change="setZoom" id="options-zoom" type="range" class="p-0 mx-2 custom-range border-0" min="0.75" max="1.25" step="0.01"></b-form-input>
+									<b-tooltip target="options-zoom">
+										{{ parseInt(this.zoom * 100) }} %
+									</b-tooltip>
+								</div>
+							</b-nav-item-dropdown>
+							<b-nav-item to="/info" :disabled="Files.changed"><font-awesome-icon icon="info"/></b-nav-item>
 						</b-navbar-nav>
 					</b-collapse>
 				</div>

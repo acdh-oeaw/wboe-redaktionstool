@@ -55,11 +55,11 @@ function insertAfter (parentNode, newNode, referenceNode) {
   }
 }
 
-function applyElIpa (el, bindings, vnode) {
+function applyElIpa (el, bindings, vNode) {
   if (!inBrowser) {
     return
   }
-  // console.log(el, el.parentNode, bindings, vnode)
+  // console.log(el, el.parentNode, bindings, vNode)
   if (!el[elIpa]) {
     el[elIpa] = new ExtIpa().$mount()
     el[elIpa].aElement = el
@@ -149,22 +149,22 @@ var ExtIpa = Vue.extend({
               this.aKeys.push({'k': key, 'a': ipaKeys[key]})
             }
           } else {
-            let alkey = ''
+            let alKey = ''
             if (aSel.focusOffset > 2) {
-              alkey = this.aElement.innerText.substring(aSel.focusOffset - 3, aSel.focusOffset)
-              if (ipaKeys[alkey]) {
-                this.aKeys.push({'k': alkey, 'a': ipaKeys[alkey]})
+              alKey = this.aElement.innerText.substring(aSel.focusOffset - 3, aSel.focusOffset)
+              if (ipaKeys[alKey]) {
+                this.aKeys.push({'k': alKey, 'a': ipaKeys[alKey]})
               }
             }
             if (aSel.focusOffset > 1) {
-              alkey = this.aElement.innerText.substring(aSel.focusOffset - 2, aSel.focusOffset)
-              if (ipaKeys[alkey]) {
-                this.aKeys.push({'k': alkey, 'a': ipaKeys[alkey]})
+              alKey = this.aElement.innerText.substring(aSel.focusOffset - 2, aSel.focusOffset)
+              if (ipaKeys[alKey]) {
+                this.aKeys.push({'k': alKey, 'a': ipaKeys[alKey]})
               }
             }
-            var akey = this.aElement.innerText.substring(aSel.focusOffset - 1, aSel.focusOffset)
-            if (akey && ipaKeys[akey]) {
-              this.aKeys.push({'k': akey, 'a': ipaKeys[akey]})
+            let aKey = this.aElement.innerText.substring(aSel.focusOffset - 1, aSel.focusOffset)
+            if (aKey && ipaKeys[aKey]) {
+              this.aKeys.push({'k': aKey, 'a': ipaKeys[aKey]})
             }
           }
         }
@@ -180,20 +180,20 @@ var ExtIpa = Vue.extend({
 })
 
 export default {
-  bind (el, bindings, vnode) {
-    applyElIpa(el, bindings, vnode)
+  bind (el, bindings, vNode) {
+    applyElIpa(el, bindings, vNode)
   },
-  inserted (el, bindings, vnode) {
-    applyElIpa(el, bindings, vnode)
+  inserted (el, bindings, vNode) {
+    applyElIpa(el, bindings, vNode)
   },
-  update (el, bindings, vnode) {
+  update (el, bindings, vNode) {
     if (bindings.value !== bindings.oldValue) {
-      applyElIpa(el, bindings, vnode)
+      applyElIpa(el, bindings, vNode)
     }
   },
-  componentUpdated (el, bindings, vnode) {
+  componentUpdated (el, bindings, vNode) {
     if (bindings.value !== bindings.oldValue) {
-      applyElIpa(el, bindings, vnode)
+      applyElIpa(el, bindings, vNode)
     }
   },
   unbind (el) {
