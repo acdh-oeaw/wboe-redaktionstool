@@ -1,6 +1,6 @@
 {
   "name": "redaktionstool",
-  "version": "0.5.02",
+  "version": "0.5.03",
   "author": "HCB",
   "description": "Redaktionstool",
   "license": null,
@@ -22,7 +22,7 @@
     "postinstall": "npm run lint:fix"
   },
   "build": {
-    "productName": "redaktionstool-electron-vue",
+    "productName": "wboe-redaktionstool",
     "appId": "org.redaktionstool.electron-vue",
     "directories": {
       "output": "build"

@@ -1,4 +1,4 @@
-# redaktionstool-electron-vue
+# wboe-redaktionstool
 
 > Redaktionstool
 

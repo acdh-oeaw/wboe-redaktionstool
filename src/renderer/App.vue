@@ -42,7 +42,7 @@
 	const inPageSearch = searchInPage(remote.getCurrentWebContents())
 
 	export default {
-		name: 'redaktionstool-electron-vue',
+		name: 'wboe-redaktionstool',
 		data () {
 			return {
 				devMode: (process.env.NODE_ENV === 'development'),
