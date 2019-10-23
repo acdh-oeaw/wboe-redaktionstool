@@ -66,13 +66,15 @@ const actions = {
 				if (folderState.isDirectory()) {
 					try {
 						if (state.parser) {
-							let aFiles = [{'name': 'parser.xml', 'fullFileName': fPath.join(__static, '/parser.xml')}]
+							let aFiles = [{name: 'parser.xml', fullFileName: fPath.join(__static, '/parser.xml')}]
+							let fileContent = fs.readFileSync(aFiles[0].fullFileName, 'utf8')
+							aFiles = [...aFiles, ...local.loadImportFiles(fileContent, __static)[2]]
 							Object.keys(state.parser.additionalFiles).forEach(function (addFileKey) {
 								aFiles.push({'name': addFileKey, 'fullFileName': state.parser.additionalFiles[addFileKey].fullFileName})
 							}, this)
 							console.log('Parser speichern ...', saveFolder, aFiles)
 							aFiles.forEach(function (sFile) {
-								console.log(fs)
+								console.log('sFile', sFile)
 								fse.copySync(sFile.fullFileName, fPath.join(saveFolder, sFile.name), {'overwrite': false})
 							}, this)
 							dispatch('RELOAD_PARSER_FILE')
@@ -94,15 +96,17 @@ const actions = {
 }
 
 const local = {
-	loadImportFiles (fileContent, aPath) {
+	loadImportFiles (fileContent, aPath, files = []) {
 		let imported = false
 		fileContent = fileContent.replace(/<\?import ".+" \?>/gi, function (imp) {
 			let impFile = imp.match(/<\?import "(.+\.xml)" \?>/)[1]
+			let impFullFile = impFile
 			if (impFile) {
 				let nFileContent = null
 				try {
-					impFile = fPath.join(aPath, '/' + impFile)
-					nFileContent = fs.readFileSync(impFile, 'utf8')
+					impFullFile = fPath.join(aPath, '/' + impFile)
+					nFileContent = fs.readFileSync(impFullFile, 'utf8')
+					files.push({name: impFile, fullFileName: impFullFile})
 				} catch (e) {
 					console.log(e)
 				}
@@ -110,17 +114,19 @@ const local = {
 					imp = nFileContent.replace(/<\?xml.+\?>/, '')
 					imported = true
 				} else {
-					console.log('Fehler!', 'Konnte Datei "' + impFile + '" nicht laden ...')
+					console.log('Fehler!', 'Konnte Datei "' + impFullFile + '" nicht laden ...')
 				}
 			} else {
-				console.log('Fehler!', 'Keine Datei gefunden!', imp, impFile)
+				console.log('Fehler!', 'Keine Datei gefunden!', imp, impFullFile)
 			}
 			return imp
 		})
 		if (imported) {
-			fileContent = local.loadImportFiles(fileContent, aPath)[1]
+			let sGIF = local.loadImportFiles(fileContent, aPath)
+			fileContent = sGIF[1]
+			files = [...files, ...sGIF[2]]
 		}
-		return [imported, fileContent]
+		return [imported, fileContent, files]
 	}
 }
 

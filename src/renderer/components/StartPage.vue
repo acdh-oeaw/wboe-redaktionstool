@@ -19,7 +19,7 @@
           <!-- Parser -->
           <button @click="reloadParser" title="Parser-Datei neu laden" class="float-right mir5"><font-awesome-icon icon="sync-alt"/></button>
           <button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Parser.file" class="float-right mir5" v-if="Parser.file && !(Parser.file.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
-          <button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right mir5" v-else-if="Parser.content && Parser.content.length > 0"><font-awesome-icon icon="file-download"/></button>
+          <button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right mir5" v-if="Parser.content && Parser.content.length > 0"><font-awesome-icon icon="file-download"/></button>
           <button @click="exportAdditionalFilesParser" title="Zusätzliche Parser-Dateien für Portal als JSON speichern" class="float-right mir5" v-if="Options.show.develope"><font-awesome-icon icon="save"/></button>
         </p>
         <div v-if="Files.paths[Options.projectPath]">
