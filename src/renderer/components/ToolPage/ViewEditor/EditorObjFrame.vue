@@ -77,41 +77,41 @@
       </div>
       <div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
             v-if="addableInButtons.length > 0">
-        <b-button @click="addTag(addableInButtons[0].uId, 'In')" size="xs"
-                  @focus="showAddableButtons('In')"
-                  @blur="hideAddableButtons($event, 'In')"
-                  @mouseenter="showAddableButtons('In')"
-                  @mouseleave="hideAddableButtons($event, 'In')"
-                  ref="addableInButton"
-                  :variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
-          <font-awesome-icon icon="circle-notch" class="fa-icon"/>
-        </b-button>
-        <div class="addable-in-btns" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
-          <b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
-                    :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableInButtons.length - 1}"
-                    :key="'aib' + aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
-            <font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
+        <div class="inline-block" @mouseenter="showAddableButtons('In')" @mouseleave="hideAddableButtons($event, 'In')">
+          <b-button @click="addTag(addableInButtons[0].uId, 'In')" size="xs"
+                    @focus="showAddableButtons('In')"
+                    @blur="hideAddableButtons($event, 'In')"
+                    ref="addableInButton"
+                    :variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
+            y<font-awesome-icon icon="circle-notch" class="fa-icon"/>
           </b-button>
+          <div class="addable-in-btns" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
+            <b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
+                      :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableInButtons.length - 1}"
+                      :key="'aib' + aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
+              <font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
+            </b-button>
+          </div>
         </div>
       </div>
       <slot name="childs"/>		<!-- Kinder -->
       <div @contextmenu.prevent="contextMenue" :class="{'addable-after-btn': true, 'inline': layoutBase !== 'box'}"
             v-if="addableAfterButtons.length > 0">
-        <b-button @click="addTag(addableAfterButtons[0].uId, 'After')" size="xs"
-                  @focus="showAddableButtons('After')"
-                  @blur="hideAddableButtons($event, 'After')"
-                  @mouseenter="showAddableButtons('After')"
-                  @mouseleave="hideAddableButtons($event, 'After')"
-                  ref="addableAfterButton"
-                  :variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
-          <font-awesome-icon icon="plus" class="fa-icon"/>
-        </b-button>
-        <div class="addable-after-btns" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
-          <b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
-                    :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableAfterButtons.length - 1}"
-                    :key="'aab' + aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
-            <font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
+        <div class="inline-block" @mouseenter="showAddableButtons('After')" @mouseleave="hideAddableButtons($event, 'After')">
+          <b-button @click="addTag(addableAfterButtons[0].uId, 'After')" size="xs"
+                    @focus="showAddableButtons('After')"
+                    @blur="hideAddableButtons($event, 'After')"
+                    ref="addableAfterButton"
+                    :variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
+            x<font-awesome-icon icon="plus" class="fa-icon"/>
           </b-button>
+          <div class="addable-after-btns" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
+            <b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
+                      :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableAfterButtons.length - 1}"
+                      :key="'aab' + aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
+              <font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
+            </b-button>
+          </div>
         </div>
       </div>
     </div>
@@ -476,6 +476,10 @@
 <style scoped>
   .inline, .context {
     display: inline;
+    cursor: default;
+  }
+  .inline-block {
+    display: inline-block;
     cursor: default;
   }
 
