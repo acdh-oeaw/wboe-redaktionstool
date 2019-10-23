@@ -83,7 +83,7 @@
                     @blur="hideAddableButtons($event, 'In')"
                     ref="addableInButton"
                     :variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
-            y<font-awesome-icon icon="circle-notch" class="fa-icon"/>
+            <font-awesome-icon icon="circle-notch" class="fa-icon"/>
           </b-button>
           <div class="addable-in-btns" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
             <b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
@@ -103,7 +103,7 @@
                     @blur="hideAddableButtons($event, 'After')"
                     ref="addableAfterButton"
                     :variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
-            x<font-awesome-icon icon="plus" class="fa-icon"/>
+            <font-awesome-icon icon="plus" class="fa-icon"/>
           </b-button>
           <div class="addable-after-btns" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
             <b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
