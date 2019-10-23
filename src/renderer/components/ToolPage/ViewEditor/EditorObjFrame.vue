@@ -76,36 +76,40 @@
         <span :class="{'comment-sym': true, 'comment-highlight': Options.show.commentsHighlight}" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
       </div>
       <div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
-           @mouseenter="showAddableButtons('In')" @mouseleave="hideAddableButtons($event, 'In')"
             v-if="addableInButtons.length > 0">
         <b-button @click="addTag(addableInButtons[0].uId, 'In')" size="xs"
                   @focus="showAddableButtons('In')"
                   @blur="hideAddableButtons($event, 'In')"
+                  @mouseenter="showAddableButtons('In')"
+                  @mouseleave="hideAddableButtons($event, 'In')"
                   ref="addableInButton"
-                  :variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"><font-awesome-icon icon="circle-notch" class="fa-icon"/></b-button>
+                  :variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
+          <font-awesome-icon icon="circle-notch" class="fa-icon"/>
+        </b-button>
         <div class="addable-in-btns" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
           <b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
                     :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableInButtons.length - 1}"
-                    :key="aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
+                    :key="'aib' + aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
             <font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
           </b-button>
         </div>
       </div>
       <slot name="childs"/>		<!-- Kinder -->
       <div @contextmenu.prevent="contextMenue" :class="{'addable-after-btn': true, 'inline': layoutBase !== 'box'}"
-           @mouseenter="showAddableButtons('After')" @mouseleave="hideAddableButtons($event, 'After')"
             v-if="addableAfterButtons.length > 0">
         <b-button @click="addTag(addableAfterButtons[0].uId, 'After')" size="xs"
                   @focus="showAddableButtons('After')"
                   @blur="hideAddableButtons($event, 'After')"
+                  @mouseenter="showAddableButtons('After')"
+                  @mouseleave="hideAddableButtons($event, 'After')"
                   ref="addableAfterButton"
-                  :variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"><font-awesome-icon icon="plus" class="fa-icon"/></b-button>
+                  :variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
+          <font-awesome-icon icon="plus" class="fa-icon"/>
+        </b-button>
         <div class="addable-after-btns" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
           <b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
                     :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableAfterButtons.length - 1}"
-                    @keyup.up.prevent=""
-                    @keyup.down.prevent=""
-                    :key="aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
+                    :key="'aab' + aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
             <font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
           </b-button>
         </div>
@@ -156,7 +160,6 @@
 <script>
   import { mapState } from 'vuex'
   import EditorContextMenu from './EditorContextMenu'
-  var _ = require('lodash')
 
   export default {
     name: 'EditorObjFrame',
@@ -381,14 +384,15 @@
       showAddableButtons (type) {
         this['isOpenAdditionalAdd' + type + 'Btn'] = true
       },
-      hideAddableButtons: _.debounce(function (e, type) {
+      hideAddableButtons (e, type) {
         if (e.type === 'blur') {
-          if (this.$refs['addable' + type + 'Button'] === document.activeElement || this.$refs['addable' + type + 'Buttons'].indexOf(document.activeElement) > -1) {
+          let aEl = e.relatedTarget || document.activeElement
+          if (this.$refs['addable' + type + 'Button'] === aEl || this.$refs['addable' + type + 'Buttons'].indexOf(aEl) > -1) {
             return false
           }
         }
         this['isOpenAdditionalAdd' + type + 'Btn'] = false
-      }, 50),
+      },
       contextMenue (e) {
         this.contextMenuCached = true
         this.$nextTick(() => {
