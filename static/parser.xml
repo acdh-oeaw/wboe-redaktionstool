@@ -746,17 +746,15 @@
                     "title": "Bedeutung",
                     "attributes": [
                       {"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}},
-                      {"n": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}}}
+                      {"n": {"canBeEmpty": {"use": true}, "remove": {"use": true}}}
                     ],
                     "tag": ["multiple"],
                     "layout": {
                       "frame": "line",
                       "hideTitle": true,
                       "multiple": {
-                        "use": true
-                      },
-                      "showAttributeBefore" : {
-                        "n": { "hideTitle": true, "class": "text" }
+                        "use": true,
+                        "enumerateFX": true
                       }
                     },
                     "editor": {

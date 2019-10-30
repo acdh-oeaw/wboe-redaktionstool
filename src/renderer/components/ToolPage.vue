@@ -58,14 +58,20 @@
           </div>
         </b-tab>
 
-        <b-tab title="XML Editor" :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}" :disabled="tabsLocked">
+        <b-tab title="XML Editor"
+          :title-item-class="{'professional': true, 'hidden': !Options.show.professional, 'error': (!xmlObject || (xmlObject.errors && Object.keys(xmlObject.errors).length > 0))}"
+          :disabled="tabsLocked && !xmlEditorLocked"
+        >
           <div class="viewxml lh95vh ohidden" v-if="aTabCach.indexOf(3) > -1 && aTab === 3 && !update">
             <ViewXML :xmlString="editorObject.getXML()" :orgXmlString="Files.fileContent" @changed="xmlChanged" @refresh="xmlRefresh" v-if="editorObject"/>
             <div class="alert alert-danger mi20" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
           </div>
         </b-tab>
 
-        <b-tab title="Parser Object" :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}" :disabled="tabsLocked">
+        <b-tab title="Parser Object"
+          :title-item-class="{'develope': true, 'hidden': !Options.show.develope, 'error': (!Parser.parser || (Parser.parser.errors && Object.keys(Parser.parser.errors).length > 0))}"
+          :disabled="tabsLocked"
+        >
           <div class="viewparser scroll p20" v-if="aTabCach.indexOf(4) > -1 && !update">
             <ViewParser :parser="Parser.parser" v-if="Parser.parser && Parser.parser.content.length > 0"/>
             <div class="alert alert-danger" role="alert" v-else>Kein <b>parser</b> vorhanden!</div>
