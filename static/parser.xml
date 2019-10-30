@@ -1063,7 +1063,10 @@
                     "attributes": [
                       {"xml:id": {"type": "edit", "canBeEmpty": {"use": true}}}
                     ],
-                    "layout": { "frame": "inline" }
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true
+                    }
                   } ?>
           <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
         </sense>
