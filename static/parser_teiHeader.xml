@@ -86,7 +86,7 @@
         <name xml:id="EW"><?copyOptions { "fromId": "nameSimple", "options": { "tag": ["possibleTag", "shouldTag"], "layout": { "after": null } } } ?>Eva Wahlmüller</name>
       </respStmt>
       <respStmt>
-        <?options { "title": "Student assistants", "layout": { "frame": "hide" } } ?>
+        <?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>
         <resp>
           <?options {
             "value": {
@@ -99,10 +99,13 @@
             "layout": ["hidden"]
           } ?>
         </resp>
-        <name><?copyOptions { "fromId": "nameSimple" } ?>Eva Wahlmüller</name>
+        <name><?copyOptions { "fromId": "nameSimplePossible", "options": { "editor": { "addTitle": "Eva Wahlmüller" } } } ?>Eva Wahlmüller</name>
         <name><?copyOptions { "fromId": "nameSimple" } ?>Susanna Muhr</name>
-        <name><?copyOptions { "fromId": "nameSimple" } ?>Alexandra Grohe</name>
-        <name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Klemens Wagner</name>
+        <name><?copyOptions { "fromId": "nameSimplePossible", "options": { "editor": { "addTitle": "Eva Wahlmüller" } } } ?>Eva Wahlmüller</name>
+        <name><?copyOptions { "fromId": "nameSimplePossible", "options": { "editor": { "addTitle": "Alexandra Grohe" } } } ?>Alexandra Grohe</name>
+        <name><?copyOptions { "fromId": "nameSimplePossible", "options": { "editor": { "addTitle": "Klemens Wagner" } } } ?>Klemens Wagner</name>
+        <name><?copyOptions { "fromId": "nameSimple" } ?>Manuela Stütz</name>
+        <name><?copyOptions { "fromId": "nameSimple", "options": { "layout": { "after": null } } } ?>Christina Hemetsberger</name>
       </respStmt>
     </titleStmt>
     <publicationStmt>

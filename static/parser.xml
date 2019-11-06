@@ -413,7 +413,20 @@
     <options>
       <?optionsPreset {
                         "id": "nameSimple",
-                        "tagAsTitle": false, "layout": { "frame": "inline", "after": ", " }
+                        "tagAsTitle": false,
+                        "layout": {
+                          "frame": "inline",
+                          "after": ", "
+                        }
+                      } ?>
+      <?optionsPreset {
+                        "id": "nameSimplePossible",
+                        "tag": ["possibleTag"],
+                        "tagAsTitle": false,
+                        "layout": {
+                          "frame": "inline",
+                          "after": ", "
+                        }
                       } ?>
       <?optionsPreset {
                         "id": "inlineMultipleJoin",
