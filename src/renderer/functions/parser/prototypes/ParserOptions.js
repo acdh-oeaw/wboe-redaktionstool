@@ -20,7 +20,8 @@ const localFunctions = {
     if (typeof aVal === 'object') {
       if (aVal.fx === 'now') {
         let aDate = new Date()
-        aVal = aDate.getFullYear() + '-' + ((aDate.getMonth() < 10) ? '0' : '') + aDate.getMonth() + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
+        let aMonth = aDate.getMonth() + 1
+        aVal = aDate.getFullYear() + '-' + ((aMonth < 10) ? '0' : '') + aMonth + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
       }
       if (aVal.fx === 'random') {
         let nVal = ''
