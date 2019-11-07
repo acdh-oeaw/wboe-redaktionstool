@@ -168,6 +168,7 @@
         devMode: (process.env.NODE_ENV === 'development'),
         devFiles: null,
         update: false,
+        updateScrollTop: null,
         xmlEditorLocked: false,
         xmlEditorNewContent: '',
         tipLine: '',
@@ -212,6 +213,12 @@
           this.$nextTick(() => {
             this.update = false
             this.aTabCach = [this.aTab]
+            this.$nextTick(() => {
+              if (this.updateScrollTop && this.$refs.vieweditorobject) {
+                this.$refs.vieweditorobject.scrollTop = this.updateScrollTop
+                this.updateScrollTop = null
+              }
+            })
           })
         }
       },
@@ -249,6 +256,9 @@
             let aXML = this.editorObject.getXML()
             let sXML = (new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aXML))).getXML()	// Doppelt parsen für "xml:id" init
             this.$store.dispatch('SAVE_FILE', sXML)
+            if (this.$refs.vieweditorobject && this.$refs.vieweditorobject.scrollTop) {
+              this.updateScrollTop = this.$refs.vieweditorobject.scrollTop
+            }
             this.loadData()
           }
         }
