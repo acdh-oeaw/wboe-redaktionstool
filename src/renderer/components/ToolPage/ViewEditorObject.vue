@@ -3,7 +3,7 @@
     <ErrorCard :error="object.getCompressedBaseError()" title="Fehler" variant="danger"/>
     <ErrorCard :error="object.warnings" title="Warnung" variant="warning"/>
     <div v-if="object.contentObj">
-      <ViewEditorObject :content="object.contentObj"/>
+      <ViewEditorObject :content="object.contentObj" :view="view"/>
     </div>
     <div v-else>
       Keine Content-Daten vorhanden
@@ -58,7 +58,7 @@
           </div>
           <div v-if="content.childs.length > 0">
             <b>Kinder:</b><br>
-            <ViewEditorObject ref="childs" :content="aContent"
+            <ViewEditorObject ref="childs" :content="aContent" :view="view"
               v-for="(aContent, aKey) in contentChildsOk"
               :key="'veo' + aKey + '-' + aContent.uId"
             />
@@ -83,6 +83,7 @@
     props: {
       object: Object,
       content: Object,
+      view: Object
     },
     data () {
       return {

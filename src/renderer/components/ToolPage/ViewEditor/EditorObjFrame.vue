@@ -85,7 +85,7 @@
                     :variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
             <font-awesome-icon icon="circle-notch" class="fa-icon"/>
           </b-button>
-          <div class="addable-in-btns" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
+          <div class="addable-in-btns" ref="addableInButtonsFrame" :style="'left:' + inAfterFrameLeft + 'px'" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
             <b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
                       :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableInButtons.length - 1}"
                       :key="'aib' + aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
@@ -105,7 +105,7 @@
                     :variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
             <font-awesome-icon icon="plus" class="fa-icon"/>
           </b-button>
-          <div class="addable-after-btns" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
+          <div class="addable-after-btns" ref="addableAfterButtonsFrame" :style="'left:' + inAfterFrameLeft + 'px'" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
             <b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
                       :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableAfterButtons.length - 1}"
                       :key="'aab' + aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
@@ -165,6 +165,7 @@
     name: 'EditorObjFrame',
     props: {
       content: Object,
+      view: Object
     },
     data () {
       return {
@@ -175,6 +176,7 @@
         'commentObj': null,
         'commentNewVal': '',
         'dragDir': null,
+        inAfterFrameLeft: 0
       }
     },
     computed: {
@@ -293,27 +295,27 @@
         }
       },
       'isOpenAdditionalAddAfterBtn' (nVal) {
-        if (nVal) {
-          this.$nextTick(() => {
-            let refAB = this.$refs.addableAfterButtons[this.$refs.addableAfterButtons.length - 1]
-            if (refAB) {
-              refAB.focus()
-            }
-          })
-        }
+        this.isOpenAdditionalAddInAfterBtn(nVal, 'addableAfterButtons')
       },
       'isOpenAdditionalAddInBtn' (nVal) {
-        if (nVal) {
-          this.$nextTick(() => {
-            let refAB = this.$refs.addableInButtons[this.$refs.addableInButtons.length - 1]
-            if (refAB) {
-              refAB.focus()
-            }
-          })
-        }
+        this.isOpenAdditionalAddInAfterBtn(nVal, 'addableInButtons')
       },
     },
     methods: {
+      isOpenAdditionalAddInAfterBtn (nVal, inAfter) {
+        if (nVal) {
+          this.inAfterFrameLeft = 0
+          this.$nextTick(() => {
+            let refAB = this.$refs[inAfter][this.$refs[inAfter].length - 1]
+            if (refAB) {
+              refAB.focus()
+            }
+            let vRight = this.view.$el.getBoundingClientRect().right + 15
+            let fRight = this.$refs[inAfter + 'Frame'].getBoundingClientRect().right
+            this.inAfterFrameLeft = fRight > vRight ? vRight - fRight : 0
+          })
+        }
+      },
       dragStart (e) {
         e.stopPropagation()
         this.$store.commit('SET_DRAG_UID', this.content.uId)

@@ -6,14 +6,14 @@
     <ErrorCard :error="object.warnings" title="Warnung" variant="warning" :closed="!Options.show.warnings" @goto="goToObject"/>
     <div v-if="object.contentObj">
       <div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
-      <ViewEditor :content="object.contentObj" @setTipLine="setTipLine" v-else/>
+      <ViewEditor :content="object.contentObj" :view="this" @setTipLine="setTipLine" v-else/>
     </div>
     <div v-else>
       Keine Content-Daten vorhanden
     </div>
   </div>
 
-  <EditorObjFrame @setTipLine="setTipLine" :content="content" v-else-if="content">
+  <EditorObjFrame @setTipLine="setTipLine" :content="content" :view="view" v-else-if="content">
     <template  v-if="content.parserObj.options && content.parserObj.options.get('layout.showAttributeBefore')">
       <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in content.parserObj.options.get('layout.showAttributeBefore')"/>
     </template>
@@ -31,7 +31,7 @@
     <EditableValue :content="content" v-else-if="valueType === 'editable'"/>
 
     <template slot="childs" v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
-      <ViewEditor ref="childs" :content="aContent" @setTipLine="setTipLine"
+      <ViewEditor ref="childs" :view="view" :content="aContent" @setTipLine="setTipLine"
         v-for="(aContent, aKey) in contentChildsShown"
         :key="aContent.uId + '-' + aKey"
       />
@@ -65,6 +65,7 @@
     props: {
       object: Object,
       content: Object,
+      view: Object
     },
     data () {
       return {
