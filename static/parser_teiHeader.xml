@@ -47,7 +47,8 @@
                           {"value": "Sonja Schwaiger", "attribute": {"ref": "#SS"}},
                           {"value": "Jan Braun", "attribute": {"ref": "#JD"}},
                           {"value": "Angela Bergermayer", "attribute": {"ref": "#AB"}},
-                          {"value": "Eva Wahlmüller", "attribute": {"ref": "#EW"}}
+                          {"value": "Eva Wahlmüller", "attribute": {"ref": "#EW"}},
+                          {"title": "David Gschösser", "value": "DG"}
                         ]
                       }}],
                       "layout": { "frame": "line" }
@@ -81,9 +82,10 @@
         <name xml:id="PZ"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Patrick Zeitlhuber", "use": true, "possibleValues": ["Patrick Zeitlhuber", "Patrick Zeithuber"] } } } } ?></name>
         <name xml:id="SW"><?copyOptions { "fromId": "nameSimple" } ?>Sabine Wahl</name>
         <name xml:id="SS"><?copyOptions { "fromId": "nameSimple" } ?>Sonja Schwaiger</name>
-        <name xml:id="JD"><?copyOptions { "fromId": "nameSimple" } ?>Jan Braun</name>
+        <name xml:id="JD"><?copyOptions { "fromId": "nameSimplePossible", "options": { "editor": { "addTitle": "Jan Braun" } } } ?>Jan Braun</name>
         <name xml:id="AB"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Angela Bergermayer", "use": true, "possibleValues": ["Angela Bergermayer", "Angela Bergmayer"] } } } } ?></name>
         <name xml:id="EW"><?copyOptions { "fromId": "nameSimple", "options": { "tag": ["possibleTag", "shouldTag"], "layout": { "after": null } } } ?>Eva Wahlmüller</name>
+        <name xml:id="DG"><?copyOptions { "fromId": "nameSimple" } ?>David Gschösser</name>
       </respStmt>
       <respStmt>
         <?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>
@@ -185,7 +187,8 @@
                                                                                 {"title": "Sonja Schwaiger", "value": "SS"},
                                                                                 {"title": "Jan Braun", "value": "JD"},
                                                                                 {"title": "Angela Bergermayer", "value": "AB"},
-                                                                                {"title": "Eva Wahlmüller", "value": "EW"}
+                                                                                {"title": "Eva Wahlmüller", "value": "EW"},
+                                                                                {"title": "David Gschösser", "value": "DG"}
                                                                               ]}
                     }],
                     "tag": ["multiple", "possibleTag", "shouldTag"],
