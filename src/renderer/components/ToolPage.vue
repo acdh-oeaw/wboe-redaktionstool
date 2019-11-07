@@ -22,7 +22,10 @@
             <b-btn @click="showFile()" variant="outline-secondary" title="Ordner in Explorer öffnen" :disabled="!Files.file"><font-awesome-icon icon="external-link-alt"/></b-btn>
           </b-input-group-append>
         </b-input-group>
-        <b-button-group size="sm" class="mr-1 mil-auto">
+        <div class="mr-2 mil-auto p-1">
+          <font-awesome-icon @click="scrollToTop" style="cursor:pointer;" v-if="aTab === 0" :class="dataStatus === 'ok' ? 'text-success' : dataStatus === 'error' ? 'text-danger' : 'text-warning'" :icon="dataStatus === 'ok' ? 'check' : 'exclamation-triangle'"/>
+        </div>
+        <b-button-group size="sm" class="mr-1">
           <b-btn @click="saveFile()"
                 :title="((!Files.changed) ? 'Datei unverändert.' : ((dataStatus === 'ok') ? 'Datei kann gespeichert werden.' : ((dataStatus === 'error') ? 'Datei enthält Fehler!' : 'Datei enthält Warnungen!')))"
                 :variant="((!Files.changed) ? 'secondary' : ((dataStatus === 'ok') ? 'success' : ((dataStatus === 'error') ? 'danger' : 'warning')))" v-b-tooltip.hover.html :disabled="tabsLocked"><font-awesome-icon icon="save"/></b-btn>
@@ -38,7 +41,7 @@
             <ViewPreview :start="true" :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
             <div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
           </div>
-          <div :class="'vieweditorobject scroll p20' + ((Options.show.editorPreview) ? ' w-50' : '')" v-if="aTabCach.indexOf(0) > -1 && !update">
+          <div ref="vieweditorobject" :class="'vieweditorobject scroll p20' + ((Options.show.editorPreview) ? ' w-50' : '')" v-if="aTabCach.indexOf(0) > -1 && !update">
             <ViewEditor :object="editorObject" @setTipLine="setTipLine" v-if="editorObject && editorObject.contentObj"/>
             <div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
           </div>
@@ -248,6 +251,11 @@
             this.$store.dispatch('SAVE_FILE', sXML)
             this.loadData()
           }
+        }
+      },
+      scrollToTop () {
+        if (this.$refs.vieweditorobject) {
+          this.$refs.vieweditorobject.scrollTop = 0
         }
       },
       discardChanges () {
