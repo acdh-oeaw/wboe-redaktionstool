@@ -170,10 +170,14 @@
 
             <?copy { "fromId": "usg-geo-verbreitung" } ?>
 
+
+            <!-- Lautung -->
+            <?copy { "fromId": "note", "options": {} } ?>
+            <!-- Beispielbelege -->
             <form>
               <?options {
                           "id": "form-dialect",
-                          "title": "Belegauswahl",
+                          "title": "Beispielbeleg",
                           "tag": ["multiple", "possibleTag", "shouldTag"],
                           "attributes": [{
                             "xml:id": {"type": "edit", "canBeEmpty": {"use": true}},
@@ -185,7 +189,8 @@
                             "hideTitle": true,
                             "multiple": {
                               "use": true,
-                              "header": "Belegauswahl",
+                              "header": "Beispielbelege",
+                              "headersize": 5,
                               "spaceBefore": 10,
                               "spaceAfter": 5,
                               "join": "; "
@@ -193,7 +198,7 @@
                           },
                           "editor": {
                             "onlyLastElementHasAddButton": true,
-                            "addTitle": "Belegauswahl"
+                            "addTitle": "Beispielbeleg"
                           }
                         } ?>
                <pron xml:lang="bar-AT">
@@ -229,54 +234,6 @@
               <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}] } } ?>
             </form>
 
-            <note type="kommentar">
-              <?options {
-                          "title": "Kommentar",
-                          "tagAsTitle": false,
-                          "tag": ["possibleTag"],
-                          "layout": {
-                            "frame": "inline"
-                          },
-                          "editor": {
-                            "addTitle": "Kommentar hinzufügen"
-                          }
-                        } ?>
-              <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true } } } ?>
-              <c>
-                <?options {
-                            "value": ["edit", "required"],
-                            "tag": ["multiple", "possibleTag", "anywhere"],
-                            "layout": {
-                              "frame": "inline",
-                              "hideTitle": true,
-                              "italic": true
-                            }
-                          } ?>
-              </c>
-              <xr>
-                <?options {
-                            "tag": ["multiple", "possibleTag", "anywhere"],
-                            "layout": {
-                              "frame": "inline",
-                              "hideTitle": true
-                            }
-                          } ?>
-                <ref>
-                  <?options {
-                            "value": ["edit", "required"],
-                            "tag": {"possibleTag": {"use": true}},
-                            "shouldTag": {"use": true},
-                            "layout": {
-                              "frame": "inline",
-                              "hideTitle": true,
-                              "italic": true,
-                              "before": "(",
-                              "after": ")"
-                            }
-                          } ?>
-                </ref>
-              </xr>
-            </note>
 
             <etym>
               <?options {
@@ -1138,6 +1095,57 @@
         <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "MWE"}}] } } ?>
         <?copy { "fromId": "re-MWE", "options": { "title": "Unter Redewendung",  "tag": ["possibleTag", "multiple"], "editor": {"onlyLastElementHasAddButton": true, "addTitle": "Unter Redewendung"} } } ?>
       </re>
+
+
+      <note type="kommentar">
+        <?options {
+                    "id": "note",
+                    "title": "Kommentar",
+                    "tagAsTitle": false,
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline"
+                    },
+                    "editor": {
+                      "addTitle": "Kommentar hinzufügen"
+                    }
+                  } ?>
+        <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true } } } ?>
+        <c>
+          <?options {
+                      "value": ["edit", "required"],
+                      "tag": ["multiple", "possibleTag", "anywhere"],
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true,
+                        "italic": true
+                      }
+                    } ?>
+        </c>
+        <xr>
+          <?options {
+                      "tag": ["multiple", "possibleTag", "anywhere"],
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true
+                      }
+                    } ?>
+          <ref>
+            <?options {
+                      "value": ["edit", "required"],
+                      "tag": {"possibleTag": {"use": true}},
+                      "shouldTag": {"use": true},
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true,
+                        "italic": true,
+                        "before": "(",
+                        "after": ")"
+                      }
+                    } ?>
+          </ref>
+        </xr>
+      </note>
 
     </tags>
   </objParserSystem>

@@ -1,6 +1,6 @@
 <template>
   <div :id="'eo' + content.uId" :class="'inline' + ((this.DragNdrop.dragUid === this.content.uId) ? ' dragobj' : '') + ((isDragTarget) ? ' dragtarget' : '') + ((dragDir) ? ' dragpos-' + dragDir : '')"
-      :style="'font-size: ' + ((content.parserObj.options && content.parserObj.options.get('layout.fontsize')) ? content.parserObj.options.get('layout.fontsize') : 100) + '%;'"
+      :style="'font-size: ' + ((cParserOptions && cParserOptions.get('layout.fontsize')) ? cParserOptions.get('layout.fontsize') : 100) + '%;'"
       :draggable="isDraggable"
       @mouseenter="mouseEnter"
       @mouseleave="mouseLeave"
@@ -11,15 +11,15 @@
       v-on:drop="drop"
     >
     <!-- Vor Inhalten -->
-    <template v-if="content.isMultiple && content.multipleNr === 0 && content.parserObj.options && content.parserObj.options.get('layout.multiple.use')">
-      <div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceBefore') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceBefore')"></div>
-      <h4 @contextmenu.prevent="contextMenue" v-if="content.parserObj.options.get('layout.multiple.header')">{{ content.parserObj.options.get('layout.multiple.header') }}</h4>
-      <span class="before" v-if="content.parserObj.options.get('layout.multiple.before')">{{ content.parserObj.options.get('layout.multiple.before') }}</span>
+    <template v-if="content.isMultiple && content.multipleNr === 0 && cParserOptions && cParserOptions.get('layout.multiple.use')">
+      <div :style="'height: ' + cParserOptions.get('layout.multiple.spaceBefore') + 'px'" v-if="cParserOptions.get('layout.multiple.spaceBefore')"></div>
+      <div :class="'h' + (cParserOptions.get('layout.multiple.headersize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions.get('layout.multiple.header')">{{ cParserOptions.get('layout.multiple.header') }}</div>
+      <span class="before" v-if="cParserOptions.get('layout.multiple.before')">{{ cParserOptions.get('layout.multiple.before') }}</span>
     </template>
 
-    <div :style="'height: ' + content.parserObj.options.get('layout.spaceBefore') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceBefore')"></div>
-    <h4 @contextmenu.prevent="contextMenue" v-if="content.parserObj.options && content.parserObj.options.get('layout.header')">{{ content.parserObj.options.get('layout.header') }}</h4>
-    <span class="before" v-if="content.parserObj.options && content.parserObj.options.get('layout.before')">{{ content.parserObj.options.get('layout.before') }}</span>
+    <div :style="'height: ' + cParserOptions.get('layout.spaceBefore') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceBefore')"></div>
+    <div :class="'h' + (cParserOptions.get('layout.headersize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions && cParserOptions.get('layout.header')">{{ cParserOptions.get('layout.header') }}</div>
+    <span class="before" v-if="cParserOptions && cParserOptions.get('layout.before')">{{ cParserOptions.get('layout.before') }}</span>
 
 
     <!-- Inhalte -->
@@ -118,19 +118,19 @@
 
 
     <!-- Nach Inhalten -->
-    <span class="join" v-if="content.isMultiple && !content.multipleLast && content.parserObj.options.get('layout.multiple.use') && content.parserObj.options.get('layout.multiple.join')">
-      {{ content.parserObj.options.get('layout.multiple.join') }}
+    <span class="join" v-if="content.isMultiple && !content.multipleLast && cParserOptions.get('layout.multiple.use') && cParserOptions.get('layout.multiple.join')">
+      {{ cParserOptions.get('layout.multiple.join') }}
     </span>
 
-    <span class="after" v-if="content.parserObj.options && content.parserObj.options.get('layout.after')">{{ content.parserObj.options.get('layout.after') }}</span>
-    <h4 v-if="content.parserObj.options && content.parserObj.options.get('layout.footer')">{{ content.parserObj.options.get('layout.footer') }}</h4>
-    <div :style="'height: ' + content.parserObj.options.get('layout.spaceAfter') + 'px'" v-if="content.parserObj.options && content.parserObj.options.get('layout.spaceAfter')"></div>
+    <span class="after" v-if="cParserOptions && cParserOptions.get('layout.after')">{{ cParserOptions.get('layout.after') }}</span>
+    <div class="h4" v-if="cParserOptions && cParserOptions.get('layout.footer')">{{ cParserOptions.get('layout.footer') }}</div>
+    <div :style="'height: ' + cParserOptions.get('layout.spaceAfter') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceAfter')"></div>
 
-    <template v-if="content.isMultiple && content.multipleLast && content.parserObj.options.get('layout.multiple.use')">
-      <span class="after" v-if="content.parserObj.options.get('layout.multiple.after')">{{ content.parserObj.options.get('layout.multiple.after') }}</span>
-      <br v-if="content.parserObj.options.get('layout.multiple.lastBR')"/>
-      <h4 v-if="content.parserObj.options.get('layout.multiple.footer')">{{ content.parserObj.options.get('layout.multiple.footer') }}</h4>
-      <div :style="'height: ' + content.parserObj.options.get('layout.multiple.spaceAfter') + 'px'" v-if="content.parserObj.options.get('layout.multiple.spaceAfter')"></div>
+    <template v-if="content.isMultiple && content.multipleLast && cParserOptions.get('layout.multiple.use')">
+      <span class="after" v-if="cParserOptions.get('layout.multiple.after')">{{ cParserOptions.get('layout.multiple.after') }}</span>
+      <br v-if="cParserOptions.get('layout.multiple.lastBR')"/>
+      <div class="h4" v-if="cParserOptions.get('layout.multiple.footer')">{{ cParserOptions.get('layout.multiple.footer') }}</div>
+      <div :style="'height: ' + cParserOptions.get('layout.multiple.spaceAfter') + 'px'" v-if="cParserOptions.get('layout.multiple.spaceAfter')"></div>
     </template>
 
 
@@ -182,42 +182,48 @@
     computed: {
       ...mapState(['DragNdrop']),
       ...mapState(['Options']),
+      cParserObj () {
+        return this.content.parserObj
+      },
+      cParserOptions () {
+        return this.content.parserObj.options
+      },
       isDragTarget () {
         if (this.DragNdrop.dragUid) {
           if (this.$el && this.$el.closest('.dragobj')) {
             return false
           }
-          return this.DragNdrop.dragUid !== this.content.uId && this.DragNdrop.dragParserUid === this.content.parserObj.uId
+          return this.DragNdrop.dragUid !== this.content.uId && this.DragNdrop.dragParserUid === this.cParserObj.uId
         } else {
           return false
         }
       },
       isDraggable () {
-        return this.content.isMultiple && this.content.parserObj.options && this.content.parserObj.options.get('editor.draggAble')
+        return this.content.isMultiple && this.cParserOptions && this.cParserOptions.get('editor.draggAble')
       },
       layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
         if (this.content.isRoot) { return 'justChilds' }
-        if (this.content.parserObj.options && this.content.parserObj.options.get('layout.frame')) {
-          if (this.content.parserObj.options.get('layout.frame') === 'panelClosed') {
+        if (this.cParserOptions && this.cParserOptions.get('layout.frame')) {
+          if (this.cParserOptions.get('layout.frame') === 'panelClosed') {
             this.isOpen = false
             return 'panel'
           }
-          return this.content.parserObj.options.get('layout.frame')
+          return this.cParserOptions.get('layout.frame')
         }
         return 'panel'
       },
       title () {
-        if (this.content.parserObj.options) {
-          if (this.content.parserObj.options.getResult('title')) {
-            return this.content.parserObj.options.getResult('title')
-          } else if (this.content.parserObj.options.get('tagAsTitle') || this.layoutBase === 'panel') {
+        if (this.cParserOptions) {
+          if (this.cParserOptions.getResult('title')) {
+            return this.cParserOptions.getResult('title')
+          } else if (this.cParserOptions.get('tagAsTitle') || this.layoutBase === 'panel') {
             return this.content.orgXmlObj.name
           }
         }
         return null
       },
       shownTitle () {
-        if (this.content.parserObj.options && !this.content.parserObj.options.get('layout.hideTitle')) {
+        if (this.cParserOptions && !this.cParserOptions.get('layout.hideTitle')) {
           return this.title
         }
         return null
@@ -245,8 +251,8 @@
         return outAddable
       },
       enumerate () {
-        if (this.content.parserObj.options && this.content.isMultiple) {
-          if (this.content.parserObj.options.get('layout.multiple.enumerateFX')) {
+        if (this.cParserOptions && this.content.isMultiple) {
+          if (this.cParserOptions.get('layout.multiple.enumerateFX')) {
             if (this.content.parserCopyDeep === 0) {
               return this.num2rom(this.content.multipleNr + 1) + '. '
             } else if (this.content.parserCopyDeep === 1) {
@@ -257,10 +263,10 @@
               return this.num2abc(this.content.multipleNr + 1, 'α', 25) + ') '
             }
           }
-          if (this.content.parserObj.options.get('layout.multiple.enumerateRom')) {
+          if (this.cParserOptions.get('layout.multiple.enumerateRom')) {
             return this.num2rom(this.content.multipleNr + 1) + '. '
           }
-          if (this.content.parserObj.options.get('layout.multiple.enumerate')) {
+          if (this.cParserOptions.get('layout.multiple.enumerate')) {
             return this.content.multipleNr + 1 + '. '
           }
         }
@@ -319,7 +325,7 @@
       dragStart (e) {
         e.stopPropagation()
         this.$store.commit('SET_DRAG_UID', this.content.uId)
-        this.$store.commit('SET_DRAG_PARSER_UID', this.content.parserObj.uId)
+        this.$store.commit('SET_DRAG_PARSER_UID', this.cParserObj.uId)
         var crt = this.$el.cloneNode(true)
         crt.classList.add('dragitem')
         crt.classList.add('delafterdrag')
@@ -404,9 +410,9 @@
       addTag (aParUId, type) {
         this['isOpenAdditionalAdd' + type + 'Btn'] = false
         if (type === 'After') {
-          this.content.addAfter(this.content.parserObj.root.family[aParUId])
+          this.content.addAfter(this.cParserObj.root.family[aParUId])
         } else if (type === 'In') {
-          this.content.add(0, this.content.parserObj.root.family[aParUId])
+          this.content.add(0, this.cParserObj.root.family[aParUId])
         }
       },
       clickComment (cObj) {
@@ -461,7 +467,7 @@
           aTipLine += this.content.parents.slice(0).reverse().map(function (x) {
             return x.orgXmlObj.name + ' (' + x.parserObj.uId + ((x.parserObj.options && x.parserObj.options.get('id')) ? ', ' + x.parserObj.options.get('id') : '') + ')'
           }).slice(1).join(' -> ')
-          aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.content.parserObj.uId + ((this.content.parserObj.options && this.content.parserObj.options.get('id')) ? ', ' + this.content.parserObj.options.get('id') : '') + ')'
+          aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.cParserObj.uId + ((this.cParserOptions && this.cParserOptions.get('id')) ? ', ' + this.cParserOptions.get('id') : '') + ')'
         }
         this.$emit('setTipLine', aTipLine)
       },
@@ -507,10 +513,10 @@
   *:focus > .focusVisInline {
     display: inline;
   }
-  h4 {
+  .h1, .h2, .h3, .h4, .h5, .h6 {
     margin-top: 10px;
   }
-  h4:first-child {
+  .h1:first-child, .h2:first-child, .h3:first-child, .h4:first-child, .h5:first-child, .h6:first-child {
     margin-top: 0px;
   }
   .enumerate {
