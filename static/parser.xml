@@ -172,7 +172,17 @@
 
 
             <!-- Lautung -->
-            <?copy { "fromId": "note", "options": {} } ?>
+            <?copy { "fromId": "note", "options": {
+                                                    "tag": ["possibleTag", "shouldTag"],
+                                                    "layout": {
+                                                      "spaceBefore": 10,
+                                                      "header": "Lautung",
+                                                      "hideTitle": true
+                                                    },
+                                                    "editor": {
+                                                      "addTitle": "Lautungs Kommentar"
+                                                    }
+                                                  } } ?>
             <!-- Beispielbelege -->
             <form>
               <?options {
