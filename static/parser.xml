@@ -778,12 +778,16 @@
                     "attributes": [{
                       "target": {"type": "edit", "canBeEmpty": {"use": true}}
                     }],
+                    "editor": {
+                      "onlyLastElementHasAddButton": true,
+                      "fxFunction": {
+                        "name": "RefBiblSelect",
+                        "filename": "Zitierung der Belegsätze und der Sekundärliteratur_Ausschnitt.xlsx"
+                      }
+                    },
                     "layout": {
                       "frame": "inline",
                       "hideTitle": true,
-                      "showAttributeAfter" : {
-                        "target": { }
-                      },
                       "multiple": {
                         "use": true,
                         "before": "(",

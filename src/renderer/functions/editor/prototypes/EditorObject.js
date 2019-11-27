@@ -3,6 +3,7 @@ import Vue from 'vue'
 import stdFunctions from '@/functions/stdFunctions'
 import Editor from '../Editor'
 import FxGeoSelect from './FxGeoSelect'
+import FxRefBiblSelect from './FxRefBiblSelect'
 
 const localFunctions = {
   init () {
@@ -317,6 +318,8 @@ const localFunctions = {
     if (this.parserObj && this.parserObj.options) {
       if (this.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect') {
         FxGeoSelect.updateData(this, first)
+      } else if (this.parserObj.options.get('editor.fxFunction.name') === 'RefBiblSelect') {
+        FxRefBiblSelect.updateData(this, first)
       }
     }
     // Updates ...
