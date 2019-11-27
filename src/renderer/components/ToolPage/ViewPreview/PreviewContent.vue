@@ -75,7 +75,7 @@
           <div class="h4" v-if="cParserOptions.get('previewLayout.multiple.footer')">{{ cParserOptions.get('previewLayout.multiple.footer') }}</div>
           <div :style="'height: ' + cParserOptions.get('previewLayout.multiple.spaceAfter') + 'px'" v-if="cParserOptions.get('previewLayout.multiple.spaceAfter')"></div>
         </template>
-        <span v-if="valueType === 'fix' || valueType === 'editable'">&nbsp;</span>
+        <span v-if="!cParserOptions.get('previewLayout.noSpaceAfter') && (valueType === 'fix' || valueType === 'editable')">&nbsp;</span>
       </template>
     </template>
   </div>
