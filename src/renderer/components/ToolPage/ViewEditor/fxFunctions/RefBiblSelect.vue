@@ -186,13 +186,13 @@
         this.lbl = ''
         this.txt = ''
         this.citedRange = ''
-        console.log(this.content)
+        // console.log(this.content)
         if (this.content.orgXmlObj && this.content.orgXmlObj.attributes) {
           this.selBeleg = (this.content.orgXmlObj.attributes.target || '#').substr(1)
           let aChilds = this.content.getChilds('all', true)
           aChilds.forEach(function (aChild) {
             if (aChild.orgXmlObj) {
-              console.log(aChild.orgXmlObj)
+              // console.log(aChild.orgXmlObj)
               if (aChild.orgXmlObj.name === 'lbl') {
                 this.lbl = aChild.orgXmlObj.getValue(false) || ''
               } else if (aChild.orgXmlObj.name === '#text') {

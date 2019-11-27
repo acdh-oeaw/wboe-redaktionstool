@@ -250,6 +250,7 @@
                                                           }
                                                         } } ?>
               <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}] } } ?>
+              <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
             </form>
 
 
@@ -723,9 +724,60 @@
          </quote>
          <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
          <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+         <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag"] } } ?>
          <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
          <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
          <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
+      </cit>
+
+      <cit type="translation">
+        <?options {
+                    "id": "cit-translation",
+                    "title": "Übersetzung",
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "before": "[",
+                      "after": "]"
+                    },
+                    "tag": ["possibleTag"]
+                  } ?>
+        <quote>
+           <?options  {
+                        "title": "Quote",
+                        "attributes": [{
+                          "xml:lang": {"type": "edit", "shouldAttribute": {"use": true}, "value": "de"}
+                        }],
+                        "value": ["edit", "required"],
+                        "layout": {
+                          "frame": "inline",
+                          "italic": true,
+                          "hideTitle": true,
+                          "after": ", "
+                        },
+                        "editor": {
+                          "parentInContext": true
+                        }
+                      } ?>
+        </quote>
+        <?copy { "fromId": "def", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "layout": { "italic": true, "before": null, "after": "; " }, "editor": { "parentInContext": true } } } ?>
+        <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "layout": { "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+        <ref type="bibl">
+          <?options {
+                      "id": "quote-ref-bibl",
+                      "title": "quote-ref-bibl",
+                      "layout": {
+                        "frame": "inline",
+                        "hideTitle": true
+                      },
+                      "editor": {
+                        "parentInContext": true
+                      }
+                    } ?>
+          <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "layout": { "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+          <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+          <?copy { "fromId": "date" } ?>
+        </ref>
       </cit>
 
       <sense>
@@ -782,7 +834,7 @@
                       "onlyLastElementHasAddButton": true,
                       "fxFunction": {
                         "name": "RefBiblSelect",
-                        "filename": "Zitierung der Belegsätze und der Sekundärliteratur_Ausschnitt.xlsx"
+                        "filename": "Zitierung der Belegsätze und der Sekundärliteratur_gesamt.xlsx"
                       }
                     },
                     "layout": {
