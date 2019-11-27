@@ -172,15 +172,23 @@
 
 
             <!-- Lautung -->
+            <!-- Überblick (Kommentar) -->
             <?copy { "fromId": "note", "options": {
                                                     "tag": ["possibleTag", "shouldTag"],
                                                     "layout": {
-                                                      "spaceBefore": 10,
-                                                      "header": "Lautung",
+                                                      "spaceBefore": 0,
+                                                      "spaceTopBefore": 10,
+                                                      "headerTop": "Lautung",
+                                                      "header": "Überblick",
+                                                      "headerSize": 5,
+                                                      "spaceAfter": 20,
                                                       "hideTitle": true
                                                     },
+                                                    "previewLayout": {
+                                                      "hideWithoutContent": true
+                                                    },
                                                     "editor": {
-                                                      "addTitle": "Lautungs Kommentar"
+                                                      "addTitle": "Lautungs Überblick"
                                                     }
                                                   } } ?>
             <!-- Beispielbelege -->
@@ -200,8 +208,8 @@
                             "multiple": {
                               "use": true,
                               "header": "Beispielbelege",
-                              "headersize": 5,
-                              "spaceBefore": 10,
+                              "headerSize": 5,
+                              "spaceBefore": 0,
                               "spaceAfter": 5,
                               "join": "; "
                             }

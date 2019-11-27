@@ -11,14 +11,17 @@
       v-on:drop="drop"
     >
     <!-- Vor Inhalten -->
+    <div :style="'height: ' + cParserOptions.get('layout.spaceTopBefore') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceTopBefore')"></div>
+    <div :class="'h' + (cParserOptions.get('layout.headerTopSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions && cParserOptions.get('layout.headerTop')">{{ cParserOptions.get('layout.headerTop') }}</div>
+
     <template v-if="content.isMultiple && content.multipleNr === 0 && cParserOptions && cParserOptions.get('layout.multiple.use')">
       <div :style="'height: ' + cParserOptions.get('layout.multiple.spaceBefore') + 'px'" v-if="cParserOptions.get('layout.multiple.spaceBefore')"></div>
-      <div :class="'h' + (cParserOptions.get('layout.multiple.headersize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions.get('layout.multiple.header')">{{ cParserOptions.get('layout.multiple.header') }}</div>
+      <div :class="'h' + (cParserOptions.get('layout.multiple.headerSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions.get('layout.multiple.header')">{{ cParserOptions.get('layout.multiple.header') }}</div>
       <span class="before" v-if="cParserOptions.get('layout.multiple.before')">{{ cParserOptions.get('layout.multiple.before') }}</span>
     </template>
 
     <div :style="'height: ' + cParserOptions.get('layout.spaceBefore') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceBefore')"></div>
-    <div :class="'h' + (cParserOptions.get('layout.headersize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions && cParserOptions.get('layout.header')">{{ cParserOptions.get('layout.header') }}</div>
+    <div :class="'h' + (cParserOptions.get('layout.headerSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions && cParserOptions.get('layout.header')">{{ cParserOptions.get('layout.header') }}</div>
     <span class="before" v-if="cParserOptions && cParserOptions.get('layout.before')">{{ cParserOptions.get('layout.before') }}</span>
 
 
