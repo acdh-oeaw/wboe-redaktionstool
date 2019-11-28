@@ -752,8 +752,7 @@
                         "layout": {
                           "frame": "inline",
                           "italic": true,
-                          "hideTitle": true,
-                          "after": ", "
+                          "hideTitle": true
                         },
                         "editor": {
                           "parentInContext": true
