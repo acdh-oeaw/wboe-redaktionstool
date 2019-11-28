@@ -765,6 +765,7 @@
           <?options {
                       "id": "quote-ref-bibl",
                       "title": "quote-ref-bibl",
+                      "tag": ["possibleTag"],
                       "layout": {
                         "frame": "inline",
                         "hideTitle": true
