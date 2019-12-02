@@ -191,7 +191,7 @@
                                                       "addTitle": "Lautungs Überblick"
                                                     }
                                                   } } ?>
-            <!-- Beispielbelege -->
+            <!-- Belegauswahl -->
             <form>
               <?options {
                           "id": "form-dialect",
@@ -207,7 +207,7 @@
                             "hideTitle": true,
                             "multiple": {
                               "use": true,
-                              "header": "Beispielbelege",
+                              "header": "Belegauswahl",
                               "headerSize": 5,
                               "spaceBefore": 0,
                               "spaceAfter": 5,
