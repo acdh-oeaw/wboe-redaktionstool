@@ -17,7 +17,7 @@
                   'ls1pt': content.parserObj.options.get('layout.ls1pt')
                 }"
         v-else>
-    <span :class="{ 'val-edit': true, 'val-focus': true, 'empty': !aValue }" v-rt-ipa ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
+    <span :style="{ 'line-height': Options.options.lineHeight }" :class="{ 'val-edit': true, 'val-focus': true, 'empty': !aValue }" v-rt-ipa ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
     <font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
   </span>
 
@@ -27,6 +27,8 @@
   import _ from 'lodash'
   import SelectPossibleValues from './SelectPossibleValues'
   import veFunctions from './functions'
+
+  import { mapState } from 'vuex'
 
   export default {
     name: 'EditableValue',
@@ -40,6 +42,7 @@
       }
     },
     computed: {
+      ...mapState(['Options']),
       aValue () {
         return this.content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false)
       },

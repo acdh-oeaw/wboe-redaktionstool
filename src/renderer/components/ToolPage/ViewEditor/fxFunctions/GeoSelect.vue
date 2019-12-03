@@ -37,7 +37,7 @@
       <font-awesome-icon icon="map-marked"/>
     </span>
     <button @click="edit = true" class="btn-none geoselect view" v-else>
-      <span v-for="(place, pKey) in placesView()" :key="'pl' + pKey"><template v-if="pKey > 0">{{ content.fxData.join }} </template><span class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
+      <span v-for="(place, pKey) in placesView()" :key="'pl' + pKey"><template v-if="pKey > 0">{{ content.fxData.join }} </template><span :style="{ 'line-height': Options.options.lineHeight }" class="place">{{ place.orgXmlObj.getValue(false) }}</span></span>
       <!-- leere Spans für die Kinder damit die Warnungen zugeordnet werden können!  -->
       <span :id="'eo' + child.uId" v-for="child in content.childs" :key="'eo' + child.uId">
         <span class="error-place" v-if="Object.keys(child.warnings).length > 0 || Object.keys(child.errors).length > 0">{{ child.orgXmlObj.getValueByOption(child.parserObj.options.get('value'), false) }}&nbsp;</span>
@@ -51,6 +51,8 @@
 <script>
   import _ from 'lodash'
   import stdFunctions from '@/functions/stdFunctions'
+
+  import { mapState } from 'vuex'
 
   export default {
     name: 'GeoSelect',
@@ -67,6 +69,7 @@
       }
     },
     computed: {
+      ...mapState(['Options'])
     },
     watch: {
       'edit' (nVal) {

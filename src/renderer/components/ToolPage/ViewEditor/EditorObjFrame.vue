@@ -80,8 +80,8 @@
       </div>
       <div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
             v-if="addableInButtons.length > 0">
-        <div class="inline-block" @mouseenter="showAddableButtons('In')" @mouseleave="hideAddableButtons($event, 'In')">
-          <b-button @click="addTag(addableInButtons[0].uId, 'In')" size="xs"
+        <div class="inline-block" @mouseenter="Options.options.addBtnHover ? showAddableButtons('In') : null" @mouseleave="Options.options.addBtnHover ? hideAddableButtons($event, 'In') : null">
+          <b-button @click="Options.options.addBtnHover ? addTag(addableInButtons[0].uId, 'In') : showAddableButtons('In')" size="xs"
                     @focus="showAddableButtons('In')"
                     @blur="hideAddableButtons($event, 'In')"
                     ref="addableInButton"
@@ -100,8 +100,8 @@
       <slot name="childs"/>		<!-- Kinder -->
       <div @contextmenu.prevent="contextMenue" :class="{'addable-after-btn': true, 'inline': layoutBase !== 'box'}"
             v-if="addableAfterButtons.length > 0">
-        <div class="inline-block" @mouseenter="showAddableButtons('After')" @mouseleave="hideAddableButtons($event, 'After')">
-          <b-button @click="addTag(addableAfterButtons[0].uId, 'After')" size="xs"
+        <div class="inline-block" @mouseenter="Options.options.addBtnHover ? showAddableButtons('After') : null" @mouseleave="Options.options.addBtnHover ? hideAddableButtons($event, 'After') : null">
+          <b-button @click="Options.options.addBtnHover ? addTag(addableAfterButtons[0].uId, 'After') : showAddableButtons('After')" size="xs"
                     @focus="showAddableButtons('After')"
                     @blur="hideAddableButtons($event, 'After')"
                     ref="addableAfterButton"

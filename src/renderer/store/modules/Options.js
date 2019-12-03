@@ -44,10 +44,17 @@ const actions = {
 		commit('SET_SHOW', { 'show': aShow })
 	},
 	GET_OPTIONS ({ commit }) {
-		commit('SET_OPTIONS', { 'options': store.get('options', { 'zoom': 1 }) })
+		let aOptions = store.get('options', { 'zoom': 1, 'lineHeight': 1.5 })
+		if (!aOptions.lineHeight) {
+			aOptions.lineHeight = 1.5
+		}
+		if (!(aOptions.addBtnHover || aOptions.addBtnHover === false)) {
+			aOptions.addBtnHover = true
+		}
+		commit('SET_OPTIONS', { 'options': aOptions })
 	},
 	SET_OPTIONS ({ commit }, { option, value }) {
-		var aOptions = JSON.parse(JSON.stringify(state.show))
+		var aOptions = JSON.parse(JSON.stringify(state.options))
 		aOptions[option] = value
 		store.set('options', aOptions)
 		commit('SET_OPTIONS', { 'options': aOptions })

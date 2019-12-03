@@ -18,7 +18,7 @@
       <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in content.parserObj.options.get('layout.showAttributeBefore')"/>
     </template>
 
-    <span :class="{ 'val-fix': true,
+    <span :style="{ 'line-height': Options.options.lineHeight }" :class="{ 'val-fix': true,
                     'bold': content.parserObj.options.get('layout.bold'),
                     'italic': content.parserObj.options.get('layout.italic'),
                     'underline': content.parserObj.options.get('layout.underline'),

@@ -12,13 +12,23 @@
 							<b-nav-item to="/tool" :disabled="!Files.file">Tool</b-nav-item>
 							<b-nav-item-dropdown right>
 								<template slot="button-content"><font-awesome-icon icon="address-card"/></template>
-								<div class="d-flex bd-highlight">
-									<label @dblclick="zoom = 1; setZoom();" title="Doppelklick für 100%"  v-b-tooltip.hover for="options-zoom" class="px-2 py-1 m-0"><font-awesome-icon icon="search"/></label>
-									<b-form-input v-model="zoom" @change="setZoom" id="options-zoom" type="range" class="p-0 mx-2 custom-range border-0" min="0.75" max="1.25" step="0.01"></b-form-input>
-									<b-tooltip target="options-zoom">
-										{{ parseInt(this.zoom * 100) }} %
-									</b-tooltip>
+								<div class="d-flex flex-column bd-highlight">
+									<div class="d-flex">
+										<label @dblclick="zoom = 1; setZoom();" title="Doppelklick für 100%"  v-b-tooltip.hover for="options-zoom" class="px-2 py-1 m-0"><font-awesome-icon icon="search"/></label>
+										<b-form-input v-model="zoom" @change="setZoom" id="options-zoom" type="range" class="p-0 mx-2 custom-range border-0" min="0.75" max="1.25" step="0.01"></b-form-input>
+										<b-tooltip target="options-zoom">
+											{{ parseInt(this.zoom * 100) }} %
+										</b-tooltip>
+									</div>
+									<div class="d-flex">
+										<label @dblclick="lineHeight = 1.5; setLineHeight();" title="Doppelklick für 100%"  v-b-tooltip.hover for="options-lineHeight" class="px-2 py-1 m-0"><font-awesome-icon icon="grip-lines"/></label>
+										<b-form-input v-model="lineHeight" @change="setLineHeight" id="options-lineHeight" type="range" class="p-0 mx-2 custom-range border-0" min="1.5" max="6" step="0.1"></b-form-input>
+										<b-tooltip target="options-lineHeight">
+											{{ parseInt(this.lineHeight / 1.5 * 100) }} %
+										</b-tooltip>
+									</div>
 								</div>
+								<button @click="addBtnHover = !addBtnHover; setAddBtnHover();" class="addbtnhover"><font-awesome-icon icon="plus" class="mr-4"/> {{ addBtnHover ? 'Hover' : 'Klick' }}</button>
 							</b-nav-item-dropdown>
 							<b-nav-item to="/info" :disabled="Files.changed"><font-awesome-icon icon="info"/></b-nav-item>
 						</b-navbar-nav>
@@ -47,6 +57,8 @@
 			return {
 				devMode: (process.env.NODE_ENV === 'development'),
 				zoom: 1,
+				lineHeight: 1.5,
+				addBtnHover: true
 			}
 		},
 		computed: {
@@ -58,6 +70,12 @@
 		watch: {
 			'Options.options.zoom' (nVal) {
 				this.zoom = nVal
+			},
+			'Options.options.lineHeight' (nVal) {
+				this.lineHeight = nVal
+			},
+			'Options.options.addBtnHover' (nVal) {
+				this.addBtnHover = nVal
 			},
 			'Misc.searchLock' (nVal) {
 				if (nVal) {
@@ -89,6 +107,12 @@
 			setZoom () {
 				this.$store.dispatch('SET_OPTIONS', { 'option': 'zoom', 'value': this.zoom })
 				webFrame.setZoomFactor(parseFloat(this.Options.options.zoom))
+			},
+			setLineHeight () {
+				this.$store.dispatch('SET_OPTIONS', { 'option': 'lineHeight', 'value': this.lineHeight })
+			},
+			setAddBtnHover () {
+				this.$store.dispatch('SET_OPTIONS', { 'option': 'addBtnHover', 'value': this.addBtnHover })
 			}
 		},
 		created () {
@@ -322,5 +346,15 @@
     color: #000;
     background-color: #eee;
     border-color: #eee;
+	}
+	.addbtnhover {
+		border: none;
+		background: none;
+		padding: 0 8px;
+		width: 100%;
+		text-align: left;
+	}
+	.addbtnhover:hover, .addbtnhover:focus {
+		background: #eef;
 	}
 </style>
