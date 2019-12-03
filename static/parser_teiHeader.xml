@@ -45,7 +45,7 @@
                           {"value": "Patrick Zeitlhuber", "attribute": {"ref": "#PZ"}},
                           {"value": "Sabine Wahl", "attribute": {"ref": "#SW"}},
                           {"value": "Sonja Schwaiger", "attribute": {"ref": "#SS"}},
-                          {"value": "Jan Braun", "attribute": {"ref": "#JD"}},
+                          {"value": "Jan Braun", "hide": true, "attribute": {"ref": "#JD"}},
                           {"value": "Angela Bergermayer", "attribute": {"ref": "#AB"}},
                           {"value": "Eva Wahlmüller", "attribute": {"ref": "#EW"}},
                           {"title": "David Gschösser", "value": "DG"}
@@ -185,7 +185,7 @@
                                                                                 {"title": "Patrick Zeitlhuber", "value": "PZ"},
                                                                                 {"title": "Sabine Wahl", "value": "SW"},
                                                                                 {"title": "Sonja Schwaiger", "value": "SS"},
-                                                                                {"title": "Jan Braun", "value": "JD"},
+                                                                                {"title": "Jan Braun", "hide": true, "value": "JD"},
                                                                                 {"title": "Angela Bergermayer", "value": "AB"},
                                                                                 {"title": "Eva Wahlmüller", "value": "EW"},
                                                                                 {"title": "David Gschösser", "value": "DG"}

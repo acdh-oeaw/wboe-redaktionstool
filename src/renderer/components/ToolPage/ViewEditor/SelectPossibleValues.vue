@@ -7,9 +7,11 @@
     <b-dropdown-item @click="select(-1)" :active="selected === -1" v-if="empty">
       <font-awesome-icon icon="check" class="fa-icon" v-if="selected === -1"/> Kein Wert!
     </b-dropdown-item>
-    <b-dropdown-item @click="select(aKey)" :active="selected === aKey" :key="aKey" v-for="(aVal, aKey) in aValues">
-      <font-awesome-icon icon="check" class="fa-icon" v-if="aKey === selected"/> {{ aVal }}
-    </b-dropdown-item>
+    <template v-for="(aVal, aKey) in aValues">
+      <b-dropdown-item @click="select(aKey)" :active="selected === aKey" :key="aKey" v-if="!(aKey !== selected && aVal.hide)">
+        <font-awesome-icon icon="check" class="fa-icon" v-if="aKey === selected"/> {{ aVal.title || aVal.value || aVal }}
+      </b-dropdown-item>
+    </template>
   </b-dropdown>
 </template>
 
@@ -30,7 +32,7 @@
       aValues () {
         let aValList = []
         this.values.forEach(function (aVal) {
-          aValList.push(aVal.title || aVal.value || aVal)
+          aValList.push(aVal)
         }, this)
         return aValList
       }
