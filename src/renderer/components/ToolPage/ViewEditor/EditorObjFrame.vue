@@ -22,7 +22,7 @@
 
     <div :style="'height: ' + cParserOptions.get('layout.spaceBefore') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceBefore')"></div>
     <div :class="'h' + (cParserOptions.get('layout.headerSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions && cParserOptions.get('layout.header')">{{ cParserOptions.get('layout.header') }}</div>
-    <span class="before" v-if="cParserOptions && cParserOptions.get('layout.before')">{{ cParserOptions.get('layout.before') }}</span>
+    <span class="before" v-if="cParserOptions && cParserOptions.get('layout.before') && !cParserOptions.get('layout.fxPreview')">{{ cParserOptions.get('layout.before') }}</span>
 
 
     <!-- Inhalte -->
@@ -125,7 +125,7 @@
       {{ cParserOptions.get('layout.multiple.join') }}
     </span>
 
-    <span class="after" v-if="cParserOptions && cParserOptions.get('layout.after')">{{ cParserOptions.get('layout.after') }}</span>
+    <span class="after" v-if="cParserOptions && cParserOptions.get('layout.after') && !cParserOptions.get('layout.fxPreview')">{{ cParserOptions.get('layout.after') }}</span>
     <div class="h4" v-if="cParserOptions && cParserOptions.get('layout.footer')">{{ cParserOptions.get('layout.footer') }}</div>
     <div :style="'height: ' + cParserOptions.get('layout.spaceAfter') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceAfter')"></div>
 

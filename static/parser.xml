@@ -515,7 +515,9 @@
                     "layout": {
                       "frame": "inline",
                       "hideTitle": true,
-                      "italic": true
+                      "italic": true,
+                      "before": "→",
+                      "fxPreview": true
                     },
                     "editor": {
                       "fxFunction": {
