@@ -29,7 +29,7 @@ const localFunctions = {
     }, this)
   },
   getXML () {
-    return (this.parserObj.header || '') + this.orgXmlObj.getXML(this)
+    return (this.parserObj.header || '') + '\n<?redaktionstool version="' + require('../../../../../package.json').version + '"?>' + this.orgXmlObj.getXML(this)
   },
   moveTo (srcUId, destUId, dir = 'left') {
     let srcObj = this.family[srcUId]
