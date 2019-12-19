@@ -44,7 +44,12 @@
         <div class="form-row align-items-center">
           <div class="col-1">
             <div class="input-group mb-2">
-              <input type="text" class="form-control" placeholder="lbl" v-model="lbl">
+              <select class="form-control" style="padding:6px 2px;" v-model="lbl">
+                <option value="">Kein lbl</option>
+                <option value="vgl.">vgl.</option>
+                <option value="s.">s.</option>
+                <option value="s. auch">s. auch</option>
+              </select>
             </div>
           </div>
           <div class="col-2">

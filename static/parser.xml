@@ -529,7 +529,7 @@
           <?options {
                       "id": "xr-int-lbl",
                       "title": "lbl",
-                      "value": ["edit", "required"],
+                      "value": ["edit", "required", {"is": {"value": "vgl.", "possibleValues": ["vgl.", "s.", "s. auch"]}}],
                       "tag": ["possibleTag"],
                       "layout": {
                         "hideTitle": true,
@@ -854,7 +854,7 @@
           <?options {
                       "id": "lbl",
                       "title": "lbl",
-                      "value": ["edit", "required"],
+                      "value": ["edit", "required", {"is": {"value": "vgl.", "possibleValues": ["vgl.", "s.", "s. auch"]}}],
                       "tag": ["possibleTag"],
                       "layout": {
                         "frame": "inline"

@@ -4,7 +4,7 @@
       <PreviewContent :content="content" :fx="{noBefore: true, noAfter: true}"/>
       <font-awesome-icon icon="external-link-alt"/>
     </button>
-    <b-modal v-if="edit" ref="editmodal" :id="'rbsmodal' + content.uId" title="Querverweis auf Artikel" @hidden="edit = false" @hide="chancelValue" size="lg" modal-class="modal-xl">
+    <b-modal v-if="edit" ref="editmodal" :id="'rbsmodal' + content.uId" title="Verweis auf Literatur" @hidden="edit = false" @hide="chancelValue" size="lg" modal-class="modal-xl">
       <div class="row">
         <div class="col-5">
           <div class="card belegselect">
@@ -56,7 +56,12 @@
               <div class="input-group-prepend">
                 <div class="input-group-text">lbl</div>
               </div>
-              <input type="text" class="form-control" v-model="lbl">
+              <select class="form-control" style="padding:6px 2px;" v-model="lbl">
+                <option value="">Kein lbl</option>
+                <option value="vgl.">vgl.</option>
+                <option value="s.">s.</option>
+                <option value="s. auch">s. auch</option>
+              </select>
             </div>
           </div>
           <div class="col-3">
