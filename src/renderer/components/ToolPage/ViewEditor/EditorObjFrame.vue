@@ -26,18 +26,19 @@
 
 
     <!-- Inhalte -->
-    <div :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
+    <div :class="'obj just-childs' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-if="layoutBase === 'justChilds'">
       <span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
       <slot name="childs"/>		<!-- Kinder -->
     </div>
 
-    <b-card :class="{'obj': true, 'paneldecent': true, 'mitb5': true, 'warnings': content.warnings.length > 0}" v-else-if="layoutBase === 'panel'" no-body>
+    <b-card :class="'obj paneldecent mitb5' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else-if="layoutBase === 'panel'" no-body>
       <div @contextmenu.prevent="contextMenue" slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
           <span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <span><b>{{ title }}</b>&nbsp;</span>
           <font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
         </button>
+        <span :class="'comment-sym' + (Options.show.commentsHighlight ? ' comment-highlight' : '')" v-if="hasComment"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
       </div>
       <b-collapse v-model="isOpen" :id="'collapse-' + _uid" class="fxcollapse">
         <b-list-group @contextmenu.prevent="contextMenue" flush v-if="content.addableInner.length > 0">
@@ -55,7 +56,6 @@
         <b-card-body>
           <div @contextmenu.prevent="contextMenue" class="context rel">
             <slot/>		<!-- Inhalt -->
-            <span :class="{'comment-sym': true, 'comment-highlight': Options.show.commentsHighlight}" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
           </div>
           <slot name="childs"/>		<!-- Kinder -->
         </b-card-body>
@@ -71,12 +71,12 @@
       </div>
     </b-card>
 
-    <div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')" v-else>
+    <div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else>
       <div @contextmenu.prevent="contextMenue" class="context rel">
         <span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
         <b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
         <slot />		<!-- Inhalt -->
-        <span :class="{'comment-sym': true, 'comment-highlight': Options.show.commentsHighlight}" v-if="content.orgXmlObj && content.orgXmlObj.comments.length > 0"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
+        <span :class="'comment-sym' + (Options.show.commentsHighlight ? ' comment-highlight' : '')" v-if="hasComment"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
       </div>
       <div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
             v-if="addableInButtons.length > 0">
@@ -157,6 +157,13 @@
       </b-input-group>
 
     </b-modal>
+    <b-tooltip :target="'eo' + content.uId" placement="topright" triggers="hover" class="tooltipcomment" v-if="hasComment && Options.show.commentsHighlight">
+      <ul class="comment-list">
+        <li class="comment" v-for="(aComment, aComKey) in content.orgXmlObj.comments" :key="'cott' + content.uId + '-' + aComKey">
+          {{ aComment.val }}
+        </li>
+      </ul>
+    </b-tooltip>
   </div>
 </template>
 
@@ -185,6 +192,9 @@
     computed: {
       ...mapState(['DragNdrop']),
       ...mapState(['Options']),
+      hasComment () {
+        return this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0
+      },
       cParserObj () {
         return this.content.parserObj
       },
@@ -553,12 +563,22 @@
     top: -9px;
     font-size: 10px;
     color: #666;
+    pointer-events: none;
   }
   .comment-sym.comment-highlight {
-    font-size: 15px;
-    top: -16px;
-    right: -9px;
-    color: #ec8d54;
+    font-size: 20px;
+    top: -21px;
+    right: -13px;
+    color: #ef4921;
+  }
+  .card.obj.has-comment.comment-highlight > .card-header, .obj.has-comment.comment-highlight {
+    background-color: #ffe1d9;
+  }
+  .tooltip-inner ul.comment-list {
+    margin: 0;
+    padding-top: 3px;
+    padding-bottom: 5px;
+    padding-right: 15px;
   }
   .dragobj {
     opacity: 0.33;
