@@ -48,7 +48,7 @@
                           {"value": "Jan Braun", "hide": true, "attribute": {"ref": "#JD"}},
                           {"value": "Angela Bergermayer", "attribute": {"ref": "#AB"}},
                           {"value": "Eva Wahlmüller", "attribute": {"ref": "#EW"}},
-                          {"title": "David Gschösser", "value": "DG"}
+                          {"value": "David Gschösser", "attribute": {"ref": "#DG"}}
                         ]
                       }}],
                       "layout": { "frame": "line" }
