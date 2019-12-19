@@ -18,10 +18,27 @@
     </div>
 
     <div class="fileline" v-if="file">
-      <button @click="loadFile()" :title="file.fullFileName" :class="{'active': isActiveFile, 'italic': isParser}">
+      <button :id="'fl-' + _uid" @click="loadFile()" :title="file.fullFileName" :class="{'active': isActiveFile, 'italic': isParser}">
         <span class="file"><font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5"/>{{ file.file }}</span>
         <span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
-        <span class="info" v-if="file.info"><span v-if="file.info.changed" style="color:#9a0000;"><b>Anpassen!</b></span> <span>Fehler: <b>{{ file.info.errors }}</b></span> <span>Warnungen: <b>{{ file.info.warnings }}</b></span></span>
+        <span class="info" v-if="file.info">
+          <span v-if="file.info.changed" style="color:#9a0000;"><b>Anpassen!</b></span>
+          <span>Fehler: <b>{{ file.info.errors }}</b></span>
+          <span>Warnungen: <b>{{ file.info.warnings }}</b></span>
+          <span :id="'fl-c-' + _uid">Kommentare: <b>{{ file.info.comments }}</b></span>
+        </span>
+        <b-tooltip :target="'fl-c-' + _uid" placement="topleft" triggers="hover" class="tooltipcomment" v-if="file.info && file.info.comments > 0">
+          <ul class="comment-list-el">
+            <li class="comment-el" v-for="(aCommentObj, aComObjKey) in file.info.commentsObj" :key="'flcott' + _uid + '-' + aComObjKey">
+              {{ aCommentObj.title }}
+              <ul class="comment-list">
+                <li class="comment-el" v-for="(aComment, aComKey) in aCommentObj.comments" :key="'flcott' + _uid + '-' + aComObjKey + '-' + aComKey">
+                  {{ aComment.val }}
+                </li>
+              </ul>
+            </li>
+          </ul>
+        </b-tooltip>
       </button>
     </div>
 

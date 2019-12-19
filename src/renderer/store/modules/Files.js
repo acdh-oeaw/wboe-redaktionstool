@@ -154,7 +154,17 @@ const actions = {
 				if (aFile.ext === 'xml') {
 					let editorFile = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
 					let editorObj = new EditorObject.EditorBase(parser, new XmlObject.XmlBase(editorFile))
-					commit('SET_PATHS_INFO', {'path': aDir, 'fileIndex': aFileIndex, 'info': {'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML(editorObj) !== editorFile)}})
+					commit('SET_PATHS_INFO', {
+						'path': aDir,
+						'fileIndex': aFileIndex,
+						'info': {
+							'errors': Object.keys(editorObj.errors).length,
+							'warnings': Object.keys(editorObj.warnings).length,
+							'comments': editorObj.comments.length,
+							'commentsObj': editorObj.comments,
+							'changed': (editorObj.getXML(editorObj) !== editorFile)
+						}
+					})
 				}
 			}, this)
 		}, this)

@@ -8,6 +8,7 @@ const localFunctions = {
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
     this.errors = {}							// Fehler. Property = "EditorObject.uId" oder "-1" für "EditorBase"
     this.warnings = {}						// Warnungen. Property = "EditorObject.uId" oder "-1" für "EditorBase"
+    this.comments = []						// Kommentare.
     this.contentObj = null				// Enthaltene "EditorObject"
     this.family = []							// Alle "EditorObject"e "Key" = "uId"
     this.parserObj = parserObj || null	// parserObj

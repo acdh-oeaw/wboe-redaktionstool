@@ -61,10 +61,28 @@ const localFunctions = {
   },
   updateFamilyErrors () {
     if (this.family.length > 0) {
+      this.comments = []
       this.family.forEach(function (aObj) {
         if (aObj) {
           aObj.childsWithErrors = false
           aObj.descendantsWithErrors = false
+          if (aObj.orgXmlObj && aObj.orgXmlObj.comments && aObj.orgXmlObj.comments.length > 0) {
+            let comment = {comments: aObj.orgXmlObj.comments}
+            if (aObj.parserObj) {
+              if (aObj.parserObj.name) {
+                comment.name = aObj.parserObj.name
+              }
+              let cParserOptions = aObj.parserObj.options
+              if (cParserOptions) {
+                if (cParserOptions.getResult('title')) {
+                  comment.title = cParserOptions.getResult('title')
+                } else if (cParserOptions.get('tagAsTitle') || this.layoutBase === 'panel') {
+                  comment.title = aObj.orgXmlObj.name
+                }
+              }
+            }
+            this.comments.push(comment)
+          }
         }
       }, this)
       this.family.forEach(function (aObj) {
