@@ -1164,7 +1164,11 @@
                       "addTitle": "Redewendung"
                     }
                   } ?>
-        <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"], "layout": {
+                      "frame": "line",
+                      "before": "",
+                      "spaceBefore": 10
+                    } } } ?>
         <form subtype="MWE">
           <?options {
                       "title": "Form Lemma/Variable",

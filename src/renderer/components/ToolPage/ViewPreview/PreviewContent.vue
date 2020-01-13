@@ -153,6 +153,7 @@
         return 'none'
       },
       layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
+        if (this.fx && this.fx.frame) { return this.fx.frame }
         if (this.content.isRoot) { return 'justChilds' }
         if (this.cParserObj && this.cParserOptions && this.cParserOptions.get('previewLayout.frame')) {
           if (this.cParserOptions.get('previewLayout.frame') === 'panelClosed') {

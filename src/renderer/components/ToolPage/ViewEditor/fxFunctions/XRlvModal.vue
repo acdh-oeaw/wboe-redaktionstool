@@ -1,7 +1,7 @@
 <template>
   <span :id="'xrlv' + content.uId" class="xrlvmodal">
     <button @click="edit = true" class="btn-none xrlvmodalbtn view">
-      <PreviewContent :content="content"/>
+      <PreviewContent :content="content" :fx="{'frame': 'inline'}"/>
       <font-awesome-icon icon="external-link-alt"/>
     </button>
     <b-modal v-if="edit" ref="editmodal" :id="'xrlvmodal' + content.uId" title="Querverweis auf Artikel" @hidden="edit = false" @hide="chancelValue" size="lg" modal-class="modal-xl">
