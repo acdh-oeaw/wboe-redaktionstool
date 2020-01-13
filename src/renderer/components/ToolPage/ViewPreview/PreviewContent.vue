@@ -1,8 +1,6 @@
 <template>
   <div :id="'po' + content.uId"
-       :class="'inline'"
-       :title="((valAnchor || subTypAnchor) ? '#' + valAnchor + ' (' + typAnchor + ((subTypAnchor) ? ', ' + subTypAnchor : '') + ')' + ' -> ' + content.orgXmlObj.getValue()[0] : '')"
-       v-b-tooltip.hover.left
+       class="inline prel"
        :style="'font-size: ' + ((cParserObj && cParserOptions && cParserOptions.get('previewLayout.fontsize')) ? cParserOptions.get('previewLayout.fontsize') : 100) + '%;'"
        >
     <template v-if="!hideWithoutContentAll">
@@ -23,11 +21,11 @@
 
         <!-- Inhalte -->
         <!-- justChilds -->
-        <div :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
+        <div :id="'pox' + content.uId" :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
           <span :class="{'enumerate': true, 'enumeraterom': cParserOptions.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <!-- Kinder -->
           <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.get('editor.fxFunction.name')) > -1)">
-            <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
+            <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
               v-for="(aContent, aKey) in contentChildsShown"
               :key="aContent.uId + '-' + aKey"
             />
@@ -37,10 +35,11 @@
         <div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')
                     + ((showAnchors && hasAnchor) ? ' hasanchor' : '')
                     + ((selectableAnchors && hasAnchor) ? ' hasselanchor' : '')
+                    + (((hasComment && showComments)) ? ' hascomment' : '')
                   "
           @click="setAnchor"
           v-else>
-          <div class="inline rel">
+          <div :id="'pox' + content.uId" class="inline rel">
             <span :class="'enumerate' + ((this.cParserOptions.get('previewLayout.multiple.enumerateFX'))?' enumeratefx deep' + content.parserCopyDeep:'')" v-if="enumerate">{{ enumerate }}&nbsp;</span>
             <b v-if="shownTitle">{{ shownTitle }}: </b><br v-if="shownTitle && layoutBase === 'box'"/>
             <!-- Inhalt -->
@@ -55,7 +54,7 @@
           </div>
           <!-- Kinder -->
           <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.get('editor.fxFunction.name')) > -1)">
-            <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
+            <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
               v-for="(aContent, aKey) in contentChildsShown"
               :key="aContent.uId + '-' + aKey"
             />
@@ -78,11 +77,21 @@
         <span v-if="!cParserOptions.get('previewLayout.noSpaceAfter') && (valueType === 'fix' || valueType === 'editable')">&nbsp;</span>
       </template>
     </template>
+    <b-tooltip :target="'po' + content.uId" placement="left" triggers="hover" v-if="showAnchors && hasAnchor">
+      {{ '#' + valAnchor + ' (' + typAnchor + ((subTypAnchor) ? ', ' + subTypAnchor : '') + ')' + ' -> ' + content.orgXmlObj.getValue()[0] }}
+    </b-tooltip>
+    <b-tooltip :target="'pox' + content.uId" placement="top" triggers="hover" v-if="hasComment && showComments">
+      <ul class="comment-list">
+        <li class="comment" v-for="(aComment, aComKey) in content.orgXmlObj.comments" :key="'cott' + content.uId + '-' + aComKey">
+          {{ aComment.val }}
+        </li>
+      </ul>
+    </b-tooltip>
+    <span :class="'comment-sym'" v-if="hasComment && showComments"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
   </div>
 </template>
 
 <script>
-  // fxFunctions
   import GeoPreview from './fxFunctions/GeoPreview'
 
   export default {
@@ -91,6 +100,7 @@
       content: Object,
       fx: Object,
       showAnchors: Boolean,
+      showComments: Boolean,
       selectableAnchors: Boolean,
     },
     data () {
@@ -100,6 +110,9 @@
       }
     },
     computed: {
+      hasComment () {
+        return this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0
+      },
       fxC () {
         return this.fx || {}
       },
@@ -263,6 +276,9 @@
 </script>
 
 <style scoped>
+  .prel {
+    position: relative;
+  }
   .inline {
     display: inline;
   }
@@ -292,5 +308,19 @@
   }
   .h1:first-child, .h2:first-child, .h3:first-child, .h4:first-child, .h5:first-child, .h6:first-child {
     margin-top: 0px;
+  }
+  .comment-sym {
+    position: absolute;
+    right: -5px;
+    top: -9px;
+    font-size: 10px;
+    color: #666;
+    pointer-events: none;
+  }
+  .comment-sym.comment-highlight {
+    font-size: 20px;
+    top: -21px;
+    right: -13px;
+    color: #ef4921;
   }
 </style>

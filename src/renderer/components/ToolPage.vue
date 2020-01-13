@@ -49,7 +49,7 @@
 
         <b-tab title="Vorschau" :disabled="tabsLocked">
           <div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
-            <ViewPreview :start="true" :object="editorObject" :showAnchors="Options.show.showAnchors" v-if="editorObject && editorObject.contentObj"/>
+            <ViewPreview :start="true" :object="editorObject" :showAnchors="Options.show.showAnchors" :showComments="Options.show.showComments" v-if="editorObject && editorObject.contentObj"/>
             <div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
           </div>
         </b-tab>
@@ -110,6 +110,7 @@
               </template>
               <template v-if="aTab === 1">
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'showAnchors')"><font-awesome-icon :icon="((Options.show.showAnchors) ? 'eye' : 'eye-slash')"/> Anker anzeigen</button>
+                <button @click="$store.dispatch('TOGGLE_SHOW', 'showComments')"><font-awesome-icon :icon="((Options.show.showComments) ? 'eye' : 'eye-slash')"/> Kommentare anzeigen</button>
                 <hr>
               </template>
               <template v-if="aTab === 3">

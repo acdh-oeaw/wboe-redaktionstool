@@ -2,7 +2,7 @@
   <div class="start" v-if="start">
     <div v-if="object.contentObj">
       <div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
-      <ViewPreview :object="object" :preview="object.parserObj.previewObj" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
+      <ViewPreview :object="object" :preview="object.parserObj.previewObj" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
     </div>
     <div v-else>
       Keine Content-Daten vorhanden
@@ -16,12 +16,12 @@
           <template v-if="typeof aContent === 'string'">
             <span v-html="aContent" :key="'sc' + aPrevKey + '-' + aConKey" />
           </template>
-          <ViewPreview :object="object" :preview="[aContent]" :showAnchors="showAnchors" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" :key="'vp' + aPrevKey + '-' + aConKey" v-else/>
+          <ViewPreview :object="object" :preview="[aContent]" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" :key="'vp' + aPrevKey + '-' + aConKey" v-else/>
         </template>
       </VariableTag>
       <template v-else-if="aPrev.type === 'PIN'">
         <PreviewContent :content="object.getEditorObjById(aPrev.options.fromid)"
-          :showAnchors="showAnchors" @setAnchor="setAnchor"
+          :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor"
           :selectableAnchors="selectableAnchors"
           :key="'pc' + aPrevKey"
           v-if="aPrev.name === 'content' && aPrev.options && aPrev.options.fromid"
@@ -51,6 +51,7 @@
       object: Object,
       preview: Array,
       showAnchors: Boolean,
+      showComments: Boolean,
       selectableAnchors: Boolean,
     },
     data () {
