@@ -49,7 +49,7 @@
 
         <b-tab title="Vorschau" :disabled="tabsLocked">
           <div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
-            <ViewPreview :start="true" ref="ViewPreview" :object="editorObject" :commentsListe="commentsListe" :showAnchors="Options.show.showAnchors" :showComments="Options.show.showComments" v-if="editorObject && editorObject.contentObj"/>
+            <ViewPreview :start="true" ref="ViewPreview" :filename="Files.file" :object="editorObject" :commentsListe="commentsListe" :showAnchors="Options.show.showAnchors" :showComments="Options.show.showComments" v-if="editorObject && editorObject.contentObj"/>
             <div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
           </div>
         </b-tab>
@@ -112,6 +112,8 @@
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'showAnchors')"><font-awesome-icon :icon="((Options.show.showAnchors) ? 'eye' : 'eye-slash')"/> Anker anzeigen</button>
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'showComments')"><font-awesome-icon :icon="((Options.show.showComments) ? 'eye' : 'eye-slash')"/> Kommentare anzeigen</button>
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'showCommentsList')" v-if="Options.show.showComments"><font-awesome-icon :icon="((Options.show.showCommentsList) ? 'eye' : 'eye-slash')"/> Kommentare als Liste</button>
+                <hr>
+                <button @click="$refs.ViewPreview.pdfExport"><font-awesome-icon icon="file-pdf"/> Als PDF exportieren</button>
                 <hr>
               </template>
               <template v-if="aTab === 3">
@@ -585,5 +587,26 @@
   .filechanged {
     margin-right: -24px;
     padding: 0 0.3rem;
+  }
+  @media print {
+    .viewpreview {
+      height: inherit!important;
+      z-index: 999999;
+      position: relative;
+      background: #fff;
+      overflow: visible;
+      padding-left: 0;
+      padding-right: 0;
+    }
+    .tabc {
+      border: none!important;
+      height: inherit!important;
+    }
+    .tabs .nav-tabs {
+      display: none!important;
+    }
+    .main-toolbar {
+      display: none!important;
+    }
   }
 </style>

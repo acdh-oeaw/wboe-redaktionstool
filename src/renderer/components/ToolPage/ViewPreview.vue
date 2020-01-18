@@ -64,9 +64,13 @@
 
 <script>
   import _ from 'lodash'
+  import { remote } from 'electron'
   import { mapState } from 'vuex'
   import VariableTag from './general/VariableTag'
   import PreviewContent from './ViewPreview/PreviewContent'
+  const ipc = require('electron').ipcRenderer
+  const path = require('path')
+  const { dialog } = remote
 
   export default {
     name: 'ViewPreview',
@@ -77,7 +81,8 @@
       showAnchors: Boolean,
       showComments: Boolean,
       selectableAnchors: Boolean,
-      commentsListe: Object
+      commentsListe: Object,
+      filename: String
     },
     data () {
       return {
@@ -98,7 +103,33 @@
     mounted () {
     },
     methods: {
+      pdfExport () {
+        let aDate = new Date()
+        let aMonth = aDate.getMonth() + 1
+        let now = aDate.getFullYear() + '-' + ((aMonth < 10) ? '0' : '') + aMonth + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
+        now += '_' + ((aDate.getHours() < 10) ? '0' : '') + aDate.getHours() + '_' + ((aDate.getMinutes() < 10) ? '0' : '') + aDate.getMinutes() + '_' + ((aDate.getSeconds() < 10) ? '0' : '') + aDate.getSeconds()
+        let oFilename = path.basename(this.filename)
+        let aExtension = path.extname(this.filename)
+        let nFilename = oFilename.substring(0, oFilename.length - aExtension.length)
+        nFilename += '_' + now
+        console.log(nFilename)
+        var newPDF = dialog.showSaveDialog({
+          title: 'PDF speichern ...',
+          defaultPath: nFilename,
+          filters: [
+            { name: 'PDF', extensions: ['pdf'] },
+            { name: 'All Files', extensions: ['*'] }
+          ]
+        })
+        console.log('newPDF', newPDF)
+        if (newPDF) {
+          ipc.send('print-to-pdf', newPDF)
+        }
+      },
       debouncedHeights: _.debounce(function () {
+        this.getHeights()
+      }, 100),
+      getHeights () {
         let sumHeight = 0
         let frmTop = this.$refs.frm.getBoundingClientRect().top
         Object.keys(this.commentsListe.comments).forEach((cId) => {
@@ -106,15 +137,12 @@
             let aY = this.commentsListe.comments[cId].el.getBoundingClientRect().top - frmTop
             let aHeight = this.$refs['cp' + cId][0].clientHeight
             let tsHeight = aY - sumHeight
-            // this.$set(this.commentsListe.comments[cId], 'y', aY)
-            // this.$set(this.commentsListe.comments[cId], 'sumHeight', sumHeight)
-            // this.$set(this.commentsListe.comments[cId], 'height', aHeight)
             this.$set(this.commentsListe.comments[cId], 'top', tsHeight)
             sumHeight += aHeight + (tsHeight > 0 ? tsHeight : 0)
           }
         })
         console.log(this.commentsListe.comments)
-      }, 100),
+      },
       getCommentPos (top, aEl) {
         // console.log(this.commentHeight)
         return 0
@@ -167,5 +195,17 @@
     overflow: hidden;
     text-overflow: ellipsis;
     margin-top: -5px;
+  }
+  @media print {
+    .col-10 {
+      -ms-flex: 0 0 81%;
+      flex: 0 0 81%;
+      max-width: 81%;
+    }
+    .col-2 {
+      -ms-flex: 0 0 19%;
+      flex: 0 0 19%;
+      max-width: 19%;
+    }
   }
 </style>

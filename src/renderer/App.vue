@@ -1,6 +1,6 @@
 <template>
 	<div id="app">
-		<b-navbar toggleable="md" type="light" variant="light">
+		<b-navbar toggleable="md" type="light" variant="light" class="rt-navbar">
 				<div class="container">
 					<b-navbar-toggle target="nav_collapse"></b-navbar-toggle>
 					<b-navbar-brand>
@@ -356,5 +356,13 @@
 	}
 	.addbtnhover:hover, .addbtnhover:focus {
 		background: #eef;
+	}
+	@media print {
+		#app {
+			font-size: 0.9rem;
+		}
+		.rt-navbar {
+			display: none!important;
+		}
 	}
 </style>

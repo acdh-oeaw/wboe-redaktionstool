@@ -2,6 +2,12 @@
 
 import { app, BrowserWindow } from 'electron'
 
+const electron = require('electron')
+
+const fs = require('fs')
+const ipc = electron.ipcMain
+const shell = electron.shell
+
 /**
  * Set `__static` path to static files in production
  * https://simulatedgreg.gitbooks.io/electron-vue/content/en/using-static-assets.html
@@ -46,6 +52,20 @@ app.on('activate', () => {
   if (mainWindow === null) {
     createWindow()
   }
+})
+
+ipc.on('print-to-pdf', function (event, filename) {
+  const pdfPath = filename // require('path').join(os.tmpdir(), 'filename.pdf')
+  const win = BrowserWindow.fromWebContents(event.sender)
+
+  win.webContents.printToPDF({}, function (error, data) {
+    if (error) return console.log(error.message)
+
+    fs.writeFile(pdfPath, data, function (err) {
+      if (err) return console.log(err.message)
+      shell.openExternal('file://' + pdfPath)
+    })
+  })
 })
 
 /**
