@@ -25,7 +25,7 @@
           <span :class="{'enumerate': true, 'enumeraterom': cParserOptions.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <!-- Kinder -->
           <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.get('editor.fxFunction.name')) > -1)">
-            <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
+            <PreviewContent ref="childs" :content="aContent" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
               v-for="(aContent, aKey) in contentChildsShown"
               :key="aContent.uId + '-' + aKey"
             />
@@ -54,7 +54,7 @@
           </div>
           <!-- Kinder -->
           <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.get('editor.fxFunction.name')) > -1)">
-            <PreviewContent ref="childs" :content="aContent" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
+            <PreviewContent ref="childs" :content="aContent" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
               v-for="(aContent, aKey) in contentChildsShown"
               :key="aContent.uId + '-' + aKey"
             />
@@ -102,12 +102,16 @@
       showAnchors: Boolean,
       showComments: Boolean,
       selectableAnchors: Boolean,
+      commentsListe: Object
     },
     data () {
       return {
         childlessFxFunctions: ['GeoSelect'],
         pSubtypes: ['compound', 'MWE', 'diminutive', 'movierung', 'shortform'],
       }
+    },
+    mounted () {
+      this.updateComments()
     },
     computed: {
       hasComment () {
@@ -225,8 +229,24 @@
       }
     },
     watch: {
+      'commentsListe.comments' (nVal) {
+        this.updateComments()
+      }
     },
     methods: {
+      updateComments () {
+        if (this.hasComment) {
+          if (this.commentsListe && this.commentsListe.comments && this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0) {
+            this.$set(this.commentsListe.comments, this.content.uId, {
+              list: this.content.orgXmlObj.comments,
+              title: this.title,
+              value: this.content.orgXmlObj.getValueByOption(this.cParserOptions.get('value'), false),
+              el: this.$el,
+              top: 0
+            })
+          }
+        }
+      },
       num2rom (num) {		// Römische Zahlen
         var rom = ''
         var aRom = ['M', 'CM', 'D', 'CD', 'C', 'XC', 'L', 'XL', 'X', 'IX', 'V', 'IV', 'I']

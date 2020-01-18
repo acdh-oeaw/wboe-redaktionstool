@@ -1,8 +1,30 @@
 <template>
   <div class="start" v-if="start">
-    <div v-if="object.contentObj">
-      <div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
-      <ViewPreview :object="object" :preview="object.parserObj.previewObj" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
+    <div ref="frm" class="row" v-if="object.contentObj">
+      <div :class="showComments && Options.show.showCommentsList ? 'col-10' : 'col-12'">
+        <div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
+        <ViewPreview :object="object" :preview="object.parserObj.previewObj" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
+      </div>
+      <div class="col-2 commList" v-if="showComments && Options.show.showCommentsList">
+        <template v-if="isCommentsListe">
+          <div
+            v-for="(aComments, aComsKey) in commentsListe.comments"
+            :key="'cp' + aComsKey"
+            :ref="'cp' + aComsKey"
+            :style="'margin-top:' + (aComments.top > 0 ? aComments.top : 0) + 'px;'"
+          >
+            <div class="comment-title"><b>{{ aComments.title }}:</b> {{ aComments.value }}</div>
+            <ul class="comment-list">
+              <li class="comment" v-for="(aComment, aComKey) in aComments.list" :key="'cp' + aComsKey + 'cott' + aComKey">
+                {{ aComment.val }}
+              </li>
+            </ul>
+          </div>
+        </template>
+        <template v-else>
+          Keine Kommentare vorhanden.
+        </template>
+      </div>
     </div>
     <div v-else>
       Keine Content-Daten vorhanden
@@ -16,11 +38,12 @@
           <template v-if="typeof aContent === 'string'">
             <span v-html="aContent" :key="'sc' + aPrevKey + '-' + aConKey" />
           </template>
-          <ViewPreview :object="object" :preview="[aContent]" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" :key="'vp' + aPrevKey + '-' + aConKey" v-else/>
+          <ViewPreview :object="object" :preview="[aContent]" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" :key="'vp' + aPrevKey + '-' + aConKey" v-else/>
         </template>
       </VariableTag>
       <template v-else-if="aPrev.type === 'PIN'">
         <PreviewContent :content="object.getEditorObjById(aPrev.options.fromid)"
+          :commentsListe="commentsListe"
           :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor"
           :selectableAnchors="selectableAnchors"
           :key="'pc' + aPrevKey"
@@ -40,6 +63,7 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import { mapState } from 'vuex'
   import VariableTag from './general/VariableTag'
   import PreviewContent from './ViewPreview/PreviewContent'
@@ -53,6 +77,7 @@
       showAnchors: Boolean,
       showComments: Boolean,
       selectableAnchors: Boolean,
+      commentsListe: Object
     },
     data () {
       return {
@@ -60,12 +85,40 @@
     },
     computed: {
       ...mapState(['Options']),
+      isCommentsListe () {
+        // console.log(Object.keys(this.commentsListe.comments), this.commentsListe.comments && Object.keys(this.commentsListe.comments).length > 0)
+        return this.commentsListe.comments && Object.keys(this.commentsListe.comments).length > 0
+      }
     },
     watch: {
+      'commentsListe.comments' (nVal) {
+        if (this.start) { this.debouncedHeights() }
+      }
     },
     mounted () {
     },
     methods: {
+      debouncedHeights: _.debounce(function () {
+        let sumHeight = 0
+        let frmTop = this.$refs.frm.getBoundingClientRect().top
+        Object.keys(this.commentsListe.comments).forEach((cId) => {
+          if (this.$refs['cp' + cId] && this.$refs['cp' + cId][0]) {
+            let aY = this.commentsListe.comments[cId].el.getBoundingClientRect().top - frmTop
+            let aHeight = this.$refs['cp' + cId][0].clientHeight
+            let tsHeight = aY - sumHeight
+            // this.$set(this.commentsListe.comments[cId], 'y', aY)
+            // this.$set(this.commentsListe.comments[cId], 'sumHeight', sumHeight)
+            // this.$set(this.commentsListe.comments[cId], 'height', aHeight)
+            this.$set(this.commentsListe.comments[cId], 'top', tsHeight)
+            sumHeight += aHeight + (tsHeight > 0 ? tsHeight : 0)
+          }
+        })
+        console.log(this.commentsListe.comments)
+      }, 100),
+      getCommentPos (top, aEl) {
+        // console.log(this.commentHeight)
+        return 0
+      },
       length (val) {
         if (Array.isArray(val)) {
           return val.length
@@ -76,6 +129,10 @@
       setAnchor (data) {
         this.$emit('setAnchor', data)
       },
+      commentsListeReset () {
+        this.commentsListe.comments = {}
+        console.log('commentsListeReset', this.commentsListe)
+      }
     },
     components: {
       VariableTag,
@@ -87,5 +144,28 @@
 <style scoped>
   .inline {
     display: inline;
+  }
+  .commList > div {
+    position: relative;
+  }
+  .commList {
+    border-left: 1px solid #ccc;
+    color: #333;
+    font-size: 0.8rem;
+    overflow-wrap: break-word;
+  }
+  ul.comment-list {
+    border-top: 1px solid #ddd;
+    margin: 0;
+    padding: 0.25rem 0;
+    padding-left: 1.5rem;
+    margin-bottom: 5px;
+  }
+  .comment-title {
+    font-size: 0.7rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: -5px;
   }
 </style>

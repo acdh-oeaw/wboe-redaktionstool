@@ -49,7 +49,7 @@
 
         <b-tab title="Vorschau" :disabled="tabsLocked">
           <div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
-            <ViewPreview :start="true" :object="editorObject" :showAnchors="Options.show.showAnchors" :showComments="Options.show.showComments" v-if="editorObject && editorObject.contentObj"/>
+            <ViewPreview :start="true" ref="ViewPreview" :object="editorObject" :commentsListe="commentsListe" :showAnchors="Options.show.showAnchors" :showComments="Options.show.showComments" v-if="editorObject && editorObject.contentObj"/>
             <div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
           </div>
         </b-tab>
@@ -111,6 +111,7 @@
               <template v-if="aTab === 1">
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'showAnchors')"><font-awesome-icon :icon="((Options.show.showAnchors) ? 'eye' : 'eye-slash')"/> Anker anzeigen</button>
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'showComments')"><font-awesome-icon :icon="((Options.show.showComments) ? 'eye' : 'eye-slash')"/> Kommentare anzeigen</button>
+                <button @click="$store.dispatch('TOGGLE_SHOW', 'showCommentsList')" v-if="Options.show.showComments"><font-awesome-icon :icon="((Options.show.showCommentsList) ? 'eye' : 'eye-slash')"/> Kommentare als Liste</button>
                 <hr>
               </template>
               <template v-if="aTab === 3">
@@ -173,6 +174,9 @@
         xmlEditorLocked: false,
         xmlEditorNewContent: '',
         tipLine: '',
+        commentsListe: {
+          comments: {}
+        },
       }
     },
     computed: {
@@ -208,6 +212,18 @@
         if (this.aTabCach.indexOf(nVal) < 0) {
           this.aTabCach.push(nVal)
         }
+        if (nVal === 1) {
+          this.$nextTick(() => {
+            if (this.$refs.ViewPreview) {
+              this.$refs.ViewPreview.commentsListeReset()
+            }
+          })
+        }
+      },
+      'Options.show.showCommentsList' (nVal) {
+        this.$nextTick(() => {
+          this.$refs.ViewPreview.commentsListeReset()
+        })
       },
       update (nVal) {
         if (nVal) {
