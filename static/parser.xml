@@ -284,8 +284,8 @@
                           } ?>
                 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
                 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
-                <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-                <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+                <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
+                <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
                 <?copy { "fromId": "lang" } ?>
                 <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
                 <form>
@@ -516,7 +516,6 @@
                       "frame": "inline",
                       "hideTitle": true,
                       "italic": true,
-                      "before": "→",
                       "fxPreview": true
                     },
                     "editor": {
@@ -1165,7 +1164,6 @@
                   } ?>
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"], "layout": {
                       "frame": "line",
-                      "before": "",
                       "spaceBefore": 10
                     } } } ?>
         <form subtype="MWE">
