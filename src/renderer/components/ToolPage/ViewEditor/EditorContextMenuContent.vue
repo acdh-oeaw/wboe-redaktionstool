@@ -8,7 +8,7 @@
         <b-button @click="moveObj('right')" variant="primary" class="w-100" :disabled="!moveableRight"><font-awesome-icon icon="angle-right" class="fa-icon"/></b-button>
       </b-button-group>
     </div>
-    <ul>
+    <ul v-if="content.orgXmlObj.name !== '#text'">
       <li @click="clickComment(content)"><font-awesome-icon icon="comment" :class="{'fa-icon': true, 'right': true, 'text-muted': !(content.orgXmlObj && content.orgXmlObj.comments.length > 0)}"/>Kommentare</li>
     </ul>
     <template v-if="attributes">

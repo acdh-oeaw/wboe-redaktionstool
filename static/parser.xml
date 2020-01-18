@@ -611,7 +611,10 @@
           "id": "text",
           "title": "Text",
           "value": ["edit", "required"],
-          "tag": ["possibleTag", "multiple", "anywhere"]
+          "tag": ["possibleTag", "multiple", "anywhere"],
+          "editor": {
+            "parentInContext": true
+          }
         }
       } ?>
 
@@ -877,6 +880,9 @@
             "previewLayout": {
               "hideTitle": true,
               "noSpaceAfter": true
+            },
+            "editor": {
+              "parentInContext": true
             }
           }
         } ?>
