@@ -49,6 +49,8 @@
                 <option value="vgl.">vgl.</option>
                 <option value="s.">s.</option>
                 <option value="s. auch">s. auch</option>
+                <option value="auch">auch</option>
+                <option value="nur">nur</option>
               </select>
             </div>
           </div>

@@ -529,12 +529,11 @@
           <?options {
                       "id": "xr-int-lbl",
                       "title": "lbl",
-                      "value": ["edit", "required", {"is": {"value": "vgl.", "possibleValues": ["vgl.", "s.", "s. auch"]}}],
+                      "value": ["edit", "required", {"is": {"value": "vgl.", "possibleValues": ["vgl.", "s.", "s. auch", "auch", "nur"]}}],
                       "tag": ["possibleTag"],
                       "layout": {
                         "hideTitle": true,
-                        "frame": "inline",
-                        "italic": true
+                        "frame": "inline"
                       },
                       "editor": {
                         "parentInContext": true
@@ -854,7 +853,7 @@
           <?options {
                       "id": "lbl",
                       "title": "lbl",
-                      "value": ["edit", "required", {"is": {"value": "vgl.", "possibleValues": ["vgl.", "s.", "s. auch"]}}],
+                      "value": ["edit", "required", {"is": {"value": "vgl.", "possibleValues": ["vgl.", "s.", "s. auch", "auch", "nur"]}}],
                       "tag": ["possibleTag"],
                       "layout": {
                         "frame": "inline"
