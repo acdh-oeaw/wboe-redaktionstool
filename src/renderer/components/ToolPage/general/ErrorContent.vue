@@ -6,7 +6,7 @@
   </ul>
   <span v-else-if="typeof aError === 'string'">{{ aError }}<br></span>
   <span @click="goto(aError.obj, true)" :class="{'clickable': hasObj}" v-else>
-    <b v-if="aError.obj && !noObj">{{ aError.obj.uId }} - </b>
+    <b v-if="aError.obj && !noObj">{{ aError.obj.uId }} - {{ aError.obj.orgXmlObj && aError.obj.orgXmlObj.name ? aError.obj.orgXmlObj.name + ' - ' : ''}}</b>
     <ErrorContent :error="aError.txt" v-if="aError.txt" @goto="goto"/>
     <div v-if="aError.sErr">{{ aError.sErr }}</div>
     <div v-if="Array.isArray(aError.err)" class="subArray"><ErrorContent :error="aError.err" @goto="goto"/></div>
@@ -21,6 +21,9 @@
     data () {
       return {
       }
+    },
+    mounted () {
+      // console.log(this.error, this.aError)
     },
     computed: {
       aError () {
@@ -56,9 +59,6 @@
           this.$emit('goto', aObj)
         }
       },
-    },
-    mounted () {
-      // console.log(this.error, this.aError)
     }
   }
 </script>
