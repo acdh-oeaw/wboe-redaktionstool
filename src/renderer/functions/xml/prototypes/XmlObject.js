@@ -218,6 +218,7 @@ const localFunctions = {
     return { 'attribute': attr, 'value': aVal }
   },
   getXML (oEditor = null, all = true, lb = true, short = false, inner = false, deep = 0, prvXmlObj) {
+    let oShort = short
     // Aktuelles EditorObject ermitteln
     let oEditorObj = null
     if (oEditor) {
@@ -227,6 +228,11 @@ const localFunctions = {
           return true
         }
       }, this)
+    }
+    if (oEditorObj && oEditorObj.parserObj && oEditorObj.parserObj.options) {
+      if (oEditorObj.parserObj.options.get('xml.short.use')) {
+        short = true
+      }
     }
     let aXML = ''
     if (this.type === 'TEXT') {
@@ -274,7 +280,7 @@ const localFunctions = {
       }
       if (this.childs.length > 0) {
         this.childs.forEach(function (aChild) {
-          aChildCont += aChild.getXML(oEditor, all, lb, short, false, deep + 1, lChild)
+          aChildCont += aChild.getXML(oEditor, all, lb, oShort, false, deep + 1, lChild)
           lChild = aChild
         }, this)
       }

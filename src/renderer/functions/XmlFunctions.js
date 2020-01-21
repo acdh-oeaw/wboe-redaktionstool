@@ -117,6 +117,10 @@ const localFunctions = {
       if (key === 'html' && deflat[key] && deflat[key].layout) {
         deflat[key].layout = localFunctions.checkLayout(deflat[key].layout)
       }
+      // xml
+      if (key === 'xml' && deflat[key]) {
+        deflat[key] = localFunctions.dcpoSimpleToComplex(deflat[key], localFunctions.defaultValue())
+      }
     }
     // Automatische Werte setzen
     if (deflat && deflat.value && deflat.value.is && deflat.value.is.shouldValue && !deflat.value.is.value) { // Wenn shouldValue gesetzt aber nicht value:

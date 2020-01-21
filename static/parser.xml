@@ -473,7 +473,8 @@
                   "target": { "title": "target (URL)" }
                 }
               },
-              "editor": { "parentInContext": true }
+              "editor": { "parentInContext": true },
+              "xml": ["short"]
             } ?>
           </ptr>
 
@@ -575,7 +576,8 @@
               "showAttributeBefore" : {
                 "target": { "title": "Collection ID" }
               }
-            }
+            },
+            "xml": ["short"]
           } ?>
       </ptr>
 
