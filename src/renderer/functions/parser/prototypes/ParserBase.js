@@ -121,10 +121,13 @@ const localFunctions = {
     } else {
       this.addError('Das Verzeichniss des Parsers konnte nicht ermittelt werden!')
     }
-    // extendPreviewLayout ...
+    // Optionen ergänzen um automatische Werte
     this.family.forEach(function (aObj) {
-      if (aObj && aObj.options && aObj.options.options && (aObj.options.options.layout)) {
-        aObj.options.extendPreviewLayout()
+      if (aObj && aObj.options && aObj.options.options) {
+        // extendPreviewLayout ...
+        if (aObj.options.options.layout) {
+          aObj.options.extendPreviewLayout()
+        }
       }
     })
     this.ready = true

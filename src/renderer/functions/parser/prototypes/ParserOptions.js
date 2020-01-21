@@ -68,7 +68,7 @@ const localFunctions = {
   },
   decompressOptions: xmlFunctions.decompressProcessingOptions,
   initFromParserObject (pObj) {
-    // Atribute auswerten
+    // Attribute auswerten
     if (Object.keys(pObj.attributes).length > 0) {
       Object.keys(pObj.attributes).forEach(function (aKey) {
         if (!this.options.attributes) { this.options.attributes = {} }

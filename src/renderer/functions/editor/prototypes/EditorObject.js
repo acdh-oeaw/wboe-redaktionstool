@@ -341,15 +341,37 @@ const localFunctions = {
     this.addableAfter = []
     if (this.parserObj && !this.isRoot) {
       if (this.isMultiple && this.parserObj.name !== '#text' && !this.parserObj.options.get('editor.noAddButton')) {
-        this.addableAfter.push({ 'uId': this.parserObj.uId, 'type': 'self', 'title': this.parserObj.options.get('editor.addTitle') || this.parserObj.options.get('title.value') || this.parserObj.name, 'cShow': true, 'bShow': !(this.isMultiple && !this.multipleLast && this.parserObj.options.get('editor.onlyLastElementHasAddButton')) })
+        this.addableAfter.push({
+          'uId': this.parserObj.uId,
+          'type': 'self',
+          'title': this.parserObj.options.get('editor.addTitle') || this.parserObj.options.get('title.value') || this.parserObj.name,
+          'cShow': true,
+          'bShow': !(this.isMultiple && !this.multipleLast && this.parserObj.options.get('editor.onlyLastElementHasAddButton'))
+        })
       }
       if (!(this.isMultiple && !this.multipleLast)) {
         let aParSibs = this.parserObj.getSiblings('all', true)
         let aNextSibs = this.getSiblings('next', true)
+        let aAllSibs = this.getSiblings('all', true)
         aParSibs.forEach(function (aParSib) {
           if (aParSib.options.get('tag.anywhere.use') && !aParSib.options.get('editor.noAddButton')) {
             if (!((this.parserObj.name === '#text' || (aNextSibs[0] && aNextSibs[0].parserObj && aNextSibs[0].parserObj.name === '#text')) && aParSib.name === '#text')) {
-              this.addableAfter.push({ 'uId': aParSib.uId, 'type': 'anywhere', 'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name, 'cShow': true, 'bShow': true })
+              let cUsed = 0
+              aAllSibs.forEach(function (aAllSib) {
+                if (aAllSib.parserObj && aAllSib.parserObj.uId === aParSib.uId) {
+                  cUsed += 1
+                }
+              }, this)
+              if (aParSib.options.get('tag.multiple.use') || cUsed === 0) {
+                this.addableAfter.push({
+                  'uId': aParSib.uId,
+                  'type': 'anywhere',
+                  'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name,
+                  'cShow': true,
+                  'bShow': true,
+                  'cUsed': cUsed
+                })
+              }
             }
           }
         }, this)
@@ -384,7 +406,13 @@ const localFunctions = {
               }, this)
             }
             if (addThis) {
-              this.addableAfter.push({ 'uId': aParSib.uId, 'type': 'ect', 'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name, 'cShow': true, 'bShow': true })
+              this.addableAfter.push({
+                'uId': aParSib.uId,
+                'type': 'ect',
+                'title': aParSib.options.get('editor.addTitle') || aParSib.options.get('title.value') || aParSib.name,
+                'cShow': true,
+                'bShow': true
+              })
             }
           }
         }, this)
@@ -420,13 +448,22 @@ const localFunctions = {
           }
         }
         if (addThis) {
-          this.addableInner.push({
-            'uId': acParser.uId,
-            'type': (acParser.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'),
-            'title': acParser.options.get('editor.addTitle') || acParser.options.get('title.value') || acParser.name,
-            'cShow': true,
-            'bShow': true
-          })
+          let cUsed = 0
+          eChilds.forEach(function (eChild) {
+            if (eChild.parserObj && eChild.parserObj.uId === acParser.uId) {
+              cUsed += 1
+            }
+          }, this)
+          if (acParser.options.get('tag.multiple.use') || cUsed === 0) {
+            this.addableInner.push({
+              'uId': acParser.uId,
+              'type': (acParser.options.get('tag.anywhere.use') ? 'anywhere' : 'ect'),
+              'title': acParser.options.get('editor.addTitle') || acParser.options.get('title.value') || acParser.name,
+              'cShow': true,
+              'bShow': true,
+              'cUsed': cUsed
+            })
+          }
         }
       }, this)
       this.addableInner = this.addableInner.slice().sort(AddableSort)

@@ -804,8 +804,8 @@
                       "draggAble": true
                     }
                   } ?>
-        <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag", "anywhere"], "editor": { "parentInContext": true } } } ?>
-        <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
+        <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag", "anywhere", "multiple"], "editor": { "parentInContext": true } } } ?>
+        <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere", "multiple"] } } ?>
         <?copy { "fromId": "ref-form" } ?>
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
