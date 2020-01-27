@@ -287,6 +287,7 @@
                 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
                 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
                 <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
+                <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
                 <?copy { "fromId": "lang" } ?>
                 <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
                 <form>
@@ -326,11 +327,13 @@
                 <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
                 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag"] } } ?>
                 <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+                <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
                 <?copy { "fromId": "lang" } ?>
               </seg>
               <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
               <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
               <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+              <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
             </etym>
             <sense>
               <?options {
@@ -423,6 +426,63 @@
     </options>
 
     <tags>
+      <ref type="bibl" subtype="online">
+        <?options {
+                    "id": "xr-op",
+                    "title": "Verweis auf Online-Publikationen",
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "bold": true,
+                      "before": "(",
+                      "after": ")"
+                    }
+                  } ?>
+        <?copy { "fromId": "xr-int-lbl", "options": { "tag": ["possibleTag"] } } ?>
+        <?text {
+          "options": {
+            "title": "Querverweis auf Literatur (TEXT)",
+            "value": ["edit", "required"],
+            "editor": {
+              "parentInContext": true
+            },
+            "layout": {
+              "frame": "inline",
+              "hideTitle": true,
+              "after": ":"
+            }
+          }
+        } ?>
+        <xr type="lemma">
+          <?options { "layout": { "frame": "inline", "hideTitle": true } } ?>
+          <ref>
+            <?options {
+              "title": "Form",
+              "value": ["edit", "required"],
+              "layout": {
+                "frame": "inline",
+                "hideTitle": true,
+                "italic": true
+              },
+              "editor": { "parentInContext": true }
+            } ?>
+          </ref>
+          <date type="accessed">
+            <?options {
+              "title": "Datum (Zugriff)",
+              "value": ["edit", "required", {"is": {"value": { "fx": "now" }}}],
+              "layout": {
+                "frame": "inline",
+                "hideTitle": true,
+                "before": "[",
+                "after": "]"
+              },
+              "editor": { "parentInContext": true }
+            } ?>
+          </date>
+        </xr>
+      </ref>
 
       <xr>    <!-- Extern: cf -->
         <?options {
@@ -733,6 +793,7 @@
          <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag"] } } ?>
          <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
          <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+         <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
          <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
       </cit>
 
