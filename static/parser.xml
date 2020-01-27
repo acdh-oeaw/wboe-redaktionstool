@@ -313,7 +313,7 @@
                               "type": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "desc"},
                               "part": {"type": "edit", "canBeEmpty": {"use": true}}
                             }],
-                            "oldTag": ["desc"],
+                            "oldTags": ["desc"],
                             "tag": ["possibleTag", "multiple", "anywhere"],
                             "layout": {
                               "frame": "inline",

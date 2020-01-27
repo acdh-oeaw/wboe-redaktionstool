@@ -11,7 +11,7 @@ const localFunctions = {
       } else {
         aParserChilds.some(function (aPC) {		// Fehlende Tags ermitteln
           if (!(aPC.options.get('tag.possibleTag.use'))) {
-            if (xmlObj.getChildsByName(aPC.name).length === 0) {
+            if (xmlObj.getChildsByName(aPC.name, true, true, aPC.options.get('oldTags')).length === 0) {
               errors.push('Kinder: Tag "' + aPC.name + '" fehlt!')
               return true
             }
@@ -22,7 +22,7 @@ const localFunctions = {
             if (xmlO.useable && (this.getChildsByName(xmlO.name).length === 0)) {
               let sWr = true
               aParserChilds.some(function (aPC) {
-                if (Array.isArray(aPC.options.get('oldTag')) && aPC.options.get('oldTag').indexOf(xmlO.name) > -1) {
+                if (Array.isArray(aPC.options.get('oldTags')) && aPC.options.get('oldTags').indexOf(xmlO.name) > -1) {
                   sWr = false
                   return true
                 }

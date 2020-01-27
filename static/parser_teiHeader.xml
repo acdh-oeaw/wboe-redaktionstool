@@ -141,22 +141,30 @@
         <item>
           <?options {  "layout": { "frame": "justChilds" } } ?>
           <label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>Geo-data</label>
-          <ref xml:id="geo-inventory-WBOE" target="../geodata-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+          <ptr xml:id="geo-inventory-WBOE" target="../geodata-wboe.xml">
+            <?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } }, "oldTags": ["ref"], "xml": ["short"] } ?>
+          </ptr>
         </item>
         <item>
           <?options {  "layout": { "frame": "justChilds" } } ?>
           <label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>Bibliography</label>
-          <ref xml:id="bibliography-WBOE" target="../bibl-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+          <ptr xml:id="bibliography-WBOE" target="../bibl-wboe.xml">
+            <?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } }, "oldTags": ["ref"], "xml": ["short"] } ?>
+          </ptr>
         </item>
         <item>
           <?options {  "layout": { "frame": "justChilds" } } ?>
           <label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Slips</label>
-          <ref xml:id="slips-WBOE" target="../slips-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+          <ptr xml:id="slips-WBOE" target="../slips-wboe.xml">
+            <?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } }, "oldTags": ["ref"], "xml": ["short"] } ?>
+          </ptr>
         </item>
         <item>
           <?options {  "layout": { "frame": "justChilds" } } ?>
           <label><?options { "layout": { "frame": "inline", "hideTitle": true, "bold": true } } ?>WBOE-Collections</label>
-          <ref xml:id="collections-WBOE" target="../collections-wboe.xml"><?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } } } ?></ref>
+          <ptr xml:id="collections-WBOE" target="../collections-wboe.xml">
+            <?options { "layout": { "frame": "inline", "hideTitle": true, "showAttributeAfter" : { "xml:id": {}, "target": {} } }, "oldTags": ["ref"], "xml": ["short"] } ?>
+          </ptr>
         </item>
       </list>
     </sourceDesc>

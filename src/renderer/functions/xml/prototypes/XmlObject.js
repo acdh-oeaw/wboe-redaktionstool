@@ -316,12 +316,12 @@ const localFunctions = {
     }
     return aChilds
   },
-  getChildsByName (name, ready = true, useable = true) {
+  getChildsByName (name, ready = true, useable = true, oldTag = null) {
     let aChilds = []
     if (this.childs.length > 0) {
       this.childs.forEach(function (aChild) {
         if ((aChild.ready || !ready) && (aChild.useable || !useable)
-        && aChild.name === name) {
+        && (aChild.name === name || (Array.isArray(oldTag) && oldTag.indexOf(aChild.name) > -1))) {
           aChilds.push(aChild)
         }
       }, this)
