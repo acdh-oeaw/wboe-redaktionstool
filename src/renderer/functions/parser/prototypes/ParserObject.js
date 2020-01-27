@@ -32,7 +32,7 @@ const localFunctions = {
               let errArr = [err.toString()]
               let errRange = errArr[0].match(/position (\d+)/mi)
               if (errRange.length > 1) {
-                errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
+                errArr.push('Fehlerbereich: ' + ((errRange[1] > 30) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 30) ? errRange[1] - 30 : 0), 60).trim() + '...')
               }
               this.addError({'txt': 'Fehler im JSON-String! (text)', 'err': errArr})
             }
@@ -96,7 +96,7 @@ const localFunctions = {
           let errArr = [err.toString()]
           let errRange = errArr[0].match(/position (\d+)/mi)
           if (errRange.length > 1) {
-            errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
+            errArr.push('Fehlerbereich: ' + ((errRange[1] > 30) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 30) ? errRange[1] - 30 : 0), 60).trim() + '...')
           }
           this.addError({'txt': 'Fehler im JSON-String! (text)', 'err': errArr})
         }
@@ -135,7 +135,7 @@ const localFunctions = {
         let errArr = [err.toString()]
         let errRange = errArr[0].match(/position (\d+)/mi)
         if (errRange.length > 1) {
-          errArr.push('Fehlerbereich: ' + ((errRange[1] > 20) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 20) ? errRange[1] - 20 : 0), 40).trim() + '...')
+          errArr.push('Fehlerbereich: ' + ((errRange[1] > 30) ? '...' : '') + this.orgDOM.nodeValue.substr(((errRange[1] > 30) ? errRange[1] - 30 : 0), 60).trim() + '...')
         }
         this.addError({'txt': 'Fehler im JSON-String! (copy)', 'err': errArr})
       }

@@ -59,9 +59,10 @@ const localFunctions = {
         Object.keys(aAttr).forEach(function (aKey) {
           if (aAttr[aKey].shouldAttribute && aAttr[aKey].shouldAttribute.use) {
             if (!this.orgXmlObj.attributes[aKey]
-            || (aAttr[aKey] && aAttr[aKey].possibleValues && this.orgXmlObj.attributes[aKey] && aAttr[aKey].possibleValues.indexOf(this.orgXmlObj.attributes[aKey]) > -1)) {
+            || !(aAttr[aKey] && aAttr[aKey].possibleValues && this.orgXmlObj.attributes[aKey] && aAttr[aKey].possibleValues.indexOf(this.orgXmlObj.attributes[aKey]) > -1)) {
               let nVal = this.parserObj.options.getOptionValue(aAttr[aKey].value, this.orgXmlObj)
               if (nVal || (!aAttr[aKey].canBeEmpty || !aAttr[aKey].canBeEmpty.use)) {
+                if (this.orgXmlObj.attributes[aKey] !== nVal) { console.log('"shouldAttribute" überprüfen/hinzufügen', aKey, this.orgXmlObj.attributes[aKey], '->', nVal) }
                 this.orgXmlObj.attributes[aKey] = nVal
               }
             }
