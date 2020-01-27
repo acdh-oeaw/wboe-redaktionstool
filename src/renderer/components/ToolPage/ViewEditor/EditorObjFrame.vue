@@ -27,14 +27,14 @@
 
     <!-- Inhalte -->
     <div :class="'obj just-childs' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-if="layoutBase === 'justChilds'">
-      <span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
+      <span :class="{'enumerate': true, 'enumerate-gt1': (cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
       <slot name="childs"/>		<!-- Kinder -->
     </div>
 
     <b-card :class="'obj paneldecent mitb5' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else-if="layoutBase === 'panel'" no-body>
       <div @contextmenu.prevent="contextMenue" slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
-          <span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+          <span :class="{'enumerate': true, 'enumerate-gt1': (cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <span><b>{{ title }}</b>&nbsp;</span>
           <font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
         </button>
@@ -73,7 +73,7 @@
 
     <div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else>
       <div @contextmenu.prevent="contextMenue" class="context rel">
-        <span :class="{'enumerate': true, 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+        <span :class="{'enumerate': true, 'enumerate-gt1': (cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
         <b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
         <slot />		<!-- Inhalt -->
         <span :class="'comment-sym' + (Options.show.commentsHighlight ? ' comment-highlight' : '')" v-if="hasComment"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
@@ -534,6 +534,9 @@
   }
   .enumerate {
     font-weight: bold;
+  }
+  .enumerate-gt1 {
+    color: #bbb;
   }
   .addable-after-btn, .addable-in-btn {
     position: relative;

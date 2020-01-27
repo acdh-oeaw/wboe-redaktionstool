@@ -22,7 +22,7 @@
         <!-- Inhalte -->
         <!-- justChilds -->
         <div :id="'pox' + content.uId" :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
-          <span :class="{'enumerate': true, 'enumeraterom': cParserOptions.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+          <span :class="{'enumerate': true, 'enumerate-gt1': (cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast), 'enumeraterom': cParserOptions.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <!-- Kinder -->
           <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.get('editor.fxFunction.name')) > -1)">
             <PreviewContent ref="childs" :content="aContent" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
@@ -40,7 +40,7 @@
           @click="setAnchor"
           v-else>
           <div :id="'pox' + content.uId" class="inline rel">
-            <span :class="'enumerate' + ((this.cParserOptions.get('previewLayout.multiple.enumerateFX'))?' enumeratefx deep' + content.parserCopyDeep:'')" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+            <span :class="'enumerate' + ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') + ((this.cParserOptions.get('previewLayout.multiple.enumerateFX'))?' enumeratefx deep' + content.parserCopyDeep:'')" v-if="enumerate">{{ enumerate }}&nbsp;</span>
             <b v-if="shownTitle">{{ shownTitle }}: </b><br v-if="shownTitle && layoutBase === 'box'"/>
             <!-- Inhalt -->
             <span :class="{ 'val-fix': valueType === 'fix',
@@ -304,6 +304,9 @@
   }
   .enumerate, .enumeraterom {
     font-weight: bold;
+  }
+  .enumerate-gt1 {
+    display: none;
   }
   .obj.lb-inline {
     display: inline;

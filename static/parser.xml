@@ -799,7 +799,7 @@
                       "hideTitle": true,
                       "multiple": {
                         "use": true,
-                        "enumerateFX": true
+                        "enumerateFX": "gt1"
                       }
                     },
                     "editor": {
