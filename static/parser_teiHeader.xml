@@ -173,7 +173,7 @@
     <?options {
                 "title": "Informationen über Änderungen!",
                 "attributes": [{
-                  "status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"], "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true} }
+                  "status": { "type": "edit", "canBeEmpty": {"use": true}, "remove": {"use": true} }
                 }],
                 "tag": ["possibleTag", "shouldTag"],
                 "layout": { "bold": true, "frame": "panel" }
