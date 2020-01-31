@@ -313,7 +313,7 @@
           }, this)
         } else {
           this.filelist.forEach(function (aFile) {
-            aFile.show = (aFile.file.indexOf(this.search.trim().toLowerCase()) > -1)
+            aFile.show = (aFile.file.toLowerCase().indexOf(this.search.trim().toLowerCase()) > -1)
           }, this)
         }
       }, 250),
