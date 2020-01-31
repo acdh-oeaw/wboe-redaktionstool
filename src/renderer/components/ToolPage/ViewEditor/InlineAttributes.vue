@@ -40,17 +40,17 @@
         if (this.parserOptions) {
           let pv = this.parserOptions.possibleValues
           let aVal = this.content.orgXmlObj.attributes[this.attrKey] || ''
-          if (pv && pv.length > 0 && pv[0].value) {
-            let xVal = stdFunctions.getFirstKeyOfValueInPropertyOfArray(pv, 'value', aVal)
-            if (xVal >= 0 && pv[xVal].title) {
-              aVal = pv[xVal].title
-            }
-          }
           if (this.parserOptions && this.parserOptions.prefix) {
             let pfVal = this.parserOptions.prefix
             // console.log(pfVal, aVal, aVal.indexOf(pfVal))
             if (aVal.indexOf(pfVal) > -1) {
               aVal = aVal.substr(pfVal.length)
+            }
+          }
+          if (pv && pv.length > 0 && pv[0].value) {
+            let xVal = stdFunctions.getFirstKeyOfValueInPropertyOfArray(pv, 'value', aVal)
+            if (xVal >= 0 && pv[xVal].title) {
+              aVal = pv[xVal].title
             }
           }
           return aVal
@@ -73,7 +73,15 @@
       getSelected () {		// Gibt die aktuell ausgewählte Option zurück
         let sVal = this.content.orgXmlObj.attributes[this.attrKey]
         let oKey = -1
+        let prefixCorrection = false
         if (this.parserOptions) {
+          if (this.parserOptions.prefix) {
+            if (sVal.substr(0, this.parserOptions.prefix.length) === this.parserOptions.prefix) {
+              sVal = sVal.substr(this.parserOptions.prefix.length)
+            } else {
+              prefixCorrection = true
+            }
+          }
           this.parserOptions.possibleValues.some(function (aVal, aKey) {
             if ((aVal.value || aVal) === sVal) {
               oKey = aKey
@@ -81,11 +89,15 @@
             }
           }, this)
         }
+        if (prefixCorrection && oKey > -1) {
+          this.setSelected(oKey)
+        }
         return oKey
       },
       setSelected (key) {
         if (this.parserOptions) {
-          this.content.orgXmlObj.setAttribute(this.attrKey, this.parserOptions.possibleValues[key])
+          console.log('setSelected', this.attrKey, this.parserOptions.possibleValues[key], key)
+          this.content.orgXmlObj.setAttribute(this.attrKey, this.parserOptions.possibleValues[key], this.parserOptions.prefix)
           this.content.checkParser()
           this.refreshSelect = true
         }

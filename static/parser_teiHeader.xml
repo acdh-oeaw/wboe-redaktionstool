@@ -186,7 +186,7 @@
                     "attributes": [{
                       "status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] },
                       "when": { "type": "edit", "value": { "fx": "now" } },
-                      "who": { "type": "edit", "value": "", "possibleValues": [
+                      "who": { "type": "edit", "value": "", "prefix": "#", "possibleValues": [
                                                                                 {"title": "Alexandra N. Lenz", "value": "AL"},
                                                                                 {"title": "Philipp Stöckle", "value": "PhS"},
                                                                                 {"title": "Andreas Gellan", "value": "AG"},

@@ -25,7 +25,12 @@
                 Kein Wert!
               </button>
               <button @click="selectAttr(aKey, attrKey)" class="sel-obj" v-for="(attrVal, attrKey) in aVal.options.possibleValues" :key="'a' + aKey + 'b' + attrKey">
-                <font-awesome-icon icon="check" class="fa-icon" v-if="(attrVal.value || attrVal) === aVal.value"/>
+                <font-awesome-icon icon="check" class="fa-icon"
+                  v-if="
+                    (attrVal.value || attrVal) === aVal.value ||
+                    content.parserObj.options.get('attributes.' + aKey + '.prefix') + (attrVal.value || attrVal) === aVal.value
+                  "
+                />
                 {{ attrVal.title || attrVal }}
               </button>
             </div>
@@ -180,7 +185,7 @@
     },
     methods: {
       selectAttr (aAttr, key) {
-        this.content.orgXmlObj.setAttribute(aAttr, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key])
+        this.content.orgXmlObj.setAttribute(aAttr, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key], this.content.parserObj.options.get('attributes.' + aAttr + '.prefix'))
         this.content.checkParser()
       },
       valAttrUpdateValue (aAttr, e) {

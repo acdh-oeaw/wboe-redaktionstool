@@ -208,9 +208,12 @@ const localFunctions = {
     }
     return this.getValue(false)
   },
-  setAttribute (attr, val) {
+  setAttribute (attr, val, prefix = null) {
     // console.log('setAttribute', this, val)
     let aVal = ((val) ? (val.value || val) : '')
+    if (prefix && aVal.substr(0, prefix.length) !== prefix) {
+      aVal = prefix + aVal
+    }
     if (!this.attributes[attr] || this.attributes[attr] !== aVal) {
       Vue.set(this.attributes, attr, aVal)
       store.dispatch('IS_CHANGED')
