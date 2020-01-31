@@ -489,17 +489,21 @@
         return abc
       },
       mouseEnter () {
-        let aTipLine = ''
-        if (this.content && this.content.orgXmlObj && this.content.orgXmlObj.parents) {
-          aTipLine += this.content.parents.slice(0).reverse().map(function (x) {
-            return x.orgXmlObj.name + ' (' + x.parserObj.uId + ((x.parserObj.options && x.parserObj.options.get('id')) ? ', ' + x.parserObj.options.get('id') : '') + ')'
-          }).slice(1).join(' -> ')
-          aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.cParserObj.uId + ((this.cParserOptions && this.cParserOptions.get('id')) ? ', ' + this.cParserOptions.get('id') : '') + ')'
+        if (this.Options.show.tipLine) {
+          let aTipLine = ''
+          if (this.content && this.content.orgXmlObj && this.content.orgXmlObj.parents) {
+            aTipLine += this.content.parents.slice(0).reverse().map(function (x) {
+              return x.orgXmlObj.name + ' (' + x.parserObj.uId + ((x.parserObj.options && x.parserObj.options.get('id')) ? ', ' + x.parserObj.options.get('id') : '') + ')'
+            }).slice(1).join(' -> ')
+            aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.cParserObj.uId + ((this.cParserOptions && this.cParserOptions.get('id')) ? ', ' + this.cParserOptions.get('id') : '') + ')'
+          }
+          this.$emit('setTipLine', aTipLine)
         }
-        this.$emit('setTipLine', aTipLine)
       },
       mouseLeave () {
-        this.$emit('setTipLine', '')
+        if (this.Options.show.tipLine) {
+          this.$emit('setTipLine', '')
+        }
       },
     },
     components: {
