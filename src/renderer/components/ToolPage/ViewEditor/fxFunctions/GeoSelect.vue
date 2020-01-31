@@ -10,13 +10,13 @@
         </span>
         <b-dropdown variant="val-focus" size="sm" menu-class="mh30vh p-0" ref="dropdown" @shown="dropdownFocusActive(pKey)" @hidden="filter = ''" no-caret>
           <template slot="button-content">
-            <span :class="{'select': true, 'mw120px': true, 'text-warning': (!place.use && place.selectedPlace), 'error': !isCorrectPlace(place)}">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
+            <span :class="'select mw120px' + ((!place.use && place.selectedPlace) ? ' text-warning' : '') + (!isCorrectPlace(place) ? ' error' : '')">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
           </template>
           <input class="dropdown-filter" type="text" ref="filter" v-model="filter" v-if="filter"/>
-          <div :class="{ 'dropdown-scrollarea': true, 'filter': filter }">
-            <b-dropdown-item @click="setPlace(place, null)" :class="{'active': (!place.selectedPlace), 'not-possible': !(!place.option || place.option.possible)}">Keiner</b-dropdown-item>
+          <div :class="'dropdown-scrollarea' + (filter ? ' filter' : '')">
+            <b-dropdown-item @click="setPlace(place, null)" :class="((!place.selectedPlace) ? 'active' : '') + (!(!place.option || place.option.possible) ? ' not-possible' : '')">Keiner</b-dropdown-item>
             <template v-for="(aPlace, apKey) in place.places">
-              <b-dropdown-item @click="setPlace(place, aPlace.sigle)" :class="{'active': (place.selectedPlace === aPlace.sigle)}"
+              <b-dropdown-item @click="setPlace(place, aPlace.sigle)" :class="((place.selectedPlace === aPlace.sigle) ? 'active' : '')"
                 :key="pKey + '-' + apKey + '-' + aPlace.sigle"
                 v-if="(Object.keys(aPlace.parents).length === 0 || isVisiblePlace(aPlace))
                       && (!filter || aPlace.name.toLowerCase().indexOf(filter.toLowerCase()) > -1)"

@@ -21,8 +21,13 @@
 
         <!-- Inhalte -->
         <!-- justChilds -->
-        <div :id="'pox' + content.uId" :class="{'obj': true, 'just-childs': true, 'warnings': content.warnings.length > 0}" v-if="layoutBase === 'justChilds'">
-          <span :class="{'enumerate': true, 'enumerate-gt1': (cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast), 'enumeraterom': cParserOptions.get('previewLayout.multiple.enumerateRom'), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+        <div :id="'pox' + content.uId" :class="'obj just-childs' + (content.warnings.length > 0 ? 'warnings' : '')" v-if="layoutBase === 'justChilds'">
+          <span :class="
+                    'enumerate' +
+                    ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
+                    (cParserOptions.get('previewLayout.multiple.enumerateRom') ? ' enumeraterom' : '') +
+                    ((content.parserCopyDeep >= 3) ? ' deeper' : '')
+                " v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <!-- Kinder -->
           <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.get('editor.fxFunction.name')) > -1)">
             <PreviewContent ref="childs" :content="aContent" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
@@ -43,12 +48,13 @@
             <span :class="'enumerate' + ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') + ((this.cParserOptions.get('previewLayout.multiple.enumerateFX'))?' enumeratefx deep' + content.parserCopyDeep:'')" v-if="enumerate">{{ enumerate }}&nbsp;</span>
             <b v-if="shownTitle">{{ shownTitle }}: </b><br v-if="shownTitle && layoutBase === 'box'"/>
             <!-- Inhalt -->
-            <span :class="{ 'val-fix': valueType === 'fix',
-                            'bold': cParserOptions.get('previewLayout.bold'),
-                            'italic': cParserOptions.get('previewLayout.italic'),
-                            'underline': cParserOptions.get('previewLayout.underline'),
-                            'ls1pt': cParserOptions.get('previewLayout.ls1pt')
-                          }"
+            <span :class="
+                      (valueType === 'fix' ? 'val-fix' : '') +
+                      (cParserOptions.get('previewLayout.bold') ? ' bold' : '') +
+                      (cParserOptions.get('previewLayout.italic') ? ' italic' : '') +
+                      (cParserOptions.get('previewLayout.underline') ? ' underline' : '') +
+                      (cParserOptions.get('previewLayout.ls1pt') ? ' ls1pt' : '')
+                  "
                   v-if="valueType === 'fix' || valueType === 'editable'">{{ content.orgXmlObj.getValueByOption(this.cParserOptions.get('value'), false) }}</span>
             <GeoPreview :content="content" v-else-if="cParserObj && cParserOptions && cParserOptions.get('editor.fxFunction.name') === 'GeoSelect'"/>
           </div>

@@ -11,7 +11,7 @@
   </div>
 
   <div class="obj" v-else-if="content">
-    <b-card :header="objName" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
+    <b-card :header="objName" no-body :class="'mib10 paneldecent' + (headerVariante !== 'Default' ? ' invert' : '')" :border-variant="headerVariante" :header-bg-variant="headerVariante">
       <div slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle" :style="'color: ' + pHeaderColor + ';'">
           <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.type === 'UNKNOWN'"/>

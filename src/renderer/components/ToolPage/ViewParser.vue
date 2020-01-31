@@ -63,7 +63,7 @@
   </div>
 
   <div class="obj" v-else-if="content">
-    <b-card :header="content.name" no-body :class="{'mib10': true, 'paneldecent': true, 'invert': headerVariante !== 'Default'}" :border-variant="headerVariante" :header-bg-variant="headerVariante">
+    <b-card :header="content.name" no-body :class="'mib10 paneldecent' + (headerVariante !== 'Default' ? ' invert' : '')" :border-variant="headerVariante" :header-bg-variant="headerVariante">
       <div slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle fx-btn" :style="'color: ' + pHeaderColor + ';'">
           <!-- <font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/> -->

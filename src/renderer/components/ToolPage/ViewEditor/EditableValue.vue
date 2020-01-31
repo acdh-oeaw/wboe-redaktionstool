@@ -1,23 +1,25 @@
 <template>
 
-  <span :class="{ 'val-obj': true,
-                  'bold': content.parserObj.options.get('layout.bold'),
-                  'italic': content.parserObj.options.get('layout.italic'),
-                  'underline': content.parserObj.options.get('layout.underline'),
-                  'ls1pt': content.parserObj.options.get('layout.ls1pt')
-                }"
+  <span :class="
+            'val-obj' +
+            (content.parserObj.options.get('layout.bold') ? ' bold' : '') +
+            (content.parserObj.options.get('layout.italic') ? ' italic' : '') +
+            (content.parserObj.options.get('layout.underline') ? ' underline' : '') +
+            (content.parserObj.options.get('layout.ls1pt') ? ' ls1pt' : '')
+          "
         v-if="editType === 'selectPossibleValues'">
     <SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.get('value.is.possibleValues')" v-if="!refreshSelect"/>
   </span>
 
-  <span :class="{ 'val-obj': true, 'val-txt': true,
-                  'bold': content.parserObj.options.get('layout.bold'),
-                  'italic': content.parserObj.options.get('layout.italic'),
-                  'underline': content.parserObj.options.get('layout.underline'),
-                  'ls1pt': content.parserObj.options.get('layout.ls1pt')
-                }"
+  <span :class="
+            'val-obj val-txt' +
+            (content.parserObj.options.get('layout.bold') ? ' bold' : '') +
+            (content.parserObj.options.get('layout.italic') ? ' italic' : '') +
+            (content.parserObj.options.get('layout.underline') ? ' underline' : '') +
+            (content.parserObj.options.get('layout.ls1pt') ? ' ls1pt' : '')
+          "
         v-else>
-    <span :style="{ 'line-height': Options.options.lineHeight }" :class="{ 'val-edit': true, 'val-focus': true, 'empty': !aValue }" v-rt-ipa ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
+    <span :style="'line-height' + Options.options.lineHeight + ';'" :class="'val-edit val-focus' + (!aValue ? ' empty' : '')" v-rt-ipa ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
     <font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
   </span>
 

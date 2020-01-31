@@ -6,8 +6,14 @@
         <b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
           <b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
-          <b-dropdown-item @click="devSelectFile(aFile.fullFileName)" :active="aFile.fullFileName === Files.file" :class="{'error' : aFile.errors, 'warning': aFile.warnings}" :key="aKey" v-for="(aFile, aKey) in devFiles">
-            {{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ')' : '')}}
+          <b-dropdown-item
+            @click="devSelectFile(aFile.fullFileName)"
+            :active="aFile.fullFileName === Files.file"
+            :class="(aFile.errors > 0 ? 'error' : '') + (aFile.warnings > 0 ?' warning' : '')"
+            v-for="(aFile, aKey) in devFiles"
+            :key="aKey"
+          >
+            {{ aFile.errors }} - {{ aFile.file + ((aFile.errors || aFile.warnings) ? ' (Fehler: ' + aFile.errors + ', Warnungen: ' + aFile.warnings + ')' : '')}}
             <span class="float-right bg-warning filechanged" v-if="aFile.changed">C</span>
           </b-dropdown-item>
         </b-dropdown>
@@ -105,7 +111,7 @@
               <template v-if="aTab === 0">
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'warnings')"><font-awesome-icon :icon="((Options.show.warnings) ? 'eye' : 'eye-slash')"/> Warnungen anzeigen</button>
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'commentsHighlight')"><font-awesome-icon :icon="((Options.show.commentsHighlight) ? 'check-square' : 'square')"/> Kommentare hervorheben</button>
-                <button @click="$store.dispatch('TOGGLE_SHOW', 'editorPreview')"><font-awesome-icon icon="columns" :class="{'text-secondary': !Options.show.editorPreview}"/> Vorschau anzeigen</button>
+                <button @click="$store.dispatch('TOGGLE_SHOW', 'editorPreview')"><font-awesome-icon icon="columns" :class="!Options.show.editorPreview ? 'text-secondary' : ''"/> Vorschau anzeigen</button>
                 <hr>
               </template>
               <template v-if="aTab === 1">

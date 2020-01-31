@@ -5,7 +5,7 @@
     </li>
   </ul>
   <span v-else-if="typeof aError === 'string'">{{ aError }}<br></span>
-  <span @click="goto(aError.obj, true)" :class="{'clickable': hasObj}" v-else>
+  <span @click="goto(aError.obj, true)" :class="hasObj ? 'clickable' : ''" v-else>
     <b v-if="aError.obj && !noObj">{{ aError.obj.uId }} - {{ aError.obj.orgXmlObj && aError.obj.orgXmlObj.name ? aError.obj.orgXmlObj.name + ' - ' : ''}}</b>
     <ErrorContent :error="aError.txt" v-if="aError.txt" @goto="goto"/>
     <div v-if="aError.sErr">{{ aError.sErr }}</div>

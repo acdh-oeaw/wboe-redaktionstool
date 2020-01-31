@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="context-menu-title clearfix"><b class="mir5" v-if="title">{{ title }}</b><i :class="{'float-right': title}">Tag: {{ content.orgXmlObj.name }}</i></div>
+    <div class="context-menu-title clearfix"><b class="mir5" v-if="title">{{ title }}</b><i :class="(title ? 'float-right' : '')">Tag: {{ content.orgXmlObj.name }}</i></div>
     <div class="tools">
       <b-button-group size="sm" class="btn-group-xs d-flex" v-if="moveableLeft || moveableRight || deleteAble">
         <b-button @click="moveObj('left')" variant="primary" class="w-100" :disabled="!moveableLeft"><font-awesome-icon icon="angle-left" class="fa-icon"/></b-button>
@@ -9,7 +9,7 @@
       </b-button-group>
     </div>
     <ul v-if="content.orgXmlObj.name !== '#text'">
-      <li @click="clickComment(content)"><font-awesome-icon icon="comment" :class="{'fa-icon': true, 'right': true, 'text-muted': !(content.orgXmlObj && content.orgXmlObj.comments.length > 0)}"/>Kommentare</li>
+      <li @click="clickComment(content)"><font-awesome-icon icon="comment" :class="'fa-icon right' + (!(content.orgXmlObj && content.orgXmlObj.comments.length > 0) ? ' text-muted' : '')"/>Kommentare</li>
     </ul>
     <template v-if="attributes">
       <div class="context-menu-subtitle"><b>Attribute:</b></div>

@@ -1,5 +1,5 @@
 <template>
-  <div :class="{'editorcontextmenu': true, 'left': subContextMenuLeft}" :id="'ecm-' + _uid" v-show="show"
+  <div :class="'editorcontextmenu' + (subContextMenuLeft ? 'left' : '')" :id="'ecm-' + _uid" v-show="show"
       :style="{ top: this.top + 'px', left: this.left + 'px' }" tabindex="-1"
       @contextmenu.capture.prevent>
     <EditorContextMenuContent :content="content" :subContextMenuLeft="subContextMenuLeft" @close="close"  @clickcomment="clickComment"/>

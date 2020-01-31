@@ -1,8 +1,8 @@
 <template>
-  <div :class="{'file': true, 'open': (path && isOpen)}">
+  <div :class="'file' + ((path && isOpen) ? ' open' : '')">
 
     <div class="pathline" v-if="path">
-      <button @click="toggleMe()" :title="path.fullFileName" :class="{'active': (Files.file && Files.file.indexOf(path.fullFileName) === 0)}">
+      <button @click="toggleMe()" :title="path.fullFileName" :class="(Files.file && Files.file.indexOf(path.fullFileName) === 0) ? 'active' : ''">
         <span class="path"><font-awesome-icon :icon="((isOpen) ? 'folder-open' : 'folder')" class="mir5"/>{{ path.file }}</span>
         <span class="foldercontent" v-if="Files.paths[path.fullFileName]">
           <span class="info">{{ Files.paths[path.fullFileName].files.length.toLocaleString() }} <font-awesome-icon icon="file"/></span>
@@ -18,7 +18,7 @@
     </div>
 
     <div class="fileline" v-if="file">
-      <button :id="'fl-' + _uid" @click="loadFile()" :title="file.fullFileName" :class="{'active': isActiveFile, 'italic': isParser}">
+      <button :id="'fl-' + _uid" @click="loadFile()" :title="file.fullFileName" :class="(isActiveFile ? 'active' : '') + (isParser ? ' italic' : '')">
         <span class="file"><font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5"/>{{ file.file }}</span>
         <span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
         <span class="info" v-if="file.info">

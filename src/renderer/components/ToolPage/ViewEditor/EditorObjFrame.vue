@@ -27,14 +27,22 @@
 
     <!-- Inhalte -->
     <div :class="'obj just-childs' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-if="layoutBase === 'justChilds'">
-      <span :class="{'enumerate': true, 'enumerate-gt1': (cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
+      <span :class="
+                'enumerate' + 
+                ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
+                ((content.parserCopyDeep >= 3) ? ' deeper' : '')
+            " v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
       <slot name="childs"/>		<!-- Kinder -->
     </div>
 
     <b-card :class="'obj paneldecent mitb5' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else-if="layoutBase === 'panel'" no-body>
       <div @contextmenu.prevent="contextMenue" slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
-          <span :class="{'enumerate': true, 'enumerate-gt1': (cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+          <span :class="
+                    'enumerate' +
+                    ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
+                    (content.parserCopyDeep >= 3 ? ' deeper' : '')
+                " v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <span><b>{{ title }}</b>&nbsp;</span>
           <font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
         </button>
@@ -73,12 +81,16 @@
 
     <div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else>
       <div @contextmenu.prevent="contextMenue" class="context rel">
-        <span :class="{'enumerate': true, 'enumerate-gt1': (cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast), 'deeper': (content.parserCopyDeep >= 3)}" v-if="enumerate">{{ enumerate }}&nbsp;</span>
+        <span :class="
+                  'enumerate' +
+                  ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
+                  ((content.parserCopyDeep >= 3) ? ' deeper' : '')
+              " v-if="enumerate">{{ enumerate }}&nbsp;</span>
         <b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
         <slot />		<!-- Inhalt -->
         <span :class="'comment-sym' + (Options.show.commentsHighlight ? ' comment-highlight' : '')" v-if="hasComment"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
       </div>
-      <div @contextmenu.prevent="contextMenue" :class="{'addable-in-btn': true, 'inline': layoutBase !== 'box'}"
+      <div @contextmenu.prevent="contextMenue" :class="'addable-in-btn' + (layoutBase !== 'box' ? ' inline' : '')"
             v-if="addableInButtons.length > 0">
         <div class="inline-block" @mouseenter="Options.options.addBtnHover ? showAddableButtons('In') : null" @mouseleave="Options.options.addBtnHover ? hideAddableButtons($event, 'In') : null">
           <b-button @click="Options.options.addBtnHover ? addTag(addableInButtons[0].uId, 'In') : showAddableButtons('In')" size="xs"
@@ -90,7 +102,8 @@
           </b-button>
           <div class="addable-in-btns" ref="addableInButtonsFrame" :style="'left:' + inAfterFrameLeft + 'px'" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
             <b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
-                      :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableInButtons.length - 1}"
+                      :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))"
+                      :class="(aKey === addableInButtons.length - 1 ? 'first' : '')"
                       :key="'aib' + aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
               <font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
             </b-button>
@@ -98,7 +111,7 @@
         </div>
       </div>
       <slot name="childs"/>		<!-- Kinder -->
-      <div @contextmenu.prevent="contextMenue" :class="{'addable-after-btn': true, 'inline': layoutBase !== 'box'}"
+      <div @contextmenu.prevent="contextMenue" :class="'addable-after-btn' + (layoutBase !== 'box' ? ' inline' : '')"
             v-if="addableAfterButtons.length > 0">
         <div class="inline-block" @mouseenter="Options.options.addBtnHover ? showAddableButtons('After') : null" @mouseleave="Options.options.addBtnHover ? hideAddableButtons($event, 'After') : null">
           <b-button @click="Options.options.addBtnHover ? addTag(addableAfterButtons[0].uId, 'After') : showAddableButtons('After')" size="xs"
@@ -110,7 +123,8 @@
           </b-button>
           <div class="addable-after-btns" ref="addableAfterButtonsFrame" :style="'left:' + inAfterFrameLeft + 'px'" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
             <b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
-                      :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))" :class="{'first': aKey === addableAfterButtons.length - 1}"
+                      :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))"
+                      :class="(aKey === addableAfterButtons.length - 1 ? 'first' : '')"
                       :key="'aab' + aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
               <font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
             </b-button>

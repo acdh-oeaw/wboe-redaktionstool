@@ -18,12 +18,14 @@
       <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in content.parserObj.options.get('layout.showAttributeBefore')"/>
     </template>
 
-    <span :style="{ 'line-height': Options.options.lineHeight }" :class="{ 'val-fix': true,
-                    'bold': content.parserObj.options.get('layout.bold'),
-                    'italic': content.parserObj.options.get('layout.italic'),
-                    'underline': content.parserObj.options.get('layout.underline'),
-                    'ls1pt': content.parserObj.options.get('layout.ls1pt')
-                  }" v-if="valueType === 'fix'">
+    <span :style="'line-height' + Options.options.lineHeight + ';'"
+          :class="
+              'val-fix' +
+              (content.parserObj.options.get('layout.bold') ? ' bold' : '') +
+              (content.parserObj.options.get('layout.italic') ? ' italic' : '') +
+              (content.parserObj.options.get('layout.underline') ? ' underline' : '') +
+              (content.parserObj.options.get('layout.ls1pt') ? ' ls1pt' : '')
+          " v-if="valueType === 'fix'">
       {{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
     </span>
     <GeoSelect     :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect'"/>
