@@ -21,7 +21,7 @@
 
         <!-- Inhalte -->
         <!-- justChilds -->
-        <div :id="'pox' + content.uId" :class="'obj just-childs' + (content.warnings.length > 0 ? 'warnings' : '')" v-if="layoutBase === 'justChilds'">
+        <div :id="'pox' + content.uId" :class="'obj just-childs' + (content.warnings.length > 0 ? ' warnings' : '')" v-if="layoutBase === 'justChilds'">
           <span :class="
                     'enumerate' +
                     ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
