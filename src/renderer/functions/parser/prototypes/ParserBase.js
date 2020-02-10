@@ -1,11 +1,13 @@
+import { remote } from 'electron'
 import xmlFunctions from '@/functions/XmlFunctions'
 import Parser from '../Parser'
 import FxGeoSelect from './FxGeoSelect'
 const XLSX = require('xlsx')
 const path = require('path')
+const fs = remote.require('fs')
 
 const localFunctions = {
-  init (xmlString, aFile) {
+  init (xmlString, aFile, aAltPath) {
     // "xmlString" überprüfen und auf "this.orgString" setzen
     if (typeof xmlString !== 'string') {		// Prüfen ob der übergebene Wert ein String ist
       this.addError('init() - Übergebener Wert ist kein "string"!')
@@ -17,6 +19,9 @@ const localFunctions = {
     }
     this.orgString = xmlString.trim()
     this.orgFilename = aFile
+    if (aAltPath) {
+      this.altPath = aAltPath
+    }
     if (this.orgFilename) {
       this.orgPath = this.orgFilename.substr(0, this.orgFilename.length - this.orgFilename.split('\\').pop().split('/').pop().length)
     }
@@ -94,7 +99,12 @@ const localFunctions = {
           // Datei laden falls noch nicht vorhanden.
           if (!this.additionalFiles[lFile]) {
             let fContent = {}
-            fContent.fullFileName = path.join(this.orgPath, lFile)
+            if (this.altPath && fs.existsSync(path.join(this.altPath, lFile))) {
+              fContent.fullFileName = path.join(this.altPath, lFile)
+              console.log('Datei aus alternativen Verzeichniss geladen!', fContent.fullFileName)
+            } else {
+              fContent.fullFileName = path.join(this.orgPath, lFile)
+            }
             fContent.ext = lFile.split('.').pop()
             if (fContent.ext === 'xlsx' || fContent.ext === 'xls') {
               try {

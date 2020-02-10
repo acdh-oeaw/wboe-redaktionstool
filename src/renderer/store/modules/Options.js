@@ -8,7 +8,8 @@ const state = {
 	projectPath: null,
 	show: {},
 	options: {},
-	lastFile: null
+	lastFile: null,
+	additionalFilesDirectory: null
 }
 
 const mutations = {
@@ -23,6 +24,9 @@ const mutations = {
 	},
 	SET_LASTFILE: (state, { filename }) => {
 		state.lastFile = filename
+	},
+	SET_ADDITIONAL_FILES_DIRECTORY: (state, { additionalFilesDirectory }) => {		// Pfad für Zusätzliche Dateien
+		state.additionalFilesDirectory = additionalFilesDirectory
 	},
 }
 
@@ -67,7 +71,7 @@ const actions = {
 		store.set('projectPath', state.projectPath)
 		dispatch('LOAD_PARSER_FILE')
 	},
-	DIALOG_PROJECT_PATH ({ commit, dispatch }) {		// Dialog zur auswahl einens neuen Projektpfads öffnen
+	DIALOG_PROJECT_PATH ({ commit, dispatch }) {		// Dialog zur Auswahl einens neuen Projektpfads öffnen
 		var newFolder = dialog.showOpenDialog({
 			title: 'Projekt Verzeichniss auswählen',
 			defaultPath: state.projectPath,
@@ -78,6 +82,33 @@ const actions = {
 		if (folderState && folderState.isDirectory) {
 			if (folderState.isDirectory()) {
 				commit('SET_PROJECT_PATH', { 'projectPath': newFolder[0] })
+				dispatch('LOAD_PARSER_FILE')
+			} else {
+				alert('Auswahl ist kein Verzeichniss!', 'Fehler!')
+			}
+		} else {
+			alert('Fehler beim auswählen des Verzeichnisses!\n\n' + JSON.stringify(folderState), 'Fehler!')
+		}
+	},
+	GET_ADDITIONAL_FILES_DIRECTORY ({ commit, dispatch }) {		// Pfad für Zusätzliche Dateien aus den "store" laden
+		commit('SET_ADDITIONAL_FILES_DIRECTORY', { 'additionalFilesDirectory': store.get('additionalFilesDirectory', null) })
+		dispatch('LOAD_PARSER_FILE')
+	},
+	SET_ADDITIONAL_FILES_DIRECTORY ({ commit, dispatch }) {		// Pfad für Zusätzliche Dateien neu setzen und in den "store" speichern
+		store.set('additionalFilesDirectory', state.additionalFilesDirectory)
+		dispatch('LOAD_PARSER_FILE')
+	},
+	DIALOG_ADDITIONAL_FILES_DIRECTORY ({ commit, dispatch }) {		// Dialog zur Auswahl einens neuen Pfad für Zusätzliche Dateien öffnen
+		var newFolder = dialog.showOpenDialog({
+			title: 'Pfad für Zusätzliche Dateien auswählen',
+			defaultPath: state.additionalFilesDirectory,
+			properties: ['openDirectory']
+		})
+		if (!newFolder) return
+		var folderState = fs.statSync(newFolder[0])
+		if (folderState && folderState.isDirectory) {
+			if (folderState.isDirectory()) {
+				commit('SET_ADDITIONAL_FILES_DIRECTORY', { 'additionalFilesDirectory': newFolder[0] })
 				dispatch('LOAD_PARSER_FILE')
 			} else {
 				alert('Auswahl ist kein Verzeichniss!', 'Fehler!')

@@ -123,6 +123,9 @@
 			if (!this.Options.projectPath) {		// Projektpfad laden
 				this.$store.dispatch('GET_PROJECT_PATH')
 			}
+			if (!this.Options.additionalFilesDirectory) {		// Pfad für Zusätzliche Dateien laden
+				this.$store.dispatch('GET_ADDITIONAL_FILES_DIRECTORY')
+			}
 			window.addEventListener('keyup', this.keyUp)
 			if (!this.devMode) {
 				window.onbeforeunload = (e) => {

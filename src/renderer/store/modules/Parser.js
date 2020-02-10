@@ -40,11 +40,7 @@ const actions = {
 			fileContent = local.loadImportFiles(fileContent, aPath)[1]
 		}
 		if (fileContent) {
-			if (fileContent === state.content && aFile === state.file) {
-				aParser = state.parser
-			} else {
-				aParser = new ParserObject.ParserBase(fileContent, aFile)
-			}
+			aParser = new ParserObject.ParserBase(fileContent, aFile, rootState.Options.additionalFilesDirectory)
 		}
 		console.log('LOAD_PARSER_FILE', aFile, (fileContent !== state.content))
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })

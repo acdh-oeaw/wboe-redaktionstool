@@ -21,6 +21,7 @@
           <button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Parser.file" class="float-right mir5" v-if="Parser.file && !(Parser.file.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
           <button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right mir5" v-if="Parser.content && Parser.content.length > 0"><font-awesome-icon icon="file-download"/></button>
           <button @click="exportAdditionalFilesParser" title="Zusätzliche Parser-Dateien für Portal als JSON speichern" class="float-right mir5" v-if="Options.show.develope"><font-awesome-icon icon="save"/></button>
+          <button @click="additionalFilesDirectory" :title="'Verzeichniss für Listen auswählen\n' + Options.additionalFilesDirectory" :class="'float-right mir5' + (Options.additionalFilesDirectory ? '' : ' warning')"><font-awesome-icon icon="external-link-square-alt"/></button>
         </p>
         <div v-if="Files.paths[Options.projectPath]">
           <FileLine :path="path" @loading="loading = true" @new="newFile" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
@@ -103,6 +104,13 @@
       saveParser () {		// Parser-Datei speichern unter ...
         this.$store.dispatch('DIALOG_SAVE_PARSER')	// Speicher Dialog
         this.updateFolder()
+      },
+      additionalFilesDirectory () {
+        console.log('additionalFilesDirectory')
+        this.loading = true
+        this.$store.dispatch('DIALOG_ADDITIONAL_FILES_DIRECTORY')	// Verzeichniss Dialog
+        this.$store.dispatch('SET_ADDITIONAL_FILES_DIRECTORY')
+        this.loading = false
       },
       exportAdditionalFilesParser () {
         console.log('exportAdditionalFilesParser', this.Parser && this.Parser.parser && this.Parser.parser.additionalFiles)
@@ -237,5 +245,8 @@
   .fileline-btn:hover {
     color: #000;
     background: #eee;
+  }
+  .warning {
+    color: #ad5900;
   }
 </style>

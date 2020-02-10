@@ -901,7 +901,7 @@
                       "onlyLastElementHasAddButton": true,
                       "fxFunction": {
                         "name": "RefBiblSelect",
-                        "filename": "Zitierung der Belegsätze und der Sekundärliteratur_gesamt.xlsx"
+                        "filename": "Literaturliste_Belegsätze_und_Sekundärliteratur_WBÖ_gesamt.xlsx"
                       }
                     },
                     "layout": {
