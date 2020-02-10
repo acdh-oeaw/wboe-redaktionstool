@@ -19,7 +19,7 @@
             (content.parserObj.options.get('layout.ls1pt') ? ' ls1pt' : '')
           "
         v-else>
-    <span :style="'line-height' + Options.options.lineHeight + ';'" :class="'val-edit val-focus' + (!aValue ? ' empty' : '')" v-rt-ipa ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
+    <span :style="'line-height' + Options.options.lineHeight + ';'" :class="'val-edit val-focus' + (!aValue ? ' empty' : '')" v-rt-ipa="!Options.show.hideIpaKeyboard" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
     <font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
   </span>
 

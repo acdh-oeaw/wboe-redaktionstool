@@ -113,6 +113,7 @@
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'commentsHighlight')"><font-awesome-icon :icon="((Options.show.commentsHighlight) ? 'check-square' : 'square')"/> Kommentare hervorheben</button>
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'editorPreview')"><font-awesome-icon icon="columns" :class="!Options.show.editorPreview ? 'text-secondary' : ''"/> Vorschau anzeigen</button>
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'tipLine')"><font-awesome-icon icon="minus" :class="!Options.show.tipLine ? 'text-secondary' : ''"/> Tippzeile anzeigen</button>
+                <button @click="$store.dispatch('TOGGLE_SHOW', 'hideIpaKeyboard')"><font-awesome-icon icon="font" :class="Options.show.hideIpaKeyboard ? 'text-secondary' : ''"/> IPA Tastatur anzeigen</button>
                 <hr>
               </template>
               <template v-if="aTab === 1">

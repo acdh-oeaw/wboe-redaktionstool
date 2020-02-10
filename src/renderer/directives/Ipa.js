@@ -67,7 +67,7 @@ function applyElIpa (el, bindings, vNode) {
   if (!inBrowser) {
     return
   }
-  // console.log(el, el.parentNode, bindings, vNode)
+  // console.log(bindings.value, el, el.parentNode, bindings, vNode)
   if (!el[elIpa]) {
     el[elIpa] = new ExtIpa().$mount()
     el[elIpa].aElement = el
@@ -84,6 +84,9 @@ function removeElIpa (el) {
   if (el[elIpa]) {
     if (el[elIpa].destroy) {
       el[elIpa].destroy()
+    }
+    if (el[elIpa].$destroy) {
+      el[elIpa].$destroy()
     }
     el[elIpa] = null
     delete el[elIpa]
@@ -185,24 +188,41 @@ var ExtIpa = Vue.extend({
       this.aElement.removeEventListener('keyup', this.keyUp)
       this.aElement.removeEventListener('blur', this.blur)
     }
+    this.$el.parentNode.removeChild(this.$el)
   },
 })
 
 export default {
   bind (el, bindings, vNode) {
-    applyElIpa(el, bindings, vNode)
+    if (bindings.value) {
+      applyElIpa(el, bindings, vNode)
+    } else {
+      removeElIpa(el)
+    }
   },
   inserted (el, bindings, vNode) {
-    applyElIpa(el, bindings, vNode)
+    if (bindings.value) {
+      applyElIpa(el, bindings, vNode)
+    } else {
+      removeElIpa(el)
+    }
   },
   update (el, bindings, vNode) {
     if (bindings.value !== bindings.oldValue) {
-      applyElIpa(el, bindings, vNode)
+      if (bindings.value) {
+        applyElIpa(el, bindings, vNode)
+      } else {
+        removeElIpa(el)
+      }
     }
   },
   componentUpdated (el, bindings, vNode) {
     if (bindings.value !== bindings.oldValue) {
-      applyElIpa(el, bindings, vNode)
+      if (bindings.value) {
+        applyElIpa(el, bindings, vNode)
+      } else {
+        removeElIpa(el)
+      }
     }
   },
   unbind (el) {
