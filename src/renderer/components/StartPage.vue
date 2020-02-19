@@ -186,7 +186,7 @@
       },
       debouncedInfoFolder: _.debounce(function () {
         this.$store.dispatch('UPDATE_PATHS')
-        this.$store.dispatch('UPDATE_PATHS_INFOS', this.Parser.parser)
+        this.$store.dispatch('UPDATE_PATHS_INFOS', { 'parser': this.Parser.parser, 'check': false })
         this.infoFolderUpdating = false
       }, 50),
     },

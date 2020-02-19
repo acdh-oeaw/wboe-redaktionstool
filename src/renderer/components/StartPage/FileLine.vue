@@ -27,6 +27,11 @@
           <span>Warnungen: <b>{{ file.info.warnings }}</b></span>
           <span :id="'fl-c-' + _uid">Kommentare: <b>{{ file.info.comments }}</b></span>
         </span>
+        <span class="info" v-if="file.sInfo">
+          <span><b>{{ file.sInfo.status }}</b></span>
+          <span style="width:150px;"><b>{{ file.sInfo.editor }}</b></span>
+          <span style="width:40px;"><b>{{ file.sInfo.version }}</b></span>
+        </span>
         <b-tooltip :target="'fl-c-' + _uid" placement="topleft" triggers="hover" class="tooltipcomment" v-if="file.info && file.info.comments > 0">
           <ul class="comment-list-el">
             <li class="comment-el" v-for="(aCommentObj, aComObjKey) in file.info.commentsObj" :key="'flcott' + _uid + '-' + aComObjKey">

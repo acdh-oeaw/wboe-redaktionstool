@@ -24,8 +24,9 @@ const mutations = {
 		Vue.set(state.paths[path], 'paths', paths)
 		Vue.set(state.paths[path], 'files', files)
 	},
-	SET_PATHS_INFO: (state, { path, fileIndex, info }) => {
+	SET_PATHS_INFO: (state, { path, fileIndex, info, sInfo }) => {
 		Vue.set(state.paths[path].files[fileIndex], 'info', info)
+		Vue.set(state.paths[path].files[fileIndex], 'sInfo', sInfo)
 	},
 	TOGGLE_PATH_OPEN: (state, { path }) => {		// Anzeige Pfad offen/geschlossen wechseln
 		state.paths[path].isOpen = !state.paths[path].isOpen
@@ -132,7 +133,8 @@ const actions = {
 							'fullFileName': aFullFileName,
 							'path': path,
 							'size': stats.size,
-							'info': null
+							'info': null,
+							'sInfo': null
 						})
 					}
 				}
@@ -147,28 +149,85 @@ const actions = {
 			dispatch('GET_PATH', { 'path': aDir, 'update': true })
 		}, this)
 	},
-	UPDATE_PATHS_INFOS ({ commit }, parser) {
-		let t0 = performance.now()
-		Object.keys(state.paths).forEach(function (aDir) {
-			state.paths[aDir].files.forEach(function (aFile, aFileIndex) {
-				if (aFile.ext === 'xml') {
-					let editorFile = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
-					let editorObj = new EditorObject.EditorBase(parser, new XmlObject.XmlBase(editorFile))
-					commit('SET_PATHS_INFO', {
-						'path': aDir,
-						'fileIndex': aFileIndex,
-						'info': {
-							'errors': Object.keys(editorObj.errors).length,
-							'warnings': Object.keys(editorObj.warnings).length,
-							'comments': editorObj.comments.length,
-							'commentsObj': editorObj.comments,
-							'changed': (editorObj.getXML(editorObj) !== editorFile)
+	UPDATE_PATHS_INFOS ({ commit }, { parser, check = false }) {
+		if (!state.asyncPaths) {
+			let t0 = performance.now()
+			Object.keys(state.paths).forEach(function (aDir) {
+				state.paths[aDir].files.forEach(function (aFile, aFileIndex) {
+					if (aFile.ext === 'xml') {
+						let editorFile = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
+						let pInfo = {
+							'path': aDir,
+							'fileIndex': aFileIndex,
+							'info': null,
+							'sInfo': null
 						}
-					})
-				}
+						let xmlObj = new XmlObject.XmlBase(editorFile)
+						let aVersion = '?'
+						let aStatus = '?'
+						let aEditor = '?'
+						if (xmlObj.orgDOM) {
+							for (let i = 0; i < xmlObj.orgDOM.childNodes.length; i++) {
+								let aObj = xmlObj.orgDOM.childNodes[i]
+								if (aObj.nodeName === 'redaktionstool' && aObj.nodeValue.length > 3) {
+									let aMatch = aObj.nodeValue.match(/version="([0-9.]+)"/)
+									if (aMatch.length === 2) {
+										aVersion = aMatch[1]
+									}
+								}
+							}
+							let aChangesXML = xmlObj.orgDOM.getElementsByTagName('change')
+							let lDate = 0
+							if (aChangesXML.length > 0) {
+								for (let i = 0; i < aChangesXML.length; i++) {
+									let aObj = aChangesXML[i]
+									if (aObj.attributes['when']) {
+										let aDate = aObj.attributes['when'].nodeValue
+										aDate = parseInt(aDate.split('-').join(''))
+										if (aDate >= lDate) {
+											lDate = aDate
+											aStatus = aObj.attributes['status'].nodeValue
+										}
+									}
+								}
+							}
+							let aEditorXML = xmlObj.orgDOM.getElementsByTagName('respStmt')
+							if (aEditorXML.length > 0) {
+								aEditorXML = aEditorXML[0].childNodes
+								if (aEditorXML.length > 0) {
+									for (let i = 0; i < aEditorXML.length; i++) {
+										if (aEditorXML[i].nodeName === 'name') {
+											aEditor = aEditorXML[i].innerHTML
+										}
+									}
+								}
+							}
+						}
+						pInfo.sInfo = {
+							'status': aStatus,
+							'editor': aEditor,
+							'version': aVersion
+						}
+						if (check) {
+							let editorObj = new EditorObject.EditorBase(parser, new XmlObject.XmlBase(xmlObj))
+							pInfo.info = {
+								'errors': Object.keys(editorObj.errors).length,
+								'warnings': Object.keys(editorObj.warnings).length,
+								'comments': editorObj.comments.length,
+								'commentsObj': editorObj.comments,
+								'changed': (editorObj.getXML(editorObj) !== editorFile)
+							}
+						}
+						commit('SET_PATHS_INFO', pInfo)
+					}
+				}, this)
 			}, this)
-		}, this)
-		console.log('UPDATE_PATHS_INFOS', Math.ceil(performance.now() - t0) + ' ms.')
+			console.log('UPDATE_PATHS_INFOS', Math.ceil(performance.now() - t0) + ' ms.', state.paths)
+			return true
+		} else {
+			console.log('UPDATE_PATHS_INFOS', 'Konnte nicht ausgeführt werden weil es bereits läuft!')
+			return false
+		}
 	},
 }
 
