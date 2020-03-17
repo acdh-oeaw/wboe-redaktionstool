@@ -48,7 +48,8 @@
                           {"value": "Jan Braun", "hide": true, "attribute": {"ref": "#JD"}},
                           {"value": "Angela Bergermayer", "attribute": {"ref": "#AB"}},
                           {"value": "Eva Wahlmüller", "attribute": {"ref": "#EW"}},
-                          {"value": "David Gschösser", "attribute": {"ref": "#DG"}}
+                          {"value": "David Gschösser", "attribute": {"ref": "#DG"}},
+                          {"value": "Stefanie Schöberl", "attribute": {"ref": "#StS"}}
                         ]
                       }}],
                       "layout": { "frame": "line" }
@@ -86,6 +87,7 @@
         <name xml:id="AB"><?copyOptions { "fromId": "nameSimple", "options": { "value": { "is": { "shouldValue": "Angela Bergermayer", "use": true, "possibleValues": ["Angela Bergermayer", "Angela Bergmayer"] } } } } ?></name>
         <name xml:id="EW"><?copyOptions { "fromId": "nameSimple", "options": { "tag": ["possibleTag", "shouldTag"], "layout": { "after": null } } } ?>Eva Wahlmüller</name>
         <name xml:id="DG"><?copyOptions { "fromId": "nameSimple" } ?>David Gschösser</name>
+        <name xml:id="StS"><?copyOptions { "fromId": "nameSimple", "options": { "tag": ["possibleTag", "shouldTag"], "layout": { "after": null } } } ?>Stefanie Schöberl</name>
       </respStmt>
       <respStmt>
         <?options { "title": "Student assistants", "layout": { "frame": "panelClosed" } } ?>
@@ -206,7 +208,8 @@
                                                                                 {"title": "Jan Braun", "hide": true, "value": "JD"},
                                                                                 {"title": "Angela Bergermayer", "value": "AB"},
                                                                                 {"title": "Eva Wahlmüller", "value": "EW"},
-                                                                                {"title": "David Gschösser", "value": "DG"}
+                                                                                {"title": "David Gschösser", "value": "DG"},
+                                                                                {"title": "Stefanie Schöberl", "value": "StS"}
                                                                               ]}
                     }],
                     "tag": ["multiple", "possibleTag", "shouldTag"],
