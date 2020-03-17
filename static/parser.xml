@@ -280,7 +280,11 @@
                             "tag": ["multiple", "possibleTag", "anywhere"],
                             "layout": {
                               "frame": "inline",
-                              "hideTitle": true
+                              "hideTitle": true,
+                              "multiple": {
+                                "use": true,
+                                "join": "; "
+                              }
                             }
                           } ?>
                 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
@@ -299,7 +303,11 @@
                               "tag": ["possibleTag", "multiple"],
                               "layout": {
                                 "frame": "inline",
-                                "hideTitle": true
+                                "hideTitle": true,
+                                "multiple": {
+                                  "use": true,
+                                  "join": ", "
+                                }
                               }
                             } ?>
                    <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"], "layout": { "italic": true } } } ?>
