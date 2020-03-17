@@ -184,7 +184,17 @@
                     "title": "Änderung",
                     "value": ["edit", "required", {"autoCreateValue": "Datensatz erstellt"}],
                     "attributes": [{
-                      "status": { "type": "edit", "value": "unfinished", "possibleValues": ["unfinished", "draft", "proofed", "cleared"] },
+                      "status": { "type": "edit", "value": "unfinished", "possibleValues": [
+                                                                                "unfinished",
+                                                                                "draft",
+                                                                                "proofed",
+                                                                                "cleared",
+                                                                                "in progress",
+                                                                                "peer correction",
+                                                                                "internal correction",
+                                                                                "external correction",
+                                                                                "finished"
+                                                                              ]},
                       "when": { "type": "edit", "value": { "fx": "now" } },
                       "who": { "type": "edit", "value": "", "prefix": "#", "possibleValues": [
                                                                                 {"title": "Alexandra N. Lenz", "value": "AL"},
