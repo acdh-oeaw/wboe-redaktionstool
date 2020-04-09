@@ -1,6 +1,6 @@
 'use strict'
 
-import { app, BrowserWindow } from 'electron'
+import { app, BrowserWindow, Menu } from 'electron'
 
 const electron = require('electron')
 
@@ -14,6 +14,45 @@ const shell = electron.shell
  */
 if (process.env.NODE_ENV !== 'development') {
   global.__static = require('path').join(__dirname, '/static').replace(/\\/g, '\\\\')
+}
+
+if (process.platform === 'darwin') {
+  app.on('ready', () => {
+    Menu.setApplicationMenu(Menu.buildFromTemplate([
+      {
+        label: app.getName(),
+        submenu: [
+          { role: 'about' },
+          { type: 'separator' },
+          { role: 'services' },
+          { type: 'separator' },
+          { role: 'hide' },
+          { role: 'hideothers' },
+          { role: 'unhide' },
+          { type: 'separator' },
+          { role: 'quit' }
+        ]
+      },
+      {
+        label: 'Edit',
+        submenu: [
+          { role: 'undo' },
+          { role: 'redo' },
+          { type: 'separator' },
+          { role: 'cut' },
+          { role: 'copy' },
+          { role: 'paste' },
+          { role: 'pasteandmatchstyle' },
+          { role: 'delete' },
+          { role: 'selectall' },
+          { type: 'separator' },
+          { role: 'reload' },
+          { type: 'separator' },
+          { role: 'quit' }
+        ]
+      }
+    ]))
+  })
 }
 
 let mainWindow
