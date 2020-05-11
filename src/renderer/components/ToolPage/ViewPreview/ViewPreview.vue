@@ -3,7 +3,16 @@
     <div ref="frm" class="row" v-if="object.contentObj">
       <div :class="showComments && Options.show.showCommentsList ? 'col-10' : 'col-12'">
         <div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
-        <ViewPreview :object="object" :preview="object.parserObj.previewObj" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" v-else/>
+        <ViewPreview
+          :object="object"
+          :preview="object.parserObj.previewObj"
+          :commentsListe="commentsListe"
+          :showAnchors="showAnchors"
+          :showComments="showComments"
+          @setAnchor="setAnchor"
+          :selectableAnchors="selectableAnchors"
+          :options="Options"
+          v-else/>
       </div>
       <div class="col-2 commList" v-if="showComments && Options.show.showCommentsList">
         <template v-if="isCommentsListe">
@@ -11,11 +20,13 @@
             v-for="(aComments, aComsKey) in commentsListe.comments"
             :key="'cp' + aComsKey"
             :ref="'cp' + aComsKey"
-            :style="'margin-top:' + (aComments.top > 0 ? aComments.top : 0) + 'px;'"
-          >
+            :style="'margin-top:' + (aComments.top > 0 ? aComments.top : 0) + 'px;'">
             <div class="comment-title"><b>{{ aComments.title }}:</b> {{ aComments.value }}</div>
             <ul class="comment-list">
-              <li class="comment" v-for="(aComment, aComKey) in aComments.list" :key="'cp' + aComsKey + 'cott' + aComKey">
+              <li
+                class="comment"
+                v-for="(aComment, aComKey) in aComments.list"
+                :key="'cp' + aComsKey + 'cott' + aComKey">
                 {{ aComment.val }}
               </li>
             </ul>
@@ -33,23 +44,43 @@
 
   <span v-else-if="!start && preview && object">
     <template v-for="(aPrev, aPrevKey) in preview">
-      <VariableTag :tag="aPrev.name" :attributes="aPrev.attributes" :key="'vt' + aPrevKey" v-if="aPrev.type === 'HTML'">
+      <VariableTag  
+        :tag="aPrev.name"
+        :attributes="aPrev.attributes"
+        :key="'vt' + aPrevKey"
+        v-if="aPrev.type === 'HTML'">
         <template v-for="(aContent, aConKey) in aPrev.content">
           <template v-if="typeof aContent === 'string'">
             <span v-html="aContent" :key="'sc' + aPrevKey + '-' + aConKey" />
           </template>
-          <ViewPreview :object="object" :preview="[aContent]" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor" :selectableAnchors="selectableAnchors" :key="'vp' + aPrevKey + '-' + aConKey" v-else/>
+          <ViewPreview
+            v-else
+            :object="object"
+            :options="Options"
+            :preview="[aContent]"
+            :commentsListe="commentsListe"
+            :showAnchors="showAnchors"
+            :showComments="showComments"
+            @setAnchor="setAnchor"
+            :selectableAnchors="selectableAnchors"
+            :key="'vp' + aPrevKey + '-' + aConKey" />
         </template>
       </VariableTag>
       <template v-else-if="aPrev.type === 'PIN'">
-        <PreviewContent :content="object.getEditorObjById(aPrev.options.fromid)"
-          :commentsListe="commentsListe"
-          :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchor"
-          :selectableAnchors="selectableAnchors"
-          :key="'pc' + aPrevKey"
+        <PreviewContent
           v-if="aPrev.name === 'content' && aPrev.options && aPrev.options.fromid"
-        />
-        <div :key="'fbPIN' + aPrevKey" v-else><b>Fehler bei "PIN": {{ aPrev.name }}</b></div>
+          :content="object.getEditorObjById(aPrev.options.fromid)"
+          :commentsListe="commentsListe"
+          :showAnchors="showAnchors"
+          :showComments="showComments"
+          @setAnchor="setAnchor"
+          :selectableAnchors="selectableAnchors"
+          :key="'pc' + aPrevKey" />
+        <div
+          v-else
+          :key="'fbPIN' + aPrevKey">
+          <b>Fehler bei "PIN": {{ aPrev.name }}</b>
+        </div>
       </template>
       <template v-else>
         <b :key="'ut' + aPrevKey">UNBEKANNTER TYPE ({{ aPrev.type }})</b>
@@ -64,13 +95,8 @@
 
 <script>
   import _ from 'lodash'
-  import { remote } from 'electron'
-  import { mapState } from 'vuex'
-  import VariableTag from './general/VariableTag'
-  import PreviewContent from './ViewPreview/PreviewContent'
-  const ipc = require('electron').ipcRenderer
-  const path = require('path')
-  const { dialog } = remote
+  import VariableTag from './VariableTag'
+  import PreviewContent from './PreviewContent'
 
   export default {
     name: 'ViewPreview',
@@ -82,17 +108,23 @@
       showComments: Boolean,
       selectableAnchors: Boolean,
       commentsListe: Object,
-      filename: String
+      filename: String,
+      options: Object
+    },
+    components: {
+      VariableTag,
+      PreviewContent
     },
     data () {
       return {
       }
     },
     computed: {
-      ...mapState(['Options']),
       isCommentsListe () {
-        // console.log(Object.keys(this.commentsListe.comments), this.commentsListe.comments && Object.keys(this.commentsListe.comments).length > 0)
-        return this.commentsListe.comments && Object.keys(this.commentsListe.comments).length > 0
+        return this.commentsListe && this.commentsListe.comments && Object.keys(this.commentsListe.comments).length > 0
+      },
+      Options () {
+        return this.options
       }
     },
     watch: {
@@ -101,31 +133,9 @@
       }
     },
     mounted () {
+      // console.log(this.$props)
     },
     methods: {
-      pdfExport () {
-        let aDate = new Date()
-        let aMonth = aDate.getMonth() + 1
-        let now = aDate.getFullYear() + '-' + ((aMonth < 10) ? '0' : '') + aMonth + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
-        now += '_' + ((aDate.getHours() < 10) ? '0' : '') + aDate.getHours() + '_' + ((aDate.getMinutes() < 10) ? '0' : '') + aDate.getMinutes() + '_' + ((aDate.getSeconds() < 10) ? '0' : '') + aDate.getSeconds()
-        let oFilename = path.basename(this.filename)
-        let aExtension = path.extname(this.filename)
-        let nFilename = oFilename.substring(0, oFilename.length - aExtension.length)
-        nFilename += '_' + now
-        console.log(nFilename)
-        var newPDF = dialog.showSaveDialog({
-          title: 'PDF speichern ...',
-          defaultPath: nFilename,
-          filters: [
-            { name: 'PDF', extensions: ['pdf'] },
-            { name: 'All Files', extensions: ['*'] }
-          ]
-        })
-        console.log('newPDF', newPDF)
-        if (newPDF) {
-          ipc.send('print-to-pdf', newPDF)
-        }
-      },
       debouncedHeights: _.debounce(function () {
         this.getHeights()
       }, 100),
@@ -161,10 +171,6 @@
         this.commentsListe.comments = {}
         console.log('commentsListeReset', this.commentsListe)
       }
-    },
-    components: {
-      VariableTag,
-      PreviewContent
     },
   }
 </script>
