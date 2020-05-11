@@ -1,8 +1,8 @@
 <template>
-  <div :id="'po' + content.uId"
-       class="inline prel"
-       :style="'font-size: ' + ((cParserObj && cParserOptions && cParserOptions.get('previewLayout.fontsize')) ? cParserOptions.get('previewLayout.fontsize') : 100) + '%;'"
-       >
+  <div
+    :id="'po' + content.uId"
+    class="inline prel"
+    :style="{ fontSize }">
     <template v-if="!hideWithoutContentAll">
       <!-- Vor Inhalten -->
       <div :style="'height: ' + cParserOptions.get('previewLayout.spaceTopBefore') + 'px'" v-if="cParserObj && cParserOptions && cParserOptions.get('previewLayout.spaceTopBefore')"></div>
@@ -22,12 +22,14 @@
         <!-- Inhalte -->
         <!-- justChilds -->
         <div :id="'pox' + content.uId" :class="'obj just-childs' + (content.warnings.length > 0 ? ' warnings' : '')" v-if="layoutBase === 'justChilds'">
-          <span :class="
-                    'enumerate' +
-                    ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
-                    (cParserOptions.get('previewLayout.multiple.enumerateRom') ? ' enumeraterom' : '') +
-                    ((content.parserCopyDeep >= 3) ? ' deeper' : '')
-                " v-if="enumerate">{{ enumerate }}&nbsp;</span>
+          <span
+          :class="{
+            enumerate      : true,
+            'enumerate-gt1': cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast,
+            enumeraterom   : cParserOptions.get('previewLayout.multiple.enumerateRom'),
+            deeper         : content.parserCopyDeep >= 3
+          }"
+          v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <!-- Kinder -->
           <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.get('editor.fxFunction.name')) > -1)">
             <PreviewContent ref="childs" :content="aContent" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
@@ -37,30 +39,47 @@
           </template>
         </div>
         <!-- normal -->
-        <div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '')
-                    + ((showAnchors && hasAnchor) ? ' hasanchor' : '')
-                    + ((selectableAnchors && hasAnchor) ? ' hasselanchor' : '')
-                    + (((hasComment && showComments)) ? ' hascomment' : '')
-                  "
+        <div
+          :class="{
+            obj                 : true,
+            ['lb-' + layoutBase]: true,
+            warnings            : content.warnings.length > 0,
+            hasanchor           : showAnchors && hasAnchor,
+            hasselanchor        : selectableAnchors && hasAnchor,
+            hascomment          : hasComment && showComments
+          }"
           @click="setAnchor"
           v-else>
           <div :id="'pox' + content.uId" class="inline rel">
             <span :class="'enumerate' + ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') + ((this.cParserOptions.get('previewLayout.multiple.enumerateFX'))?' enumeratefx deep' + content.parserCopyDeep:'')" v-if="enumerate">{{ enumerate }}&nbsp;</span>
             <b v-if="shownTitle">{{ shownTitle }}: </b><br v-if="shownTitle && layoutBase === 'box'"/>
             <!-- Inhalt -->
-            <span :class="
-                      (valueType === 'fix' ? 'val-fix' : '') +
-                      (cParserOptions.get('previewLayout.bold') ? ' bold' : '') +
-                      (cParserOptions.get('previewLayout.italic') ? ' italic' : '') +
-                      (cParserOptions.get('previewLayout.underline') ? ' underline' : '') +
-                      (cParserOptions.get('previewLayout.ls1pt') ? ' ls1pt' : '')
-                  "
-                  v-if="valueType === 'fix' || valueType === 'editable'">{{ content.orgXmlObj.getValueByOption(this.cParserOptions.get('value'), false) }}</span>
-            <GeoPreview :content="content" v-else-if="cParserObj && cParserOptions && cParserOptions.get('editor.fxFunction.name') === 'GeoSelect'"/>
+            <span
+              v-if="valueType === 'fix' || valueType === 'editable'"
+              :class="{
+                'val-fix': valueType === 'fix',
+                bold     : cParserOptions.get('previewLayout.bold'),
+                italic   : cParserOptions.get('previewLayout.italic'),
+                underline: cParserOptions.get('previewLayout.underline'),
+                ls1pt    : cParserOptions.get('previewLayout.ls1pt')
+              }">
+              {{ content.orgXmlObj.getValueByOption(this.cParserOptions.get('value'), false) }}
+            </span>
+            <GeoPreview
+              v-else-if="cParserObj && cParserOptions && cParserOptions.get('editor.fxFunction.name') === 'GeoSelect'"
+              :content="content"
+            />
           </div>
           <!-- Kinder -->
           <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.get('editor.fxFunction.name')) > -1)">
-            <PreviewContent ref="childs" :content="aContent" :commentsListe="commentsListe" :showAnchors="showAnchors" :showComments="showComments" @setAnchor="setAnchorX" :selectableAnchors="selectableAnchors"
+            <PreviewContent
+              ref="childs"
+              :content="aContent"
+              :commentsListe="commentsListe"
+              :showAnchors="showAnchors"
+              :showComments="showComments"
+              @setAnchor="setAnchorX"
+              :selectableAnchors="selectableAnchors"
               v-for="(aContent, aKey) in contentChildsShown"
               :key="aContent.uId + '-' + aKey"
             />
@@ -83,23 +102,39 @@
         <span v-if="!cParserOptions.get('previewLayout.noSpaceAfter') && (valueType === 'fix' || valueType === 'editable')">&nbsp;</span>
       </template>
     </template>
-    <b-tooltip :target="'po' + content.uId" placement="left" triggers="hover" v-if="showAnchors && hasAnchor">
+    <b-tooltip
+      v-if="showAnchors && hasAnchor"
+      :target="'po' + content.uId"
+      placement="left"
+      triggers="hover">
       {{ '#' + valAnchor + ' (' + typAnchor + ((subTypAnchor) ? ', ' + subTypAnchor : '') + ')' + ' -> ' + content.orgXmlObj.getValue()[0] }}
     </b-tooltip>
-    <b-tooltip :target="'pox' + content.uId" placement="top" triggers="hover" v-if="hasComment && showComments">
+    <b-tooltip
+      v-if="hasComment && showComments"
+      :target="'pox' + content.uId"
+      placement="top"
+      triggers="hover">
       <ul class="comment-list">
-        <li class="comment" v-for="(aComment, aComKey) in content.orgXmlObj.comments" :key="'cott' + content.uId + '-' + aComKey">
+        <li
+          class="comment"
+          v-for="(aComment, aComKey) in content.orgXmlObj.comments" :key="'cott' + content.uId + '-' + aComKey">
           {{ aComment.val }}
         </li>
       </ul>
     </b-tooltip>
-    <span :class="'comment-sym'" v-if="hasComment && showComments"><font-awesome-icon icon="comment"/></span>		<!-- Kommentar -->
+    <span
+      v-if="hasComment && showComments"
+      class="comment-sym">
+      <font-awesome-icon :icon="faComment" />
+    </span>
   </div>
 </template>
 
 <script>
   import GeoPreview from './fxFunctions/GeoPreview'
-
+  import { BTooltip } from 'bootstrap-vue'
+  import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+  import { faComment } from '@fortawesome/free-solid-svg-icons'
   export default {
     name: 'PreviewContent',
     props: {
@@ -110,16 +145,33 @@
       selectableAnchors: Boolean,
       commentsListe: Object
     },
+    components: {
+      GeoPreview,
+      BTooltip,
+      FontAwesomeIcon
+    },
     data () {
       return {
-        childlessFxFunctions: ['GeoSelect'],
-        pSubtypes: ['compound', 'MWE', 'diminutive', 'movierung', 'shortform'],
+        faComment,
+        childlessFxFunctions: [
+          'GeoSelect'
+        ],
+        pSubtypes: [
+          'compound',
+          'MWE',
+          'diminutive',
+          'movierung',
+          'shortform'
+        ],
       }
     },
     mounted () {
       this.updateComments()
     },
     computed: {
+      fontSize () {
+        return ((this.cParserObj && this.cParserOptions && this.cParserOptions.get('previewLayout.fontsize')) ? this.cParserOptions.get('previewLayout.fontsize') : 100) + '%'
+      },
       hasComment () {
         return this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0
       },
@@ -294,10 +346,7 @@
       setAnchorX (data) {
         this.$emit('setAnchor', data)
       },
-    },
-    components: {
-      GeoPreview
-    },
+    }
   }
 </script>
 

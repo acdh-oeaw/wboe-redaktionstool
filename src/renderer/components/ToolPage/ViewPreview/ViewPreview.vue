@@ -2,8 +2,9 @@
   <div class="start" v-if="start">
     <div ref="frm" class="row" v-if="object.contentObj">
       <div :class="showComments && Options.show.showCommentsList ? 'col-10' : 'col-12'">
-        <div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
+        <div v-if="objectHasErrors">Bearbeiten nicht möglich!</div>
         <ViewPreview
+          v-else
           :object="object"
           :preview="object.parserObj.previewObj"
           :commentsListe="commentsListe"
@@ -12,7 +13,7 @@
           @setAnchor="setAnchor"
           :selectableAnchors="selectableAnchors"
           :options="Options"
-          v-else/>
+        />
       </div>
       <div class="col-2 commList" v-if="showComments && Options.show.showCommentsList">
         <template v-if="isCommentsListe">
@@ -121,7 +122,14 @@
     },
     computed: {
       isCommentsListe () {
-        return this.commentsListe && this.commentsListe.comments && Object.keys(this.commentsListe.comments).length > 0
+        return this.commentsListe
+          && this.commentsListe.comments
+          && Object.keys(this.commentsListe.comments).length > 0
+      },
+      objectHasErrors () {
+        return (this.object.errors && this.length(this.object.errors) > 0)
+          || (this.object.orgXmlObj.errors && this.length(this.object.orgXmlObj.errors) > 0)
+          || (this.object.parserObj.errors && this.length(this.object.parserObj.errors) > 0)
       },
       Options () {
         return this.options
