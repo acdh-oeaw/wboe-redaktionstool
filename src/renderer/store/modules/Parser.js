@@ -4,6 +4,7 @@ import fPath from 'path'
 const fs = remote.require('fs')
 const fse = remote.require('fs-extra')
 const { dialog } = remote
+const XLSX = require('xlsx')
 
 const state = {
 	file: null,
@@ -40,7 +41,31 @@ const actions = {
 			fileContent = local.loadImportFiles(fileContent, aPath)[1]
 		}
 		if (fileContent) {
-			aParser = new ParserObject.ParserBase(fileContent, aFile, rootState.Options.additionalFilesDirectory)
+			let altPath = rootState.Options.additionalFilesDirectory
+			let getAdditionalFile = function (lFile) {
+				let fContent = {}
+				if (altPath && fs.existsSync(fPath.join(altPath, lFile))) {
+					fContent.fullFileName = fPath.join(altPath, lFile)
+					console.log('Datei aus alternativen Verzeichniss geladen!', fContent.fullFileName)
+				} else {
+					fContent.fullFileName = fPath.join(this.orgPath, lFile)
+				}
+				fContent.ext = lFile.split('.').pop()
+				if (fContent.ext === 'xlsx' || fContent.ext === 'xls') {
+					try {
+						// let t0 = performance.now()
+						let aXLSX = XLSX.readFile(fContent.fullFileName)
+						// let t1 = performance.now()
+						fContent.JSON = XLSX.utils.sheet_to_json(aXLSX.Sheets[aXLSX.SheetNames[0]])
+						// console.log('XLSX laden: ' + Math.ceil(t1 - t0) + ' ms. > JSON: ' + Math.ceil(performance.now() - t1) + ' ms.')
+					} catch (e) {
+						fContent.error = 'Datei "' + fContent.fullFileName + '" konnte nicht geladen werden! (xlsx)'
+						console.log(e)
+					}
+				}
+				return fContent
+			}
+			aParser = new ParserObject.ParserBase(fileContent, aFile, getAdditionalFile)
 		}
 		console.log('LOAD_PARSER_FILE', aFile, (fileContent !== state.content))
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })

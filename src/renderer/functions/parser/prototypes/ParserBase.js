@@ -1,13 +1,9 @@
-import { remote } from 'electron'
 import xmlFunctions from '@/functions/XmlFunctions'
 import Parser from '../Parser'
 import FxGeoSelect from './FxGeoSelect'
-const XLSX = require('xlsx')
-const path = require('path')
-const fs = remote.require('fs')
 
 const localFunctions = {
-  init (xmlString, aFile, aAltPath) {
+  init (xmlString, aFile) {
     // "xmlString" überprüfen und auf "this.orgString" setzen
     if (typeof xmlString !== 'string') {		// Prüfen ob der übergebene Wert ein String ist
       this.addError('init() - Übergebener Wert ist kein "string"!')
@@ -19,9 +15,6 @@ const localFunctions = {
     }
     this.orgString = xmlString.trim()
     this.orgFilename = aFile
-    if (aAltPath) {
-      this.altPath = aAltPath
-    }
     if (this.orgFilename) {
       this.orgPath = this.orgFilename.substr(0, this.orgFilename.length - this.orgFilename.split('\\').pop().split('/').pop().length)
     }
@@ -98,27 +91,10 @@ const localFunctions = {
           let lFile = aObj.options.get('editor.fxFunction.filename')
           // Datei laden falls noch nicht vorhanden.
           if (!this.additionalFiles[lFile]) {
-            let fContent = {}
-            if (this.altPath && fs.existsSync(path.join(this.altPath, lFile))) {
-              fContent.fullFileName = path.join(this.altPath, lFile)
-              console.log('Datei aus alternativen Verzeichniss geladen!', fContent.fullFileName)
-            } else {
-              fContent.fullFileName = path.join(this.orgPath, lFile)
+            this.additionalFiles[lFile] = this.getAdditionalFile(lFile)
+            if (this.additionalFiles[lFile].error) {
+              this.addError(this.additionalFiles[lFile].error)
             }
-            fContent.ext = lFile.split('.').pop()
-            if (fContent.ext === 'xlsx' || fContent.ext === 'xls') {
-              try {
-                // let t0 = performance.now()
-                fContent.XLSX = XLSX.readFile(fContent.fullFileName)
-                // let t1 = performance.now()
-                fContent.JSON = XLSX.utils.sheet_to_json(fContent.XLSX.Sheets[fContent.XLSX.SheetNames[0]])
-                // console.log('XLSX laden: ' + Math.ceil(t1 - t0) + ' ms. > JSON: ' + Math.ceil(performance.now() - t1) + ' ms.')
-              } catch (e) {
-                this.addError('Datei "' + fContent.fullFileName + '" konnte nicht geladen werden! (xlsx)')
-                console.log(e)
-              }
-            }
-            this.additionalFiles[lFile] = fContent
           }
           // Datenvorbereitung für spezielle Funktionen:
           if (!this.additionalFiles[lFile].geoSelect && this.additionalFiles[lFile].JSON && aObj.options.get('editor.fxFunction.name') === 'GeoSelect') {		// Daten für GeoSelect vorbereiten
