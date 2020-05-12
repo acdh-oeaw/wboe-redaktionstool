@@ -3,7 +3,7 @@ import prototypeXmlBase from './prototypes/XmlBase'
 import prototypeXmlObject from './prototypes/XmlObject'
 
 const localFunctions = {
-  XmlBase (xmlString) {
+  XmlBase (xmlString, cCall = null) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
     this.errors = {}							// Fehler. Property = "XmlObject.uId" oder "-1" für "XmlBase"
@@ -12,12 +12,13 @@ const localFunctions = {
     this.family = []							// Alle "XmlObject"e "Key" = "uId"
     this.orgString = null					// Original String für DOM
     this.orgDOM = null						// Original DOM über init generiert
+    this.changeCall = cCall				// Funktion die aufgerufen wird wenn es eine Änderung gibt
     if (xmlString) {							// Wenn der "xmlString" übergeben wurde direkt initialisieren
       this.init(xmlString)
       this.updateFamilyErrors()
     }
   },
-  XmlObject (root, parents, dom) {
+  XmlObject (root, parents, dom, cCall = null) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
     this.parserIgnore = true			// Objekt beim parsen ignorieren! (comments, usw.)
@@ -36,6 +37,7 @@ const localFunctions = {
     this.root = root							// Enthält die "XmlBase"
     this.orgDOM = dom							// Original DOM
     this.siblings = ((this.parents.length > 0) ? this.parents[0].childs : this.root.content)		// Geschwister
+    this.changeCall = cCall				// Funktion die aufgerufen wird wenn es eine Änderung gibt
     this.init()										// Immer dirket initialisieren
   },
 }

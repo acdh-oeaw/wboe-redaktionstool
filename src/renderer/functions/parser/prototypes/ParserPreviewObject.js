@@ -1,5 +1,3 @@
-// import xmlFunctions from '@/functions/XmlFunctions'
-// import stdFunctions from '@/functions/stdFunctions'
 import Parser from '../Parser'
 
 function domDescendantsPIN (dom) {

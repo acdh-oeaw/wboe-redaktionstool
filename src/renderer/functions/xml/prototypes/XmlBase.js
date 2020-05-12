@@ -1,5 +1,4 @@
 import xmlFunctions from '@/functions/XmlFunctions'
-import store from '@/store'
 import Xml from '../Xml'
 
 const localFunctions = {
@@ -30,7 +29,8 @@ const localFunctions = {
     if (this.orgDOM.childNodes.length > 0) {
       this.orgDOM.childNodes.forEach(function (topChild) {
         if (topChild.nodeType !== topChild.PROCESSING_INSTRUCTION_NODE) {
-          this.content.push(new Xml.XmlObject(this, null, topChild))
+          let nXmlObj = new Xml.XmlObject(this, null, topChild, this.changeCall)
+          this.content.push(nXmlObj)
         }
       }, this)
     }
@@ -55,10 +55,11 @@ const localFunctions = {
   addByParser (pos, pObj) {
     console.log('addByParser', this, pos, pObj)
     let aKey = pos
+    let nXmlObj = new Xml.XmlObject(this, null, null, this.changeCall)
     if (aKey || aKey === 0) {
-      this.content.splice(aKey, 0, new Xml.XmlObject(this, null))
+      this.content.splice(aKey, 0, nXmlObj)
     } else {
-      aKey = this.content.push(new Xml.XmlObject(this, null)) - 1
+      aKey = this.content.push(nXmlObj) - 1
     }
     this.content[aKey].type = ((pObj.name === '#text') ? 'TEXT' : 'ELEMENT')
     this.content[aKey].name = pObj.name
@@ -88,7 +89,9 @@ const localFunctions = {
       dPos = dPos + ((dir === 'right') ? 1 : 0) + ((srcObj.parents[0] === destObj.parents[0] && sPos < dPos) ? -1 : 0)
       destObj.siblings.splice(dPos, 0, srcObj.siblings.splice(sPos, 1)[0])
       srcObj.updateParents([...destObj.parents])
-      store.dispatch('IS_CHANGED')
+      if (this.changeCall && typeof this.changeCall === 'function') {
+        this.changeCall()
+      }
     } else {
       console.log('Fehler! Verschieben kann nicht funktionieren! (XML)')
     }

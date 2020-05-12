@@ -1,6 +1,4 @@
-// import xmlFunctions from '@/functions/XmlFunctions'
 import Editor from '../Editor'
-import store from '@/store'
 
 const localFunctions = {
   init () {
@@ -47,7 +45,9 @@ const localFunctions = {
         srcObj.orgXmlObj.root.moveTo(srcObj.orgXmlObj, destObj.orgXmlObj, dir)
         sPar.updateData(true)
         dPar.updateData(true)
-        store.dispatch('IS_CHANGED')
+        if (this.changeCall && typeof this.changeCall === 'function') {
+          this.changeCall()
+        }
       } else {
         console.log('Fehler! Verschieben kann nicht funktionieren! (Editor)')
       }
