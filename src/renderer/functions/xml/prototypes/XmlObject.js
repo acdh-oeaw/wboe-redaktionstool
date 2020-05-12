@@ -1,6 +1,5 @@
 import Xml from '../Xml'
 import Vue from 'vue'
-import store from '@/store'
 
 const localFunctions = {
   init () {
@@ -27,7 +26,8 @@ const localFunctions = {
             }
             if (!(child.nodeType === child.PROCESSING_INSTRUCTION_NODE && child.nodeName === 'comment')
             && !(child.nodeType === child.TEXT_NODE && child.nodeValue.trim().length < 1)) {		// Leere Text Felder ignorieren
-              this.childs.push(new Xml.XmlObject(this.root, [this, ...this.parents], child))
+              let nXmlObj = new Xml.XmlObject(this.root, [this, ...this.parents], child, this.changeCall)
+              this.childs.push(nXmlObj)
             }
           }, this)
         }
@@ -65,10 +65,11 @@ const localFunctions = {
   addByParser (pos, pObj, autoCreate) {
     // console.log('addByParser', this, pos, pObj)
     let aKey = pos
+    let nXmlObj = new Xml.XmlObject(this.root, [this, ...this.parents], null, this.changeCall)
     if (aKey || aKey === 0) {
-      this.childs.splice(aKey, 0, new Xml.XmlObject(this.root, [this, ...this.parents]))
+      this.childs.splice(aKey, 0, nXmlObj)
     } else {
-      aKey = this.childs.push(new Xml.XmlObject(this.root, [this, ...this.parents])) - 1
+      aKey = this.childs.push(nXmlObj) - 1
     }
     this.childs[aKey].type = ((pObj.name === '#text') ? 'TEXT' : 'ELEMENT')
     this.childs[aKey].name = pObj.name
@@ -93,7 +94,9 @@ const localFunctions = {
     this.childs[aKey].ready = true
     this.childs[aKey].parserIgnore = false
     if (this.ready) {
-      store.dispatch('IS_CHANGED')
+      if (this.changeCall && typeof this.changeCall === 'function') {
+        this.changeCall()
+      }
     }
     Vue.set(this.childs, aKey, this.childs[aKey])
     return this.childs[aKey]
@@ -113,7 +116,9 @@ const localFunctions = {
     if (tPos > -1 && ePos > -1) {
       this.siblings.splice(ePos, 0, this.siblings.splice(tPos, 1)[0])
       if (this.ready) {
-        store.dispatch('IS_CHANGED')
+        if (this.changeCall && typeof this.changeCall === 'function') {
+          this.changeCall()
+        }
       }
     } else {
       console.log('Fehler! Verschieben kann nicht funktionieren!')
@@ -132,7 +137,9 @@ const localFunctions = {
             Vue.delete(this.siblings, aSibKey)
             console.log('XmlObject gelöscht ...')
             if (this.ready) {
-              store.dispatch('IS_CHANGED')
+              if (this.changeCall && typeof this.changeCall === 'function') {
+                this.changeCall()
+              }
             }
             return true
           }
@@ -180,7 +187,9 @@ const localFunctions = {
       if (this.value !== val) {
         this.value = val
         // console.log('setValue [value]', this, val)
-        store.dispatch('IS_CHANGED')
+        if (this.changeCall && typeof this.changeCall === 'function') {
+          this.changeCall()
+        }
       }
     } else {
       let aTxtChilds = this.getChildsOfType(['TEXT'], false, false)
@@ -188,13 +197,16 @@ const localFunctions = {
         if (aTxtChilds[0].value !== val) {
           // console.log('setValue text [child]', this, val, aTxtChilds[0].value)
           aTxtChilds[0].value = val
-          store.dispatch('IS_CHANGED')
+          if (this.changeCall && typeof this.changeCall === 'function') {
+            this.changeCall()
+          }
         }
       } else if (aTxtChilds.length > 1) {
         // ToDo: Mehrer Text Kinder ?!?
         console.log(aTxtChilds.length + ' TEXT Kind ...')
       } else {
-        let nTxt = this.childs.push(new Xml.XmlObject(this.root, [this, ...this.parents])) - 1
+        let nXmlObj = new Xml.XmlObject(this.root, [this, ...this.parents], null, this.changeCall)
+        let nTxt = this.childs.push(nXmlObj) - 1
         this.childs[nTxt].type = 'TEXT'
         this.childs[nTxt].name = '#text'
         this.childs[nTxt].value = val
@@ -203,7 +215,9 @@ const localFunctions = {
         this.childs[nTxt].parserIgnore = false
         Vue.set(this.childs, nTxt, this.childs[nTxt])
         // console.log('setValue [new text child]', this, val)
-        if (val) { store.dispatch('IS_CHANGED') }
+        if (this.changeCall && typeof this.changeCall === 'function') {
+          this.changeCall()
+        }
       }
     }
     return this.getValue(false)
@@ -216,7 +230,9 @@ const localFunctions = {
     }
     if (!this.attributes[attr] || this.attributes[attr] !== aVal) {
       Vue.set(this.attributes, attr, aVal)
-      store.dispatch('IS_CHANGED')
+      if (this.changeCall && typeof this.changeCall === 'function') {
+        this.changeCall()
+      }
     }
     return { 'attribute': attr, 'value': aVal }
   },

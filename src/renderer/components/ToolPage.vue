@@ -273,6 +273,10 @@
       console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
     },
     methods: {
+      changeCall () {
+        console.log('ToolPage - changeCall', this)
+        this.$store.dispatch('IS_CHANGED')
+      },
       saveFile () {
         if (Object.keys(this.xmlObject.errors).length > 0) {
           alert('Fehler beim laden der XML-Datei! Speichern nicht möglich!')
@@ -312,8 +316,8 @@
         this.xmlEditorLocked = true
       },
       xmlEditorSet () {
-        let xmlObject = new XmlObject.XmlBase(this.xmlEditorNewContent)		// XML Objekt erstellen
-        let editorObject = new EditorObject.EditorBase(this.Parser.parser, xmlObject)		// Editor Objekt erstellen
+        let xmlObject = new XmlObject.XmlBase(this.xmlEditorNewContent, this.changeCall)		// XML Objekt erstellen
+        let editorObject = new EditorObject.EditorBase(this.Parser.parser, xmlObject, this.changeCall)		// Editor Objekt erstellen
         console.log(xmlObject, editorObject)
         if (Object.keys(xmlObject.errors).length === 0) {
           if (Object.keys(editorObject.errors).length === 0) {
@@ -381,12 +385,12 @@
       },
       loadData () {
         if (this.Files.fileContent) {
-          this.xmlObject = new XmlObject.XmlBase(this.Files.fileContent)		// XML Objekt erstellen
+          this.xmlObject = new XmlObject.XmlBase(this.Files.fileContent, this.changeCall)		// XML Objekt erstellen
         } else {
           this.xmlObject = null
         }
         if (this.Parser.parser && this.xmlObject) {
-          this.editorObject = new EditorObject.EditorBase(this.Parser.parser, this.xmlObject)		// Editor Objekt erstellen
+          this.editorObject = new EditorObject.EditorBase(this.Parser.parser, this.xmlObject, this.changeCall)		// Editor Objekt erstellen
         } else {
           this.editorObject = null
         }
