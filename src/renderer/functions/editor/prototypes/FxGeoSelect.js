@@ -1,7 +1,5 @@
 import Vue from 'vue'
-// import xmlFunctions from '@/functions/XmlFunctions'
 import stdFunctions from '@/functions/stdFunctions'
-// import Editor from '../Editor'
 
 const localFunctions = {
   updateData (eObj, first) {

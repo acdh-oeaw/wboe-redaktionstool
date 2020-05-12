@@ -1,4 +1,3 @@
-// import XmlObject from '@/functions/xml/Xml'
 import Vue from 'vue'
 import stdFunctions from '@/functions/stdFunctions'
 import Editor from '../Editor'

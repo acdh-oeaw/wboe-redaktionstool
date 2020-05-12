@@ -1,4 +1,3 @@
-// import xmlFunctions from '@/functions/XmlFunctions'
 import Parser from '../Parser'
 
 const localFunctions = {

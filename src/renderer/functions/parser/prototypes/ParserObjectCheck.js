@@ -1,5 +1,3 @@
-// import xmlFunctions from '@/functions/XmlFunctions'
-
 const localFunctions = {
   checkChilds (xmlObj) {		// Kinder überprüfen (simpel: nur Tagnamen)
     let errors = []

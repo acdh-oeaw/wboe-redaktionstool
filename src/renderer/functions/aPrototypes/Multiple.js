@@ -1,4 +1,3 @@
-// import xmlFunctions from '@/functions/XmlFunctions'
 import Vue from 'vue'
 
 const localFunctions = {
