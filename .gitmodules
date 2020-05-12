@@ -1,0 +1,3 @@
+[submodule "src/renderer/components/ToolPage/ViewPreview"]
+	path = src/renderer/components/ToolPage/ViewPreview
+	url = https://gitlab.com/acdh-oeaw/wboe/wboe-article-view.git
