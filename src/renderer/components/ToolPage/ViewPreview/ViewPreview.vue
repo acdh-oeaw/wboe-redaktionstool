@@ -90,7 +90,7 @@
   </span>
 
   <div class="error" v-else>
-    Kein "object/preview" übergeben !!!!
+    Kein "object/preview" übergeben !!!
   </div>
 </template>
 
