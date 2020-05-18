@@ -44,7 +44,13 @@
 
         <b-tab title="Editor" :disabled="tabsLocked">
           <div class="viewpreview scroll p20 editorpreview w-50" v-if="aTabCach.indexOf(0) > -1 && !update && Options.show.editorPreview">
-            <ViewPreview :start="true" :object="editorObject" v-if="editorObject && editorObject.contentObj"/>
+            <ViewPreview
+              v-if="editorObject && editorObject.contentObj"
+              :start="true"
+              :filename="Files.file"
+              :object="editorObject"
+              :options="Options"
+              />
             <div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
           </div>
           <div ref="vieweditorobject" :class="'vieweditorobject scroll p20' + ((Options.show.editorPreview) ? ' w-50' : '')" v-if="aTabCach.indexOf(0) > -1 && !update">
@@ -55,7 +61,16 @@
 
         <b-tab title="Vorschau" :disabled="tabsLocked">
           <div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
-            <ViewPreview :start="true" ref="ViewPreview" :filename="Files.file" :object="editorObject" :commentsListe="commentsListe" :showAnchors="Options.show.showAnchors" :showComments="Options.show.showComments" v-if="editorObject && editorObject.contentObj"/>
+            <ViewPreview
+              v-if="editorObject && editorObject.contentObj"
+              :start="true"
+              ref="ViewPreview"
+              :filename="Files.file"
+              :options="Options"
+              :object="editorObject"
+              :commentsListe="commentsListe"
+              :showAnchors="Options.show.showAnchors"
+              :showComments="Options.show.showComments" />
             <div class="alert alert-danger" role="alert" v-else>Kein <b>Editor Objekt</b> vorhanden!</div>
           </div>
         </b-tab>
@@ -121,7 +136,7 @@
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'showComments')"><font-awesome-icon :icon="((Options.show.showComments) ? 'eye' : 'eye-slash')"/> Kommentare anzeigen</button>
                 <button @click="$store.dispatch('TOGGLE_SHOW', 'showCommentsList')" v-if="Options.show.showComments"><font-awesome-icon :icon="((Options.show.showCommentsList) ? 'eye' : 'eye-slash')"/> Kommentare als Liste</button>
                 <hr>
-                <button @click="$refs.ViewPreview.pdfExport"><font-awesome-icon icon="file-pdf"/> Als PDF exportieren</button>
+                <button @click="pdfExport"><font-awesome-icon icon="file-pdf"/> Als PDF exportieren</button>
                 <hr>
               </template>
               <template v-if="aTab === 3">
@@ -156,7 +171,8 @@
   import { mapState } from 'vuex'
   import ViewXML from './ToolPage/ViewXML'
   import ViewEditor from './ToolPage/ViewEditor'
-  import ViewPreview from './ToolPage/ViewPreview'
+  import ViewPreview from './ToolPage/ViewPreview/ViewPreview'
+  // import ViewPreview from '../../../../redaktionstool-view-preview/ViewPreview.vue'
   import ViewParser from './ToolPage/ViewParser'
   import ViewXmlObject from './ToolPage/ViewXmlObject'
   import ViewEditorObject from './ToolPage/ViewEditorObject'
@@ -164,6 +180,10 @@
   import XmlObject from '@/functions/xml/Xml'
   import EditorObject from '@/functions/editor/Editor'
   import fPath from 'path'
+  const ipc = require('electron').ipcRenderer
+  const path = require('path')
+  const { dialog } = remote
+
   const fs = remote.require('fs')
   const currentWindow = remote.getCurrentWindow()
 
@@ -273,6 +293,27 @@
       console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
     },
     methods: {
+      pdfExport () {
+        let aDate = new Date()
+        let aMonth = aDate.getMonth() + 1
+        let now = aDate.getFullYear() + '-' + ((aMonth < 10) ? '0' : '') + aMonth + '-' + ((aDate.getDate() < 10) ? '0' : '') + aDate.getDate()
+        now += '_' + ((aDate.getHours() < 10) ? '0' : '') + aDate.getHours() + '_' + ((aDate.getMinutes() < 10) ? '0' : '') + aDate.getMinutes() + '_' + ((aDate.getSeconds() < 10) ? '0' : '') + aDate.getSeconds()
+        let oFilename = path.basename(this.Files.file)
+        let aExtension = path.extname(this.Files.file)
+        let nFilename = oFilename.substring(0, oFilename.length - aExtension.length)
+        nFilename += '_' + now
+        var newPDF = dialog.showSaveDialog({
+          title: 'PDF speichern ...',
+          defaultPath: nFilename,
+          filters: [
+            { name: 'PDF', extensions: ['pdf'] },
+            { name: 'All Files', extensions: ['*'] }
+          ]
+        })
+        if (newPDF) {
+          ipc.send('print-to-pdf', newPDF)
+        }
+      },
       changeCall () {
         console.log('ToolPage - changeCall', this)
         this.$store.dispatch('IS_CHANGED')

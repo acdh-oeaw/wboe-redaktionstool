@@ -110,7 +110,7 @@
 <script>
   import { remote } from 'electron'
   import { mapState } from 'vuex'
-  import ViewPreview from '../../ViewPreview'
+  import ViewPreview from '../../ViewPreview/ViewPreview'
   import PreviewContent from '../../ViewPreview/PreviewContent'
   import _ from 'lodash'
   // import stdFunctions from '@/functions/stdFunctions'
