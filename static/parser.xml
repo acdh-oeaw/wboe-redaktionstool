@@ -1315,14 +1315,18 @@
           <ref>
             <?options {
                       "value": ["edit", "required"],
-                      "tag": {"possibleTag": {"use": true}},
+                      "tag": ["multiple", "possibleTag"],
                       "shouldTag": {"use": true},
                       "layout": {
                         "frame": "inline",
                         "hideTitle": true,
                         "italic": true,
-                        "before": "(",
-                        "after": ")"
+                        "multiple": {
+                          "use": true,
+                          "before": "(",
+                          "after": ")",
+                          "join": ", "
+                        }
                       }
                     } ?>
           </ref>
