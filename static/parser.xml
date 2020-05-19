@@ -173,7 +173,7 @@
 
             <!-- Lautung -->
             <!-- Überblick (Kommentar) -->
-            <?copy { "fromId": "note", "options": {
+            <?copy { "fromId": "note", "id": "lautung", "options": {
                                                     "tag": ["possibleTag", "shouldTag"],
                                                     "layout": {
                                                       "spaceBefore": 0,
@@ -257,6 +257,7 @@
 
             <etym>
               <?options {
+                          "id": "etymologie",
                           "title": "Etymologie",
                           "tagAsTitle": false,
                           "layout": {
