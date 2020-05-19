@@ -32,9 +32,10 @@
           <font-awesome-icon @click="scrollToTop" style="cursor:pointer;" v-if="aTab === 0" :class="dataStatus === 'ok' ? 'text-success' : dataStatus === 'error' ? 'text-danger' : 'text-warning'" :icon="dataStatus === 'ok' ? 'check' : 'exclamation-triangle'"/>
         </div>
         <b-button-group size="sm" class="mr-1">
-          <b-btn @click="saveFile()"
+          <b-btn @click="saveFileClick()"
                 :title="((!Files.changed) ? 'Datei unverändert.' : ((dataStatus === 'ok') ? 'Datei kann gespeichert werden.' : ((dataStatus === 'error') ? 'Datei enthält Fehler!' : 'Datei enthält Warnungen!')))"
                 :variant="((!Files.changed) ? 'secondary' : ((dataStatus === 'ok') ? 'success' : ((dataStatus === 'error') ? 'danger' : 'warning')))" v-b-tooltip.hover.html :disabled="tabsLocked"><font-awesome-icon icon="save"/></b-btn>
+          <b-btn @click="$store.dispatch('TOGGLE_SHOW', 'autosave')" :title="((Options.show.autosave) ? 'Es wird automatisch alle 5 Minuten gespeichert!' : 'Manuell speichern!')" variant="secondary" v-b-tooltip.hover.html><font-awesome-icon :icon="((Options.show.autosave) ? 'hourglass' : 'mouse-pointer')"/></b-btn>
           <b-btn @click="discardChanges" :title="((Files.changed) ? 'Änderungen verwerfen und zurück zur Auswahl!' : 'Zurück zur Auswahl')" :variant="((Files.changed) ? 'warning' : 'secondary')" v-b-tooltip.hover.html><font-awesome-icon icon="minus-circle"/></b-btn>
         </b-button-group>
       </b-button-toolbar>
@@ -207,6 +208,7 @@
         commentsListe: {
           comments: {}
         },
+        autoSave: null,
       }
     },
     computed: {
@@ -290,6 +292,7 @@
       if (this.devMode) {
         this.devFiles = this.devFileList()
       }
+      this.autoSaveFile()
       console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
     },
     methods: {
@@ -318,21 +321,34 @@
         console.log('ToolPage - changeCall', this)
         this.$store.dispatch('IS_CHANGED')
       },
-      saveFile () {
+      saveFileClick () {
         if (Object.keys(this.xmlObject.errors).length > 0) {
           alert('Fehler beim laden der XML-Datei! Speichern nicht möglich!')
         } else {
           if (this.dataStatus === 'ok'
           || (this.dataStatus === 'error' && confirm('Daten enthalten Fehler! Wiklich speichern?'))
           || (this.dataStatus === 'warning' && confirm('Daten enthalten Warnungen! Wiklich speichern?'))) {
-            let aXML = this.editorObject.getXML()
-            let sXML = (new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aXML))).getXML()	// Doppelt parsen für "xml:id" init
-            this.$store.dispatch('SAVE_FILE', sXML)
+            this.saveFile()
             if (this.$refs.vieweditorobject && this.$refs.vieweditorobject.scrollTop) {
               this.updateScrollTop = this.$refs.vieweditorobject.scrollTop
             }
             this.loadData()
           }
+        }
+      },
+      autoSaveFile () {
+        this.autoSave = setInterval(() => {
+          if (this.Options.show.autosave && this.Files.changed) {
+            console.log('autoSaveFile')
+            this.saveFile()
+          }
+        }, 300000)
+      },
+      saveFile () {
+        if (Object.keys(this.xmlObject.errors).length === 0) {
+          let aXML = this.editorObject.getXML()
+          let sXML = (new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aXML))).getXML()	// Doppelt parsen für "xml:id" init
+          this.$store.dispatch('SAVE_FILE', sXML)
         }
       },
       scrollToTop () {
@@ -470,6 +486,7 @@
       }
     },
     beforeDestroy () {
+      clearInterval(this.autoSave)
       window.removeEventListener('mousedown', this.mousedown)
     },
     components: {
