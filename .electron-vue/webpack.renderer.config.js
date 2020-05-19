@@ -55,7 +55,7 @@ let rendererConfig = {
       {
         test: /\.js$/,
         use: 'babel-loader',
-        exclude: /node_modules\/(?!bootstrap-vue\/src\/)/
+        exclude: /node_modules/
       },
       {
         test: /\.node$/,
