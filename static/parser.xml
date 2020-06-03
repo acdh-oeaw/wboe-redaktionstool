@@ -647,6 +647,9 @@
                 "target": { "title": "Collection ID" }
               }
             },
+            "previewLayout": {
+              "addAttribute": {"attribute": "collection-href", "sourceAttribute": "target", "removePrefix": true}
+            },
             "xml": ["short"]
           } ?>
       </ptr>
