@@ -55,6 +55,7 @@ const ipaKeys = {
   ':':	['ː'],
   '.':	['̩', '̥', '̝', '̞'],
   '?':	['?', 'ʔ']
+  '"':  ['„', '“']
 }
 
 function insertAfter (parentNode, newNode, referenceNode) {
