@@ -1025,7 +1025,7 @@
         <gram type="pos">
           <?options {
                       "title": "Gram Pos",
-                      "value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb", "Adverb", "Artikel", "Pronomen", "Konjunktion", "Präposition", "Partikel", "Interjektion", "Name", "auch Name"]}}],
+                      "value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb", "Adverb", "Artikel", "Pronomen", "Konjunktion", "Präposition", "Partikel", "Interjektion", "Numerale", "Name", "auch Name"]}}],
                       "tag": ["possibleTag"],
                       "layout": {
                                 "frame": "inline",
