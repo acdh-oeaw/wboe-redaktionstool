@@ -92,18 +92,35 @@
                             }
                           }
                         } ?>
-              <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+              <?copy { "fromId": "orth",
+                       "options": {
+                                    "tag": ["multiple"],
+                                    "editor": { "parentInContext": true },
+                                    "layout": {
+                                      "italic": true,
+                                      "noSpaceAfter": true,
+                                      "multiple": {
+                                        "use": true,
+                                        "join": ", "
+                                      }
+                                    }
+                                  }
+                      } ?>
               <gramGrp>
                 <?options {
                             "title": "grammatische Information",
                             "layout": {
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": "(Diminutiv, ",
-                              "after": ")"
+                              "before": " (Diminutiv, ",
+                              "after": ")",
+                              "noSpaceAfter": true
+                            },
+                            "previewLayout": {
+                              "fx": "hideIfParentNextSame"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline", "noSpaceAfter": true } } } ?>
               </gramGrp>
             </form>
             <!-- Movierung -->
