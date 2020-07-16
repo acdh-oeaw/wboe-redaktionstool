@@ -131,6 +131,7 @@
             peRest = true
           }
         }, this)
+        // console.log('getPlacesEdit', aPlaces)
         return aPlaces
       },
       setPlace (place, sigle) {
