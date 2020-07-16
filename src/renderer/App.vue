@@ -148,6 +148,7 @@
 
 <style>
 	@import url('~@/assets/css/lato.css');
+	@import url('~@/assets/css/fiduz.css');
 	.rel {
 		position: relative;
 	}

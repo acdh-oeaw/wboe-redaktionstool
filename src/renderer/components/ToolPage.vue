@@ -658,6 +658,9 @@
     margin-right: -24px;
     padding: 0 0.3rem;
   }
+  .viewpreview, .vieweditorobject {
+    font-family: 'fiduz' !important;
+  }
   @media print {
     .viewpreview {
       height: inherit!important;
