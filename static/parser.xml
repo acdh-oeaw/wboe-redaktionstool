@@ -80,11 +80,15 @@
                           "tag": ["multiple", "possibleTag"],
                           "layout": {
                             "frame": "line",
+                            "hideTitle": true
+                          },
+                          "previewLayout": {
+                            "frame": "inline",
                             "hideTitle": true,
                             "multiple": {
-                              "spaceBefore": 1,
-                              "spaceAfter": 1,
-                              "join": ", "
+                              "use": true,
+                              "join": ", ",
+                              "lastjoin": " und "
                             }
                           }
                         } ?>
