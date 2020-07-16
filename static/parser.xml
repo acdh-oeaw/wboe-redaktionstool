@@ -942,8 +942,8 @@
                       "hideTitle": true,
                       "multiple": {
                         "use": true,
-                        "before": "(",
-                        "after": ")",
+                        "before": " (",
+                        "after": ") ",
                         "join": "; "
                       }
                     }
@@ -958,7 +958,8 @@
                         "frame": "inline"
                       },
                       "previewLayout": {
-                        "hideTitle": true
+                        "hideTitle": true,
+                        "fx": "hideIfParentPrevSame"
                       },
                       "editor": {
                         "parentInContext": true
