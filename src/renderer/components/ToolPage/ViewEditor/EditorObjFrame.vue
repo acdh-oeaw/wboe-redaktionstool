@@ -136,7 +136,7 @@
 
     <!-- Nach Inhalten -->
     <span class="join" v-if="content.isMultiple && !content.multipleLast && cParserOptions.get('layout.multiple.use') && cParserOptions.get('layout.multiple.join')">
-      {{ cParserOptions.get('layout.multiple.join') }}
+      {{ (cParserOptions.get('layout.multiple.lastjoin') && content.multipleNr === content.multipleMax - 1) ? cParserOptions.get('layout.multiple.lastjoin') : cParserOptions.get('layout.multiple.join') }}
     </span>
 
     <span class="after" v-if="cParserOptions && cParserOptions.get('layout.after') && !cParserOptions.get('layout.fxPreview')">{{ cParserOptions.get('layout.after') }}</span>
