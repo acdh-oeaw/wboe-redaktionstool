@@ -1037,12 +1037,16 @@
           <?options {
                       "title": "Verbflektion",
                       "value": ["edit", "required", {"is": {"possibleValues": ["stark", "schwach", "gemischt"]}}],
-                      "tag": ["possibleTag"],
+                      "tag": ["possibleTag", "multiple"],
                       "layout": {
                         "frame": "inline",
                         "hideTitle": true,
-                        "before": "(",
-                        "after": ")"
+                        "multiple": {
+                          "use": true,
+                          "join": ", ",
+                          "before": "(",
+                          "after": ")"
+                        }
                       }
                     } ?>
         </iType>
