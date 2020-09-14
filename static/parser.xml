@@ -1273,11 +1273,14 @@
         <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "wortbildung"}}] } } ?>
       </re>
 
-      <re type="redenwendung">
+      <re>
         <?options {
                     "title": "Redewendungen",
                     "id": "re-MWE",
                     "tag": ["multiple", "possibleTag"],
+                    "attributes": [
+                      {"type": {"type": "fixed", "value": "redewendung", "shouldAttribute": {"use": true}, "possibleValues": ["redewendung", "redenwendung"]}}
+                    ],
                     "tagHasChildWithAttribute": { "form": { "subtype": "MWE" } },
                     "layout": {
                       "frame": "box",
