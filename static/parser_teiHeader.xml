@@ -189,15 +189,15 @@
                     "value": ["edit", "required", {"autoCreateValue": "Datensatz erstellt"}],
                     "attributes": [{
                       "status": { "type": "edit", "value": "unfinished", "possibleValues": [
-                                                                                "unfinished",
-                                                                                "draft",
-                                                                                "proofed",
-                                                                                "cleared",
-                                                                                "in progress",
-                                                                                "peer correction",
-                                                                                "internal correction",
-                                                                                "external correction",
-                                                                                "finished"
+                                                                                {"title": "unfinished", "hide": true, "value": "unfinished"},
+                                                                                {"title": "draft", "hide": true, "value": "draft"},
+                                                                                {"title": "proofed", "hide": true, "value": "proofed"},
+                                                                                {"title": "cleared", "hide": true, "value": "cleared"},
+                                                                                {"title": "in progress", "value": "in progress"},
+                                                                                {"title": "peer correction", "value": "peer correction"},
+                                                                                {"title": "internal correction", "value": "internal correction"},
+                                                                                {"title": "external correction", "value": "external correction"},
+                                                                                {"title": "finished", "value": "finished"}
                                                                               ]},
                       "when": { "type": "edit", "value": { "fx": "now" } },
                       "who": { "type": "edit", "value": "", "prefix": "#", "possibleValues": [
