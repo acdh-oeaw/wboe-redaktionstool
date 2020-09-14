@@ -33,6 +33,7 @@
                 ((content.parserCopyDeep >= 3) ? ' deeper' : '')
             " v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
       <slot name="childs"/>		<!-- Kinder -->
+      <slot name="after"/>
     </div>
 
     <b-card :class="'obj paneldecent mitb5' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else-if="layoutBase === 'panel'" no-body>
@@ -66,6 +67,7 @@
             <slot/>		<!-- Inhalt -->
           </div>
           <slot name="childs"/>		<!-- Kinder -->
+          <slot name="after"/>
         </b-card-body>
       </b-collapse>
       <div @contextmenu.prevent="contextMenue" slot="footer" style="margin: -8px -9px;" v-if="content.addableAfter.length > 0">
@@ -111,6 +113,7 @@
         </div>
       </div>
       <slot name="childs"/>		<!-- Kinder -->
+      <slot name="after"/>
       <div @contextmenu.prevent="contextMenue" :class="'addable-after-btn' + (layoutBase !== 'box' ? ' inline' : '')"
             v-if="addableAfterButtons.length > 0">
         <div class="inline-block" @mouseenter="Options.options.addBtnHover ? showAddableButtons('After') : null" @mouseleave="Options.options.addBtnHover ? hideAddableButtons($event, 'After') : null">

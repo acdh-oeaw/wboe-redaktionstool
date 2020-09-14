@@ -550,6 +550,9 @@
                           "target": { }
                         }
                       },
+                      "previewLayout": {
+                        "showAttributeBefore" : null
+                      },
                       "editor": { "parentInContext": true }
                     } ?>
           <?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
@@ -567,6 +570,9 @@
                 "showAttributeBefore" : {
                   "target": { "title": "target (URL)" }
                 }
+              },
+              "previewLayout": {
+                "showAttributeBefore" : null
               },
               "editor": { "parentInContext": true },
               "xml": ["short"]
@@ -593,6 +599,9 @@
                 "showAttributeBefore" : {
                   "xml:lang": { }
                 }
+              },
+              "previewLayout": {
+                "showAttributeBefore" : null
               },
               "editor": { "parentInContext": true }
             } ?>
@@ -651,6 +660,9 @@
                   "target": { }
                 }
               },
+              "previewLayout": {
+                "showAttributeBefore" : null
+              },
               "editor": { "parentInContext": true }
             } ?>
         </ref>
@@ -673,6 +685,7 @@
               }
             },
             "previewLayout": {
+              "showAttributeBefore" : null,
               "addAttribute": {"attribute": "collection-href", "sourceAttribute": "target", "removePrefix": true}
             },
             "xml": ["short"]
@@ -1032,6 +1045,9 @@
                 "target": { }
               }
             },
+            "previewLayout": {
+              "showAttributeBefore" : null
+            },
             "editor": {
               "parentInContext": true
             }
@@ -1312,14 +1328,39 @@
       </re>
 
 
-      <note type="kommentar">
+      <note>
         <?options {
                     "id": "note",
                     "title": "Kommentar",
                     "tagAsTitle": false,
                     "tag": ["possibleTag"],
+                    "attributes": [{
+                      "type": {"type": "fixed", "value": "kommentar"},
+                      "resp": { "type": "edit", "value": "", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": [
+                                              {"title": "Alexandra N. Lenz", "value": "#AL"},
+                                              {"title": "Philipp Stöckle", "value": "#PhS"},
+                                              {"title": "Andreas Gellan", "value": "#AG"},
+                                              {"title": "Patrick Zeitlhuber", "value": "#PZ"},
+                                              {"title": "Sabine Wahl", "value": "#SW"},
+                                              {"title": "Sonja Schwaiger", "value": "#SS"},
+                                              {"title": "Jan Braun", "hide": true, "value": "#JD"},
+                                              {"title": "Angela Bergermayer", "value": "#AB"},
+                                              {"title": "Eva Wahlmüller", "value": "#EW"},
+                                              {"title": "David Gschösser", "value": "#DG"},
+                                              {"title": "Stefanie Schöberl", "value": "#StS"},
+                                              {"title": "Fabian Fleißner", "value": "#FF"}
+                                            ]}
+                    }],
                     "layout": {
-                      "frame": "inline"
+                      "frame": "inline",
+                      "showAttributeAfter" : {
+                        "resp": { "title": "Von", "class": "box" }
+                      }
+                    },
+                    "previewLayout": {
+                      "showAttributeAfter" : {
+                        "resp": { "hideTitle": true, "class": "right", "fx": "valWoHt" }
+                      }
                     },
                     "editor": {
                       "addTitle": "Kommentar hinzufügen"

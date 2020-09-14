@@ -14,8 +14,8 @@
   </div>
 
   <EditorObjFrame @setTipLine="setTipLine" :content="content" :view="view" v-else-if="content">
-    <template  v-if="content.parserObj.options && content.parserObj.options.get('layout.showAttributeBefore')">
-      <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in content.parserObj.options.get('layout.showAttributeBefore')"/>
+    <template  v-if="showAttributeBefore">
+      <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in showAttributeBefore"/>
     </template>
 
     <span :style="'line-height' + Options.options.lineHeight + ';'"
@@ -40,8 +40,8 @@
       />
     </template>
 
-    <template  v-if="content.parserObj.options && content.parserObj.options.get('layout.showAttributeAfter')">
-      <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in content.parserObj.options.get('layout.showAttributeAfter')"/>
+    <template slot="after" v-if="showAttributeAfter">
+      <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in showAttributeAfter"/>
     </template>
   </EditorObjFrame>
 
@@ -97,6 +97,12 @@
           }
         })
         return aOut
+      },
+      showAttributeBefore () {
+        return this.content.parserObj.options && this.content.parserObj.options.get('layout.showAttributeBefore')
+      },
+      showAttributeAfter () {
+        return this.content.parserObj.options && this.content.parserObj.options.get('layout.showAttributeAfter')
       }
     },
     watch: {

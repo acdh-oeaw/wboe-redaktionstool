@@ -74,7 +74,7 @@
         let sVal = this.content.orgXmlObj.attributes[this.attrKey]
         let oKey = -1
         let prefixCorrection = false
-        if (this.parserOptions) {
+        if (this.parserOptions && sVal) {
           if (this.parserOptions.prefix) {
             if (sVal.substr(0, this.parserOptions.prefix.length) === this.parserOptions.prefix) {
               sVal = sVal.substr(this.parserOptions.prefix.length)
@@ -158,7 +158,7 @@
     padding: 1px 5px;
     margin-right: 3px;
   }
-  .layout-box {
+  .layout-box, .layout-div {
     display: inline-block;
     border: 1px solid #666;
     margin-left: 5px;
@@ -166,15 +166,18 @@
     line-height: 1.2;
     padding: 0px 6px 0px 5px;
   }
-  .layout-box > span {
+  .layout-div {
+    display: block;
+  }
+  .layout-box > span, .layout-div > span {
     display: inline-block;
     padding: 3px 0px 2px 0px;
   }
-  .layout-box > .title {
+  .layout-box > .title, .layout-div > .title {
     border-right: 1px solid #666;
     padding-right: 5px;
   }
-  .layout-box > .value {
+  .layout-box > .value, .layout-div > .value {
     padding-left: 2px;
   }
   .attr-edit {
