@@ -97,6 +97,11 @@
         'pHeaderColor': '#333',
       }
     },
+    mounted () {
+      // if (!this.content && this.object) {
+      //   console.log('ViewEditor', this.object)
+      // }
+    },
     computed: {
       ...mapState(['Options']),
       headerVariante () {

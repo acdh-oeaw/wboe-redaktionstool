@@ -149,6 +149,7 @@
               <gramGrp>
                 <?options {
                             "title": "grammatische Information",
+                            "autospace": true,
                             "layout": {
                               "frame": "inline",
                               "hideTitle": true,
@@ -182,6 +183,7 @@
               <gramGrp>
                 <?options {
                             "title": "grammatische Information",
+                            "autospace": true,
                             "layout": {
                               "frame": "inline",
                               "hideTitle": true,
@@ -267,6 +269,7 @@
                                                           "tag": ["possibleTag", "multiple"],
                                                           "layout": {
                                                             "frame": "inline",
+                                                            "autospace": true,
                                                             "multiple": {
                                                               "use": true,
                                                               "join": ", ",
@@ -465,6 +468,7 @@
                     "id": "xr-op",
                     "title": "Verweis auf Online-Publikationen",
                     "tag": ["possibleTag"],
+                    "autospace": true,
                     "layout": {
                       "frame": "inline",
                       "hideTitle": true,
@@ -506,6 +510,7 @@
             <?options {
               "title": "Datum (Zugriff)",
               "value": ["edit", "required", {"is": {"value": { "fx": "now" }}}],
+              "autospace": true,
               "layout": {
                 "frame": "inline",
                 "hideTitle": true,
@@ -526,6 +531,7 @@
                       "type": {"type": "fixed", "value": "cf"}
                     }],
                     "tag": ["possibleTag"],
+                    "autospace": true,
                     "layout": {
                       "frame": "inline",
                       "hideTitle": true,
@@ -844,13 +850,14 @@
          <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
          <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
          <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
+         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "autospace": true, "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
       </cit>
 
       <cit type="translation">
         <?options {
                     "id": "cit-translation",
                     "title": "Übersetzung",
+                    "autospace": true,
                     "layout": {
                       "frame": "inline",
                       "hideTitle": true,
@@ -1083,6 +1090,7 @@
                       "layout": {
                         "frame": "inline",
                         "hideTitle": true,
+                        "autospace": true,
                         "multiple": {
                           "use": true,
                           "join": ", ",
@@ -1096,6 +1104,7 @@
                                                       "tag": ["possibleTag"],
                                                       "layout": {
                                                         "frame": "inline",
+                                                        "autospace": true,
                                                         "multiple": {
                                                           "use": true,
                                                           "join": ", ",
@@ -1398,6 +1407,7 @@
                         "frame": "inline",
                         "hideTitle": true,
                         "italic": true,
+                        "autospace": true,
                         "multiple": {
                           "use": true,
                           "before": "(",
