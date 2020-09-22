@@ -149,8 +149,8 @@
               <gramGrp>
                 <?options {
                             "title": "grammatische Information",
-                            "autospace": true,
                             "layout": {
+                              "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
                               "before": "(Movierung, ",
@@ -183,8 +183,8 @@
               <gramGrp>
                 <?options {
                             "title": "grammatische Information",
-                            "autospace": true,
                             "layout": {
+                              "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
                               "before": "(Shortform, ",
@@ -468,13 +468,17 @@
                     "id": "xr-op",
                     "title": "Verweis auf Online-Publikationen",
                     "tag": ["possibleTag"],
-                    "autospace": true,
                     "layout": {
+                      "autospace": true,
                       "frame": "inline",
                       "hideTitle": true,
                       "bold": true,
-                      "before": "(",
-                      "after": ")"
+                      "multiple": {
+                        "use": true,
+                        "before": "(",
+                        "after": ")",
+                        "join": "; "
+                      }
                     }
                   } ?>
         <?copy { "fromId": "xr-int-lbl", "options": { "tag": ["possibleTag"] } } ?>
@@ -510,8 +514,8 @@
             <?options {
               "title": "Datum (Zugriff)",
               "value": ["edit", "required", {"is": {"value": { "fx": "now" }}}],
-              "autospace": true,
               "layout": {
+                "noSpaceAfter": true,
                 "frame": "inline",
                 "hideTitle": true,
                 "before": "[",
@@ -531,8 +535,8 @@
                       "type": {"type": "fixed", "value": "cf"}
                     }],
                     "tag": ["possibleTag"],
-                    "autospace": true,
                     "layout": {
+                      "autospace": true,
                       "frame": "inline",
                       "hideTitle": true,
                       "bold": true,
@@ -857,8 +861,8 @@
         <?options {
                     "id": "cit-translation",
                     "title": "Übersetzung",
-                    "autospace": true,
                     "layout": {
+                      "autospace": true,
                       "frame": "inline",
                       "hideTitle": true,
                       "before": "[",
