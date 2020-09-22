@@ -875,7 +875,6 @@
                         "value": ["edit", "required"],
                         "layout": {
                           "frame": "inline",
-                          "italic": true,
                           "hideTitle": true
                         },
                         "editor": {
