@@ -118,7 +118,7 @@
         </b-tab>
 
         <!-- Ansicht Einstellungen (eye) -->
-        <template slot="tabs">
+        <template slot="tabs-end">
           <li class="nav-item extra">
             <b-button size="sm" @click="xmlEditorSet" v-if="aTab === 3" variant="primary" :disabled="!xmlEditorLocked">Anwenden</b-button>
             <b-button size="sm" @click="xmlEditorUnset" v-if="aTab === 3" variant="warning" :disabled="!xmlEditorLocked">Verwerfen</b-button>
