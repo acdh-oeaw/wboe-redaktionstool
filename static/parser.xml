@@ -70,7 +70,7 @@
                         } ?>
               <?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
             </form>
-            <?copy { "fromId": "gramGrp", "id": "gramGrpLemma", "options": { "layout": { "frame": "line" } } } ?>
+            <?copy { "fromId": "gramGrp", "id": "gramGrpLemma", "options": { "tag": ["possibleTag", "multiple"], "editor": { "parentInContext": true }, "layout": { "frame": "line" } } } ?>
             <!-- Diminutiv -->
             <form type="variant" subtype="diminutive">
               <?options {
