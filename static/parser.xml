@@ -316,7 +316,7 @@
                             }
                           } ?>
                 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
-                <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+                <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"], "layout": { "before": " (", "after": ") " } } } ?>
                 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
                 <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
                 <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
@@ -360,7 +360,7 @@
                           } ?>
                 <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
                 <?copy { "fromId": "date" } ?>
-                <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+                <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"], "layout": { "before": " (", "after": ") " } } } ?>
                 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag"] } } ?>
                 <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
                 <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
@@ -849,7 +849,7 @@
           <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "editor": { "parentInContext": true } } } ?>
         </quote>
         <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-        <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+        <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"], "layout": { "before": " (", "after": ") " } } } ?>
         <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag"] } } ?>
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
