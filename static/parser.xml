@@ -323,6 +323,7 @@
                 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
                 <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
                 <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
+                <?copy { "fromId": "bibl-personal", "options": { "tag": ["possibleTag", "multiple"], "layout": { "before": "→" } } } ?>
                 <?copy { "fromId": "lang" } ?>
                 <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
                 <form>
@@ -367,12 +368,14 @@
                 <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag"] } } ?>
                 <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
                 <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+                <?copy { "fromId": "bibl-personal", "options": { "tag": ["possibleTag", "multiple"] } } ?>
                 <?copy { "fromId": "lang" } ?>
               </seg>
               <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple"] } } ?>
               <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
               <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
               <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+              <?copy { "fromId": "bibl-personal", "options": { "tag": ["possibleTag", "multiple"] } } ?>
             </etym>
             <sense>
               <?options {
@@ -527,6 +530,68 @@
             } ?>
           </date>
         </xr>
+      </ref>
+      <ref type="bibl" subtype="personal">
+        <?options {
+                    "id": "bibl-personal",
+                    "title": "Verweis auf Person",
+                    "tag": ["possibleTag"],
+                    "layout": {
+                      "autospace": true,
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "bold": true,
+                      "multiple": {
+                        "use": true,
+                        "before": "(",
+                        "after": ")",
+                        "join": "; "
+                      }
+                    }
+                  } ?>
+        <lbl>
+          <?options {
+                      "id": "lbl-personal",
+                      "title": "lbl",
+                      "value": ["edit", "required", {"is": {"value": "Auskunft", "possibleValues": ["Auskunft"]}}],
+                      "tag": ["possibleTag"],
+                      "layout": {
+                        "hideTitle": true,
+                        "frame": "inline"
+                      },
+                      "editor": {
+                        "parentInContext": true
+                      }
+                    } ?>
+        </lbl>
+        <persName>
+          <?options {
+              "title": "Person Name",
+              "value": ["edit", "required"],
+              "layout": {
+                "noSpaceAfter": true,
+                "frame": "inline",
+                "hideTitle": true
+              },
+              "previewLayout": {
+                "showAttributeBefore" : null
+              },
+              "editor": { "parentInContext": true }
+            } ?>
+        </persName>
+        <date type="accessed">
+          <?options {
+            "title": "Datum (Zugriff)",
+            "value": ["edit", "required", {"is": {"value": { "fx": "now" }}}],
+            "layout": {
+              "noSpaceAfter": true,
+              "frame": "inline",
+              "hideTitle": true,
+              "before": ", "
+            },
+            "editor": { "parentInContext": true }
+          } ?>
+        </date>
       </ref>
 
       <xr>    <!-- Extern: cf -->
@@ -857,6 +922,7 @@
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "bibl-personal", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "autospace": true, "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
       </cit>
 
