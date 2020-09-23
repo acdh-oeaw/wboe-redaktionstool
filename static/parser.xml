@@ -830,31 +830,32 @@
                     },
                     "tag": ["multiple", "possibleTag"]
                   } ?>
-         <quote>
-           <?options {
-                      "title": "Quote",
-                      "attributes": [{
-                        "xml:lang": {"type": "edit", "shouldAttribute": {"use": true}, "value": "bar-AT", "possibleValues": ["bar-AT", "bar-IT"]}
-                      }],
-                      "value": ["edit", "required"],
-                      "layout": {
-                        "frame": "inline",
-                        "italic": true,
-                        "hideTitle": true,
-                        "before": " – "
-                      },
-                      "editor": {
-                        "parentInContext": true
-                      }
-                    } ?>
-         </quote>
-         <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-         <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
-         <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag"] } } ?>
-         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-         <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-         <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "autospace": true, "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
+        <quote>
+          <?options {
+                     "title": "Quote",
+                     "attributes": [{
+                       "xml:lang": {"type": "edit", "shouldAttribute": {"use": true}, "value": "bar-AT", "possibleValues": ["bar-AT", "bar-IT"]}
+                     }],
+                     "layout": {
+                       "frame": "inline",
+                       "italic": true,
+                       "hideTitle": true,
+                       "before": " – "
+                     },
+                     "editor": {
+                       "parentInContext": true
+                     }
+                   } ?>
+          <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+          <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "editor": { "parentInContext": true } } } ?>
+        </quote>
+        <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+        <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"] } } ?>
+        <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag"] } } ?>
+        <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
+        <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "autospace": true, "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
       </cit>
 
       <cit type="translation">
@@ -862,11 +863,11 @@
                     "id": "cit-translation",
                     "title": "Übersetzung",
                     "layout": {
-                      "autospace": true,
+                      "noSpaceAfter": true,
                       "frame": "inline",
                       "hideTitle": true,
                       "before": "[",
-                      "after": "]"
+                      "after": "] "
                     },
                     "tag": ["possibleTag"]
                   } ?>
@@ -879,7 +880,8 @@
                         "value": ["edit", "required"],
                         "layout": {
                           "frame": "inline",
-                          "hideTitle": true
+                          "hideTitle": true,
+                          "noSpaceAfter": true
                         },
                         "editor": {
                           "parentInContext": true
