@@ -142,8 +142,7 @@
                               "spaceAfter": 1,
                               "join": ", "
                             }
-                          },
-                          "previewLayout": { "frame": "hide" }
+                          }
                         } ?>
               <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
               <gramGrp>
