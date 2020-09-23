@@ -248,14 +248,17 @@
                <pron>
                  <?options {
                             "tagAsTitle": false,
+                            "tag": ["multiple", "anywhere"],
                             "attributes": [{
                               "extent": {"type": "edit", "canBeEmpty": {"use": true}, "possibleValues": ["stuff"]},
                               "xml:lang": {"type": "edit", "shouldAttribute": {"use": true}, "value": "bar-AT", "possibleValues": ["bar-AT", "bar-IT"]}
                             }],
                             "value": ["edit", "required"],
                             "layout": {
+                              "noSpaceAfter": true,
                               "frame": "inline",
-                              "italic": true
+                              "italic": true,
+                              "beforeIfNotFirst": ", "
                             },
                             "editor": {
                               "parentInContext": true
@@ -272,13 +275,13 @@
                                                             "multiple": {
                                                               "use": true,
                                                               "join": ", ",
-                                                              "before": "(",
+                                                              "before": " (",
                                                               "after": ")"
                                                             }
                                                           }
                                                         } } ?>
               <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}] } } ?>
-              <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
+              <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "layout": { "before": " [", "after": "]" } } } ?>
             </form>
 
 
