@@ -836,6 +836,22 @@
                     }
                   } ?>
       </def>
+      <def>
+        <?options {
+                    "id": "def-um",
+                    "title": "Definition Umschreibung",
+                    "attributes": [{
+                      "type": {"type": "fixed", "value": "umschreibung"},
+                      "xml:id": {"type": "edit", "canBeEmpty": {"use": true}}
+                    }],
+                    "value": ["edit", "required"],
+                    "layout": {
+                      "frame": "inline",
+                      "hideTitle": true,
+                      "ls1pt": true
+                    }
+                  } ?>
+      </def>
 
       <orth>
         <?options {
@@ -1003,6 +1019,7 @@
         <?copy { "fromId": "ref-form" } ?>
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+        <?copy { "fromId": "def-um", "options": { "tag": ["possibleTag"] } } ?>
         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
         <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "bedeutung"}}] } } ?>
