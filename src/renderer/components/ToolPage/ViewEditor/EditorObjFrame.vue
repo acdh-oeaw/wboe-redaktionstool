@@ -11,6 +11,7 @@
       v-on:drop="drop"
     >
     <!-- Vor Inhalten -->
+    <div v-if="this.content.count > 0 && cParserObj && cParserOptions && cParserOptions.get('layout.newlineIfNotFirst')"/>
     <div :style="'height: ' + cParserOptions.get('layout.spaceTopBefore') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceTopBefore')"></div>
     <div :class="'h' + (cParserOptions.get('layout.headerTopSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions && cParserOptions.get('layout.headerTop')">{{ cParserOptions.get('layout.headerTop') }}</div>
 

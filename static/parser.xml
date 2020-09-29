@@ -1380,9 +1380,33 @@
                     }
                   } ?>
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"], "layout": {
-                      "frame": "line",
+                      "frame": "inline",
                       "spaceBefore": 10
                     } } } ?>
+        <gramGrp>
+          <?options {
+              "title": "grammatische Information",
+              "tag": ["possibleTag", "multiple"],
+              "layout": {
+                "frame": "inline",
+                "hideTitle": true,
+                "noSpaceAfter": true,
+                "before": "(",
+                "after": ") "
+              }
+            } ?>
+          <usg>
+            <?options {
+                        "title": "Gebrauch",
+                        "value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb", "Adverb", "Artikel", "Pronomen", "Konjunktion", "Präposition"]}}],
+                        "layout": {
+                          "frame": "inline",
+                          "hideTitle": true,
+                          "noSpaceAfter": true
+                        }
+                      } ?>
+          </usg>
+        </gramGrp>
         <form subtype="MWE">
           <?options {
                       "title": "Form Lemma/Variable",
@@ -1391,6 +1415,7 @@
                       }],
                       "layout": {
                         "frame": "inline",
+                        "newlineIfNotFirst": true,
                         "hideTitle": true
                       },
                       "tag": ["multiple"]
