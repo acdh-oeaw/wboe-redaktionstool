@@ -482,7 +482,9 @@
                         "use": true,
                         "before": "(",
                         "after": ")",
-                        "join": "; "
+                        "join": "; ",
+                        "beforeIf": { "id": ["xr-ext"], "value": "" },
+                        "afterIf": { "id": ["xr-ext"], "value": "; " }
                       }
                     }
                   } ?>
@@ -603,12 +605,13 @@
                     }],
                     "tag": ["possibleTag"],
                     "layout": {
-                      "autospace": true,
                       "frame": "inline",
                       "hideTitle": true,
                       "bold": true,
                       "before": "(",
-                      "after": ")"
+                      "after": ")",
+                      "beforeIf": { "id": ["xr-op"], "value": "" },
+                      "afterIf": { "id": ["xr-op"], "value": "; " }
                     }
                   } ?>
         <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
@@ -620,6 +623,7 @@
                         "target": {"type": "edit", "canBeEmpty": {"use": true}}
                       }],
                       "layout": {
+                        "noSpaceAfter": true,
                         "frame": "inline",
                         "hideTitle": true,
                         "bold": true,
@@ -632,7 +636,7 @@
                       },
                       "editor": { "parentInContext": true }
                     } ?>
-          <?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+          <?copy { "fromId": "text", "options": { "tag": {"possibleTag": {"use": true}, "shouldTag": {"use": true}, "anywhere": {"use": false}}, "layout": { "noSpaceAfter": true, "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
           <ptr>
             <?options {
               "id": "xr-cf-ptr",
@@ -641,6 +645,7 @@
                 "target": {"type": "edit", "canBeEmpty": {"use": true}}
               }],
               "layout": {
+                "noSpaceAfter": true,
                 "frame": "inline",
                 "hideTitle": true,
                 "bold": true,
@@ -668,6 +673,7 @@
                 "xml:lang": {"type": "edit", "canBeEmpty": {"use": true}}
               }],
               "layout": {
+                "noSpaceAfter": true,
                 "frame": "inline",
                 "hideTitle": true,
                 "italic": true,
