@@ -933,13 +933,31 @@
           <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "editor": { "parentInContext": true } } } ?>
         </quote>
         <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-        <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag"], "layout": { "before": " (", "after": ") " } } } ?>
+        <?copy { "fromId": "ref-bibl", "options": {
+            "tag": ["possibleTag"],
+            "layout": {
+              "before": " (",
+              "after": ") ",
+              "afterIf": { "id": "usg-geo", "value": "; " }
+            }
+          } } ?>
         <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag"] } } ?>
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "bibl-personal", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-        <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "layout": { "autospace": true, "multiple": { "use": true, "before": "(", "after": ")" } } } } ?>
+        <?copy { "fromId": "usg-geo", "options": {
+            "tag": ["possibleTag", "multiple"],
+            "layout": {
+              "autospace": true,
+              "multiple": {
+                "use": true,
+                "before": "(",
+                "beforeIf": { "id": "ref-bibl", "value": "" },
+                "after": ")"
+              }
+            }
+          } } ?>
       </cit>
 
       <cit type="translation">
