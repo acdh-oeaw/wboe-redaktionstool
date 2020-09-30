@@ -159,13 +159,14 @@
                 <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": { "hideTitle": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
-            <!-- Shortform -->
-            <form type="variant" subtype="shortform">
+            <!-- Kurzwort -->
+            <form type="variant">
               <?options {
-                          "title": "Shortform",
-                          "id": "shortform",
+                          "title": "Kurzwort",
+                          "id": "kurzwort",
                           "attributes": [{
-                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }},
+                            "subtype": {"type": "fixed", "shouldAttribute": {"use": true}, "value": "kurzwort", "possibleValues": ["kurzwort", "shortform"]}
                           }],
                           "tag": ["multiple", "possibleTag"],
                           "layout": {
@@ -186,7 +187,7 @@
                               "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": "(Shortform, ",
+                              "before": "(Kurzwort, ",
                               "after": ")"
                             }
                           } ?>
@@ -697,7 +698,7 @@
                     "title": "Querverweis auf Artikel",
                     "attributes": [{
                       "type": {"type": "variable", "possibleValues": ["lemma", "variant"]},
-                      "subtype": {"type": "variable", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["compound", "MWE", "diminutive", "movierung", "shortform"]}
+                      "subtype": {"type": "variable", "canBeEmpty": {"use": true}, "removeIfEmpty": {"use": true}, "possibleValues": ["diminutive", "kurzwort", "kurzform", "diminuiertes kurzwort", "diminuierte kurzform", "nebenform", "movierung", "inflected", "compound", "MWE", "shortform"]}
                     }],
                     "tag": ["possibleTag"],
                     "layout": {
