@@ -1042,12 +1042,16 @@
         <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag", "anywhere", "multiple"], "editor": { "parentInContext": true } } } ?>
         <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere", "multiple"] } } ?>
         <?copy { "fromId": "ref-form" } ?>
-        <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
         <?copy { "fromId": "def-um", "options": { "tag": ["possibleTag"] } } ?>
         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
         <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "bedeutung"}}] } } ?>
+        <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
+        <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
+        <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
+        <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
+        <?copy { "fromId": "bibl-personal", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "sense", "options": {
                                                 "tagAsTitle": false,
                                                 "title": "Bedeutung (sub)",
