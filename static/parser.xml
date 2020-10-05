@@ -1674,6 +1674,7 @@
                       "layout": {
                         "frame": "inline",
                         "hideTitle": true,
+                        "autospace": true,
                         "italic": true
                       }
                     } ?>
