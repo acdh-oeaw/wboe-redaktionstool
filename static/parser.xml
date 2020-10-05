@@ -122,7 +122,7 @@
                               "fx": "hideIfParentNextSame"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline", "noSpaceAfter": true } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline", "noSpaceAfter": true } } } ?>
               </gramGrp>
             </form>
             <!-- Movierung -->
@@ -154,9 +154,12 @@
                               "hideTitle": true,
                               "before": "(Movierung, ",
                               "after": ")"
+                            },
+                            "previewLayout" : {
+                              "before": "("
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": { "hideTitle": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
             <!-- Kurzwort -->
@@ -191,9 +194,150 @@
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "tag": {"multiple": null }, "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
+
+            <!-- diminuiertes Kurzwort -->
+            <form type="variant" subtype="diminuiertes Kurzwort">
+              <?options {
+                          "title": "diminuiertes Kurzwort",
+                          "id": "diminuierteskurzwort",
+                          "attributes": [{
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["multiple", "possibleTag"],
+                          "layout": {
+                            "frame": "line",
+                            "hideTitle": true,
+                            "multiple": {
+                              "spaceBefore": 1,
+                              "spaceAfter": 1,
+                              "join": ", "
+                            }
+                          }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+              <gramGrp>
+                <?options {
+                            "title": "grammatische Information",
+                            "layout": {
+                              "autospace": true,
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "before": "(diminuiertes Kurzwort, ",
+                              "after": ")"
+                            }
+                          } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+              </gramGrp>
+            </form>
+
+            <!-- Kurzform -->
+            <form type="variant" subtype="Kurzform">
+              <?options {
+                          "title": "Kurzform",
+                          "id": "kurzform",
+                          "attributes": [{
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["multiple", "possibleTag"],
+                          "layout": {
+                            "frame": "line",
+                            "hideTitle": true,
+                            "multiple": {
+                              "spaceBefore": 1,
+                              "spaceAfter": 1,
+                              "join": ", "
+                            }
+                          }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+              <gramGrp>
+                <?options {
+                            "title": "grammatische Information",
+                            "layout": {
+                              "autospace": true,
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "before": "(Kurzform, ",
+                              "after": ")"
+                            }
+                          } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+              </gramGrp>
+            </form>
+
+            <!-- diminuierte Kurzform -->
+            <form type="variant" subtype="diminuierte Kurzform">
+              <?options {
+                          "title": "diminuierte Kurzform",
+                          "id": "diminuiertekurzform",
+                          "attributes": [{
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["multiple", "possibleTag"],
+                          "layout": {
+                            "frame": "line",
+                            "hideTitle": true,
+                            "multiple": {
+                              "spaceBefore": 1,
+                              "spaceAfter": 1,
+                              "join": ", "
+                            }
+                          }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+              <gramGrp>
+                <?options {
+                            "title": "grammatische Information",
+                            "layout": {
+                              "autospace": true,
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "before": "(diminuierte Kurzform, ",
+                              "after": ")"
+                            }
+                          } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+              </gramGrp>
+            </form>
+
+            <!-- Nebenform -->
+            <form type="variant" subtype="Nebenform">
+              <?options {
+                          "title": "Nebenform",
+                          "id": "nebenform",
+                          "attributes": [{
+                            "xml:id": {"type": "edit", "canBeEmpty": {"use": true}, "shouldAttribute": {"use": true}, "value": { "fx": "orthId" }}
+                          }],
+                          "tag": ["multiple", "possibleTag"],
+                          "layout": {
+                            "frame": "line",
+                            "hideTitle": true,
+                            "multiple": {
+                              "spaceBefore": 1,
+                              "spaceAfter": 1,
+                              "join": ", "
+                            }
+                          }
+                        } ?>
+              <?copy { "fromId": "orth", "options": { "tag": ["multiple"], "layout": { "italic": true }, "editor": { "parentInContext": true } } } ?>
+              <gramGrp>
+                <?options {
+                            "title": "grammatische Information",
+                            "layout": {
+                              "autospace": true,
+                              "frame": "inline",
+                              "hideTitle": true,
+                              "before": "(Nebenform, ",
+                              "after": ")"
+                            }
+                          } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+              </gramGrp>
+            </form>
+
 
             <?copy { "fromId": "usg-geo-verbreitung" } ?>
 
