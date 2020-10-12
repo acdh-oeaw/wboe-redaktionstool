@@ -1087,7 +1087,7 @@
                        "parentInContext": true
                      }
                    } ?>
-          <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
+          <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true, "italic": true }, "editor": { "parentInContext": true } } } ?>
           <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "editor": { "parentInContext": true } } } ?>
         </quote>
         <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
