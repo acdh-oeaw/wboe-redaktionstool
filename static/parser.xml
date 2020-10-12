@@ -1675,6 +1675,7 @@
                         "frame": "inline",
                         "hideTitle": true,
                         "autospace": true,
+                        "prevAutospace": true,
                         "italic": true
                       }
                     } ?>
