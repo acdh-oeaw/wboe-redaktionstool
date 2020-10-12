@@ -159,7 +159,7 @@
                               "before": "("
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": {"hideTitle": true, "noSpaceAfter": true, "frame": "inline"} } } ?>
               </gramGrp>
             </form>
             <!-- Kurzwort -->
@@ -194,7 +194,7 @@
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -229,7 +229,7 @@
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -264,7 +264,7 @@
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -299,7 +299,7 @@
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -334,7 +334,7 @@
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -1026,7 +1026,14 @@
                     "title": "Genus",
                     "value": ["edit", "required", {"is": {"value": "Neutrum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}],
                     "tag": ["multiple"],
-                    "layout": { "frame": "line", "hideTitle": true },
+                    "layout": {
+                      "frame": "line",
+                      "hideTitle": true,
+                      "multiple": {
+                        "use": true,
+                        "join": ", "
+                      }
+                    },
                     "editor": {
                       "onlyLastElementHasAddButton": true,
                       "addTitle": "Gender"
