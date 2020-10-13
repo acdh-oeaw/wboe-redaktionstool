@@ -400,7 +400,7 @@
                             }],
                             "value": ["edit", "required"],
                             "layout": {
-                              "noSpaceAfter": true,
+                              "autospace": true,
                               "frame": "inline",
                               "italic": true,
                               "beforeIfNotFirst": ", "
@@ -456,6 +456,7 @@
                             "tag": ["multiple", "possibleTag", "anywhere"],
                             "layout": {
                               "frame": "inline",
+                              "autospace": true,
                               "hideTitle": true,
                               "multiple": {
                                 "use": true,
@@ -481,17 +482,18 @@
                               "layout": {
                                 "frame": "inline",
                                 "hideTitle": true,
+                                "autospace": true,
                                 "multiple": {
                                   "use": true,
                                   "join": ", "
                                 }
                               }
                             } ?>
-                   <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"], "layout": { "italic": true } } } ?>
-                   <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
+                   <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"], "layout": { "autospace": true, "italic": true } } } ?>
+                   <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"], "layout": { "autospace": true } } } ?>
                 </form>
                 <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-                <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
+                <?copy { "fromId": "def", "options": { "tag": ["possibleTag"], "layout": { "autospace": true } } } ?>
               </cit>
               <seg>
                 <?options {
@@ -642,6 +644,7 @@
               "parentInContext": true
             },
             "layout": {
+              "autospace": true,
               "frame": "inline",
               "hideTitle": true,
               "after": ":"
@@ -649,12 +652,13 @@
           }
         } ?>
         <xr type="lemma">
-          <?options { "layout": { "frame": "inline", "hideTitle": true } } ?>
+          <?options { "layout": { "frame": "inline", "hideTitle": true, "autospace": true } } ?>
           <ref>
             <?options {
               "title": "Form",
               "value": ["edit", "required"],
               "layout": {
+                "autospace": true,
                 "frame": "inline",
                 "hideTitle": true,
                 "italic": true
@@ -806,8 +810,8 @@
             } ?>
           </ptr>
 
-          <?copy { "fromId": "date", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
-          <?copy { "fromId": "citedRange", "options": { "tag": ["possibleTag"], "layout": { "bold": true }, "editor": { "parentInContext": true } } } ?>
+          <?copy { "fromId": "date", "options": { "tag": ["possibleTag"], "layout": { "bold": true, "autospace": true }, "editor": { "parentInContext": true } } } ?>
+          <?copy { "fromId": "citedRange", "options": { "tag": ["possibleTag"], "layout": { "bold": true, "noSpaceAfter": true }, "editor": { "parentInContext": true } } } ?>
         </ref>
         <ref>
           <?options {
@@ -927,6 +931,7 @@
                     "value": ["edit", "required"],
                     "tag": ["possibleTag"],
                     "layout": {
+                      "autospace": true,
                       "frame": "inline",
                       "hideTitle": true,
                       "before": ": "
@@ -1233,11 +1238,13 @@
                     },
                     "layout": {
                       "frame": "inline",
+                      "shoudSpace": true,
+                      "autospace": true,
                       "hideTitle": true,
                       "multiple": {
                         "use": true,
                         "before": " (",
-                        "after": ") ",
+                        "after": ")",
                         "join": "; "
                       }
                     }
@@ -1287,9 +1294,7 @@
                       "layout": {
                         "frame": "inline",
                         "hideTitle": true,
-                        "before": ": "
-                      },
-                      "previewLayout": {
+                        "before": ": ",
                         "noSpaceAfter": true
                       }
                     } ?>
