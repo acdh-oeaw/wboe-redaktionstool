@@ -400,7 +400,7 @@
                             }],
                             "value": ["edit", "required"],
                             "layout": {
-                              "autospace": true,
+                              "noSpaceAfter": true,
                               "frame": "inline",
                               "italic": true,
                               "beforeIfNotFirst": ", "
@@ -410,8 +410,8 @@
                             }
                           } ?>
                </pron>
-               <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
-               <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"] } } ?>
+               <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "before": " " } } } ?>
+               <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"], "layout": { "before": " " } } } ?>
                <?copy { "fromId": "usg-geo", "options": {
                                                           "tag": ["possibleTag", "multiple"],
                                                           "layout": {
@@ -425,7 +425,7 @@
                                                             }
                                                           }
                                                         } } ?>
-              <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}] } } ?>
+              <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}], "layout": { "before": " " } } } ?>
               <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "layout": { "before": " [", "after": "]" } } } ?>
             </form>
 
@@ -1521,6 +1521,7 @@
                       "layout": {
                         "frame": "inline",
                         "hideTitle": true,
+                        "after": " ",
                         "multiple": {
                           "use": true,
                           "join": ", "
@@ -1530,13 +1531,14 @@
                     } ?>
           <?copy { "fromId": "orth", "options": {
                                                   "layout": {
+                                                    "noSpaceAfter": true,
                                                     "italic": true
                                                   },
                                                   "editor": {
                                                     "parentInContext": true
                                                   }
                                                 } } ?>
-          <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+          <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "before": " ", "frame": "inline" } } } ?>
         </form>
         <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag", "anywhere"], "editor": { "parentInContext": true } } } ?>
         <sense>
