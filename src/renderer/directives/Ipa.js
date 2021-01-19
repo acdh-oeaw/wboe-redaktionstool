@@ -4,58 +4,50 @@ const inBrowser = typeof window !== 'undefined' && typeof document !== 'undefine
 const elIpa = '__rt_ipa__'
 
 const ipaKeys = {
-  'a':	['ᵃ', 'ᵄ', 'ᵅ', 'ᵆ', 'ͣ', 'ᶛ', 'ₐ', 'a', 'ɑ', 'ɐ'],
-  'b':	['ᵇ', 'ᵝ', 'ᵦ', 'b', 'b̥', 'β', 'β̥'],
-  'c':	['ᶜ', 'ͨ', 'ᵡ', 'ᵪ', 'ᶝ'],
-  'p':	['ᵖ', 'ₚ', 'p', 'pʰ'],
-  'd':	['ᵈ', 'ͩ', 'ᵟ', 'd', 'd̥', 'ᶞ'],
-  'e':	['ᵉ', 'ᵊ', 'ͤ', 'ᵋ', 'ᵌ', 'ₑ', 'ₔ', 'e', 'ɛ', 'ə'],
-  'ä':	['ɛː', 'æ'],
-  'f':	['ᶠ', 'ᵠ', 'ᵩ', 'ᶡ', 'ᶲ', 'f', 'v̥'],
-  'g':	['ᵍ', 'ˠ', 'ᵧ', 'g', 'g̥'],
-  'h':	['ʰ', 'ʱ', 'ͪ', 'ᶣ', 'ₕ'],
-  'i':	['', 'ͥ', 'ᵎ', 'ᵢ', 'ᶤ', 'ᶦ', 'ᶥ', 'ᶧ', 'i', 'ɪ'],
-  'j':	['ʲ'],
-  'k':	['k', 'kʰ', 'k͡χ', 'ᵏ', 'ₖ'],
-  'l':	['ˡ', 'ᶩ', 'ᶪ', 'ᶫ', 'ₗ', 'l', 'ɭ', 'ɬ'],
-  'm':	['ᵐ', 'ͫ', 'ᵚ', 'ᶬ', 'ᶭ', 'ₘ', 'm', 'ɱ'],
-  'n':	['ⁿ', 'ᵑ', 'ᶮ', 'ᶯ', 'ᶰ', 'ₙ', 'n', 'ŋ', 'n̩'],
-  'o':	['ᵒ', 'ᵓ', 'ͦ', 'ᶱ', 'ₒ', 'o', 'ɔ'],
-  'oa':	['ɔɐ̯', 'ɔo̯'],
-  'ö':	['ø', 'œ'],
-  's':	['ˢ', 'ᶳ', 'ₛ'],
-  'r':	['ʳ', 'ʴ', 'ʵ', 'ʶ', 'ͬ', 'ᵣ', 'ᵨ', 'ʁ', 'ʀ', 'ɹ', 'ɾ'],
-  't':	['t', 'tʰ', 'ᵗ', 'ͭ', 'ᶵ', 'ᶿ', 'ₜ'],
-  'v':	['ᵛ', 'ͮ', 'ᵥ', 'ᶹ', 'ᶺ'],
-  'z':	['ᶻ', 'ᶼ', 'ᶽ', 'z', 'z̥'],
-  'sch': ['ᶴ', 'ᶾ', 'ʃ', 'ʒ̥', 'ʒ'],
-  'u':	['ᵘ', 'ͧ', 'ᵤ', 'ᵙ', 'ᶶ', 'ᶸ', 'u', 'ʊ', 'ue̯'],
-  'ü':	['y', 'ʏ', 'ʏɐ̯'],
-  'w':	['ʷ', 'v', 'β', 'β̥'],
-  'x':	['ˣ', 'ͯ', 'ₓ'],
-  'y':	['ʸ', 'ᶷ'],
-  'ch':	['ç', 'x', 'χ', 'ɣ̥', 'ʝ̥'],
-  'ei':	['aɛ̯', 'æe̯', 'æː'],
-  'au':	['ɑɔ̯'],
-  'eu':	['ɔe̯'],
-  'ie':	['ɪɐ̯'],
-  'ia':	['ɪɐ̯'],
-  'pf':	['p͡f', 'b̥͡f'],
-  'ts':	['t͡s', 'd̥͡s'],
-  '0':	['⁰', '₀', 'ᵔ', 'ᵕ', '˜', '̯', '̃', 'ː', '͡', '̝', '̞', 'ʔ'],
-  '1':	['¹', '₁', '̯', '̃', '͡'],
-  '2':	['²', '₂'],
-  '3':	['³', '₃'],
-  '4':	['⁴', '₄'],
-  '5':	['⁵', '₅'],
-  '6':	['⁶', '₆'],
-  '7':	['⁷', '₇'],
-  '8':	['⁸', '₈'],
-  '9':	['⁹', '₉'],
-  ':':	['ː'],
-  '.':	['̩', '̥', '̝', '̞'],
-  '?':	['?', 'ʔ'],
-  '"':	['„', '“']
+  'a': ['á', 'â', 'ã', 'å', 'æ', 'ā', 'ă', 'ą', 'ǎ', 'ǡ', 'ǻ', 'ȃ', 'ȧ', 'ɒ', 'ͣ', 'ᵃ', 'ᵄ', 'ḁ', 'ạ', 'ẫ', 'ặ', 'ₐ', '', '', '', '', '', '', '', ''],
+  'ä': ['ǟ', ''],
+  'b': ['ᵇ', 'ᷨ', 'ḇ', '', ''],
+  'c': ['ć', 'ċ', 'č', 'ᶜ'],
+  'd': ['ð', 'ď', 'ͩ', 'δ', 'ᵈ', 'ḋ', 'ḍ', 'ḏ', 'ḓ', '', '', ''],
+  'e': ['è', 'é', 'ê', 'ë', 'ē', 'ĕ', 'ė', 'ę', 'ě', 'ȇ', 'ə', 'ɛ', 'ͤ', 'ᵉ', 'ᵊ', 'ᵋ', 'ᷪ', 'ḗ', 'ḙ', 'ḛ', 'ẹ', 'ẽ', 'ễ', 'ệ', 'ₑ', 'ₔ', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''],
+  'f': ['ƒ', 'φ', 'ϝ', 'ᶠ', 'ᶲ', 'ḟ', 'ꬵ', '', ''],
+  'g': ['ĝ', 'ğ', 'ġ', 'ǥ', 'ǧ', 'ǵ', 'γ', 'ᵍ', 'ḡ', ''],
+  'h': ['ĥ', 'ȟ', 'ʰ', 'ͪ', 'ḣ', 'ḫ', 'ẖ', 'ₕ', ''],
+  'i': ['ì', 'í', 'î', 'ï', 'ĩ', 'ī', 'ĭ', 'į', 'ǐ', 'ȋ', 'ɩ', 'ͥ', 'ί', 'ι', 'ϊ', 'ᵢ', 'ᶥ', 'ḭ', 'ị', 'ῑ', 'ῖ', 'ⁱ', '', '', '', '', '', '', '', '', '', '', ''],
+  'j': ['ᶨ'],
+  'k': ['ķ', 'κ', 'ᵏ', 'ᷜ', 'ḳ', 'ḵ'],
+  'l': ['ľ', 'ɫ', 'ʟ', 'ˡ', 'λ', 'ᷝ', 'ḷ', 'ḻ', 'ḽ', 'ₗ', 'ꭞ', '', '', '', '', '', '', ''],
+  'm': ['ᵐ', 'ḿ', 'ṁ', 'ṃ'],
+  'n': ['ñ', 'ń', 'ň', 'ŋ', 'ᷠ', 'ṅ', 'ṇ', 'ṉ', 'ṋ', 'ⁿ', 'ₙ', '', '', '', '', '', '', '', '', '', ''],
+  'o': ['ò', 'ó', 'ô', 'õ', 'ō', 'ŏ', 'ǒ', 'ǫ', 'ǭ', 'ȏ', 'ȭ', 'ȯ', 'ȱ', 'ɔ', 'ͦ', 'ᵒ', 'ṓ', 'ọ', 'ỗ', 'ộ', 'ₒ', '', '', '', '', ''],
+  'ö': ['ø', 'œ', 'ᷳ', '', '', '', '', '', '', '', '', ''],
+  'p': ['π', 'ᵖ'],
+  'r': ['ŕ', 'ř', 'ȓ', 'ʀ', 'ʳ', 'ͬ', 'ᵣ', 'ṙ', 'ṛ', 'ṟ', '', '', '', ''],
+  's': ['ś', 'ŝ', 'š', 'ʒ', 'ˢ', 'σ', 'ṡ', 'ṣ', 'ₛ'],
+  'ß': [''],
+  't': ['þ', 'ţ', 'ť', 'ͭ', 'τ', 'ᵗ', 'ṫ', 'ṭ', 'ṯ', 'ṱ', '', ''],
+  'u': ['ú', 'û', 'ũ', 'ū', 'ŭ', 'ů', 'ų', 'ǔ', 'ȗ', 'ʊ', 'ͧ', 'ᵘ', 'ᵤ', 'ṷ', 'ụ', '', '', '', '', '', '', '', '', '', ''],
+  'ü': ['ǖ', 'ǘ', '', '', '', ''],
+  'w': ['ʷ', 'ᴡ', 'ᷱ', 'ẃ'],
+  'x': ['ˣ', 'ͯ', 'χ', 'ẋ', 'ₓ', '', ''],
+  'y': ['ÿ', 'ȳ'],
+  'z': ['ź', 'ż', 'ž', 'ᶻ', ''],
+  '+': ['̀', '́', '̂', '̃', '̄', '̆', '̇', '̈', '̊', '̌', '̐', '̑', '̓', '̔', '͡', '᪱'],
+  '-': ['̣', '̤', '̥', '̧', '̨', '̩', '̬', '̭', '̮', '̯', '̰', '̱', 'ͅ', '͓', '͜', '᪸', '', ''],
+  '#': ['~', '·', '×', 'ʾ', 'ʿ', '˙', '˜', 'ᶺ', 'ⸯ'],
+  '"': ['“', '„'],
+  '(': ['⁽'],
+  ')': ['⁾'],
+  '0': ['⁰'],
+  '1': ['¹'],
+  '2': ['²'],
+  '3': ['³'],
+  '4': ['⁴'],
+  '5': ['⁵'],
+  '6': ['⁶'],
+  '7': ['⁷'],
+  '8': ['⁸'],
+  '9': ['⁹']
 }
 
 function insertAfter (parentNode, newNode, referenceNode) {
@@ -95,10 +87,10 @@ function removeElIpa (el) {
 }
 
 var ExtIpa = Vue.extend({
-  template: '<div style="position: absolute; bottom: 100%; left: 0; max-height: 150px; overflow-y: auto; background: #fff; padding: 10px; padding-bottom: 5px; border: 1px solid #eee; border-radius: 5px; min-width: 250px;" v-if="ready && aKeys.length > 0">'
+  template: '<div ref="ipa" :style="\'position: absolute; bottom: 100%; left: \' + left + \'px; max-width: \' + maxWidth + \'px; max-height: 150px; overflow-y: auto; background: #fff; padding: 10px; padding-bottom: 0; border: 1px solid #eee; border-radius: 5px; min-width: 250px;\'" v-if="ready && aKeys.length > 0">'
           + '	<div style="margin-bottom: 5px; white-space: nowrap;" v-for="aKey in aKeys">'
-          + '		<span style="display: inline-block; width: 31px; text-align: center;">{{ aKey.k }}</span>'
-          + '		<button @click="setKey(aKey.k, pKey)" @keyup.esc="unsetKeys()" @blur="blur" ref="aBtns" class="btn btn-grey btn-sm" style="display: inline-block; margin-right: 5px; min-width: 35px;" v-for="pKey in aKey.a">{{ pKey }}</button>'
+          + '		<span style="display: inline-block; width: 31px; text-align: center; margin-right: 5px; padding: 4px 8px;">{{ aKey.k }}</span>'
+          + '		<button @click="setKey(aKey.k, pKey)" @keyup.esc="unsetKeys()" @blur="blur" ref="aBtns" class="btn btn-grey btn-sm" style="display: inline-block; margin-right: 5px; margin-bottom: 5px; min-width: 35px;" v-for="pKey in aKey.a">{{ pKey }}</button>'
           + '	</div>'
           + '</div>',
   data () {
@@ -107,6 +99,8 @@ var ExtIpa = Vue.extend({
       'aElement': null,
       'ready': false,
       'lastPosition': null,
+      'left': 0,
+      'maxWidth': 1500
     }
   },
   watch: {
@@ -121,6 +115,24 @@ var ExtIpa = Vue.extend({
         nVal.addEventListener('blur', this.blur)
       }
     },
+    'aKeys' (nVal) {
+      this.left = 0
+      this.maxWidth = 1500
+      this.$nextTick(() => {
+        if (nVal && nVal.length > 0 && this.ready && this.$refs.ipa) {
+          let aClientWidth = this.$el.getRootNode().documentElement.clientWidth
+          let aIpaRect = this.$refs.ipa.getBoundingClientRect()
+          if (aIpaRect.left + aIpaRect.width > aClientWidth) {
+            if (aIpaRect.width > aClientWidth - 75) {
+              this.maxWidth = aClientWidth - 75
+              this.left = -aIpaRect.left + 25
+            } else {
+              this.left = -aIpaRect.left + aClientWidth - aIpaRect.width - 50
+            }
+          }
+        }
+      })
+    }
   },
   methods: {
     blur (e) {
