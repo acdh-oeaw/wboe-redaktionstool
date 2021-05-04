@@ -96,9 +96,7 @@
     methods: {
       toggleMe () {		// Verzeichniss öffnen/schließen
         if (!this.fileobject.isOpen) {
-          this.fileobject.isOpen = true
-          this.fileobject.update = true
-          this.filesystem.updatePaths(false)
+          this.filesystem.openPath(this.fileobject)
         } else {
           this.fileobject.isOpen = false
         }

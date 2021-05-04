@@ -16,5 +16,6 @@ const localFunctions = {
 localFunctions.Filesystem.prototype.init = prototypeFilesystem.init
 localFunctions.Filesystem.prototype.update = prototypeFilesystem.update
 localFunctions.Filesystem.prototype.updatePaths = prototypeFilesystem.updatePaths
+localFunctions.Filesystem.prototype.openPath = prototypeFilesystem.openPath
 
 export default localFunctions

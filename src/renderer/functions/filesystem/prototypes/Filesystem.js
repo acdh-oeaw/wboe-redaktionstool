@@ -28,6 +28,11 @@ const localFunctions = {
   },
   updatePaths (all = true) {
     updateDir(this.basePath, this.paths, all)
+  },
+  openPath (fileObj) {
+    fileObj.isOpen = true
+    fileObj.update = true
+    updateDir(fileObj.fullFileName, fileObj, true)
   }
 }
 
