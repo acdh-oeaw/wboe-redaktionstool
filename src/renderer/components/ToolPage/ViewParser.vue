@@ -69,19 +69,19 @@
           <!-- <font-awesome-icon icon="id-badge" class="fa-icon icmd" v-if="getValOfSubProp(content, 'p.options.id')"/> -->
           <font-awesome-icon icon="clone" class="fa-icon icmd" v-if="content.isCopy"/>
           <!-- <font-awesome-icon icon="sitemap" class="fa-icon icmd" v-if="Array.isArray(getValOfSubProp(content, 'p.for'))"/> -->
-          <font-awesome-icon icon="bars" class="fa-icon icmd" v-if="content.options.get('tag.multiple.use')"/>
-          <font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="content.options.get('tag.anywhere.use')"/>
-          <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.options.get('tag.possibleTag.use')"/>
-          <span v-if="content.options.get('title.use')"><b>{{ content.options.get('title.value') }}</b> ({{ content.name }})&nbsp;</span>
+          <font-awesome-icon icon="bars" class="fa-icon icmd" v-if="content.options.getOption('tag.multiple.use')"/>
+          <font-awesome-icon icon="arrows-alt-v" class="fa-icon icmd" v-if="content.options.getOption('tag.anywhere.use')"/>
+          <font-awesome-icon icon="question-circle" class="fa-icon icmd" v-if="content.options.getOption('tag.possibleTag.use')"/>
+          <span v-if="content.options.getOption('title.use')"><b>{{ content.options.getOption('title.value') }}</b> ({{ content.name }})&nbsp;</span>
           <span v-else><b>{{ content.name }}</b>&nbsp;</span>
-          <span class="val" v-if="content.options.get('value.is.use')"> = <i>{{ tranculatedValue }}</i>&nbsp;</span>
-          <span> (uId: {{ content.uId }}<span v-if="content.options && content.options.get('id')">, id: <b>{{ content.options.get('id') }}</b></span>)</span>
-          <font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('value.possibleValues'))"/>
-          <font-awesome-icon :icon="((content.options.get('value.edit.use')) ? 'edit' : ((content.options.get('value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>
-          <span class="attribut" v-for="(attrOpt, attr) in content.options.get('attributes')" :key="'attr' + attr">
+          <span class="val" v-if="content.options.getOption('value.is.use')"> = <i>{{ tranculatedValue }}</i>&nbsp;</span>
+          <span> (uId: {{ content.uId }}<span v-if="content.options && content.options.getOption('id')">, id: <b>{{ content.options.getOption('id') }}</b></span>)</span>
+          <font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.getOption('value.possibleValues'))"/>
+          <font-awesome-icon :icon="((content.options.getOption('value.edit.use')) ? 'edit' : ((content.options.getOption('value.variable.use')) ? 'lock-open' : 'lock'))" class="fa-icon icmd"/>
+          <span class="attribut" v-for="(attrOpt, attr) in content.options.getOption('attributes')" :key="'attr' + attr">
             {{ attr + ((attrOpt.value) ? ':' : '') }}&nbsp;
             <span v-if="attrOpt.value">{{ attrOpt.value }}</span>
-            <font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.get('attributes.' + attr + '.possibleValues'))"/>
+            <font-awesome-icon icon="bars" class="fa-icon" v-if="Array.isArray(content.options.getOption('attributes.' + attr + '.possibleValues'))"/>
             <font-awesome-icon :icon="((attrOpt.type === 'fixed' || !attrOpt.type) ? 'lock' : ((attrOpt.type === 'variable') ? 'lock-open' : 'question-circle'))" class="fa-icon"/>
           </span>
           <font-awesome-icon :icon="((isOpen) ? 'eye' : 'eye-slash')" class="float-right fa-icon"/>
@@ -97,7 +97,7 @@
           <b-button-toolbar aria-label="Toolbar with button groups and dropdown menu">
             <b-button-group size="sm" class="mr-1">
               <b-button @click="setInfoOpen(null)"><font-awesome-icon :icon="((infoOpen) ? 'eye' : 'eye-slash')" class="fa-icon"/></b-button>
-              <b-button @click="setInfoOpen('value')" v-if="content.options.get('value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
+              <b-button @click="setInfoOpen('value')" v-if="content.options.getOption('value.is.use')" :pressed="infoOpen === 'value'" variant="outline-secondary"><b>Value</b></b-button>
               <b-button @click="setInfoOpen('options')" :pressed="infoOpen === 'options'" variant="outline-secondary"><b>Optionen</b></b-button>
             </b-button-group>
             <b-input-group size="sm" class="mx-1" v-if="content.childs.length > 0">
@@ -165,7 +165,7 @@
         return 'Default'
       },
       tranculatedValue () {
-        var aVal = this.content.options.get('value.is.value')
+        var aVal = this.content.options.getOption('value.is.value')
         if (aVal) {
           return aVal.length > 25 ? aVal.slice(0, 25) + '...' : aVal
         } else {

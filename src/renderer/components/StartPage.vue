@@ -2,7 +2,11 @@
   <div class="start-page mib50">
     <div class="container">
       <br>
-      <h2>Übersicht</h2>
+      <b-alert show variant="danger" v-if="filesystem && filesystem.errors && Object.keys(filesystem.errors).length > 0">
+        <ul class="my-0">
+          <li v-for="(err, i) in filesystem.errors" :key="'e' + i"><b>{{ i }}:</b> {{ err }}</li>
+        </ul>
+      </b-alert>
       <div class="project-path" v-if="Options.projectPath">
         <p v-if="Files.file">
           <span :title="'Geöffnete Datei: ' + Files.file"><font-awesome-icon icon="book-open" class="mir10"/> {{ Files.file.split('\\').pop().split('/').pop() }}</span>
@@ -15,18 +19,16 @@
           <button @click="selectFolder" title="Verzeichniss ändern"><font-awesome-icon icon="edit" class="mil5 mir5"/></button>
           <button @click="showFolder" title="Ordner in Explorer öffnen"><font-awesome-icon icon="external-link-alt" class="mil5 mir5"/></button>
           <button @click="updateFolder" title="Projektpfad neu laden"><font-awesome-icon icon="sync-alt" class="mil5 mir5"/></button>
-          <button @click="infoFolder" title="Angezeigte Dateien überprüfen" :disabled="infoFolderUpdating"><font-awesome-icon icon="bars" class="mil5 mir5"/></button>
           <!-- Parser -->
           <button @click="reloadParser" title="Parser-Datei neu laden" class="float-right mir5"><font-awesome-icon icon="sync-alt"/></button>
           <button @click="showParser" :title="'Parser-Datei in Explorer anzeigen\n' + Parser.file" class="float-right mir5" v-if="Parser.file && !(Parser.file.indexOf('app.asar') > -1)"><font-awesome-icon icon="external-link-alt"/></button>
-          <button @click="saveParser" title="Parser-Datei speichern unter ..." class="float-right mir5" v-if="Parser.content && Parser.content.length > 0"><font-awesome-icon icon="file-download"/></button>
-          <button @click="exportAdditionalFilesParser" title="Zusätzliche Parser-Dateien für Portal als JSON speichern" class="float-right mir5" v-if="Options.show.develope"><font-awesome-icon icon="save"/></button>
-          <button @click="additionalFilesDirectory" :title="'Verzeichniss für Listen auswählen\n' + Options.additionalFilesDirectory" :class="'float-right mir5' + (Options.additionalFilesDirectory ? '' : ' warning')"><font-awesome-icon icon="external-link-square-alt"/></button>
+          <button @click="parserPath" :title="'Verzeichniss für Parser auswählen\n' + Options.parserPath" :class="'float-right mir5' + (Options.parserPath ? '' : ' warning')"><font-awesome-icon icon="external-link-square-alt"/></button>
+          <span class="float-right mir10">
+            Parser: <b>{{ Parser.parser ? (Parser.parser.type + '-' + Parser.parser.version) : 'Kein Parser' }}</b>
+          </span>
         </p>
-        <div v-if="Files.paths[Options.projectPath]">
-          <FileLine :path="path" @loading="loading = true" @new="newFile" v-for="(path, fKey) in Files.paths[Options.projectPath].paths" :key="'path-' + fKey" :base="Options.projectPath"/>
-          <button @click="newFile(Options.projectPath)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk" class="mil5 mir5" style="width:1.125em;"/><span>Neue Datei erstellen ...</span></button>
-          <FileLine :file="file" @loading="loading = true" @new="newFile" v-for="(file, fKey) in Files.paths[Options.projectPath].files" :key="'file-' + fKey" :base="Options.projectPath"/>
+        <div>
+          <FileLine :fileobject="filesystem.paths" :filesystem="filesystem" @loadfile="loadFile" @new="newFile" v-if="filesystem" />
         </div>
       </div>
       <b-alert show variant="danger" v-else>Projektpfad nicht vergeben!</b-alert>
@@ -49,32 +51,28 @@
 
   const { shell, remote } = require('electron')
   const fs = remote.require('fs')
-  const { dialog } = remote
 
   export default {
     name: 'start-page',
+    props: {
+      filesystem: Object
+    },
     data () {
       return {
         loading: false,
         newFilePath: '',
         newFileName: '',
-        infoFolderUpdating: false,
       }
+    },
+    mounted () {
+      this.loading = true
+      this.updateFolder()
+      this.loading = false
     },
     computed: {
       ...mapState(['Options']),
       ...mapState(['Parser']),
       ...mapState(['Files'])
-    },
-    watch: {
-      'Options.projectPath' (nVal) {
-        if (nVal) {		// Wenn sich der Projektpfad ändert alle Verzeichnisse zurücksetzen
-          this.loading = true
-          this.$store.dispatch('CLEAN_PATH', this.Options.projectPath)
-          this.$store.dispatch('GET_PATH', { 'path': this.Options.projectPath })
-          this.loading = false
-        }
-      }
     },
     methods: {
       goToTool () {		// Zu Tool wechseln
@@ -94,65 +92,32 @@
       showFolder () {		// Ordner in Explorer öffnen
         shell.openItem(this.Options.projectPath)
       },
+      loadFile (d) {
+        console.log('loadFile', d)
+        this.loading = true
+        this.$nextTick(() => {
+          _.debounce(() => {
+            console.log('xxx')
+            this.$store.dispatch('LOAD_FILE', d)		// Datei laden
+            // Nur Tool öffnen wenn Datei lesbar!
+            this.$router.push('/tool')		// Tool öffnen
+          }, 100)()
+        })
+      },
       updateFolder () {		// Projektpfad neu laden
-        this.$store.dispatch('UPDATE_PATHS')
-        this.$store.dispatch('LOAD_PARSER_FILE')
+        if (this.filesystem && this.filesystem.updatePaths) {
+          this.filesystem.updatePaths(true)
+        }
       },
       showParser () {		// Parser-Datei in Explorer anzeigen
         shell.showItemInFolder(this.Parser.file)
       },
-      saveParser () {		// Parser-Datei speichern unter ...
-        this.$store.dispatch('DIALOG_SAVE_PARSER')	// Speicher Dialog
-        this.updateFolder()
-      },
-      additionalFilesDirectory () {
-        console.log('additionalFilesDirectory')
+      parserPath () {
+        console.log('parserPath')
         this.loading = true
-        this.$store.dispatch('DIALOG_ADDITIONAL_FILES_DIRECTORY')	// Verzeichniss Dialog
-        this.$store.dispatch('SET_ADDITIONAL_FILES_DIRECTORY')
+        this.$store.dispatch('DIALOG_PARSER_FILES_DIRECTORY')	// Verzeichniss Dialog
+        this.$store.dispatch('SET_PARSER_PATH')
         this.loading = false
-      },
-      exportAdditionalFilesParser () {
-        console.log('exportAdditionalFilesParser', this.Parser && this.Parser.parser && this.Parser.parser.additionalFiles)
-        if (this.Parser && this.Parser.parser && this.Parser.parser.additionalFiles) {
-          let saveFolder = dialog.showOpenDialog({
-            title: 'Verzeichniss zum speichern der Dateien auswählen',
-            defaultPath: this.Options.projectPath,
-            properties: ['openDirectory']
-          })
-          if (saveFolder) {
-            saveFolder = saveFolder[0]
-            Object.keys(this.Parser.parser.additionalFiles).forEach(function (aFileObj) {
-              let aAdFile = this.Parser.parser.additionalFiles[aFileObj]
-              if (aAdFile.geoSelect && aAdFile.geoSelect.uFields) {
-                let jsonExport = {}
-                jsonExport.uFields = aAdFile.geoSelect.uFields
-                aAdFile.geoSelect.uFields.forEach(function (aObj) {
-                  let cObj = JSON.parse(JSON.stringify(aAdFile.geoSelect[aObj]))
-                  cObj.forEach(function (aPlace) {
-                    delete aPlace.obj
-                    aPlace.sigle = aPlace.sigle_raw
-                    delete aPlace.sigle_raw
-                    Object.keys(aPlace.parents).forEach(function (aPar) {
-                      aPlace.parents[aPar] = aPlace.parents[aPar].sigle_raw
-                    }, this)
-                  }, this)
-                  jsonExport[aObj] = cObj
-                }, this)
-                // Speichern
-                let aFileName = fPath.join(saveFolder, aFileObj.substr(0, aFileObj.length - 5) + '.json')
-                console.log(aFileName)
-                try {
-                  fs.writeFileSync(aFileName, JSON.stringify(jsonExport), 'utf8')
-                } catch (e) {
-                  console.log(e)
-                  alert('Beim speichern kam es zu einem Fehler!\nDatei NICHT gespeichert!')
-                }
-              }
-              // ToDo: RefBiblSelect
-            }, this)
-          }
-        }
       },
       reloadParser () {
         this.$store.dispatch('RELOAD_PARSER_FILE')	// "parser.xml" neu laden
@@ -177,26 +142,16 @@
             this.goToTool()
           }
         }
-      },
-      infoFolder () {
-        if (!this.infoFolderUpdating) {
-          this.infoFolderUpdating = true
-          this.debouncedInfoFolder()
-        }
-      },
-      debouncedInfoFolder: _.debounce(function () {
-        this.$store.dispatch('UPDATE_PATHS')
-        this.$store.dispatch('UPDATE_PATHS_INFOS', { 'parser': this.Parser.parser, 'check': false })
-        this.infoFolderUpdating = false
-      }, 50),
-    },
-    mounted () {
-      this.loading = true
-      if (!this.Files.paths[this.Options.projectPath]) {
-        this.$store.dispatch('GET_PATH', { 'path': this.Options.projectPath })
       }
-      this.updateFolder()
-      this.loading = false
+    },
+    watch: {
+      'Options.projectPath' (nVal) {
+        if (nVal) {		// Wenn sich der Projektpfad ändert alle Verzeichnisse zurücksetzen
+          this.loading = true
+          this.updateFolder()
+          this.loading = false
+        }
+      }
     },
     components: {
       FileLine

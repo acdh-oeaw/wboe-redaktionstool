@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<objParser>
+<objParser type="lioe" version="0.7.0">
   <xmlParserHeader>
     &lt;?xml version="1.0" encoding="UTF-8"?&gt;
     &lt;?xml-model href="http://www.tei-c.org/release/xml/tei/custom/schema/relaxng/tei_all.rng" type="application/xml" schematypens="http://purl.oclc.org/dsdl/schematron"?&gt;
@@ -47,9 +47,12 @@
                               "spaceAfter": 5
                             }
                           },
-                          "editor": { "addTitle": "Lemma" }
+                          "editor": {
+                            "addTitle": "Lemma",
+                            "addButtonSort": 2
+                          }
                         } ?>
-              <?copy { "fromId": "orth", "options": { "layout": { "frame": "inline", "bold": true, "fontsize": 120 }, "editor": { "parentInContext": true } } } ?>
+              <?copy { "fromId": "orth", "options": { "layout": { "frame": "inline", "bold": true, "fontsize": 120, "noSpaceAfter": true }, "editor": { "parentInContext": true } } } ?>
               <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lemma"}}] } } ?>
             </form>
             <form type="variant">
@@ -70,7 +73,7 @@
                         } ?>
               <?copy { "fromId": "orth", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "bold": true }, "editor": { "parentInContext": true } } } ?>
             </form>
-            <?copy { "fromId": "gramGrp", "id": "gramGrpLemma", "options": { "tag": ["possibleTag", "multiple"], "editor": { "parentInContext": true }, "layout": { "frame": "line" } } } ?>
+            <?copy { "fromId": "gramGrp", "id": "gramGrpLemma", "options": { "tag": ["possibleTag", "multiple"], "editor": { "parentInContext": true, "addButtonSort": 1 }, "layout": { "frame": "line" } } } ?>
             <!-- Diminutiv -->
             <form type="variant" subtype="diminutive">
               <?options {
@@ -114,7 +117,7 @@
                             "layout": {
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": " (Diminutiv, ",
+                              "before": " (Diminutiv",
                               "after": ")",
                               "noSpaceAfter": true
                             },
@@ -122,7 +125,7 @@
                               "fx": "hideIfParentNextSame"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "frame": "inline", "noSpaceAfter": true } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": ["possibleTag"], "layout": { "multiple": { "before": ", " }, "hideTitle": true, "frame": "inline", "noSpaceAfter": true } } } ?>
               </gramGrp>
             </form>
             <!-- Movierung -->
@@ -152,14 +155,15 @@
                               "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": "(Movierung, ",
+                              "before": "(Movierung",
                               "after": ")"
                             },
                             "previewLayout" : {
-                              "before": "("
+                              "before": "",
+                              "after": ""
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": {"hideTitle": true, "noSpaceAfter": true, "frame": "inline"} } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": ["possibleTag"], "value": ["edit", "required", {"is": {"value": "Femininum", "possibleValues": ["Maskulinum", "Femininum", "Neutrum"]}}], "layout": { "multiple": { "before": ", " }, "hideTitle": true, "noSpaceAfter": true, "frame": "inline"}, "previewLayout" : { "multiple": { "before": "(", "after": ")" } } } } ?>
               </gramGrp>
             </form>
             <!-- Kurzwort -->
@@ -190,11 +194,11 @@
                               "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": "(Kurzwort, ",
+                              "before": "(Kurzwort",
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": ["possibleTag"], "layout": { "multiple": { "before": ", " }, "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -225,11 +229,11 @@
                               "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": "(diminuiertes Kurzwort, ",
+                              "before": "(diminuiertes Kurzwort",
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": ["possibleTag"], "layout": { "multiple": { "before": ", " }, "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -260,11 +264,11 @@
                               "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": "(Kurzform, ",
+                              "before": "(Kurzform",
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": ["possibleTag"], "layout": { "multiple": { "before": ", " }, "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -295,11 +299,11 @@
                               "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": "(diminuierte Kurzform, ",
+                              "before": "(diminuierte Kurzform",
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": ["possibleTag"], "layout": { "multiple": { "before": ", " }, "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -330,11 +334,11 @@
                               "autospace": true,
                               "frame": "inline",
                               "hideTitle": true,
-                              "before": "(Nebenform, ",
+                              "before": "(Nebenform",
                               "after": ")"
                             }
                           } ?>
-                <?copy { "fromId": "gram-gender", "options": { "layout": { "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
+                <?copy { "fromId": "gram-gender", "options": { "tag": ["possibleTag"], "layout": { "multiple": { "before": ", " }, "hideTitle": true, "noSpaceAfter": true, "frame": "inline" } } } ?>
               </gramGrp>
             </form>
 
@@ -406,11 +410,12 @@
                               "beforeIfNotFirst": ", "
                             },
                             "editor": {
-                              "parentInContext": true
+                              "parentInContext": true,
+                              "addButtonSort": 2
                             }
                           } ?>
                </pron>
-               <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "before": " " } } } ?>
+               <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline", "before": " " }, "editor": { "addButtonSort": 3 } } } ?>
                <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag"], "layout": { "before": " " } } } ?>
                <?copy { "fromId": "usg-geo", "options": {
                                                           "tag": ["possibleTag", "multiple"],
@@ -423,6 +428,9 @@
                                                               "before": " (",
                                                               "after": ")"
                                                             }
+                                                          },
+                                                          "editor": {
+                                                            "addButtonSort": 1
                                                           }
                                                         } } ?>
               <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "lautung"}}], "layout": { "before": " " } } } ?>
@@ -460,8 +468,11 @@
                               "hideTitle": true,
                               "multiple": {
                                 "use": true,
-                                "join": "; "
+                                "join": ", "
                               }
+                            },
+                            "editor": {
+                              "addButtonSort": 1
                             }
                           } ?>
                 <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"] } } ?>
@@ -482,15 +493,16 @@
                               "layout": {
                                 "frame": "inline",
                                 "hideTitle": true,
-                                "autospace": true,
+                                "noSpaceAfter": true,
                                 "multiple": {
                                   "use": true,
-                                  "join": ", "
+                                  "join": ", ",
+                                  "after": " "
                                 }
                               }
                             } ?>
-                   <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"], "layout": { "autospace": true, "italic": true } } } ?>
-                   <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"], "layout": { "autospace": true } } } ?>
+                   <?copy { "fromId": "orth", "options": { "tag": ["multiple", "possibleTag"], "layout": { "noSpaceAfter": true, "italic": true, "multiple": { "use": true, "join": " " } } } } ?>
+                   <?copy { "fromId": "oRef", "options": { "tag": ["possibleTag", "anywhere"], "layout": { "noSpaceAfter": true } } } ?>
                 </form>
                 <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
                 <?copy { "fromId": "def", "options": { "tag": ["possibleTag"], "layout": { "autospace": true } } } ?>
@@ -507,6 +519,9 @@
                             "layout": {
                               "frame": "inline",
                               "hideTitle": true
+                            },
+                            "editor": {
+                              "addButtonSort": 2
                             }
                           } ?>
                 <?copy { "fromId": "text", "options": { "layout": { "frame": "inline", "hideTitle": true }, "editor": { "parentInContext": true } } } ?>
@@ -1102,6 +1117,9 @@
               "before": " (",
               "after": ") ",
               "afterIf": { "id": "usg-geo", "value": "; " }
+            },
+            "editor": {
+              "addButtonSort": 2
             }
           } } ?>
         <?copy { "fromId": "cit-translation", "options": { "tag": ["possibleTag"] } } ?>
@@ -1119,6 +1137,9 @@
                 "beforeIf": { "id": "ref-bibl", "value": "" },
                 "after": ")"
               }
+            },
+            "editor": {
+              "addButtonSort": 1
             }
           } } ?>
       </cit>
@@ -1196,14 +1217,14 @@
                     }
                   } ?>
         <?copy { "fromId": "lbl", "options": { "tag": ["possibleTag", "anywhere", "multiple"], "editor": { "parentInContext": true } } } ?>
-        <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere", "multiple"] } } ?>
+        <?copy { "fromId": "usg-drg", "options": { "tag": ["possibleTag", "anywhere", "multiple"], "editor": { "addButtonSort": 5 } } } ?>
         <?copy { "fromId": "ref-form" } ?>
-        <?copy { "fromId": "def", "options": { "tag": ["possibleTag"] } } ?>
-        <?copy { "fromId": "def-um", "options": { "tag": ["possibleTag"] } } ?>
-        <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
-        <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"] } } ?>
-        <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "bedeutung"}}] } } ?>
-        <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
+        <?copy { "fromId": "def", "options": { "tag": ["possibleTag"], "editor": { "addButtonSort": 1 } } } ?>
+        <?copy { "fromId": "def-um", "options": { "tag": ["possibleTag"], "editor": { "addButtonSort": 2 } } } ?>
+        <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"], "editor": { "addButtonSort": 4 } } } ?>
+        <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag"], "editor": { "addButtonSort": 6 } } } ?>
+        <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "bedeutung"}}], "editor": { "addButtonSort": 7 } } } ?>
+        <?copy { "fromId": "ref-bibl", "options": { "tag": ["possibleTag", "multiple", "anywhere"], "editor": { "addButtonSort": 8 } } } ?>
         <?copy { "fromId": "xr-int", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
         <?copy { "fromId": "xr-ext", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
         <?copy { "fromId": "xr-op", "options": { "tag": ["possibleTag", "multiple", "anywhere"] } } ?>
@@ -1217,7 +1238,8 @@
                                                 },
                                                 "editor": {
                                                   "onlyLastElementHasAddButton": true,
-                                                  "addTitle": "Bedeutung Sub."
+                                                  "addTitle": "Bedeutung Sub.",
+                                                  "addButtonSort": 3
                                                 }
                                               } } ?>
       </sense>
@@ -1349,7 +1371,7 @@
         <gram type="pos">
           <?options {
                       "title": "Gram Pos",
-                      "value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb", "Adverb", "Artikel", "Pronomen", "Konjunktion", "Präposition", "Partikel", "Interjektion", "Numerale", "Name", "auch Name"]}}],
+                      "value": ["edit", "required", {"is": {"possibleValues": ["Adjektiv", "Substantiv", "Verb", "Adverb", "Artikel", "Pronomen", "Konjunktion", "Präposition", "Partikel", "Interjektion", "Numerale", "Name", "vor allem Name"]}}],
                       "tag": ["possibleTag"],
                       "layout": {
                                 "frame": "inline",
@@ -1552,7 +1574,7 @@
                       "hideTitle": true
                     }
                   } ?>
-          <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+          <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "line" }, "previewLayout": { "frame": "inline" } } } ?>
         </sense>
         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
@@ -1634,11 +1656,11 @@
                                                 } } ?>
           <?copy { "fromId": "gramGrp", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
         </form>
-        <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "inline" } } } ?>
+        <?copy { "fromId": "sense", "options": { "tag": ["possibleTag"], "layout": { "frame": "line" }, "previewLayout": { "frame": "inline" }, "editor": { "addButtonSort": 1 } } } ?>
         <?copy { "fromId": "usg-geo", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "cit-example", "options": { "tag": ["possibleTag", "multiple"] } } ?>
         <?copy { "fromId": "ptr-col", "options": { "attributes": [{"subtype": {"type": "fixed", "value": "MWE"}}] } } ?>
-        <?copy { "fromId": "re-MWE", "options": { "title": "Unter Redewendung",  "tag": ["possibleTag", "multiple"], "editor": {"onlyLastElementHasAddButton": true, "addTitle": "Unter Redewendung"} } } ?>
+        <?copy { "fromId": "re-MWE", "options": { "title": "Unter Redewendung",  "tag": ["possibleTag", "multiple"], "editor": {"onlyLastElementHasAddButton": true, "addTitle": "Unter Redewendung", "addButtonSort": 2 } } } ?>
       </re>
 
 

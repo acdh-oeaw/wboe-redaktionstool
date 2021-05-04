@@ -28,7 +28,7 @@
                 <font-awesome-icon icon="check" class="fa-icon"
                   v-if="
                     (attrVal.value || attrVal) === aVal.value ||
-                    content.parserObj.options.get('attributes.' + aKey + '.prefix') + (attrVal.value || attrVal) === aVal.value
+                    content.parserObj.options.getOption('attributes.' + aKey + '.prefix') + (attrVal.value || attrVal) === aVal.value
                   "
                 />
                 {{ attrVal.title || attrVal }}
@@ -81,7 +81,7 @@
       </ul>
     </template>
 
-    <EditorContextMenuContent :content="content.parents[0]" :subContextMenuLeft="subContextMenuLeft" @close="close" @clickcomment="clickComment" v-if="content.parents.length > 0 && content.parserObj.options && content.parents.length > 0 && content.parserObj.options.get('editor.parentInContext')"/>
+    <EditorContextMenuContent :content="content.parents[0]" :subContextMenuLeft="subContextMenuLeft" @close="close" @clickcomment="clickComment" v-if="content.parents.length > 0 && content.parserObj.options && content.parents.length > 0 && content.parserObj.options.getOption('editor.parentInContext')"/>
   </div>
 </template>
 
@@ -104,9 +104,9 @@
     },
     computed: {
       attributes () {
-        if (this.content.parserObj.options && this.content.parserObj.options.get('attributes')) {
+        if (this.content.parserObj.options && this.content.parserObj.options.getOption('attributes')) {
           let oAttr = {}
-          let aAttributes = this.content.parserObj.options.get('attributes')
+          let aAttributes = this.content.parserObj.options.getOption('attributes')
           Object.keys(aAttributes).forEach(function (aAttr) {
             let aIcon
             let aVal = this.content.orgXmlObj.attributes[aAttr]
@@ -130,14 +130,14 @@
         if (this.content.parserObj.options) {
           if (this.content.parserObj.options.getResult('title')) {
             return this.content.parserObj.options.getResult('title')
-          } else if (this.content.parserObj.options.get('tagAsTitle') || this.layoutBase === 'panel') {
+          } else if (this.content.parserObj.options.getOption('tagAsTitle') || this.layoutBase === 'panel') {
             return this.content.orgXmlObj.name
           }
         }
         return null
       },
       deleteAble () {
-        return (this.content.parserObj.options && this.content.parserObj.options.get('tag.possibleTag'))
+        return (this.content.parserObj.options && this.content.parserObj.options.getOption('tag.possibleTag'))
             || (this.content.isMultiple && !(this.content.multipleNr === 0 && this.content.multipleLast))
       },
       moveableLeft () {
@@ -185,7 +185,7 @@
     },
     methods: {
       selectAttr (aAttr, key) {
-        this.content.orgXmlObj.setAttribute(aAttr, this.content.parserObj.options.get('attributes.' + aAttr + '.possibleValues')[key], this.content.parserObj.options.get('attributes.' + aAttr + '.prefix'))
+        this.content.orgXmlObj.setAttribute(aAttr, this.content.parserObj.options.getOption('attributes.' + aAttr + '.possibleValues')[key], this.content.parserObj.options.getOption('attributes.' + aAttr + '.prefix'))
         this.content.checkParser()
       },
       valAttrUpdateValue (aAttr, e) {

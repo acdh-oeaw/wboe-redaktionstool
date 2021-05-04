@@ -8,7 +8,7 @@
       </span>
       <span class="value" v-else>
         <span class="attr-edit" ref="attrEdit" @input="valAttrUpdate" @focus="valAttrUpdate" @blur="valAttrUpdateValue" @keyup.enter="valAttrUpdateValue" @keydown.enter.prevent contenteditable>{{ attrValue }}</span>
-        <font-awesome-icon @click="$refs.attrEdit.focus()" icon="edit" class="fa-icon"/>
+        <span class="icon-edit-black" @click="$refs.attrEdit.focus()">&nbsp;</span>
       </span>
     </template>
     <span class="value" v-else>{{ attrValue || '&nbsp;' }}</span>
@@ -57,7 +57,7 @@
         }
       },
       parserOptions () {
-        return this.content.parserObj.options.get('attributes.' + this.attrKey)
+        return this.content.parserObj.options.getOption('attributes.' + this.attrKey)
       }
     },
     watch: {

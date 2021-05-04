@@ -24,6 +24,9 @@ Vue.config.productionTip = false
 
 Vue.use(BootstrapVue)
 
+const isDev = process.env.NODE_ENV !== 'production'
+Vue.config.performance = isDev
+
 Vue.mixin({		// Global verfügbare Funktionen
 	methods: {
 		htmlEncode: stdFunctions.htmlEncode,

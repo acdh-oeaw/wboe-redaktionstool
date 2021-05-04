@@ -1,5 +1,5 @@
 <template>
-  <b-dropdown variant="val-focus" no-caret>
+  <b-dropdown variant="val-focus" no-caret ref="dd" @hidden="deactivate" v-if="active">
     <template slot="button-content">
       <span class="select">{{ selectedText }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
     </template>
@@ -13,6 +13,11 @@
       </b-dropdown-item>
     </template>
   </b-dropdown>
+  <div class="dropdown b-dropdown btn-group" v-else>
+    <button @click="activate" aria-haspopup="true" aria-expanded="false" type="button" class="btn dropdown-toggle btn-val-focus dropdown-toggle-no-caret">
+      <span class="select">{{ selectedText }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
+    </button>
+  </div>
 </template>
 
 <script>
@@ -26,6 +31,7 @@
     },
     data () {
       return {
+        active: false
       }
     },
     computed: {
@@ -38,6 +44,19 @@
       }
     },
     methods: {
+      activate () {
+        this.active = true
+        this.$nextTick(() => {
+          if (this.$refs.dd) {
+            this.$refs.dd.show()
+          }
+        })
+      },
+      deactivate () {
+        this.$nextTick(() => {
+          this.active = false
+        })
+      },
       select (key) {
         this.$emit('select', key)
       }

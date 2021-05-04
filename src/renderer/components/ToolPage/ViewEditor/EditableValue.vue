@@ -1,26 +1,29 @@
 <template>
 
-  <span :class="
-            'val-obj' +
-            (content.parserObj.options.get('layout.bold') ? ' bold' : '') +
-            (content.parserObj.options.get('layout.italic') ? ' italic' : '') +
-            (content.parserObj.options.get('layout.underline') ? ' underline' : '') +
-            (content.parserObj.options.get('layout.ls1pt') ? ' ls1pt' : '')
-          "
-        v-if="editType === 'selectPossibleValues'">
-    <SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.get('value.is.possibleValues')" v-if="!refreshSelect"/>
+  <span
+    :class="
+      'val-obj' +
+      (content.parserObj.options.getOption('layout.bold') ? ' bold' : '') +
+      (content.parserObj.options.getOption('layout.italic') ? ' italic' : '') +
+      (content.parserObj.options.getOption('layout.underline') ? ' underline' : '') +
+      (content.parserObj.options.getOption('layout.ls1pt') ? ' ls1pt' : '')
+    "
+    v-if="editType === 'selectPossibleValues'"
+  >
+    <SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.getOption('value.is.possibleValues')" v-if="!refreshSelect"/>
   </span>
 
-  <span :class="
-            'val-obj val-txt' +
-            (content.parserObj.options.get('layout.bold') ? ' bold' : '') +
-            (content.parserObj.options.get('layout.italic') ? ' italic' : '') +
-            (content.parserObj.options.get('layout.underline') ? ' underline' : '') +
-            (content.parserObj.options.get('layout.ls1pt') ? ' ls1pt' : '')
-          "
-        v-else>
-    <span :style="'line-height' + Options.options.lineHeight + ';'" :class="'val-edit val-focus' + (!aValue ? ' empty' : '')" v-rt-ipa="!Options.show.hideIpaKeyboard" ref="valEdit" @input="valEditUpdate" @focus="valEditUpdate" @blur="valEditUpdateValue" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
-    <font-awesome-icon @click="$refs.valEdit.focus()" icon="edit" class="fa-icon" :title="editType"/>
+  <span
+    :class="
+      'val-obj val-txt' +
+      (content.parserObj.options.getOption('layout.bold') ? ' bold' : '') +
+      (content.parserObj.options.getOption('layout.italic') ? ' italic' : '') +
+      (content.parserObj.options.getOption('layout.underline') ? ' underline' : '') +
+      (content.parserObj.options.getOption('layout.ls1pt') ? ' ls1pt' : '')
+    "
+    v-else
+  >
+    <span :style="'line-height' + Options.options.lineHeight + ';'" :class="'val-edit val-focus icon-edit-black' + (!aValue ? ' empty' : '')" v-rt-ipa="focus && !Options.show.hideIpaKeyboard" ref="valEdit" @input="valEditUpdate" @focus="valFocus" @blur="valBlur" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
   </span>
 
 </template>
@@ -39,17 +42,17 @@
     },
     data () {
       return {
-        'isOpen': true,
-        'refreshSelect': false,
+        refreshSelect: false,
+        focus: false
       }
     },
     computed: {
       ...mapState(['Options']),
       aValue () {
-        return this.content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false)
+        return this.content.orgXmlObj.getValueByOption(this.content.parserObj.options.getOption('value'), false)
       },
       editType () {		// Art der Wert bearbeitung
-        if (this.content.parserObj.options.get('value.is.possibleValues')) {
+        if (this.content.parserObj.options.getOption('value.is.possibleValues')) {
           return 'selectPossibleValues'
         }
         return 'text'
@@ -68,7 +71,7 @@
       getSelected () {		// Gibt die aktuell ausgewählte Option zurück
         let sVal = this.content.orgXmlObj.getValue(false)
         let oKey = -1
-        this.content.parserObj.options.get('value.is.possibleValues').some(function (aVal, aKey) {
+        this.content.parserObj.options.getOption('value.is.possibleValues').some(function (aVal, aKey) {
           if ((aVal.value || aVal) === sVal) {
             oKey = aKey
             return true
@@ -78,7 +81,7 @@
       },
       setSelected (val) {		// Auswahl ändern
         if (val >= 0) {
-          let aVal = this.content.parserObj.options.get('value.is.possibleValues')[val]
+          let aVal = this.content.parserObj.options.getOption('value.is.possibleValues')[val]
           this.content.orgXmlObj.setValue(aVal.value || aVal)
           if (aVal.attribute && Object.keys(aVal.attribute).length > 0) {
             Object.keys(aVal.attribute).forEach(function (aKey) {
@@ -90,6 +93,14 @@
           this.content.orgXmlObj.setValue(null)
           this.content.checkParser()
         }
+      },
+      valFocus (e) {
+        this.focus = true
+        this.valEditUpdate(e)
+      },
+      valBlur (e) {
+        this.focus = false
+        this.valEditUpdateValue(e)
       },
       valEditUpdate: _.debounce(function (e) {		// Bei Textfeldern HTML-Elemente und Zeilenumbrüche entfernen
         var restoreCaretPosition = veFunctions.saveCaretPosition(e.target)
@@ -124,6 +135,10 @@
     min-width:15px;
     padding: 0px 2px;
     cursor: text;
+  }
+  .val-edit.icon-edit-black::after {
+    margin-left: 0.3em;
+    cursor: pointer;
   }
   .val-edit.empty {
     border-bottom: 2px solid #f83;
