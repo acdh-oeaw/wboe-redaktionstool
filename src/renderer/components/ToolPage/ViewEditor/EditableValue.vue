@@ -23,7 +23,7 @@
     "
     v-else
   >
-    <span :style="'line-height' + Options.options.lineHeight + ';'" :class="'val-edit val-focus icon-edit-black' + (!aValue ? ' empty' : '')" v-rt-ipa="focus && !Options.show.hideIpaKeyboard" ref="valEdit" @input="valEditUpdate" @focus="valFocus" @blur="valBlur" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
+    <span :style="'line-height' + Options.options.lineHeight + ';'" :class="'val-edit val-focus icon-edit-black' + (!aValue ? ' empty' : '')" v-rt-ipa="(ipaOpen) && !Options.show.hideIpaKeyboard" ref="valEdit" @input="valEditUpdate" @focus="valFocus" @blur="valBlur" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
   </span>
 
 </template>
@@ -43,7 +43,8 @@
     data () {
       return {
         refreshSelect: false,
-        focus: false
+        focus: false,
+        ipaOpen: false
       }
     },
     computed: {
@@ -96,6 +97,7 @@
       },
       valFocus (e) {
         this.focus = true
+        this.ipaOpen = true
         this.valEditUpdate(e)
       },
       valBlur (e) {
@@ -112,8 +114,37 @@
         if (nVal !== this.aValue) {
           this.content.orgXmlObj.setValue(nVal)
           this.content.checkParser()
+          if (e.target === document.activeElement) {
+            let lPos = this.getCaretPosition(e.target)
+            this.$nextTick(() => {
+              this.setCaret(e.target, lPos)
+            })
+          }
         }
       },
+      getCaretPosition (el) {
+        var caretPos = 0
+        if (window.getSelection) {
+          var sel = window.getSelection()
+          if (sel.rangeCount) {
+            var range = sel.getRangeAt(0)
+            if (range.commonAncestorContainer.parentNode === el) {
+              caretPos = range.endOffset
+            }
+          }
+        }
+        return caretPos
+      },
+      setCaret (el, caretPos) {
+        var range = document.createRange()
+        if (window.getSelection) {
+          var sel = window.getSelection()
+          range.setStart(el.childNodes[0], caretPos)
+          range.collapse(true)
+          sel.removeAllRanges()
+          sel.addRange(range)
+        }
+      }
     },
     components: {
       SelectPossibleValues
