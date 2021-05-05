@@ -1,7 +1,7 @@
 <template>
   <span :id="'xrlv' + content.uId" class="xrlvmodal">
     <button @click="edit = true" class="btn-none xrlvmodalbtn view">
-      <PreviewContent :content="content" :fx="{'frame': 'inline'}"/>
+      <PreviewContent :content="content" :fx="{'frame': 'inline'}" v-if="content"/>
       <font-awesome-icon icon="external-link-alt"/>
     </button>
     <b-modal v-if="edit" ref="editmodal" :id="'xrlvmodal' + content.uId" title="Querverweis auf Artikel" @hidden="edit = false" @hide="chancelValue" size="lg" modal-class="modal-xl">
@@ -140,6 +140,10 @@
         'subTypAnchor': '',
       }
     },
+    mounted () {
+      this.cFile = this.Files.file.substr(this.Files.file.length - this.Files.file.split('\\').pop().split('/').pop().length)
+      // console.log('XRlvModal', this.content)
+    },
     computed: {
       ...mapState(['Parser']),
       ...mapState(['Files']),
@@ -152,66 +156,6 @@
         })
         return aOut
       }
-    },
-    watch: {
-      'search' (nVal) {
-        this.debouncedSearching()
-      },
-      'selFile' (nVal) {
-        this.changed = true
-        this.selFileEditObj = null
-        if (!nVal) {
-          this.selFileEditObj = this.content.root
-        } else {
-          let aFile = null
-          this.filelist.some(function (af, i) {
-            if (af.file === this.selFile) {
-              aFile = af
-              return true
-            }
-          }, this)
-          if (aFile) {
-            let aFileContent = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
-            this.selFileEditObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aFileContent))
-            this.$set(aFile, 'errors', Object.keys(this.selFileEditObj.errors).length)
-            this.$set(aFile, 'warnings', Object.keys(this.selFileEditObj.warnings).length)
-            this.$set(aFile, 'changed', (this.selFileEditObj.getXML() !== aFileContent))
-            this.$set(aFile, 'loaded', true)
-          }
-        }
-      },
-      'lbl' () { this.changed = true },
-      'txtAnchor' () { this.changed = true },
-      'valAnchor' () { this.changed = true },
-      'typAnchor' () { this.changed = true },
-      'subTypAnchor' () { this.changed = true },
-      'edit' (nVal) {
-        if (nVal) {
-          this.getBaseData()
-          this.updateFileList()
-          this.$nextTick(() => {
-            this.$refs.editmodal.show()
-          })
-        } else {
-          this.selFile = ''
-          this.lbl = ''
-          this.txtAnchor = ''
-          this.valAnchor = ''
-          this.typAnchor = ''
-          this.subTypAnchor = ''
-        }
-      },
-      'refreshSelect' (nVal) {
-        if (nVal) {
-          this.$nextTick(() => {
-            this.refreshSelect = false
-          })
-        }
-      },
-    },
-    mounted () {
-      this.cFile = this.Files.file.substr(this.Files.file.length - this.Files.file.split('\\').pop().split('/').pop().length)
-      console.log('XRlvModal', this.content)
     },
     methods: {
       saveValue () {	// Speichervorgang
@@ -318,9 +262,61 @@
         }
       }, 250),
     },
-    created () {
-    },
-    beforeDestroy () {
+    watch: {
+      'search' (nVal) {
+        this.debouncedSearching()
+      },
+      'selFile' (nVal) {
+        this.changed = true
+        this.selFileEditObj = null
+        if (!nVal) {
+          this.selFileEditObj = this.content.root
+        } else {
+          let aFile = null
+          this.filelist.some(function (af, i) {
+            if (af.file === this.selFile) {
+              aFile = af
+              return true
+            }
+          }, this)
+          if (aFile) {
+            let aFileContent = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
+            this.selFileEditObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aFileContent))
+            this.$set(aFile, 'errors', Object.keys(this.selFileEditObj.errors).length)
+            this.$set(aFile, 'warnings', Object.keys(this.selFileEditObj.warnings).length)
+            this.$set(aFile, 'changed', (this.selFileEditObj.getXML() !== aFileContent))
+            this.$set(aFile, 'loaded', true)
+          }
+        }
+      },
+      'lbl' () { this.changed = true },
+      'txtAnchor' () { this.changed = true },
+      'valAnchor' () { this.changed = true },
+      'typAnchor' () { this.changed = true },
+      'subTypAnchor' () { this.changed = true },
+      'edit' (nVal) {
+        if (nVal) {
+          this.getBaseData()
+          this.updateFileList()
+          this.$nextTick(() => {
+            this.$refs.editmodal.show()
+          })
+        } else {
+          this.selFile = ''
+          this.lbl = ''
+          this.txtAnchor = ''
+          this.valAnchor = ''
+          this.typAnchor = ''
+          this.subTypAnchor = ''
+        }
+      },
+      'refreshSelect' (nVal) {
+        if (nVal) {
+          this.$nextTick(() => {
+            this.refreshSelect = false
+          })
+        }
+      },
     },
     components: {
       ViewPreview,

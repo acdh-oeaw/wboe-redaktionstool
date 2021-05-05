@@ -3,6 +3,7 @@
     <div class="container-fluid">
       <!-- Obere Toolbar -->
       <b-button-toolbar class="main-toolbar">
+        <b-btn @click="toggleCheckAllFiles" title="Alle Dateien prüfen" v-if="devMode"><font-awesome-icon :icon="((checkAllFiles) ? 'check-square' : 'square')" /></b-btn>
         <b-dropdown size="sm" class="mx-1" right text="Developer - Datei" v-if="devMode">
           <b-dropdown-item @click="updateData()"><b>Parser und Datei neu laden</b></b-dropdown-item>
           <b-dropdown-divider></b-dropdown-divider>
@@ -17,6 +18,7 @@
             <span class="float-right bg-warning filechanged" v-if="aFile.changed">C</span>
           </b-dropdown-item>
         </b-dropdown>
+        <b-btn @click="update = true" title="Repaint" v-if="devMode"><font-awesome-icon :icon="'eye'" /></b-btn>
         <b-button-group size="sm" class="mx-1" v-if="devMode">
           <b-btn @click="devNextFile(false)" title="Vorherige Datei"><font-awesome-icon icon="angle-left"/></b-btn>
           <b-btn @click="updateData()" title="Parser und Datei neu laden"><font-awesome-icon icon="sync-alt"/></b-btn>
@@ -169,6 +171,7 @@
 </template>
 
 <script>
+  import _ from 'lodash'
   import { mapState } from 'vuex'
   import ViewXML from './ToolPage/ViewXML'
   import ViewEditor from './ToolPage/ViewEditor'
@@ -199,6 +202,7 @@
         editorObject: null,
         updateTimer: performance.now(),
         devMode: (process.env.NODE_ENV === 'development'),
+        checkAllFiles: false,
         devFiles: null,
         update: false,
         updateScrollTop: null,
@@ -210,6 +214,34 @@
         },
         autoSave: null,
       }
+    },
+    // beforeCreate () {
+    //   this.xmlObject = null
+    //   this.editorObject = null
+    // },
+    mounted () {
+      var t0 = performance.now()
+      this.update = true
+      if (!this.Parser.parser) {
+        this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
+      }
+      if (!this.Files.file) {
+        if (this.devMode && this.Options.lastFile && this.Options.lastFile) {
+          this.$store.dispatch('LOAD_FILE', this.Options.lastFile)		// Datei laden
+        } else {
+          this.$router.push('/home')
+        }
+      }
+      if (!this.Files.file) {
+        this.$router.push('/home')
+      }
+      this.loadData()
+      if (this.devMode) {
+        this.devFiles = this.devFileList()
+      }
+      this.autoSaveFile()
+      console.log('Parser', this.Parser)
+      console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
     },
     computed: {
       ...mapState(['Options']),
@@ -259,41 +291,21 @@
       },
       update (nVal) {
         if (nVal) {
+          this.aTabCach = [this.aTab]
           this.$nextTick(() => {
-            this.update = false
-            this.aTabCach = [this.aTab]
-            this.$nextTick(() => {
-              if (this.updateScrollTop && this.$refs.vieweditorobject) {
-                this.$refs.vieweditorobject.scrollTop = this.updateScrollTop
-                this.updateScrollTop = null
-              }
-            })
+            _.debounce(() => {
+              console.log('Do update! Now!')
+              this.update = false
+              this.$nextTick(() => {
+                if (this.updateScrollTop && this.$refs.vieweditorobject) {
+                  this.$refs.vieweditorobject.scrollTop = this.updateScrollTop
+                  this.updateScrollTop = null
+                }
+              })
+            }, 150)()
           })
         }
       },
-    },
-    mounted () {
-      var t0 = performance.now()
-      this.update = true
-      if (!this.Parser.parser) {
-        this.$store.dispatch('LOAD_PARSER_FILE')		// Parser Datei laden und Parser Objekt erstellen
-      }
-      if (!this.Files.file) {
-        if (this.devMode && this.Options.lastFile && this.Options.lastFile) {
-          this.$store.dispatch('LOAD_FILE', this.Options.lastFile)		// Datei laden
-        } else {
-          this.$router.push('/home')
-        }
-      }
-      if (!this.Files.file) {
-        this.$router.push('/home')
-      }
-      this.loadData()
-      if (this.devMode) {
-        this.devFiles = this.devFileList()
-      }
-      this.autoSaveFile()
-      console.log('ToolPage mounted - ' + Math.ceil(performance.now() - t0) + ' ms.')
     },
     methods: {
       pdfExport () {
@@ -398,6 +410,10 @@
           this.xmlEditorLocked = false
         }
       },
+      toggleCheckAllFiles () {
+        this.checkAllFiles = !this.checkAllFiles
+        this.devFiles = this.devFileList()
+      },
       devFileList () {
         let t0 = performance.now()
         let aFiles = []
@@ -408,9 +424,13 @@
             if (!fs.statSync(aFullFileName).isDirectory()) {
               let aExt = file.split('.').pop()
               if (aExt === 'xml' && file.substr(0, 6) !== 'parser') {
-                let aFileContent = fs.readFileSync(aFullFileName, 'utf8').replace(/\r/gmi, '')
-                let editorObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aFileContent))
-                aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML() !== aFileContent) })
+                if (this.checkAllFiles) {
+                  let aFileContent = fs.readFileSync(aFullFileName, 'utf8').replace(/\r/gmi, '')
+                  let editorObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aFileContent))
+                  aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': Object.keys(editorObj.errors).length, 'warnings': Object.keys(editorObj.warnings).length, 'changed': (editorObj.getXML() !== aFileContent) })
+                } else {
+                  aFiles.push({ 'file': file, 'fullFileName': aFullFileName, 'errors': 0, 'warnings': 0, 'changed': false })
+                }
               }
             }
           }, this)
@@ -482,7 +502,7 @@
     updated () {
       let aUpdDur = Math.ceil(performance.now() - this.updateTimer)
       if (aUpdDur > 50) {
-        console.log('updated: ' + aUpdDur + ' ms.')
+        console.log('ToolPage - updated: ' + aUpdDur + ' ms.')
       }
     },
     beforeDestroy () {
@@ -624,6 +644,8 @@
     text-overflow: ellipsis;
     direction: rtl;
     text-align: left;
+    height: 100%;
+    padding: 0.45rem 0.5rem;
   }
 
   a.dropdown-item.warning {
@@ -642,7 +664,6 @@
   .tip-line {
     color: #aaa;
     margin: 0 20px;
-    margin-top: 1px;
     overflow: hidden;
     white-space: nowrap;
     direction: rtl;

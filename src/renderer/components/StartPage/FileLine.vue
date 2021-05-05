@@ -1,106 +1,117 @@
 <template>
-  <div :class="'file' + ((path && isOpen) ? ' open' : '')">
-
-    <div class="pathline" v-if="path">
-      <button @click="toggleMe()" :title="path.fullFileName" :class="(Files.file && Files.file.indexOf(path.fullFileName) === 0) ? 'active' : ''">
-        <span class="path"><font-awesome-icon :icon="((isOpen) ? 'folder-open' : 'folder')" class="mir5"/>{{ path.file }}</span>
-        <span class="foldercontent" v-if="Files.paths[path.fullFileName]">
-          <span class="info">{{ Files.paths[path.fullFileName].files.length.toLocaleString() }} <font-awesome-icon icon="file"/></span>
-          <span class="info">{{ Files.paths[path.fullFileName].paths.length.toLocaleString() }} <font-awesome-icon icon="folder"/></span>
-        </span>
-        <span class="foldercontent unknown" v-else><span class="info">? <font-awesome-icon icon="file"/></span><span class="info">? <font-awesome-icon icon="folder"/></span></span>
-      </button>
-      <div class="subdata" v-if="isOpen && Files.paths[path.fullFileName]">
-        <FileLine :path="sPath" @loading="loading" @new="newFile" v-for="(sPath, fKey) in Files.paths[path.fullFileName].paths" :key="'path-' + fKey" :base="path.fullFileName"/>
-        <button @click="$emit('new', path.fullFileName)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk"/><span>Neue Datei erstellen ...</span></button>
-        <FileLine :file="sFile" @loading="loading" @new="newFile" v-for="(sFile, fKey) in Files.paths[path.fullFileName].files" :key="'file-' + fKey" :base="path.fullFileName"/>
+  <div :class="'file' + ((fileobject.isDir && fileobject.isOpen) ? ' open' : '')">
+    <div v-if="fileobject.firstFile">
+      <button @click="$emit('new', fileobject.path)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk"/><span>Neue Datei erstellen ...</span></button>
+    </div>
+    <template v-if="!fileobject.file">
+      <FileLine :fileobject="fObj" @loadfile="loadFileE" :filesystem="filesystem" @new="newFile" v-for="(fObj, fKey) in fileobject.children" :key="'fl' + fKey" />
+    </template>
+    <template v-else>
+      <div class="pathline" v-if="fileobject.isDir">
+        <button @click="toggleMe" :title="fileobject.fullFileName" :class="(Files.file && Files.file.indexOf(fileobject.fullFileName) === 0) ? 'active' : ''">
+          <span class="path"><font-awesome-icon :icon="((fileobject.isOpen) ? 'folder-open' : 'folder')" class="mir5"/>{{ fileobject.file }}</span>
+          <span class="foldercontent" v-if="!fileobject.update">
+            <span class="info">{{ fileobject.children.filter((fO) => !fO.isDir).length.toLocaleString() }} <font-awesome-icon icon="file"/></span>
+            <span class="info">{{ fileobject.children.filter((fO) => fO.isDir).length.toLocaleString() }} <font-awesome-icon icon="folder"/></span>
+          </span>
+          <span class="foldercontent unknown" v-else-if="fileobject.isOpen"><span class="info"><font-awesome-icon icon="sync-alt"/></span></span>
+          <span class="foldercontent unknown" v-else><span class="info">? <font-awesome-icon icon="file"/></span><span class="info">? <font-awesome-icon icon="folder"/></span></span>
+        </button>
+        <div class="subdata" v-if="fileobject.isOpen && !fileobject.update">
+          <FileLine :fileobject="fObj" @loadfile="loadFileE" :filesystem="filesystem" @new="newFile" v-for="(fObj, fKey) in fileobject.children" :key="'fl' + fKey" />
+          <div v-if="fileobject.children.length === 0">
+            <button @click="$emit('new', fileobject.fullFileName)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk"/><span>Neue Datei erstellen ...</span></button>
+          </div>
+        </div>
+        <div class="subdata" v-else-if="fileobject.isOpen">
+          Lade Verzeichniss ...
+        </div>
       </div>
-    </div>
-
-    <div class="fileline" v-if="file">
-      <button :id="'fl-' + _uid" @click="loadFile()" :title="file.fullFileName" :class="(isActiveFile ? 'active' : '') + (isParser ? ' italic' : '')">
-        <span class="file"><font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5"/>{{ file.file }}</span>
-        <span class="filesize" v-if="!file.isDir">{{ file.size | prettyBytes }}</span>
-        <span class="info" v-if="file.info">
-          <span v-if="file.info.changed" style="color:#9a0000;"><b>Anpassen!</b></span>
-          <span>Fehler: <b>{{ file.info.errors }}</b></span>
-          <span>Warnungen: <b>{{ file.info.warnings }}</b></span>
-          <span :id="'fl-c-' + _uid">Kommentare: <b>{{ file.info.comments }}</b></span>
-        </span>
-        <span class="info" v-if="file.sInfo">
-          <span><b>{{ file.sInfo.status }}</b></span>
-          <span style="width:150px;"><b>{{ file.sInfo.editor }}</b></span>
-          <span style="width:40px;"><b>{{ file.sInfo.version }}</b></span>
-        </span>
-        <b-tooltip :target="'fl-c-' + _uid" placement="topleft" triggers="hover" class="tooltipcomment" v-if="file.info && file.info.comments > 0">
-          <ul class="comment-list-el">
-            <li class="comment-el" v-for="(aCommentObj, aComObjKey) in file.info.commentsObj" :key="'flcott' + _uid + '-' + aComObjKey">
-              {{ aCommentObj.title }}
-              <ul class="comment-list">
-                <li class="comment-el" v-for="(aComment, aComKey) in aCommentObj.comments" :key="'flcott' + _uid + '-' + aComObjKey + '-' + aComKey">
-                  {{ aComment.val }}
-                </li>
-              </ul>
-            </li>
-          </ul>
-        </b-tooltip>
-      </button>
-    </div>
-
+      <div class="fileline" v-else>
+        <button :id="'fl-' + _uid" @click="loadFile()" :title="fileobject.fullFileName" :class="(isActiveFile ? 'active' : '') + (isParser ? ' italic' : '')">
+          <span class="file"><font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5"/>{{ fileobject.file }}</span>
+          <span class="filesize">{{ fileobject.size | prettyBytes }}</span>
+          <span class="info" v-if="fileobject.info">
+            <span v-if="fileobject.info.changed" style="color:#9a0000;"><b>Anpassen!</b></span>
+            <span>Fehler: <b>{{ fileobject.info.errors }}</b></span>
+            <span>Warnungen: <b>{{ fileobject.info.warnings }}</b></span>
+            <span :id="'fl-c-' + _uid">Kommentare: <b>{{ fileobject.info.comments }}</b></span>
+          </span>
+          <span class="info" v-if="fileobject.loading">
+            <span><font-awesome-icon icon="sync-alt"/></span>
+          </span>
+          <span class="info" v-if="fileobject.sInfo && !fileobject.loading">
+            <span :id="'fl-err-' + _uid" style="width:120px; color: red;" v-if="fileobject.sInfo && fileobject.sInfo.errors && fileobject.sInfo.errors.length > 0"><b>Fehler: {{ fileobject.sInfo.errors.length }}</b></span>
+            <span style="width:120px;"><b>{{ fileobject.sInfo.status }}</b></span>
+            <span style="width:150px;"><b>{{ fileobject.sInfo.editor }}</b></span>
+            <span style="width:50px;"><b>{{ fileobject.sInfo.version }}</b></span>
+            <span style="width:70px;"><b>{{ fileobject.sInfo.parserVersion }}</b></span>
+            <span :id="'fl-c-' + _uid" style="width:40px; text-align: right;"><b>{{ fileobject.sInfo.comments && fileobject.sInfo.comments.length }}</b></span>
+          </span>
+          <b-tooltip :target="'fl-c-' + _uid" placement="topleft" triggers="hover" class="tooltipcomment" v-if="fileobject.sInfo && fileobject.sInfo.comments && fileobject.sInfo.comments.length > 0">
+            <ul class="comment-list-el">
+              <li class="comment-el" v-for="(aComment, aComKey) in fileobject.sInfo.comments" :key="'flcott' + _uid + '-' + aComKey">
+                {{ aComment }}
+              </li>
+            </ul>
+          </b-tooltip>
+          <b-tooltip :target="'fl-err-' + _uid" placement="topright" triggers="hover" class="tooltipcomment" v-if="fileobject.sInfo && fileobject.sInfo.errors && fileobject.sInfo.errors.length > 0">
+            <ul class="comment-list-el">
+              <li class="comment-el" v-for="(aErr, aErrKey) in fileobject.sInfo.errors" :key="'flcerr' + _uid + '-' + aErrKey">
+                {{ aErr.split('\n').join(' | ') }}
+              </li>
+            </ul>
+          </b-tooltip>
+        </button>
+      </div>
+    </template>
   </div>
 </template>
 
 <script>
   import { mapState } from 'vuex'
-  import _ from 'lodash'
 
   export default {
     name: 'FileLine',
     props: {
-      base: String,
-      file: Object,
-      path: Object
+      fileobject: Object,
+      filesystem: Object
+    },
+    mounted () {
+      // console.log(this.fileobject)
     },
     computed: {
       ...mapState(['Files']),
-      ...mapState(['Options']),
       isParser () {
-        if (this.file) {
-          return (this.file.file.substr(0, 6) === 'parser')
-        }
-      },
-      isOpen () {
-        if (this.path) {
-          return this.Files.paths[this.path.fullFileName] && this.Files.paths[this.path.fullFileName].isOpen
+        if (this.fileobject.file) {
+          return (this.fileobject.file.substr(0, 6) === 'parser')
         }
       },
       isActiveFile () {
-        if (this.file) {
-          return this.Files.file === this.file.fullFileName
+        if (this.fileobject.file) {
+          return this.Files.file === this.fileobject.fullFileName
         }
       },
     },
     methods: {
       toggleMe () {		// Verzeichniss öffnen/schließen
-        this.$store.dispatch('TOGGLE_OPEN', {path: this.path.fullFileName})
+        if (!this.fileobject.isOpen) {
+          this.filesystem.openPath(this.fileobject)
+        } else {
+          this.fileobject.isOpen = false
+        }
       },
-      loading () {
-        this.$emit('loading')
+      loadFileE (d) {
+        this.$emit('loadfile', d)
       },
       loadFile () {		// Lade Datei
         if (!this.isParser) {
-          this.$emit('loading')
-          this.debouncedLoadFile()
+          this.$emit('loadfile', this.fileobject.fullFileName)
         }
       },
       newFile (nf) {
         this.$emit('new', nf)
-      },
-      debouncedLoadFile: _.debounce(function () {		// Verzögert öffnen damit "Laden ..." angezeigt wird
-        this.$store.dispatch('LOAD_FILE', this.file.fullFileName)		// Datei laden
-        // Nur Tool öffnen wenn Datei lesbar!
-        this.$router.push('/tool')		// Tool öffnen
-      }, 50),
+      }
     }
   }
 </script>
@@ -155,6 +166,8 @@
     float: right;
     font-size: 12px;
     min-width: 100px;
+    margin-top: 3px;
+    text-align: right;
   }
   .foldercontent.unknown {
     color: #999;

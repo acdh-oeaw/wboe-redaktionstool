@@ -6,44 +6,12 @@
     <ErrorCard :error="object.warnings" title="Warnung" variant="warning" :closed="!Options.show.warnings" @goto="goToObject"/>
     <div v-if="object.contentObj">
       <div v-if="(object.errors && length(object.errors) > 0) || (object.orgXmlObj.errors && length(object.orgXmlObj.errors) > 0) || (object.parserObj.errors && length(object.parserObj.errors) > 0)">Bearbeiten nicht möglich!</div>
-      <ViewEditor :content="object.contentObj" :view="this" @setTipLine="setTipLine" v-else/>
+      <ViewEditorContent :content="object.contentObj" :view="this" @setTipLine="setTipLine" v-else/>
     </div>
     <div v-else>
       Keine Content-Daten vorhanden
     </div>
   </div>
-
-  <EditorObjFrame @setTipLine="setTipLine" :content="content" :view="view" v-else-if="content">
-    <template  v-if="showAttributeBefore">
-      <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in showAttributeBefore"/>
-    </template>
-
-    <span :style="'line-height' + Options.options.lineHeight + ';'"
-          :class="
-              'val-fix' +
-              (content.parserObj.options.get('layout.bold') ? ' bold' : '') +
-              (content.parserObj.options.get('layout.italic') ? ' italic' : '') +
-              (content.parserObj.options.get('layout.underline') ? ' underline' : '') +
-              (content.parserObj.options.get('layout.ls1pt') ? ' ls1pt' : '')
-          " v-if="valueType === 'fix'">
-      {{ content.orgXmlObj.getValueByOption(this.content.parserObj.options.get('value'), false) }}
-    </span>
-    <GeoSelect     :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'GeoSelect'"/>
-    <RefBiblSelect :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'RefBiblSelect'"/>
-    <XRlvModal     :content="content" v-else-if="content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction.name') === 'XRlvModal'"/>
-    <EditableValue :content="content" v-else-if="valueType === 'editable'"/>
-
-    <template slot="childs" v-if="content.childs.length > 0 && !(content.parserObj && content.parserObj.options && content.parserObj.options.get('editor.fxFunction'))">
-      <ViewEditor ref="childs" :view="view" :content="aContent" @setTipLine="setTipLine"
-        v-for="(aContent, aKey) in contentChildsShown"
-        :key="aContent.uId + '-' + aKey"
-      />
-    </template>
-
-    <template slot="after" v-if="showAttributeAfter">
-      <InlineAttributes :content="content" :attrOpt="attrOpt" :attrKey="attrKey" :key="content.uId + '-attr-' + attrKey" v-for="(attrOpt, attrKey) in showAttributeAfter"/>
-    </template>
-  </EditorObjFrame>
 
   <div class="error" v-else>
     Kein "object" übergeben !!!!
@@ -52,15 +20,8 @@
 
 <script>
   import { mapState } from 'vuex'
-  import ErrorContent from './general/ErrorContent'
   import ErrorCard from './general/ErrorCard'
-  import EditorObjFrame from './ViewEditor/EditorObjFrame'
-  import EditableValue from './ViewEditor/EditableValue'
-  import InlineAttributes from './ViewEditor/InlineAttributes'
-  // fxFunctions
-  import GeoSelect from './ViewEditor/fxFunctions/GeoSelect'
-  import RefBiblSelect from './ViewEditor/fxFunctions/RefBiblSelect'
-  import XRlvModal from './ViewEditor/fxFunctions/XRlvModal'
+  import ViewEditorContent from './ViewEditor/ViewEditorContent'
 
   import _ from 'lodash'
 
@@ -78,47 +39,12 @@
         'warningsOpen': true,
       }
     },
-    computed: {
-      ...mapState(['Options']),
-      valueType () {		// Ist der aktuelle Wert 'fix', 'editable' oder 'none'?
-        if (this.content.parserObj.options && this.content.parserObj.options.get('value')) {
-          if (!this.content.parserObj.options.get('value.edit.use')) {
-            return 'fix'
-          }
-          return 'editable'
-        }
-        return 'none'
-      },
-      contentChildsShown () {
-        let aOut = []
-        this.content.childs.forEach((aObj) => {
-          if (this.showObj(aObj)) {
-            aOut.push(aObj)
-          }
-        })
-        return aOut
-      },
-      showAttributeBefore () {
-        return this.content.parserObj.options && this.content.parserObj.options.get('layout.showAttributeBefore')
-      },
-      showAttributeAfter () {
-        return this.content.parserObj.options && this.content.parserObj.options.get('layout.showAttributeAfter')
-      }
-    },
-    watch: {
-    },
     mounted () {
     },
+    computed: {
+      ...mapState(['Options']),
+    },
     methods: {
-      showObj (obj) {		// Soll das Element angezeigt werden?
-        if (obj && obj.orgXmlObj
-        && (obj.parserObj && obj.parserObj.ready && obj.parserObj.useable)
-        && (obj.orgXmlObj.type === 'TEXT' || obj.orgXmlObj.type === 'ELEMENT')
-        && !(obj.parserObj.options && obj.parserObj.options.get('layout.hidden'))) {
-          return true
-        }
-        return false
-      },
       length (val) {
         if (Array.isArray(val)) {
           return val.length
@@ -163,14 +89,8 @@
       },
     },
     components: {
-      ErrorContent,
       ErrorCard,
-      EditorObjFrame,
-      EditableValue,
-      InlineAttributes,
-      GeoSelect,
-      RefBiblSelect,
-      XRlvModal,
+      ViewEditorContent,
     },
   }
 </script>

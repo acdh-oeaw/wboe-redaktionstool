@@ -1,6 +1,6 @@
 <template>
   <div :id="'eo' + content.uId" :class="'inline' + ((this.DragNdrop.dragUid === this.content.uId) ? ' dragobj' : '') + ((isDragTarget) ? ' dragtarget' : '') + ((dragDir) ? ' dragpos-' + dragDir : '')"
-      :style="'font-size: ' + ((cParserOptions && cParserOptions.get('layout.fontsize')) ? cParserOptions.get('layout.fontsize') : 100) + '%;'"
+      :style="fontSize ? 'font-size: ' + fontSize + '%;' : null"
       :draggable="isDraggable"
       @mouseenter="mouseEnter"
       @mouseleave="mouseLeave"
@@ -11,30 +11,30 @@
       v-on:drop="drop"
     >
     <!-- Vor Inhalten -->
-    <div v-if="this.content.count > 0 && cParserObj && cParserOptions && cParserOptions.get('layout.newlineIfNotFirst')"/>
-    <div :style="'height: ' + cParserOptions.get('layout.spaceTopBefore') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceTopBefore')"></div>
-    <div :class="'h' + (cParserOptions.get('layout.headerTopSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions && cParserOptions.get('layout.headerTop')">{{ cParserOptions.get('layout.headerTop') }}</div>
+    <div v-if="this.content.count > 0 && cParserObj && cParserOptionsGet('layout.newlineIfNotFirst')"/>
+    <div :style="'height: ' + cParserOptions.getOption('layout.spaceTopBefore') + 'px'" v-if="cParserOptionsGet('layout.spaceTopBefore')"></div>
+    <div :class="'h' + (cParserOptions.getOption('layout.headerTopSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptionsGet('layout.headerTop')">{{ cParserOptions.getOption('layout.headerTop') }}</div>
 
-    <template v-if="content.isMultiple && content.multipleNr === 0 && cParserOptions && cParserOptions.get('layout.multiple.use')">
-      <div :style="'height: ' + cParserOptions.get('layout.multiple.spaceBefore') + 'px'" v-if="cParserOptions.get('layout.multiple.spaceBefore')"></div>
-      <div :class="'h' + (cParserOptions.get('layout.multiple.headerSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions.get('layout.multiple.header')">{{ cParserOptions.get('layout.multiple.header') }}</div>
-      <span class="before" v-if="cParserOptions.get('layout.multiple.before')">{{ cParserOptions.get('layout.multiple.before') }}</span>
+    <template v-if="content.isMultiple && content.multipleNr === 0 && cParserOptionsGet('layout.multiple.use')">
+      <div :style="'height: ' + cParserOptions.getOption('layout.multiple.spaceBefore') + 'px'" v-if="cParserOptions.getOption('layout.multiple.spaceBefore')"></div>
+      <div :class="'h' + (cParserOptions.getOption('layout.multiple.headerSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions.getOption('layout.multiple.header')">{{ cParserOptions.getOption('layout.multiple.header') }}</div>
+      <span class="before" v-if="cParserOptions.getOption('layout.multiple.before')">{{ cParserOptions.getOption('layout.multiple.before') }}</span>
     </template>
 
-    <div :style="'height: ' + cParserOptions.get('layout.spaceBefore') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceBefore')"></div>
-    <div :class="'h' + (cParserOptions.get('layout.headerSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptions && cParserOptions.get('layout.header')">{{ cParserOptions.get('layout.header') }}</div>
-    <span class="before" v-if="cParserOptions && cParserOptions.get('layout.before') && !cParserOptions.get('layout.fxPreview')">{{ cParserOptions.get('layout.before') }}</span>
+    <div :style="'height: ' + cParserOptions.getOption('layout.spaceBefore') + 'px'" v-if="cParserOptionsGet('layout.spaceBefore')"></div>
+    <div :class="'h' + (cParserOptions.getOption('layout.headerSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptionsGet('layout.header')">{{ cParserOptions.getOption('layout.header') }}</div>
+    <span class="before" v-if="cParserOptionsGet('layout.before') && !cParserOptions.getOption('layout.fxPreview')">{{ cParserOptions.getOption('layout.before') }}</span>
 
 
     <!-- Inhalte -->
     <div :class="'obj just-childs' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-if="layoutBase === 'justChilds'">
       <span :class="
                 'enumerate' + 
-                ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
+                ((cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
                 ((content.parserCopyDeep >= 3) ? ' deeper' : '')
             " v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
-      <slot name="childs"/>		<!-- Kinder -->
-      <slot name="after"/>
+      <slot name="childs" />		<!-- Kinder -->
+      <slot name="after" />
     </div>
 
     <b-card :class="'obj paneldecent mitb5' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else-if="layoutBase === 'panel'" no-body>
@@ -42,7 +42,7 @@
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
           <span :class="
                     'enumerate' +
-                    ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
+                    ((cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
                     (content.parserCopyDeep >= 3 ? ' deeper' : '')
                 " v-if="enumerate">{{ enumerate }}&nbsp;</span>
           <span><b>{{ title }}</b>&nbsp;</span>
@@ -86,7 +86,7 @@
       <div @contextmenu.prevent="contextMenue" class="context rel">
         <span :class="
                   'enumerate' +
-                  ((cParserOptions.get('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
+                  ((cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
                   ((content.parserCopyDeep >= 3) ? ' deeper' : '')
               " v-if="enumerate">{{ enumerate }}&nbsp;</span>
         <b v-if="shownTitle">{{ shownTitle }}:</b><br v-if="shownTitle && layoutBase === 'box'"/>
@@ -100,37 +100,36 @@
                     @focus="showAddableButtons('In')"
                     @blur="hideAddableButtons($event, 'In')"
                     ref="addableInButton"
-                    :variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
-            <font-awesome-icon icon="circle-notch" class="fa-icon"/>
-          </b-button>
+                    class="btn-icon-circle-notch-white"
+                    :variant="((addableInButtons[0].type === 'self') ? 'success' : ((addableInButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))"
+          />
           <div class="addable-in-btns" ref="addableInButtonsFrame" :style="'left:' + inAfterFrameLeft + 'px'" v-if="isOpenAdditionalAddInBtn && !this.DragNdrop.dragUid">
             <b-button @click="addTag(aVal.uId, 'In')" @blur="hideAddableButtons($event, 'In')" size="xs"
                       :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))"
-                      :class="(aKey === addableInButtons.length - 1 ? 'first' : '')"
+                      :class="(aKey === addableInButtons.length - 1 ? 'first' : null)"
                       :key="'aib' + aKey" ref="addableInButtons"	v-for="(aVal, aKey) in addableInButtons.slice().reverse()">
-              <font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }}
+              <font-awesome-icon icon="circle-notch" class="fa-icon"/> {{ aVal.title }} <span :class="'shortcut' + (aVal.sort < 99999 ? ' sorted' : '')" v-if="addableInButtons.length - aKey < 10">{{ addableInButtons.length - aKey }}</span>
             </b-button>
           </div>
         </div>
       </div>
-      <slot name="childs"/>		<!-- Kinder -->
-      <slot name="after"/>
+      <slot name="childs" />
+      <slot name="after" />
       <div @contextmenu.prevent="contextMenue" :class="'addable-after-btn' + (layoutBase !== 'box' ? ' inline' : '')"
             v-if="addableAfterButtons.length > 0">
         <div class="inline-block" @mouseenter="Options.options.addBtnHover ? showAddableButtons('After') : null" @mouseleave="Options.options.addBtnHover ? hideAddableButtons($event, 'After') : null">
-          <b-button @click="Options.options.addBtnHover ? addTag(addableAfterButtons[0].uId, 'After') : showAddableButtons('After')" size="xs"
-                    @focus="showAddableButtons('After')"
-                    @blur="hideAddableButtons($event, 'After')"
-                    ref="addableAfterButton"
-                    :variant="((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary'))">
-            <font-awesome-icon icon="plus" class="fa-icon"/>
-          </b-button>
+          <button @click="Options.options.addBtnHover ? addTag(addableAfterButtons[0].uId, 'After') : showAddableButtons('After')" size="xs"
+                  @focus="showAddableButtons('After')"
+                  @blur="hideAddableButtons($event, 'After')"
+                  ref="addableAfterButton"
+                  :class="'btn btn-icon-plus-white btn-' + ((addableAfterButtons[0].type === 'self') ? 'success' : ((addableAfterButtons[0].type === 'anywhere') ? 'secondary' : 'primary')) + ' btn-xs'"
+          />
           <div class="addable-after-btns" ref="addableAfterButtonsFrame" :style="'left:' + inAfterFrameLeft + 'px'" v-if="isOpenAdditionalAddAfterBtn && !this.DragNdrop.dragUid">
             <b-button @click="addTag(aVal.uId, 'After')" @blur="hideAddableButtons($event, 'After')" size="xs"
                       :variant="((aVal.type === 'self') ? 'success' : ((aVal.type === 'anywhere') ? 'secondary' : 'primary'))"
                       :class="(aKey === addableAfterButtons.length - 1 ? 'first' : '')"
                       :key="'aab' + aKey" ref="addableAfterButtons"	v-for="(aVal, aKey) in addableAfterButtons.slice().reverse()">
-              <font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }}
+              <font-awesome-icon icon="plus" class="fa-icon"/> {{ aVal.title }} <span :class="'shortcut' + (aVal.sort < 99999 ? ' sorted' : '')" v-if="addableAfterButtons.length - aKey < 10">{{ addableAfterButtons.length - aKey }}</span>
             </b-button>
           </div>
         </div>
@@ -139,19 +138,19 @@
 
 
     <!-- Nach Inhalten -->
-    <span class="join" v-if="content.isMultiple && !content.multipleLast && cParserOptions.get('layout.multiple.use') && cParserOptions.get('layout.multiple.join')">
-      {{ (cParserOptions.get('layout.multiple.lastjoin') && content.multipleNr === content.multipleMax - 1) ? cParserOptions.get('layout.multiple.lastjoin') : cParserOptions.get('layout.multiple.join') }}
+    <span class="join" v-if="content.isMultiple && !content.multipleLast && cParserOptions.getOption('layout.multiple.use') && cParserOptions.getOption('layout.multiple.join')">
+      {{ (cParserOptions.getOption('layout.multiple.lastjoin') && content.multipleNr === content.multipleMax - 1) ? cParserOptions.getOption('layout.multiple.lastjoin') : cParserOptions.getOption('layout.multiple.join') }}
     </span>
 
-    <span class="after" v-if="cParserOptions && cParserOptions.get('layout.after') && !cParserOptions.get('layout.fxPreview')">{{ cParserOptions.get('layout.after') }}</span>
-    <div class="h4" v-if="cParserOptions && cParserOptions.get('layout.footer')">{{ cParserOptions.get('layout.footer') }}</div>
-    <div :style="'height: ' + cParserOptions.get('layout.spaceAfter') + 'px'" v-if="cParserOptions && cParserOptions.get('layout.spaceAfter')"></div>
+    <span class="after" v-if="cParserOptionsGet('layout.after') && !cParserOptions.getOption('layout.fxPreview')">{{ cParserOptions.getOption('layout.after') }}</span>
+    <div class="h4" v-if="cParserOptionsGet('layout.footer')">{{ cParserOptions.getOption('layout.footer') }}</div>
+    <div :style="'height: ' + cParserOptions.getOption('layout.spaceAfter') + 'px'" v-if="cParserOptionsGet('layout.spaceAfter')"></div>
 
-    <template v-if="content.isMultiple && content.multipleLast && cParserOptions.get('layout.multiple.use')">
-      <span class="after" v-if="cParserOptions.get('layout.multiple.after')">{{ cParserOptions.get('layout.multiple.after') }}</span>
-      <br v-if="cParserOptions.get('layout.multiple.lastBR')"/>
-      <div class="h4" v-if="cParserOptions.get('layout.multiple.footer')">{{ cParserOptions.get('layout.multiple.footer') }}</div>
-      <div :style="'height: ' + cParserOptions.get('layout.multiple.spaceAfter') + 'px'" v-if="cParserOptions.get('layout.multiple.spaceAfter')"></div>
+    <template v-if="content.isMultiple && content.multipleLast && cParserOptions.getOption('layout.multiple.use')">
+      <span class="after" v-if="cParserOptions.getOption('layout.multiple.after')">{{ cParserOptions.getOption('layout.multiple.after') }}</span>
+      <br v-if="cParserOptions.getOption('layout.multiple.lastBR')"/>
+      <div class="h4" v-if="cParserOptions.getOption('layout.multiple.footer')">{{ cParserOptions.getOption('layout.multiple.footer') }}</div>
+      <div :style="'height: ' + cParserOptions.getOption('layout.multiple.spaceAfter') + 'px'" v-if="cParserOptions.getOption('layout.multiple.spaceAfter')"></div>
     </template>
 
 
@@ -207,138 +206,34 @@
         inAfterFrameLeft: 0
       }
     },
-    computed: {
-      ...mapState(['DragNdrop']),
-      ...mapState(['Options']),
-      hasComment () {
-        return this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0
-      },
-      cParserObj () {
-        return this.content.parserObj
-      },
-      cParserOptions () {
-        return this.content.parserObj.options
-      },
-      isDragTarget () {
-        if (this.DragNdrop.dragUid) {
-          if (this.$el && this.$el.closest('.dragobj')) {
-            return false
-          }
-          return this.DragNdrop.dragUid !== this.content.uId && this.DragNdrop.dragParserUid === this.cParserObj.uId
-        } else {
-          return false
-        }
-      },
-      isDraggable () {
-        return this.content.isMultiple && this.cParserOptions && this.cParserOptions.get('editor.draggAble')
-      },
-      layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
-        if (this.content.isRoot) { return 'justChilds' }
-        if (this.cParserOptions && this.cParserOptions.get('layout.frame')) {
-          if (this.cParserOptions.get('layout.frame') === 'panelClosed') {
-            this.isOpen = false
-            return 'panel'
-          }
-          return this.cParserOptions.get('layout.frame')
-        }
-        return 'panel'
-      },
-      title () {
-        if (this.cParserOptions) {
-          if (this.cParserOptions.getResult('title')) {
-            return this.cParserOptions.getResult('title')
-          } else if (this.cParserOptions.get('tagAsTitle') || this.layoutBase === 'panel') {
-            return this.content.orgXmlObj.name
-          }
-        }
-        return null
-      },
-      shownTitle () {
-        if (this.cParserOptions && !this.cParserOptions.get('layout.hideTitle')) {
-          return this.title
-        }
-        return null
-      },
-      addableAfterButtons () {
-        let outAddable = []
-        if (this.content.addableAfter) {
-          this.content.addableAfter.forEach(function (aA) {
-            if (aA.bShow) {
-              outAddable.push(aA)
-            }
-          }, this)
-        }
-        return outAddable
-      },
-      addableInButtons () {
-        let outAddable = []
-        if (this.content.addableInner) {
-          this.content.addableInner.forEach(function (aA) {
-            if (aA.bShow) {
-              outAddable.push(aA)
-            }
-          }, this)
-        }
-        return outAddable
-      },
-      enumerate () {
-        if (this.cParserOptions && this.content.isMultiple) {
-          if (this.cParserOptions.get('layout.multiple.enumerateFX')) {
-            if (this.content.parserCopyDeep === 0) {
-              return this.num2rom(this.content.multipleNr + 1) + '. '
-            } else if (this.content.parserCopyDeep === 1) {
-              return this.content.multipleNr + 1 + '. '
-            } else if (this.content.parserCopyDeep === 2) {
-              return this.num2abc(this.content.multipleNr + 1) + ') '
-            } else if (this.content.parserCopyDeep >= 3) {
-              return this.num2abc(this.content.multipleNr + 1, 'α', 25) + ') '
-            }
-          }
-          if (this.cParserOptions.get('layout.multiple.enumerateRom')) {
-            return this.num2rom(this.content.multipleNr + 1) + '. '
-          }
-          if (this.cParserOptions.get('layout.multiple.enumerate')) {
-            return this.content.multipleNr + 1 + '. '
-          }
-        }
-      },
-      contentAddableInnerBShow () {
-        let aOut = []
-        this.content.addableInner.forEach((aObj) => {
-          if (aObj.bShow) {
-            aOut.push(aObj)
-          }
-        })
-        return aOut
-      },
-      contentAddableAfterBShow () {
-        let aOut = []
-        this.content.addableAfter.forEach((aObj) => {
-          if (aObj.bShow) {
-            aOut.push(aObj)
-          }
-        })
-        return aOut
-      }
+    mounted () {
+      // console.log('x')
     },
-    watch: {
-      'commentObj' (nVal) {
-        if (nVal) {
-          console.log(nVal)
-          this.commentNewVal = ''
-          this.$nextTick(() => {
-            this.$refs.commentModal.show()
-          })
-        }
-      },
-      'isOpenAdditionalAddAfterBtn' (nVal) {
-        this.isOpenAdditionalAddInAfterBtn(nVal, 'addableAfterButtons')
-      },
-      'isOpenAdditionalAddInBtn' (nVal) {
-        this.isOpenAdditionalAddInAfterBtn(nVal, 'addableInButtons')
-      },
+    created () {
+      window.addEventListener('keyup', this.keyUp)
+    },
+    beforeDestroy () {
+      window.removeEventListener('keyup', this.keyUp)
     },
     methods: {
+      keyUp (e) {
+        if (this.isOpenAdditionalAddAfterBtn || this.isOpenAdditionalAddInBtn) {
+          if (e.keyCode >= 49 && e.keyCode <= 57) {
+            e.preventDefault()
+            let aRef = this.$refs[this.isOpenAdditionalAddAfterBtn ? 'addableAfterButtons' : 'addableInButtons']
+            if (aRef && aRef.length >= e.keyCode - 48) {
+              let aBtn = aRef[aRef.length - (e.keyCode - 48)]
+              // console.log(e.keyCode - 48, {x: aBtn})
+              if (aBtn) {
+                aBtn.click()
+              }
+            }
+          }
+        }
+      },
+      cParserOptionsGet (opt) {
+        return this.cParserOptions && this.cParserOptions.getOption(opt)
+      },
       isOpenAdditionalAddInAfterBtn (nVal, inAfter) {
         if (nVal) {
           this.inAfterFrameLeft = 0
@@ -497,9 +392,9 @@
           let aTipLine = ''
           if (this.content && this.content.orgXmlObj && this.content.orgXmlObj.parents) {
             aTipLine += this.content.parents.slice(0).reverse().map(function (x) {
-              return x.orgXmlObj.name + ' (' + x.parserObj.uId + ((x.parserObj.options && x.parserObj.options.get('id')) ? ', ' + x.parserObj.options.get('id') : '') + ')'
+              return x.orgXmlObj.name + ' (' + x.parserObj.uId + ((x.parserObj.options && x.parserObj.options.getOption('id')) ? ', ' + x.parserObj.options.getOption('id') : '') + ')'
             }).slice(1).join(' -> ')
-            aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.cParserObj.uId + ((this.cParserOptions && this.cParserOptions.get('id')) ? ', ' + this.cParserOptions.get('id') : '') + ')'
+            aTipLine += ' -> ' + this.content.orgXmlObj.name + ' (' + this.cParserObj.uId + ((this.cParserOptionsGet('id')) ? ', ' + this.cParserOptions.getOption('id') : '') + ')'
           }
           this.$emit('setTipLine', aTipLine)
         }
@@ -508,6 +403,140 @@
         if (this.Options.show.tipLine) {
           this.$emit('setTipLine', '')
         }
+      },
+    },
+    computed: {
+      ...mapState(['DragNdrop']),
+      ...mapState(['Options']),
+      fontSize () {
+        return this.cParserOptions && this.cParserOptions.getOption('layout.fontsize')
+      },
+      hasComment () {
+        return this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0
+      },
+      cParserObj () {
+        return this.content.parserObj
+      },
+      cParserOptions () {
+        return this.content.parserObj.options
+      },
+      isDragTarget () {
+        if (this.DragNdrop.dragUid) {
+          if (this.$el && this.$el.closest('.dragobj')) {
+            return false
+          }
+          return this.DragNdrop.dragUid !== this.content.uId && this.DragNdrop.dragParserUid === this.cParserObj.uId
+        } else {
+          return false
+        }
+      },
+      isDraggable () {
+        return this.content.isMultiple && this.cParserOptions && this.cParserOptions.getOption('editor.draggAble')
+      },
+      layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
+        if (this.content.isRoot) { return 'justChilds' }
+        if (this.cParserOptions && this.cParserOptions.getOption('layout.frame')) {
+          if (this.cParserOptions.getOption('layout.frame') === 'panelClosed') {
+            this.isOpen = false
+            return 'panel'
+          }
+          return this.cParserOptions.getOption('layout.frame')
+        }
+        return 'panel'
+      },
+      title () {
+        if (this.cParserOptions) {
+          if (this.cParserOptions.getResult('title')) {
+            return this.cParserOptions.getResult('title')
+          } else if (this.cParserOptions.getOption('tagAsTitle') || this.layoutBase === 'panel') {
+            return this.content.orgXmlObj.name
+          }
+        }
+        return null
+      },
+      shownTitle () {
+        if (this.cParserOptions && !this.cParserOptions.getOption('layout.hideTitle')) {
+          return this.title
+        }
+        return null
+      },
+      addableAfterButtons () {
+        let outAddable = []
+        if (this.content.addableAfter) {
+          this.content.addableAfter.forEach(function (aA) {
+            if (aA.bShow) {
+              outAddable.push(aA)
+            }
+          }, this)
+        }
+        return outAddable
+      },
+      addableInButtons () {
+        let outAddable = []
+        if (this.content.addableInner) {
+          this.content.addableInner.forEach(function (aA) {
+            if (aA.bShow) {
+              outAddable.push(aA)
+            }
+          }, this)
+        }
+        return outAddable
+      },
+      enumerate () {
+        if (this.cParserOptions && this.content.isMultiple) {
+          if (this.cParserOptions.getOption('layout.multiple.enumerateFX')) {
+            if (this.content.parserCopyDeep === 0) {
+              return this.num2rom(this.content.multipleNr + 1) + '. '
+            } else if (this.content.parserCopyDeep === 1) {
+              return this.content.multipleNr + 1 + '. '
+            } else if (this.content.parserCopyDeep === 2) {
+              return this.num2abc(this.content.multipleNr + 1) + ') '
+            } else if (this.content.parserCopyDeep >= 3) {
+              return this.num2abc(this.content.multipleNr + 1, 'α', 25) + ') '
+            }
+          }
+          if (this.cParserOptions.getOption('layout.multiple.enumerateRom')) {
+            return this.num2rom(this.content.multipleNr + 1) + '. '
+          }
+          if (this.cParserOptions.getOption('layout.multiple.enumerate')) {
+            return this.content.multipleNr + 1 + '. '
+          }
+        }
+      },
+      contentAddableInnerBShow () {
+        let aOut = []
+        this.content.addableInner.forEach((aObj) => {
+          if (aObj.bShow) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      },
+      contentAddableAfterBShow () {
+        let aOut = []
+        this.content.addableAfter.forEach((aObj) => {
+          if (aObj.bShow) {
+            aOut.push(aObj)
+          }
+        })
+        return aOut
+      }
+    },
+    watch: {
+      'commentObj' (nVal) {
+        if (nVal) {
+          console.log(nVal)
+          this.commentNewVal = ''
+          this.$nextTick(() => {
+            this.$refs.commentModal.show()
+          })
+        }
+      },
+      'isOpenAdditionalAddAfterBtn' (nVal) {
+        this.isOpenAdditionalAddInAfterBtn(nVal, 'addableAfterButtons')
+      },
+      'isOpenAdditionalAddInBtn' (nVal) {
+        this.isOpenAdditionalAddInAfterBtn(nVal, 'addableInButtons')
       },
     },
     components: {
@@ -573,6 +602,8 @@
     padding: 3px 6px;
   }
   .addable-after-btns > button, .addable-in-btns > button {
+    position: relative;
+    padding-right: 23px!important;
     display: block;
     width: 100%;
     margin: 3px 0;
@@ -581,6 +612,19 @@
   }
   .addable-after-btns > button.first, .addable-in-btns > button.first {
     font-weight: bolder;
+  }
+  .shortcut {
+    position: absolute;
+    right: 2px;
+    background: rgba(255,255,255,0.5);
+    width: 13px;
+    text-align: center;
+    border-radius: 3px;
+    color: #333;
+  }
+  .shortcut.sorted {
+    font-weight: bold;
+    color: #111;
   }
   .comment-sym {
     position: absolute;

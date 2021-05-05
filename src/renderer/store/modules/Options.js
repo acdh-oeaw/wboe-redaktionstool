@@ -1,4 +1,5 @@
 import { remote } from 'electron'
+import fPath from 'path'
 const fs = remote.require('fs')
 const { dialog } = remote
 const Store = require('electron-store')
@@ -6,15 +7,18 @@ const store = new Store()
 
 const state = {
 	projectPath: null,
+	parserPath: null,
 	show: {},
 	options: {},
-	lastFile: null,
-	additionalFilesDirectory: null
+	lastFile: null
 }
 
 const mutations = {
 	SET_PROJECT_PATH: (state, { projectPath }) => {		// Aktuellen Projektpfad setzen
 		state.projectPath = projectPath
+	},
+	SET_PARSER_PATH: (state, { parserPath }) => {		// Aktuellen Projektpfad setzen
+		state.parserPath = parserPath
 	},
 	SET_SHOW: (state, { show }) => {
 		state.show = show
@@ -24,10 +28,7 @@ const mutations = {
 	},
 	SET_LASTFILE: (state, { filename }) => {
 		state.lastFile = filename
-	},
-	SET_ADDITIONAL_FILES_DIRECTORY: (state, { additionalFilesDirectory }) => {		// Pfad für Zusätzliche Dateien
-		state.additionalFilesDirectory = additionalFilesDirectory
-	},
+	}
 }
 
 const actions = {
@@ -65,10 +66,16 @@ const actions = {
 	},
 	GET_PROJECT_PATH ({ commit, dispatch }) {		// Aktuellen Projektpfad aus den "store" laden
 		commit('SET_PROJECT_PATH', { 'projectPath': store.get('projectPath', remote.app.getPath('userData')) })
-		dispatch('LOAD_PARSER_FILE')
 	},
 	SET_PROJECT_PATH ({ commit, dispatch }) {		// Aktuellen Projektpfad neu setzen und in den "store" speichern
 		store.set('projectPath', state.projectPath)
+	},
+	GET_PARSER_PATH ({ commit, dispatch }) {		// Aktuellen Parserpfad aus den "store" laden
+		commit('SET_PARSER_PATH', { 'parserPath': store.get('parserPath', fPath.join(state.projectPath, 'Datenlisten')) })
+		dispatch('LOAD_PARSER_FILE')
+	},
+	SET_PARSER_PATH ({ commit, dispatch }) {		// Aktuellen Parserpfad neu setzen und in den "store" speichern
+		store.set('parserPath', state.parserPath)
 		dispatch('LOAD_PARSER_FILE')
 	},
 	DIALOG_PROJECT_PATH ({ commit, dispatch }) {		// Dialog zur Auswahl einens neuen Projektpfads öffnen
@@ -82,7 +89,6 @@ const actions = {
 		if (folderState && folderState.isDirectory) {
 			if (folderState.isDirectory()) {
 				commit('SET_PROJECT_PATH', { 'projectPath': newFolder[0] })
-				dispatch('LOAD_PARSER_FILE')
 			} else {
 				alert('Auswahl ist kein Verzeichniss!', 'Fehler!')
 			}
@@ -90,26 +96,17 @@ const actions = {
 			alert('Fehler beim auswählen des Verzeichnisses!\n\n' + JSON.stringify(folderState), 'Fehler!')
 		}
 	},
-	GET_ADDITIONAL_FILES_DIRECTORY ({ commit, dispatch }) {		// Pfad für Zusätzliche Dateien aus den "store" laden
-		commit('SET_ADDITIONAL_FILES_DIRECTORY', { 'additionalFilesDirectory': store.get('additionalFilesDirectory', null) })
-		dispatch('LOAD_PARSER_FILE')
-	},
-	SET_ADDITIONAL_FILES_DIRECTORY ({ commit, dispatch }) {		// Pfad für Zusätzliche Dateien neu setzen und in den "store" speichern
-		store.set('additionalFilesDirectory', state.additionalFilesDirectory)
-		dispatch('LOAD_PARSER_FILE')
-	},
-	DIALOG_ADDITIONAL_FILES_DIRECTORY ({ commit, dispatch }) {		// Dialog zur Auswahl einens neuen Pfad für Zusätzliche Dateien öffnen
+	DIALOG_PARSER_FILES_DIRECTORY ({ commit, dispatch }) {		// Dialog zur Auswahl einens neuen Pfad für Parser öffnen
 		var newFolder = dialog.showOpenDialog({
-			title: 'Pfad für Zusätzliche Dateien auswählen',
-			defaultPath: state.additionalFilesDirectory,
+			title: 'Pfad für Parser auswählen',
+			defaultPath: state.parserPath,
 			properties: ['openDirectory']
 		})
 		if (!newFolder) return
 		var folderState = fs.statSync(newFolder[0])
 		if (folderState && folderState.isDirectory) {
 			if (folderState.isDirectory()) {
-				commit('SET_ADDITIONAL_FILES_DIRECTORY', { 'additionalFilesDirectory': newFolder[0] })
-				dispatch('LOAD_PARSER_FILE')
+				commit('SET_PARSER_PATH', { 'parserPath': newFolder[0] })
 			} else {
 				alert('Auswahl ist kein Verzeichniss!', 'Fehler!')
 			}
