@@ -243,7 +243,7 @@
   import { BTooltip } from 'bootstrap-vue'
   import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
   import { faComment } from '@fortawesome/free-solid-svg-icons/faComment'
-  import renderingPreview from '@/functions/renderingPreview'
+  import renderingPreview from './renderingPreview'
 
   export default {
     name: 'PreviewContent',
