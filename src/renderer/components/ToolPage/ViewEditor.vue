@@ -40,6 +40,10 @@
       }
     },
     mounted () {
+      // console.log({x: this.$el})
+      this.$nextTick(() => {
+        this.$el.parentElement.scrollTop = this.$el.parentElement.scrollTop + 1
+      })
     },
     computed: {
       ...mapState(['Options']),

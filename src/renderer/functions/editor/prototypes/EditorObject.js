@@ -25,7 +25,7 @@ const localFunctions = {
             return true
           }
         }, this)
-        // Aktuell Auswahl neu setzen
+        // Aktuelle Auswahl neu setzen
         if (oKey >= 0) {
           let aVal = this.parserObj.options.getOption('value.is.possibleValues')[oKey]
           this.orgXmlObj.setValue(aVal.value || aVal)

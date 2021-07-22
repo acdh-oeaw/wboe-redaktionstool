@@ -35,6 +35,9 @@
         'refreshSelect': false,
       }
     },
+    mounted () {
+      // console.log('InlineAttributes')
+    },
     computed: {
       attrValue () {
         if (this.parserOptions) {
@@ -59,15 +62,6 @@
       parserOptions () {
         return this.content.parserObj.options.getOption('attributes.' + this.attrKey)
       }
-    },
-    watch: {
-      'refreshSelect' (nVal) {
-        if (nVal) {
-          this.$nextTick(() => {
-            this.refreshSelect = false
-          })
-        }
-      },
     },
     methods: {
       getSelected () {		// Gibt die aktuell ausgewählte Option zurück
@@ -119,6 +113,15 @@
         restoreCaretPosition()
       }, 20),
 
+    },
+    watch: {
+      'refreshSelect' (nVal) {
+        if (nVal) {
+          this.$nextTick(() => {
+            this.refreshSelect = false
+          })
+        }
+      },
     },
     components: {
       SelectPossibleValues

@@ -35,7 +35,7 @@
         <div class="col-7">
           <div class="card anchorselect">
            <div class="card-body">
-              <ViewPreview :start="true" :showAnchors="true" :selectableAnchors="true" @setAnchor="setAnchor" :object="selFileEditObj" v-if="selFileEditObj && selFileEditObj.contentObj"/>
+              <ViewPreview :start="true" :showAnchors="true" :selectableAnchors="true" @setAnchor="setAnchor" :object="selFileEditObj" v-if="selFileEditObj && selFileEditObj.contentObj && !refresh"/>
             </div>
           </div>
         </div>
@@ -126,18 +126,19 @@
     },
     data () {
       return {
-        'edit': false,
-        'changed': false,
-        'filelist': [],
-        'cFile': '',
-        'selFile': '',
-        'selFileEditObj': null,
-        'search': '',
-        'lbl': '',
-        'txtAnchor': '',
-        'valAnchor': '',
-        'typAnchor': '',
-        'subTypAnchor': '',
+        edit: false,
+        changed: false,
+        refresh: false,
+        filelist: [],
+        cFile: '',
+        selFile: '',
+        selFileEditObj: null,
+        search: '',
+        lbl: '',
+        txtAnchor: '',
+        valAnchor: '',
+        typAnchor: '',
+        subTypAnchor: '',
       }
     },
     mounted () {
@@ -263,38 +264,41 @@
       }, 250),
     },
     watch: {
-      'search' (nVal) {
+      search (nVal) {
         this.debouncedSearching()
       },
-      'selFile' (nVal) {
+      selFile (nVal) {
         this.changed = true
         this.selFileEditObj = null
-        if (!nVal) {
-          this.selFileEditObj = this.content.root
-        } else {
-          let aFile = null
-          this.filelist.some(function (af, i) {
-            if (af.file === this.selFile) {
-              aFile = af
-              return true
+        this.$nextTick(() => {
+          this.refresh = true
+          if (!nVal) {
+            this.selFileEditObj = this.content.root
+          } else {
+            let aFile = null
+            this.filelist.some(function (af, i) {
+              if (af.file === this.selFile) {
+                aFile = af
+                return true
+              }
+            }, this)
+            if (aFile) {
+              let aFileContent = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
+              this.selFileEditObj = Object.seal(new EditorObject.EditorBase(this.Parser.parser, Object.seal(new XmlObject.XmlBase(aFileContent))))
+              this.$set(aFile, 'errors', Object.keys(this.selFileEditObj.errors).length)
+              this.$set(aFile, 'warnings', Object.keys(this.selFileEditObj.warnings).length)
+              this.$set(aFile, 'changed', (this.selFileEditObj.getXML() !== aFileContent))
+              this.$set(aFile, 'loaded', true)
             }
-          }, this)
-          if (aFile) {
-            let aFileContent = fs.readFileSync(aFile.fullFileName, 'utf8').replace(/\r/gmi, '')
-            this.selFileEditObj = new EditorObject.EditorBase(this.Parser.parser, new XmlObject.XmlBase(aFileContent))
-            this.$set(aFile, 'errors', Object.keys(this.selFileEditObj.errors).length)
-            this.$set(aFile, 'warnings', Object.keys(this.selFileEditObj.warnings).length)
-            this.$set(aFile, 'changed', (this.selFileEditObj.getXML() !== aFileContent))
-            this.$set(aFile, 'loaded', true)
           }
-        }
+        })
       },
-      'lbl' () { this.changed = true },
-      'txtAnchor' () { this.changed = true },
-      'valAnchor' () { this.changed = true },
-      'typAnchor' () { this.changed = true },
-      'subTypAnchor' () { this.changed = true },
-      'edit' (nVal) {
+      lbl () { this.changed = true },
+      txtAnchor () { this.changed = true },
+      valAnchor () { this.changed = true },
+      typAnchor () { this.changed = true },
+      subTypAnchor () { this.changed = true },
+      edit (nVal) {
         if (nVal) {
           this.getBaseData()
           this.updateFileList()
@@ -310,13 +314,13 @@
           this.subTypAnchor = ''
         }
       },
-      'refreshSelect' (nVal) {
+      refresh (nVal) {
         if (nVal) {
           this.$nextTick(() => {
-            this.refreshSelect = false
+            this.refresh = false
           })
         }
-      },
+      }
     },
     components: {
       ViewPreview,

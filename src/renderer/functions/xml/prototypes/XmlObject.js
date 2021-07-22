@@ -1,6 +1,6 @@
 import Xml from '../Xml'
 import Vue from 'vue'
-import stdFunctions from '@/functions/stdFunctions'
+import stdFunctions from '../../stdFunctions'
 
 const localFunctions = {
   init () {
@@ -182,6 +182,9 @@ const localFunctions = {
     } else {
       return aValue.toString()
     }
+  },
+  getRawValue () {
+    return this.value
   },
   setValue (val) {
     // ToDo: innerXML ?!?!

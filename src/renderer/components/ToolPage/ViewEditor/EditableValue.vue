@@ -1,31 +1,14 @@
 <template>
-
-  <span
-    :class="
-      'val-obj' +
-      (content.parserObj.options.getOption('layout.bold') ? ' bold' : '') +
-      (content.parserObj.options.getOption('layout.italic') ? ' italic' : '') +
-      (content.parserObj.options.getOption('layout.underline') ? ' underline' : '') +
-      (content.parserObj.options.getOption('layout.ls1pt') ? ' ls1pt' : '')
-    "
+  <span :class="'val-obj ' + styleClasses"
     v-if="editType === 'selectPossibleValues'"
   >
     <SelectPossibleValues @select="setSelected" :selected="getSelected()" :selectedText="this.content.orgXmlObj.getValue(false)" :values="content.parserObj.options.getOption('value.is.possibleValues')" v-if="!refreshSelect"/>
   </span>
-
-  <span
-    :class="
-      'val-obj val-txt' +
-      (content.parserObj.options.getOption('layout.bold') ? ' bold' : '') +
-      (content.parserObj.options.getOption('layout.italic') ? ' italic' : '') +
-      (content.parserObj.options.getOption('layout.underline') ? ' underline' : '') +
-      (content.parserObj.options.getOption('layout.ls1pt') ? ' ls1pt' : '')
-    "
+  <span :class="'val-obj val-txt' + styleClasses"
     v-else
   >
     <span :style="'line-height' + Options.options.lineHeight + ';'" :class="'val-edit val-focus icon-edit-black' + (!aValue ? ' empty' : '')" v-rt-ipa="(ipaOpen) && !Options.show.hideIpaKeyboard" ref="valEdit" @input="valEditUpdate" @focus="valFocus" @blur="valBlur" @keyup.enter="valEditUpdateValue" @keydown.enter.prevent contenteditable>{{ aValue }}</span>
   </span>
-
 </template>
 
 <script>
@@ -44,8 +27,16 @@
       return {
         refreshSelect: false,
         focus: false,
-        ipaOpen: false
+        ipaOpen: false,
+        styleClasses: ''
       }
+    },
+    mounted () {
+      // console.log('EditableValue')
+      this.styleClasses = (this.content.parserObj.options.getOption('layout.bold') ? ' bold' : '')
+        + (this.content.parserObj.options.getOption('layout.italic') ? ' italic' : '')
+        + (this.content.parserObj.options.getOption('layout.underline') ? ' underline' : '')
+        + (this.content.parserObj.options.getOption('layout.ls1pt') ? ' ls1pt' : '')
     },
     computed: {
       ...mapState(['Options']),
@@ -58,15 +49,6 @@
         }
         return 'text'
       }
-    },
-    watch: {
-      'refreshSelect' (nVal) {
-        if (nVal) {
-          this.$nextTick(() => {
-            this.refreshSelect = false
-          })
-        }
-      },
     },
     methods: {
       getSelected () {		// Gibt die aktuell ausgewählte Option zurück
@@ -145,6 +127,15 @@
           sel.addRange(range)
         }
       }
+    },
+    watch: {
+      'refreshSelect' (nVal) {
+        if (nVal) {
+          this.$nextTick(() => {
+            this.refreshSelect = false
+          })
+        }
+      },
     },
     components: {
       SelectPossibleValues

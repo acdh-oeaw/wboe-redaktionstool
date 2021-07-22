@@ -11,8 +11,8 @@
       v-on:drop="drop"
     >
     <!-- Vor Inhalten -->
-    <div v-if="this.content.count > 0 && cParserObj && cParserOptionsGet('layout.newlineIfNotFirst')"/>
-    <div :style="'height: ' + cParserOptions.getOption('layout.spaceTopBefore') + 'px'" v-if="cParserOptionsGet('layout.spaceTopBefore')"></div>
+    <div v-if="this.content.count > 0 && cParserObj && cParserOptionsGet('layout.newlineIfNotFirst')" />
+    <div :style="'height: ' + layoutSpaceTopBefore + 'px'" v-if="layoutSpaceTopBefore"></div>
     <div :class="'h' + (cParserOptions.getOption('layout.headerTopSize') || 4)" @contextmenu.prevent="contextMenue" v-if="cParserOptionsGet('layout.headerTop')">{{ cParserOptions.getOption('layout.headerTop') }}</div>
 
     <template v-if="content.isMultiple && content.multipleNr === 0 && cParserOptionsGet('layout.multiple.use')">
@@ -27,17 +27,30 @@
 
 
     <!-- Inhalte -->
-    <div :class="'obj just-childs' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-if="layoutBase === 'justChilds'">
-      <span :class="
-                'enumerate' + 
+    <div :class="'obj lb-' + layoutBase + ' cache-line'"
+      v-if="!cacheShow"
+      :style="'height: ' + cacheHeight + 'px'"
+      @click="cacheTest"
+      ref="cacheContent"
+    >
+      Cache ...
+    </div>
+    <div :class="'obj just-childs' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')"
+      v-else-if="layoutBase === 'justChilds'"
+    >
+      <span :class="'enumerate' + 
                 ((cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
-                ((content.parserCopyDeep >= 3) ? ' deeper' : '')
-            " v-if="enumerate" @contextmenu.prevent="contextMenue">{{ enumerate }}&nbsp;</span>
+                ((content.parserCopyDeep >= 3) ? ' deeper' : '')"
+        v-if="enumerate" @contextmenu.prevent="contextMenue"
+      >{{ enumerate }}&nbsp;</span>
       <slot name="childs" />		<!-- Kinder -->
       <slot name="after" />
     </div>
 
-    <b-card :class="'obj paneldecent mitb5' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else-if="layoutBase === 'panel'" no-body>
+    <b-card :class="'obj paneldecent mitb5' + (content.warnings.length > 0 ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" no-body
+      v-else-if="layoutBase === 'panel'"
+      ref="cacheContent"
+    >
       <div @contextmenu.prevent="contextMenue" slot="header">
         <button v-b-toggle="'collapse-' + _uid" class="header-btn-toggle">
           <span :class="
@@ -64,11 +77,11 @@
           </b-list-group-item>
         </b-list-group>
         <b-card-body>
-          <div @contextmenu.prevent="contextMenue" class="context rel">
-            <slot/>		<!-- Inhalt -->
+          <div @contextmenu.prevent="contextMenue" class="context rel" v-if="$slots.default">
+            <slot />		<!-- Inhalt -->
           </div>
-          <slot name="childs"/>		<!-- Kinder -->
-          <slot name="after"/>
+          <slot name="childs" />		<!-- Kinder -->
+          <slot name="after" />
         </b-card-body>
       </b-collapse>
       <div @contextmenu.prevent="contextMenue" slot="footer" style="margin: -8px -9px;" v-if="content.addableAfter.length > 0">
@@ -82,8 +95,11 @@
       </div>
     </b-card>
 
-    <div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')" v-else>
-      <div @contextmenu.prevent="contextMenue" class="context rel">
+    <div :class="'obj lb-' + layoutBase + ((content.warnings.length > 0) ? ' warnings' : '') + (hasComment ? ' has-comment' + (Options.show.commentsHighlight ? ' comment-highlight' : '') : '')"
+      ref="cacheContent"
+      v-else
+    >
+      <div @contextmenu.prevent="contextMenue" class="context rel" v-if="enumerate || shownTitle || hasComment || $slots.default">
         <span :class="
                   'enumerate' +
                   ((cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerate-gt1' : '') +
@@ -155,10 +171,10 @@
 
 
     <!-- Kontext Menü -->
-    <EditorContextMenu :content="content" @clickcomment="clickComment" ref="contextMenuEditor" v-if="contextMenuCached"/>
+    <EditorContextMenu :content="content" @clickcomment="clickComment" ref="contextMenuEditor" v-if="contextMenuCached && cacheShow"/>
 
     <!-- Kommentare -->
-    <b-modal ref="commentModal" title="Kommentare" @hidden="closeCommentModal" ok-only v-if="commentObj && commentObj.orgXmlObj">
+    <b-modal ref="commentModal" title="Kommentare" @hidden="closeCommentModal" ok-only v-if="commentObj && commentObj.orgXmlObj && cacheShow">
       <b-input-group size="sm" class="my-3" :key="'co' + commentObj.uId + '-' + aComKey" v-for="(aComment, aComKey) in commentObj.orgXmlObj.comments">
         <b-form-input v-model="aComment.val"></b-form-input>
         <b-input-group-append>
@@ -174,7 +190,7 @@
       </b-input-group>
 
     </b-modal>
-    <b-tooltip :target="'eo' + content.uId" placement="topright" triggers="hover" class="tooltipcomment" v-if="hasComment && Options.show.commentsHighlight">
+    <b-tooltip :target="'eo' + content.uId" placement="topright" triggers="hover" class="tooltipcomment" v-if="hasComment && Options.show.commentsHighlight && cacheShow">
       <ul class="comment-list">
         <li class="comment" v-for="(aComment, aComKey) in content.orgXmlObj.comments" :key="'cott' + content.uId + '-' + aComKey">
           {{ aComment.val }}
@@ -203,19 +219,63 @@
         'commentObj': null,
         'commentNewVal': '',
         'dragDir': null,
-        inAfterFrameLeft: 0
+        inAfterFrameLeft: 0,
+        cacheVisible: false,
+        cacheHeight: 25,
+        fontSize: null,
+        layoutSpaceTopBefore: null
       }
     },
     mounted () {
-      // console.log('x')
+      // console.log('x', this.$slots.default)
+      this.fontSize = this.cParserOptionsGet('layout.fontsize')
+      this.layoutSpaceTopBefore = this.cParserOptionsGet('layout.spaceTopBefore')
     },
     created () {
       window.addEventListener('keyup', this.keyUp)
+      if (this.layoutBase === 'line') {
+        this.$nextTick(() => {
+          this.view.$el.parentElement.addEventListener('scroll', this.cacheScroll)
+        })
+      }
     },
     beforeDestroy () {
       window.removeEventListener('keyup', this.keyUp)
+      if (this.layoutBase === 'line' && this.view.$el && this.view.$el.parentElement) {
+        this.view.$el.parentElement.removeEventListener('scroll', this.cacheScroll)
+      }
     },
     methods: {
+      cacheScroll (e) {
+        let aTop = this.getScrollOffsetTop()
+        let aHeight = this.$refs.cacheContent.clientHeight
+        let sTop = this.view.$el.parentElement.scrollTop
+        let inView = sTop <= aTop + aHeight && sTop + this.view.$el.parentElement.clientHeight + 500 >= aTop
+        if (this.cacheVisible && !inView) {
+          this.cacheHeight = aHeight
+        }
+        this.cacheVisible = inView
+        // if (this.cacheVisible) {
+        //   console.log('cacheScroll', this.view.$el.parentElement.scrollTop, this.view.$el.parentElement.clientHeight)
+        // }
+      },
+      cacheTest () {
+        console.log('cacheTest', this.view, this.content)
+        console.log([this.view.$el.parentElement, this.view.$el.parentElement.scrollTop, this.view.$el.parentElement.clientHeight])
+        console.log([this.$refs.cacheContent, this.$refs.cacheContent.offsetTop])
+        this.cacheVisible = true
+      },
+      getScrollOffsetTop () {
+        let aScrollObj = this.$refs.cacheContent
+        let aTop = aScrollObj.offsetTop
+        let dg = 0
+        while (aScrollObj.offsetParent && !aScrollObj.classList.contains('scroll') && dg < 100) {
+          aScrollObj = aScrollObj.offsetParent
+          aTop += aScrollObj.offsetTop
+          dg += 1
+        }
+        return aTop
+      },
       keyUp (e) {
         if (this.isOpenAdditionalAddAfterBtn || this.isOpenAdditionalAddInBtn) {
           if (e.keyCode >= 49 && e.keyCode <= 57) {
@@ -406,11 +466,12 @@
       },
     },
     computed: {
+      cacheShow () {
+        // return !((this.layoutBase === 'line') && !this.cacheVisible)
+        return true
+      },
       ...mapState(['DragNdrop']),
       ...mapState(['Options']),
-      fontSize () {
-        return this.cParserOptions && this.cParserOptions.getOption('layout.fontsize')
-      },
       hasComment () {
         return this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0
       },
@@ -431,11 +492,11 @@
         }
       },
       isDraggable () {
-        return this.content.isMultiple && this.cParserOptions && this.cParserOptions.getOption('editor.draggAble')
+        return this.content.isMultiple && this.cParserOptionsGet('editor.draggAble')
       },
       layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
         if (this.content.isRoot) { return 'justChilds' }
-        if (this.cParserOptions && this.cParserOptions.getOption('layout.frame')) {
+        if (this.cParserOptionsGet('layout.frame')) {
           if (this.cParserOptions.getOption('layout.frame') === 'panelClosed') {
             this.isOpen = false
             return 'panel'
@@ -555,6 +616,13 @@
     cursor: default;
   }
 
+  /* .obj.lb-line {
+    border: 1px solid #f00;
+  } */
+  .obj.cache-line {
+    border: 1px solid #900;
+    overflow: hidden;
+  }
   .obj.lb-inline {
     display: inline;
     padding: 0px 3px;

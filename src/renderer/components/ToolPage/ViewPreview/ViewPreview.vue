@@ -4,7 +4,6 @@
       <div :class="showComments && Options.show.showCommentsList ? 'col-10' : 'col-12'">
         <div v-if="objectHasErrors">Bearbeiten nicht möglich!</div>
         <ViewPreview
-          v-else
           :object="object"
           :preview="object.parserObj.previewObj"
           :commentsListe="commentsListe"
@@ -13,6 +12,7 @@
           @setAnchor="setAnchor"
           :selectableAnchors="selectableAnchors"
           :options="Options"
+          v-else
         />
       </div>
       <div class="col-2 commList" v-if="showComments && Options.show.showCommentsList">
@@ -21,13 +21,15 @@
             v-for="(aComments, aComsKey) in commentsListe.comments"
             :key="'cp' + aComsKey"
             :ref="'cp' + aComsKey"
-            :style="'margin-top:' + (aComments.top > 0 ? aComments.top : 0) + 'px;'">
+            :style="'margin-top:' + (aComments.top > 0 ? aComments.top : 0) + 'px;'"
+          >
             <div class="comment-title"><b>{{ aComments.title }}:</b> {{ aComments.value }}</div>
             <ul class="comment-list">
               <li
                 class="comment"
                 v-for="(aComment, aComKey) in aComments.list"
-                :key="'cp' + aComsKey + 'cott' + aComKey">
+                :key="'cp' + aComsKey + 'cott' + aComKey"
+              >
                 {{ aComment.val }}
               </li>
             </ul>
@@ -49,7 +51,8 @@
         :tag="aPrev.name"
         :attributes="aPrev.attributes"
         :key="'vt' + aPrevKey"
-        v-if="aPrev.type === 'HTML'">
+        v-if="aPrev.type === 'HTML'"
+      >
         <template v-for="(aContent, aConKey) in aPrev.content">
           <template v-if="typeof aContent === 'string'">
             <span v-html="aContent" :key="'sc' + aPrevKey + '-' + aConKey" />
@@ -64,7 +67,8 @@
             :showComments="showComments"
             @setAnchor="setAnchor"
             :selectableAnchors="selectableAnchors"
-            :key="'vp' + aPrevKey + '-' + aConKey" />
+            :key="'vp' + aPrevKey + '-' + aConKey"
+          />
         </template>
       </VariableTag>
       <template v-else-if="aPrev.type === 'PIN'">
@@ -76,10 +80,12 @@
           :showComments="showComments"
           @setAnchor="setAnchor"
           :selectableAnchors="selectableAnchors"
-          :key="'pc' + aPrevKey" />
+          :key="'pc' + aPrevKey"
+        />
         <div
           v-else
-          :key="'fbPIN' + aPrevKey">
+          :key="'fbPIN' + aPrevKey"
+        >
           <b>Fehler bei "PIN": {{ aPrev.name }}</b>
         </div>
       </template>
@@ -136,11 +142,6 @@
         return this.options
       }
     },
-    watch: {
-      'commentsListe.comments' (nVal) {
-        if (this.start) { this.debouncedHeights() }
-      }
-    },
     mounted () {
       // console.log(this.$props)
       // console.log('ViewPreview - mounted - timer: ' + performance.now() + ' ms.')
@@ -190,6 +191,11 @@
         console.log('commentsListeReset', this.commentsListe)
       }
     },
+    watch: {
+      'commentsListe.comments' (nVal) {
+        if (this.start) { this.debouncedHeights() }
+      }
+    }
   }
 </script>
 
