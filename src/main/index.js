@@ -2,6 +2,8 @@
 
 import { app, BrowserWindow, Menu } from 'electron'
 
+app.commandLine.appendSwitch('js-flags', '--max-old-space-size=4096')
+
 const electron = require('electron')
 
 const fs = require('fs')
