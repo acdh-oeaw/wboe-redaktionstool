@@ -1,5 +1,4 @@
 import Vue from 'vue'
-import stdFunctions from '../../stdFunctions'
 import Editor from '../Editor'
 import FxGeoSelect from './FxGeoSelect'
 import FxRefBiblSelect from './FxRefBiblSelect'
@@ -69,11 +68,11 @@ const localFunctions = {
         }, this)
       }
     }
-    let aParserChilds = stdFunctions.getValOfSubProp(this.parserObj, 'childs') || []
-    let aXmlChilds = stdFunctions.getValOfSubProp(this.orgXmlObj, 'childs') || []
+    let aParserChilds = this.parserObj ? this.parserObj.childs || [] : []
+    let aXmlChilds = this.orgXmlObj ? this.orgXmlObj.childs || [] : []
     if (this.isRoot) {
-      aParserChilds = stdFunctions.getValOfSubProp(this.parserObj, 'content') || []
-      aXmlChilds = stdFunctions.getValOfSubProp(this.orgXmlObj, 'content') || []
+      aParserChilds = this.parserObj ? this.parserObj.content || [] : []
+      aXmlChilds = this.orgXmlObj ? this.orgXmlObj.content || [] : []
     }
     // Parser mit XML Objekt vergleichen
     if (!this.ignoreChilds) {

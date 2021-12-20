@@ -365,7 +365,7 @@
       },
       whitespaceAfter () {
         function indexFor (arr, value) {
-          for (let i = 0; i < arr.length; i++) {
+          for (let i = 0, aLen = arr.length; i < aLen; i++) {
             if (arr[i] === value) {
               return i
             }
@@ -389,22 +389,29 @@
         }
         let wsA = (!this.cParserOptions.getOption('previewLayout.noSpaceAfter') && (this.valueType === 'fix' || this.valueType === 'editable')) || this.cParserOptions.getOption('previewLayout.shoudSpace')
         if (wsA) {
-          let ix = indexFor(this.content.root.family, this.content) // Slow
-          let allAfter = this.content.root.family.slice(ix + 1)
-          allAfter = allAfter.filter(x => x && x.parents && indexFor(x.parents.indexOf, this.content) > -1) // slow ?
-          if (wsA && allAfter.length > 0 && allAfter[0].parserObj.options.getOption('previewLayout.prevAutospace')) {
-            if (['-', '('].indexOf(this.content.orgXmlObj.getValue()[0].slice(-1)) > -1 || ['-', '('].indexOf(allAfter[0].orgXmlObj.getValue()[0][0]) > -1) {
+          if (this.cParserOptions.getOption('previewLayout.noSpaceAfterHyphen')) {
+            if (['-'].indexOf(this.content.orgXmlObj.getValue()[0].slice(-1)) > -1) {
               wsA = false
             }
-            // console.log(allAfter[0], this.content.orgXmlObj.getValue()[0], allAfter[0].orgXmlObj.getValue()[0][0])
-          }
-          if (wsA && this.cParserOptions.getOption('previewLayout.autospace') && ix > -1) {
-            let firstTextAfter = getFirstLetterAfter(allAfter)
-            if (firstTextAfter.length > 0) {
-              if (['.', ',', ';', ':', '-', ')'].indexOf(firstTextAfter[0]) > -1) {
+            // console.log(this.content.orgXmlObj.name, this.content.orgXmlObj.getValue()[0], this.content.orgXmlObj.getValue()[0].slice(-1))
+          } else {
+            let ix = indexFor(this.content.root.family, this.content)
+            let allAfter = this.content.root.family.slice(ix + 1)
+            allAfter = allAfter.filter(x => x && x.parents && indexFor(x.parents.indexOf, this.content) > -1)
+            if (wsA && allAfter.length > 0 && allAfter[0].parserObj.options.getOption('previewLayout.prevAutospace')) {
+              if (['-', '('].indexOf(this.content.orgXmlObj.getValue()[0].slice(-1)) > -1 || ['-', '('].indexOf(allAfter[0].orgXmlObj.getValue()[0][0]) > -1) {
                 wsA = false
               }
-              // console.log('firstTextAfter', this.content.uId, '"' + this.content.orgXmlObj.getValue()[0] + '"', wsA, ['.', ',', ';', ':', '-', ')'].indexOf(firstTextAfter[0]), this.content, [firstTextAfter[0], firstTextAfter])
+              // console.log(allAfter[0], this.content.orgXmlObj.getValue()[0], allAfter[0].orgXmlObj.getValue()[0][0])
+            }
+            if (wsA && this.cParserOptions.getOption('previewLayout.autospace') && ix > -1) {
+              let firstTextAfter = getFirstLetterAfter(allAfter)
+              if (firstTextAfter.length > 0) {
+                if (['.', ',', ';', ':', '-', ')'].indexOf(firstTextAfter[0]) > -1) {
+                  wsA = false
+                }
+                // console.log('firstTextAfter', this.content.uId, '"' + this.content.orgXmlObj.getValue()[0] + '"', wsA, ['.', ',', ';', ':', '-', ')'].indexOf(firstTextAfter[0]), this.content, [firstTextAfter[0], firstTextAfter])
+              }
             }
           }
         }
@@ -460,12 +467,12 @@
         return this.content.parserObj.options
       },
       hasTarget () {
-        let tg = this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['target']
+        let tg = this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.target
         return tg
       },
       hasAnchor () {
         let hA = (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id'])
-              || ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['subtype'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['subtype']) > -1)
+              || ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.subtype && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes.subtype) > -1)
                 && !(this.content.orgXmlObj && this.content.orgXmlObj.name === 'xr'))
         return hA
       },
@@ -476,8 +483,8 @@
         return ''
       },
       typAnchor () {
-        if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['type'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['type']) > -1)) {
-          return this.content.orgXmlObj.attributes['type']
+        if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.type && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes.type) > -1)) {
+          return this.content.orgXmlObj.attributes.type
         }
         if (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id']) {
           return 'lemma'
@@ -486,8 +493,8 @@
         }
       },
       subTypAnchor () {
-        if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['subtype'] && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes['subtype']) > -1)) {
-          return this.content.orgXmlObj.attributes['subtype']
+        if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.subtype && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes.subtype) > -1)) {
+          return this.content.orgXmlObj.attributes.subtype
         }
         return ''
       },

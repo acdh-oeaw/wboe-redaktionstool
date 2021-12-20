@@ -15,7 +15,7 @@
                   <button class="btn btn-primary" type="button" @click="debouncedSearching"><font-awesome-icon icon="search"/></button>
                 </div>
               </div>
-              <button @click="selBeleg = (selBeleg === aBeleg['ID']) ? '' : aBeleg['ID']" :class="'btn btn-sm w-100 mb-1 text-left btn-' + (selBeleg === aBeleg['ID'] ? 'success' : 'primary')"
+              <button @click="selBeleg = (selBeleg === aBeleg.ID) ? '' : aBeleg.ID" :class="'btn btn-sm w-100 mb-1 text-left btn-' + (selBeleg === aBeleg.ID ? 'success' : 'primary')"
                 :key="'bl' + aKey"
                 v-for="(aBeleg, aKey) in belege"
               >
@@ -30,12 +30,12 @@
               <p v-if="selBeleg"><b>ID:</b> {{selBeleg}}</p>
               <template v-if="selBelegObj">
                 <p><b>Kürzel:</b> {{ selBelegObj['Kürzel'] }}</p>
-                <p><b>Jahr:</b> {{ selBelegObj['Jahr'] }}</p>
-                <p><b>Titel:</b><br>{{ selBelegObj['Titel'] }}</p>
+                <p><b>Jahr:</b> {{ selBelegObj.Jahr }}</p>
+                <p><b>Titel:</b><br>{{ selBelegObj.Titel }}</p>
                 <p><b>Autor - Nachname:</b> {{ selBelegObj['Autor - Nachname'] }}</p>
-                <p><b>Vorname:</b> {{ selBelegObj['Vorname'] }}</p>
-                <p><b>Kommentar:</b> {{ selBelegObj['Kommentar'] }}</p>
-                <p><b>Zotero:</b> {{ selBelegObj['Zotero'] }}</p>
+                <p><b>Vorname:</b> {{ selBelegObj.Vorname }}</p>
+                <p><b>Kommentar:</b> {{ selBelegObj.Kommentar }}</p>
+                <p><b>Zotero:</b> {{ selBelegObj.Zotero }}</p>
               </template>
             </div>
           </div>
@@ -127,7 +127,7 @@
         if (this.searchDebounced.trim().length > 0) {
           let aBelege = []
           this.content.fxData.belege.forEach(aBeleg => {
-            if (this.selBeleg === aBeleg['ID'] || aBeleg['Kürzel'].toLowerCase().indexOf(this.searchDebounced.trim().toLowerCase()) > -1) {
+            if (this.selBeleg === aBeleg.ID || aBeleg['Kürzel'].toLowerCase().indexOf(this.searchDebounced.trim().toLowerCase()) > -1) {
               aBelege.push(aBeleg)
             }
           })
@@ -140,7 +140,7 @@
         let aBelegObj = null
         if (this.selBeleg) {
           this.belege.forEach(aBeleg => {
-            if (this.selBeleg === aBeleg['ID']) {
+            if (this.selBeleg === aBeleg.ID) {
               aBelegObj = aBeleg
             }
           })
@@ -231,7 +231,7 @@
           aTxt.orgXmlObj.setValue(this.txt)
         }
         if (this.lbl) {
-          let aLbl = this.content.add(0, this.content.parserObj.root.idList['lbl'])
+          let aLbl = this.content.add(0, this.content.parserObj.root.idList.lbl)
           aLbl.orgXmlObj.setValue(this.lbl)
         }
         this.changed = false

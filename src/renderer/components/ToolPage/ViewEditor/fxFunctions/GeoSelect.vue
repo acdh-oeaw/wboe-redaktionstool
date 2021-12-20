@@ -101,25 +101,34 @@
       getPlacesEdit () {
         let aPlaces = []
         let peRest = false
-        this.content.fxData.places.uFields.forEach(function (aField, aFieldKey) {
-          let xmlFieldName = this.content.fxData.places.xFields[this.content.fxData.places.pFields.indexOf(aField)]
-          let aOption = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.content.fxData.fields, 'name', aField)
-          if (peRest || aOption) {
-            // Aktuelle Werte auslesen
-            let aManualUse = false
-            let aPlaceObj = null
-            let aSelectedPlace = null
-            this.content.getChilds('all', true).some(function (child) {
-              if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.attributes['ref'] && child.orgXmlObj.attributes.type === xmlFieldName) {
-                aPlaceObj = child
-                aSelectedPlace = child.orgXmlObj.attributes['ref']
-                aManualUse = true
-                return true
-              }
-            }, this)
-            // Objekt der Liste hinzufügen
-            aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'selectedPlace': aSelectedPlace, 'use': true, 'manualUse': aManualUse, 'placeObj': aPlaceObj, 'option': aOption, 'places': this.content.fxData.places[aField]})
-            peRest = true
+        let useFields = this.content.fxData.places.uFields
+        if (this.content.parserObj.options.getOption('editor.fxFunction.fieldsAfterDef')) {
+          let aPrev = this.content.getSiblings('prev', true, false, true)[0]
+          if (aPrev && aPrev.orgXmlObj.name === 'def') {
+            useFields = this.content.parserObj.options.getOption('editor.fxFunction.fieldsAfterDef')
+          }
+        }
+        useFields.forEach(function (aField, aFieldKey) {
+          if (useFields.indexOf(aField) > -1) {
+            let xmlFieldName = this.content.fxData.places.xFields[this.content.fxData.places.pFields.indexOf(aField)]
+            let aOption = stdFunctions.getFirstObjectOfValueInPropertyOfArray(this.content.fxData.fields, 'name', aField)
+            if (peRest || aOption) {
+              // Aktuelle Werte auslesen
+              let aManualUse = false
+              let aPlaceObj = null
+              let aSelectedPlace = null
+              this.content.getChilds('all', true).some(function (child) {
+                if (child.orgXmlObj.name === 'placeName' && child.orgXmlObj.attributes.ref && child.orgXmlObj.attributes.type === xmlFieldName) {
+                  aPlaceObj = child
+                  aSelectedPlace = child.orgXmlObj.attributes.ref
+                  aManualUse = true
+                  return true
+                }
+              }, this)
+              // Objekt der Liste hinzufügen
+              aPlaces.push({'fieldName': aField, 'xmlFieldName': xmlFieldName, 'selectedPlace': aSelectedPlace, 'use': true, 'manualUse': aManualUse, 'placeObj': aPlaceObj, 'option': aOption, 'places': this.content.fxData.places[aField]})
+              peRest = true
+            }
           }
         }, this)
         // console.log('getPlacesEdit', aPlaces)
@@ -185,7 +194,7 @@
               }
             } else {
               if (aPlace.placeObj) {
-                if (aPlace.placeObj.orgXmlObj.attributes['ref'] !== aPlace.selectedPlace) {
+                if (aPlace.placeObj.orgXmlObj.attributes.ref !== aPlace.selectedPlace) {
                   aPlace.placeObj.orgXmlObj.setAttribute('ref', aPlace.selectedPlace)
                 }
               } else {
@@ -251,7 +260,7 @@
       },
       getFirstObjectOfValueInPropertyOfArray: stdFunctions.getFirstObjectOfValueInPropertyOfArray,
       dropdownFocusActive: _.debounce(function (key) {
-        let aElement = this.$refs['dropdown'][key].$el.getElementsByClassName('dropdown-item active')[0]
+        let aElement = this.$refs.dropdown[key].$el.getElementsByClassName('dropdown-item active')[0]
         if (aElement) {
           aElement.focus()
         }
@@ -289,7 +298,7 @@
           this.placesEdit = this.getPlacesEdit()
           this.updateUse()
           this.$nextTick(() => {
-            this.$refs['dropdown'][0].$el.getElementsByClassName('btn-val-focus')[0].focus()
+            this.$refs.dropdown[0].$el.getElementsByClassName('btn-val-focus')[0].focus()
           })
         }
       },

@@ -668,6 +668,7 @@
     background: #eee;
     border-radius: 5px;
     padding: 3px 6px;
+    z-index: 1100;
   }
   .addable-after-btns > button, .addable-in-btns > button {
     position: relative;

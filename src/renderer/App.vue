@@ -10,6 +10,7 @@
 						<b-navbar-nav class="ml-auto">
 							<b-nav-item to="/home" :disabled="Files.changed" :class="$route.path === '/home' ? ' active' : ''">Übersicht</b-nav-item>
 							<b-nav-item to="/tool" :disabled="!Files.file" :class="$route.path === '/tool' ? ' active' : ''">Tool</b-nav-item>
+							<b-nav-item to="/test" :class="$route.path === '/test' ? ' active' : ''" v-if="devMode">Test</b-nav-item>
 							<b-nav-item-dropdown right>
 								<template slot="button-content"><font-awesome-icon icon="address-card"/></template>
 								<div class="d-flex flex-column bd-highlight">
@@ -141,6 +142,7 @@
 						var answer = confirm('Es gab Änderungen die noch nicht abgespeichert wurden!\nWeiter bearbeiten?')
 						if (answer) {
 							e.returnValue = true
+							e.preventDefault()
 						}
 					}
 				}

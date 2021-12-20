@@ -14,6 +14,7 @@ const localFunctions = {
   getOption (opt) {
     if (!this.$optionsCache[opt]) {
       this.$optionsCache[opt] = stdFunctions.getValOfSubProp(this.options, opt)
+      this.$optionsCache[opt] = stdFunctions.deepSeal(this.$optionsCache[opt])
     }
     return this.$optionsCache[opt]
   },
