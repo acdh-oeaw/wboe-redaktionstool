@@ -18,6 +18,15 @@ const localFunctions = {
     }
     return this.$optionsCache[opt]
   },
+  getPreviewFontStyles () {
+    if (!this.previewFontStyles) {
+      this.previewFontStyles = (stdFunctions.getValOfSubProp(this.options, 'previewLayout.bold') ? ' bold' : '')
+      + (stdFunctions.getValOfSubProp(this.options, 'previewLayout.italic') ? ' italic' : '')
+      + (stdFunctions.getValOfSubProp(this.options, 'previewLayout.underline') ? ' underline' : '')
+      + (stdFunctions.getValOfSubProp(this.options, 'previewLayout.ls1pt') ? ' ls1pt' : '')
+    }
+    return this.previewFontStyles
+  },
   getOptionValue (parserOptionValue, aOrgXmObj) {
     let aVal = ((typeof parserOptionValue === 'object') ? JSON.parse(JSON.stringify(parserOptionValue)) : parserOptionValue)
     if (typeof aVal === 'object') {

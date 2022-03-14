@@ -367,14 +367,14 @@ const localFunctions = {
         let aAllSibs = this.getSiblings('all', true)
         aParSibs.forEach(function (aParSib) {
           if (aParSib.options.getOption('tag.anywhere.use') && !aParSib.options.getOption('editor.noAddButton')) {
-            if (!((this.parserObj.name === '#text' || (aNextSibs[0] && aNextSibs[0].parserObj && aNextSibs[0].parserObj.name === '#text')) && aParSib.name === '#text')) {
+            if (!(aParSib.name === '#text' && (this.parserObj.name === '#text' || (aNextSibs[0] && aNextSibs[0].parserObj && aNextSibs[0].parserObj.name === '#text')))) {
               let cUsed = 0
               aAllSibs.forEach(function (aAllSib) {
                 if (aAllSib.parserObj && aAllSib.parserObj.uId === aParSib.uId) {
                   cUsed += 1
                 }
               }, this)
-              if (aParSib.options.getOption('tag.multiple.use') || cUsed === 0) {
+              if (cUsed === 0 || aParSib.options.getOption('tag.multiple.use')) {
                 this.addableAfter.push({
                   'uId': aParSib.uId,
                   'type': 'anywhere',
@@ -457,7 +457,7 @@ const localFunctions = {
           }
         } else {
           if ((acParser.name === '#text' && eChilds.length > 0 && (eChilds[0] && eChilds[0].parserObj && eChilds[0].parserObj.name === '#text'))
-            || (!acParser.options.getOption('tag.multiple.use') && eChilds.length > 0 && eChilds[0].parserObj === acParser)) {
+            || (eChilds.length > 0 && eChilds[0].parserObj === acParser && !acParser.options.getOption('tag.multiple.use'))) {
             addThis = false
           }
         }

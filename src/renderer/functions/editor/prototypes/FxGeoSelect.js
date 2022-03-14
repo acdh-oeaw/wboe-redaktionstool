@@ -105,13 +105,14 @@ const localFunctions = {
         if (!child.orgXmlObj.attributes.ref && child.orgXmlObj.getValue(false)) {
           warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') ohne "ref" Attribut!')
         } else if (child.orgXmlObj.attributes.ref) {
-          let foundInPlaces = 0
-          eObj.fxData.places.pFields.forEach(function (val) {
+          let foundInPlaces = false
+          eObj.fxData.places.pFields.some(function (val) {
             if (stdFunctions.getFirstObjectOfValueInPropertyOfArray(eObj.fxData.places[val], 'sigle', child.orgXmlObj.attributes.ref)) {
-              foundInPlaces += 1
+              foundInPlaces = true
+              return true
             }
           }, this)
-          if (foundInPlaces < 1) {
+          if (!foundInPlaces) {
             warnings.push('"placeName" (' + child.orgXmlObj.getValue(false) + ') hat unbekanntes "ref" (' + child.orgXmlObj.attributes.ref + ') Attribut!')
           }
         }

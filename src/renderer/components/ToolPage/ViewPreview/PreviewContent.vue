@@ -2,57 +2,57 @@
   <div
     :id="'po' + content.uId"
     class="inline prel"
-    :style="fontSize ? 'font-size: ' + fontSize + '%;' : null"
+    :style="$options.privateData.fontSize ? 'font-size: ' + $options.privateData.fontSize + '%;' : null"
   >
-    <template v-if="!hideWithoutContentAll">
+    <template v-if="!$options.privateData.hideWithoutContentAll">
       <!-- Vor Inhalten -->
       <div
         v-if="
           (this.content.count > 0 && cParserOptionsGet('previewLayout.newlineIfNotFirst'))
           || cParserOptionsGet('previewLayout.spaceTopBefore')
         "
-        :style="'height: ' + (cParserOptions.getOption('previewLayout.spaceTopBefore') || 0) + 'px'"
+        :style="'height: ' + ($options.cParserOptions.getOption('previewLayout.spaceTopBefore') || 0) + 'px'"
       />
       <div
         v-if="cParserOptionsGet('previewLayout.headerTop')"
-        v-text="cParserOptions.getOption('previewLayout.headerTop')"
-        :class="'h' + (cParserOptions.getOption('previewLayout.headerTopSize') || 4)"
+        v-text="$options.cParserOptions.getOption('previewLayout.headerTop')"
+        :class="'h' + ($options.cParserOptions.getOption('previewLayout.headerTopSize') || 4)"
       />
-      <template v-if="!hideWithoutContentTop">
+      <template v-if="!$options.privateData.hideWithoutContentTop">
         <template v-if="content.isMultiple && content.multipleNr === 0 && cParserOptionsGet('previewLayout.multiple.use')">
           <div
-            v-if="cParserOptions.getOption('previewLayout.multiple.spaceBefore')"
-            :style="'height: ' + cParserOptions.getOption('previewLayout.multiple.spaceBefore') + 'px'"
+            v-if="$options.cParserOptions.getOption('previewLayout.multiple.spaceBefore')"
+            :style="'height: ' + $options.cParserOptions.getOption('previewLayout.multiple.spaceBefore') + 'px'"
           />
           <div
-            v-if="cParserOptions.getOption('previewLayout.multiple.header')"
-            v-text="cParserOptions.getOption('previewLayout.multiple.header')"
-            :class="'h' + (cParserOptions.getOption('previewLayout.multiple.headerSize') || 4)"
+            v-if="$options.cParserOptions.getOption('previewLayout.multiple.header')"
+            v-text="$options.cParserOptions.getOption('previewLayout.multiple.header')"
+            :class="'h' + ($options.cParserOptions.getOption('previewLayout.multiple.headerSize') || 4)"
           />
           <span
-            v-if="multipleBefore"
-            v-text="multipleBefore"
-            class="before"
+            v-if="$options.privateData.multipleBefore"
+            v-text="$options.privateData.multipleBefore"
+            class="$options.privateData.before"
           />
         </template>
         <div
           v-if="cParserOptionsGet('previewLayout.spaceBefore')"
-          :style="'height: ' + cParserOptions.getOption('previewLayout.spaceBefore') + 'px'"
+          :style="'height: ' + $options.cParserOptions.getOption('previewLayout.spaceBefore') + 'px'"
         />
         <div
           v-if="cParserOptionsGet('previewLayout.header')"
-          :class="'h' + (cParserOptions.getOption('previewLayout.headerSize') || 4)"
-          v-text="cParserOptions.getOption('previewLayout.header')"
+          :class="'h' + ($options.cParserOptions.getOption('previewLayout.headerSize') || 4)"
+          v-text="$options.cParserOptions.getOption('previewLayout.header')"
         />
         <span
-          v-if="before" 
-          class="before"
-          v-text="before"
+          v-if="$options.privateData.before" 
+          class="$options.privateData.before"
+          v-text="$options.privateData.before"
         />
-        <template v-if="showAttributeBefore">
-          <span :class="'inline-attr layout-' + (iaVal.class || 'attr')" v-for="(iaVal, iaKey) in showAttributeBefore" :key="'ia' + iaKey">
+        <template v-if="$options.privateData.showAttributeBefore">
+          <span :class="'inline-attr layout-' + (iaVal.class || 'attr')" v-for="(iaVal, iaKey) in $options.privateData.showAttributeBefore" :key="'ia' + iaKey">
             <template v-if="content.orgXmlObj && content.orgXmlObj.attributes && content.orgXmlObj.attributes[iaKey]">
-              <span class="before" v-if="iaVal.before">{{ iaVal.before }}</span>
+              <span class="$options.privateData.before" v-if="iaVal.before">{{ iaVal.before }}</span>
               <span class="title" v-if="!iaVal.hideTitle">{{ iaVal.title || attrKey }}</span>
               <template v-if="iaVal.fx === 'valWoHt'">
                 {{ content.orgXmlObj.attributes[iaKey].indexOf('#') === 0 ? content.orgXmlObj.attributes[iaKey].substring(1) : content.orgXmlObj.attributes[iaKey] }}
@@ -60,7 +60,7 @@
               <template v-else>
                 {{ content.orgXmlObj.attributes[iaKey] }}
               </template>
-              <span class="before" v-if="iaVal.after">{{ iaVal.after }}</span>
+              <span class="$options.privateData.before" v-if="iaVal.after">{{ iaVal.after }}</span>
             </template>
           </span>
         </template>
@@ -70,25 +70,25 @@
           :id="'pox' + content.uId"
           :class="
             'obj just-childs'
-            + (enumeratedChilds.length > 1 ? ' enumerated-childs' : '')
-            + (enumerate && !(cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerated' : '')
+            + ($options.enumeratedChilds.length > 1 ? ' enumerated-childs' : '')
+            + ($options.privateData.enumerate && !($options.cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerated' : '')
             + (content.warnings.length > 0 ? ' warnings' : '')
           "
-          :data-target="hasTarget"
-          v-if="layoutBase === 'justChilds'"
+          :data-target="$options.privateData.hasTarget"
+          v-if="$options.privateData.layoutBase === 'justChilds'"
         >
           <span
-            v-if="enumerate"
-            v-text="enumerate + ' '"
+            v-if="$options.privateData.enumerate"
+            v-text="$options.privateData.enumerate + ' '"
             :class="
               'enumerate'
-              + (cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast ? ' enumerate-gt1' : '')
-              + (cParserOptions.getOption('previewLayout.multiple.enumerateRom') ? ' enumeraterom' : '')
+              + ($options.cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast ? ' enumerate-gt1' : '')
+              + ($options.cParserOptions.getOption('previewLayout.multiple.enumerateRom') ? ' enumeraterom' : '')
               + (content.parserCopyDeep >= 3 ? ' deeper' : '')
             "
           />
           <!-- Kinder -->
-          <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.getOption('editor.fxFunction.name')) > -1)">
+          <template v-if="content.childs.length > 0 && !($options.cParserOptions && $options.privateData.childlessFxFunctions.indexOf($options.cParserOptions.getOption('editor.fxFunction.name')) > -1)">
             <PreviewContent
               :geo-store="geoStore"
               ref="childs"
@@ -98,7 +98,7 @@
               :showComments="showComments"
               @setAnchor="setAnchorX"
               :selectableAnchors="selectableAnchors"
-              v-for="(aContent) in contentChildsShown"
+              v-for="(aContent) in $options.contentChildsShown"
               :key="'ccs' + aContent.uId"
             />
           </template>
@@ -106,50 +106,41 @@
         <!-- normal -->
         <div
           :class="
-            'obj lb-' + layoutBase
-            + (enumeratedChilds.length > 1 ? ' enumerated-childs' : '')
-            + (enumerate && !(cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerated' : '')
+            'obj lb-' + $options.privateData.layoutBase
+            + ($options.enumeratedChilds.length > 1 ? ' enumerated-childs' : '')
+            + ($options.privateData.enumerate && !($options.cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast) ? ' enumerated' : '')
             + (content.warnings.length > 0 ? ' warnings' : '')
-            + (showAnchors && hasAnchor ? ' hasanchor' : '')
-            + (selectableAnchors && hasAnchor ? ' hasselanchor' : '')
-            + (hasComment && showComments ? ' hascomment' : '')
+            + (showAnchors && $options.privateData.hasAnchor ? ' hasanchor' : '')
+            + (selectableAnchors && $options.privateData.hasAnchor ? ' hasselanchor' : '')
+            + (showComments && $options.privateData.hasComment ? ' hascomment' : '')
           "
-          :data-target="hasTarget"
+          :data-target="$options.privateData.hasTarget"
           @click="setAnchor"
           v-else
         >
           <div
             :id="'pox' + content.uId"
-            v-bind="additionalAttributs"
+            v-bind="$options.privateData.additionalAttributs"
             class="inline rel"
           >
             <span
-              v-text="enumerate + ' '"
+              v-text="$options.privateData.enumerate + ' '"
               :class="
                 'enumerate'
-                + (cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast ? ' enumerate-gt1' : '')
-                + (this.cParserOptions.getOption('previewLayout.multiple.enumerateFX') ? ' enumeratefx' : '')
-                + (this.cParserOptions.getOption('previewLayout.multiple.enumerateFX') ? ' deep' + content.parserCopyDeep : '')
+                + ($options.cParserOptions.getOption('layout.multiple.enumerateFX') === 'gt1' && content.multipleNr === 0 && content.multipleLast ? ' enumerate-gt1' : '')
+                + ($options.cParserOptions.getOption('previewLayout.multiple.enumerateFX') ? ' enumeratefx deep' + content.parserCopyDeep : '')
               "
-              v-if="enumerate"
+              v-if="$options.privateData.enumerate"
             />
-            <b
-              v-if="shownTitle"
-              v-text="shownTitle + ': '"
-            />
-            <br v-if="shownTitle && layoutBase === 'box'" />
+            <template v-if="$options.privateData.shownTitle">
+              <b v-text="$options.privateData.shownTitle + ': '" />
+              <br v-if="$options.privateData.layoutBase === 'box'" />
+            </template>
             <!-- Inhalt -->
             <span
-              v-if="valueType === 'fix' || valueType === 'editable'"
-              v-text="content.orgXmlObj.getValueByOption(this.cParserOptions.getOption('value'), false)"
-              :class="
-                ''
-                + (valueType === 'fix' ? ' val-fix' : '')
-                + (cParserOptions.getOption('previewLayout.bold') ? ' bold' : '')
-                + (cParserOptions.getOption('previewLayout.italic') ? ' italic' : '')
-                + (cParserOptions.getOption('previewLayout.underline') ? ' underline' : '')
-                + (cParserOptions.getOption('previewLayout.ls1pt') ? ' ls1pt' : '')
-              "
+              v-if="$options.privateData.valueType === 'fix' || $options.privateData.valueType === 'editable'"
+              v-text="content.orgXmlObj.getValueByOption($options.cParserOptions.getOption('value'), false)"
+              :class="$options.cParserOptions.getPreviewFontStyles() + ($options.privateData.valueType === 'fix' ? ' val-fix' : '')"
             />
             <span
               :id="'gs' + content.uId"
@@ -158,7 +149,7 @@
             />
           </div>
           <!-- Kinder -->
-          <template v-if="content.childs.length > 0 && !(cParserObj && cParserOptions && childlessFxFunctions.indexOf(cParserOptions.getOption('editor.fxFunction.name')) > -1)">
+          <template v-if="content.childs.length > 0 && !($options.cParserOptions && $options.privateData.childlessFxFunctions.indexOf($options.cParserOptions.getOption('editor.fxFunction.name')) > -1)">
             <PreviewContent
               :geo-store="geoStore"
               ref="childs"
@@ -168,17 +159,17 @@
               :showComments="showComments"
               @setAnchor="setAnchorX"
               :selectableAnchors="selectableAnchors"
-              v-for="(aContent, aKey) in contentChildsShown"
+              v-for="(aContent, aKey) in $options.contentChildsShown"
               :key="aContent.uId + '-' + aKey"
             />
           </template>
         </div>
 
         <!-- Nach Inhalten -->
-        <template v-if="showAttributeAfter">
-          <span :class="'inline-attr layout-' + (iaVal.class || 'attr')" v-for="(iaVal, iaKey) in showAttributeAfter" :key="'ia' + iaKey">
+        <template v-if="$options.privateData.showAttributeAfter">
+          <span :class="'inline-attr layout-' + (iaVal.class || 'attr')" v-for="(iaVal, iaKey) in $options.privateData.showAttributeAfter" :key="'ia' + iaKey">
             <template v-if="content.orgXmlObj && content.orgXmlObj.attributes && content.orgXmlObj.attributes[iaKey]">
-              <span class="before" v-if="iaVal.before">{{ iaVal.before }}</span>
+              <span class="$options.privateData.before" v-if="iaVal.before">{{ iaVal.before }}</span>
               <span class="title" v-if="!iaVal.hideTitle">{{ iaVal.title || attrKey }}</span>
               <template v-if="iaVal.fx === 'valWoHt'">
                 {{ content.orgXmlObj.attributes[iaKey].indexOf('#') === 0 ? content.orgXmlObj.attributes[iaKey].substring(1) : content.orgXmlObj.attributes[iaKey] }}
@@ -186,78 +177,79 @@
               <template v-else>
                 {{ content.orgXmlObj.attributes[iaKey] }}
               </template>
-              <span class="before" v-if="iaVal.after">{{ iaVal.after }}</span>
+              <span class="$options.privateData.before" v-if="iaVal.after">{{ iaVal.after }}</span>
             </template>
           </span>
         </template>
         <span
           class="join"
-          v-if="content.isMultiple && !content.multipleLast && cParserObj && cParserOptions.getOption('previewLayout.multiple.use') && cParserOptions.getOption('previewLayout.multiple.join')"
-          v-text="(cParserOptions.getOption('previewLayout.multiple.lastjoin') && content.multipleNr === content.multipleMax - 1) ? cParserOptions.getOption('previewLayout.multiple.lastjoin') : cParserOptions.getOption('previewLayout.multiple.join')"
+          v-if="content.isMultiple && !content.multipleLast && $options.cParserOptions.getOption('previewLayout.multiple.use') && $options.cParserOptions.getOption('previewLayout.multiple.join')"
+          v-text="($options.cParserOptions.getOption('previewLayout.multiple.lastjoin') && content.multipleNr === content.multipleMax - 1) ? $options.cParserOptions.getOption('previewLayout.multiple.lastjoin') : $options.cParserOptions.getOption('previewLayout.multiple.join')"
         />
         <span
-          class="after"
-          v-if="after"
-          v-text="after"
+          class="$options.privateData.after"
+          v-if="$options.privateData.after"
+          v-text="$options.privateData.after"
         />
         <div
           class="h4"
-          v-text="cParserOptions.getOption('previewLayout.footer')"
+          v-text="$options.cParserOptions.getOption('previewLayout.footer')"
           v-if="cParserOptionsGet('previewLayout.footer')"
         />
         <div
-          :style="'height: ' + cParserOptions.getOption('previewLayout.spaceAfter') + 'px'"
+          :style="'height: ' + $options.cParserOptions.getOption('previewLayout.spaceAfter') + 'px'"
           v-if="cParserOptionsGet('previewLayout.spaceAfter')"
         />
-        <template v-if="content.isMultiple && content.multipleLast && cParserObj && cParserOptions.getOption('previewLayout.multiple.use')">
+        <template v-if="content.isMultiple && content.multipleLast && $options.cParserOptions.getOption('previewLayout.multiple.use')">
           <span
-            class="after"
-            v-if="multipleAfter"
-            v-text="multipleAfter"
+            class="$options.privateData.after"
+            v-if="$options.privateData.multipleAfter"
+            v-text="$options.privateData.multipleAfter"
           />
-          <br v-if="cParserOptions.getOption('previewLayout.multiple.lastBR')" />
+          <br v-if="$options.cParserOptions.getOption('previewLayout.multiple.lastBR')" />
           <div
             class="h4"
-            v-text="cParserOptions.getOption('previewLayout.multiple.footer')"
-            v-if="cParserOptions.getOption('previewLayout.multiple.footer')"
+            v-text="$options.cParserOptions.getOption('previewLayout.multiple.footer')"
+            v-if="$options.cParserOptions.getOption('previewLayout.multiple.footer')"
           />
           <div
-            :style="'height: ' + cParserOptions.getOption('previewLayout.multiple.spaceAfter') + 'px'"
-            v-if="cParserOptions.getOption('previewLayout.multiple.spaceAfter')"
+            :style="'height: ' + $options.cParserOptions.getOption('previewLayout.multiple.spaceAfter') + 'px'"
+            v-if="$options.cParserOptions.getOption('previewLayout.multiple.spaceAfter')"
           />
         </template>
         <span
-          v-if="whitespaceAfter" 
+          v-if="$options.privateData.whitespaceAfter" 
           v-text="' '"
         />
       </template>
     </template>
     <b-tooltip
-      v-if="showAnchors && hasAnchor"
+      v-if="showAnchors && $options.privateData.hasAnchor"
       :target="'po' + content.uId"
       placement="left"
       triggers="hover"
     >
-      {{ '#' + valAnchor + ' (' + typAnchor + ((subTypAnchor) ? ', ' + subTypAnchor : '') + ')' + ' -> ' + content.orgXmlObj.getValue()[0] }}
+      {{ '#' + $options.privateData.valAnchor + ' (' + $options.privateData.typAnchor + (($options.privateData.subTypAnchor) ? ', ' + $options.privateData.subTypAnchor : '') + ')' + ' -> ' + content.orgXmlObj.getValue()[0] }}
     </b-tooltip>
-    <b-tooltip
-      v-if="hasComment && showComments"
-      :target="'pox' + content.uId"
-      placement="top"
-      triggers="hover"
-    >
-      <ul class="comment-list">
-        <li
-          class="comment"
-          v-for="(aComment, aComKey) in content.orgXmlObj.comments" :key="'cott' + content.uId + '-' + aComKey"
-        >
-          {{ aComment.val }}
-        </li>
-      </ul>
-    </b-tooltip>
-    <span class="comment-sym" v-if="hasComment && showComments">
-      <font-awesome-icon :icon="faComment" />
-    </span>
+    <template v-if="showComments && $options.privateData.hasComment">
+      <b-tooltip
+        :target="'pox' + content.uId"
+        placement="top"
+        triggers="hover"
+      >
+        <ul class="comment-list">
+          <li
+            class="comment"
+            v-for="(aComment, aComKey) in content.orgXmlObj.comments" :key="'cott' + content.uId + '-' + aComKey"
+          >
+            {{ aComment.val }}
+          </li>
+        </ul>
+      </b-tooltip>
+      <span class="comment-sym">
+        <font-awesome-icon :icon="faComment" />
+      </span>
+    </template>
   </div>
 </template>
 
@@ -284,287 +276,252 @@
     },
     data () {
       return {
-        fontSize: null,
         faComment,
-        childlessFxFunctions: [
-          'GeoSelect'
-        ],
-        pSubtypes: [
-          'compound',
-          'MWE',
-          'diminutive',
-          'movierung',
-          'shortform'
-        ],
       }
     },
-    mounted () {
-      this.fontSize = this.cParserOptions && this.cParserOptions.getOption('layout.fontsize')
-      this.updateComments()
+    cParserOptions: null,
+    contentChildsShown: [],
+    enumeratedChilds: false,
+    privateData: {
+      childlessFxFunctions: [
+        'GeoSelect'
+      ],
+      pSubtypes: [
+        'compound',
+        'MWE',
+        'diminutive',
+        'movierung',
+        'shortform'
+      ],
+      fxC: {},
+      hideWithoutContentAll: false,
+      fontSize: null,
+      before: null,
+      after: null,
+      multipleBefore: null,
+      multipleAfter: null,
+      whitespaceAfter: null,
+      hasComment: false,
+      showAttributeBefore: false,
+      showAttributeAfter: false,
+      additionalAttributs: null,
+      hideWithoutContentTop: false,
+      hasTarget: false,
+      hasAnchor: false,
+      valAnchor: '',
+      typAnchor: '',
+      subTypAnchor: '',
+      valueType: 'none',
+      layoutBase: 'box',
+      title: null,
+      shownTitle: null,
+      enumerate: null
     },
-    computed: {
-      before () {
-        if (!this.fxC.noBefore && this.cParserObj && this.cParserOptions) {
-          if (this.cParserOptions.getOption('previewLayout.beforeIfNotFirst')) {
-            return this.content.count > 0 ? this.cParserOptions.getOption('previewLayout.beforeIfNotFirst') : null
-          }
-          let aOptBI = this.cParserOptions.getOption('previewLayout.beforeIf')
-          if (aOptBI && aOptBI.id) {
-            let aPrev = this.content.getSiblings('prev', true, false, true)[0]
-            console.log('xxxx', aOptBI.id)
-            if (aPrev && (typeof aOptBI.id === 'string' ? aPrev.parserObj.options.getOption('id') === aOptBI.id : aOptBI.id.indexOf(aPrev.parserObj.options.getOption('id')) > -1)) {
-              return aOptBI.value
+    created () {
+      var aThis = this
+      if (this.content.parserObj) {
+        this.$options.cParserOptions = this.content.parserObj.options
+      }
+      this.$options.privateData.valueType = (this.$options.cParserOptions && this.$options.cParserOptions.getOption('value'))
+          ? ((!this.$options.cParserOptions.getOption('value.edit.use')) ? 'fix' : 'editable')
+          : 'none'
+      this.$options.privateData.fxC = this.fx || {}
+      this.$options.privateData.fontSize = this.$options.cParserOptions && this.$options.cParserOptions.getOption('layout.fontsize')
+      this.$options.privateData.hideWithoutContentAll = this.content.childs.length === 0 && !this.$options.cParserOptions.getOption('previewLayout.spaceTopBefore') && !this.$options.cParserOptions.getOption('previewLayout.headerTopSize') && this.$options.cParserOptions.getOption('previewLayout.hideWithoutContent')
+      this.$options.privateData.before = (function () {
+          if (!aThis.$options.privateData.fxC.noBefore && aThis.$options.cParserOptions) {
+            if (aThis.$options.cParserOptions.getOption('previewLayout.beforeIfNotFirst')) {
+              return aThis.content.count > 0 ? aThis.$options.cParserOptions.getOption('previewLayout.beforeIfNotFirst') : null
             }
+            let aOptBI = aThis.$options.cParserOptions.getOption('previewLayout.beforeIf')
+            if (aOptBI && aOptBI.id) {
+              let aPrev = aThis.content.getSiblings('prev', true, false, true)[0]
+              console.log('xxxx', aOptBI.id)
+              if (aPrev && (typeof aOptBI.id === 'string' ? aPrev.parserObj.options.getOption('id') === aOptBI.id : aOptBI.id.indexOf(aPrev.parserObj.options.getOption('id')) > -1)) {
+                return aOptBI.value
+              }
+            }
+            return aThis.$options.cParserOptions.getOption('previewLayout.before')
+          } else {
+            return null
           }
-          return this.cParserOptions.getOption('previewLayout.before')
-        } else {
-          return null
-        }
-      },
-      after () {
-          if (!this.fxC.noAfter && this.cParserObj && this.cParserOptions) {
-            let aOptAI = this.cParserOptions.getOption('previewLayout.afterIf')
+        }())
+      this.$options.privateData.after = (function () {
+          if (!aThis.$options.privateData.fxC.noAfter && aThis.$options.cParserOptions) {
+            let aOptAI = aThis.$options.cParserOptions.getOption('previewLayout.afterIf')
             if (aOptAI && aOptAI.id) {
-              let aNext = this.content.getSiblings('next', true, false, true)[0]
+              let aNext = aThis.content.getSiblings('next', true, false, true)[0]
               if (aNext && (typeof aOptAI.id === 'string' ? aNext.parserObj.options.getOption('id') === aOptAI.id : aOptAI.id.indexOf(aNext.parserObj.options.getOption('id')) > -1)) {
                 return aOptAI.value
               }
             }
-            return this.cParserOptions.getOption('previewLayout.after')
+            return aThis.$options.cParserOptions.getOption('previewLayout.after')
           } else {
             return null
           }
-      },
-      multipleBefore () {
-        if (!this.fxC.noBefore) {
-          let aOptBI = this.cParserOptions.getOption('previewLayout.multiple.beforeIf')
-          if (aOptBI && aOptBI.id) {
-            let aPrev = this.content.getSiblings('prev', true, false, true)[0]
-            if (aPrev && (typeof aOptBI.id === 'string' ? aPrev.parserObj.options.getOption('id') === aOptBI.id : aOptBI.id.indexOf(aPrev.parserObj.options.getOption('id')) > -1)) {
-              return aOptBI.value
+        }())
+      this.$options.privateData.multipleBefore = (function () {
+          if (!aThis.$options.privateData.fxC.noBefore) {
+            let aOptBI = aThis.$options.cParserOptions.getOption('previewLayout.multiple.beforeIf')
+            if (aOptBI && aOptBI.id) {
+              let aPrev = aThis.content.getSiblings('prev', true, false, true)[0]
+              if (aPrev && (typeof aOptBI.id === 'string' ? aPrev.parserObj.options.getOption('id') === aOptBI.id : aOptBI.id.indexOf(aPrev.parserObj.options.getOption('id')) > -1)) {
+                return aOptBI.value
+              }
             }
+            return aThis.$options.cParserOptions.getOption('previewLayout.multiple.before')
+          } else {
+            return null
           }
-          return this.cParserOptions.getOption('previewLayout.multiple.before')
-        } else {
-          return null
-        }
-      },
-      multipleAfter () {
-        if (!this.fxC.noBefore) {
-          let aOptAI = this.cParserOptions.getOption('previewLayout.multiple.afterIf')
-          if (aOptAI && aOptAI.id) {
-            let aNext = this.content.getSiblings('next', true, false, true)[0]
-            if (aNext && (typeof aOptAI.id === 'string' ? aNext.parserObj.options.getOption('id') === aOptAI.id : aOptAI.id.indexOf(aNext.parserObj.options.getOption('id')) > -1)) {
-              return aOptAI.value
+        }())
+      this.$options.privateData.multipleAfter = (function () {
+          if (!aThis.$options.privateData.fxC.noBefore) {
+            let aOptAI = aThis.$options.cParserOptions.getOption('previewLayout.multiple.afterIf')
+            if (aOptAI && aOptAI.id) {
+              let aNext = aThis.content.getSiblings('next', true, false, true)[0]
+              if (aNext && (typeof aOptAI.id === 'string' ? aNext.parserObj.options.getOption('id') === aOptAI.id : aOptAI.id.indexOf(aNext.parserObj.options.getOption('id')) > -1)) {
+                return aOptAI.value
+              }
             }
+            return aThis.$options.cParserOptions.getOption('previewLayout.multiple.after')
+          } else {
+            return null
           }
-          return this.cParserOptions.getOption('previewLayout.multiple.after')
-        } else {
-          return null
-        }
-      },
-      whitespaceAfter () {
-        function indexFor (arr, value) {
-          for (let i = 0, aLen = arr.length; i < aLen; i++) {
-            if (arr[i] === value) {
-              return i
+        }())
+      this.$options.privateData.whitespaceAfter = (function () {
+          function indexFor (arr, value) {
+            for (let i = 0, aLen = arr.length; i < aLen; i++) {
+              if (arr[i] === value) {
+                return i
+              }
             }
+            return -1
           }
-          return -1
-        }
-        function getFirstLetterAfter (arr) {
-          for (let i = 0; i < arr.length; i++) {
-            let x = arr[i]
-            if (x.orgXmlObj.getValue) {
-              let v = x.orgXmlObj.getValue()
-              if (v && v.length > 0) {
-                let vt = v.join(' ').trim()
-                if (vt.length > 0) {
-                  return vt
+          function getFirstLetterAfter (arr) {
+            for (let i = 0; i < arr.length; i++) {
+              let x = arr[i]
+              if (x.orgXmlObj.getValue) {
+                let v = x.orgXmlObj.getValue()
+                if (v && v.length > 0) {
+                  let vt = v.join(' ').trim()
+                  if (vt.length > 0) {
+                    return vt
+                  }
                 }
               }
             }
+            return ''
           }
-          return ''
-        }
-        let wsA = (!this.cParserOptions.getOption('previewLayout.noSpaceAfter') && (this.valueType === 'fix' || this.valueType === 'editable')) || this.cParserOptions.getOption('previewLayout.shoudSpace')
-        if (wsA) {
-          if (this.cParserOptions.getOption('previewLayout.noSpaceAfterHyphen')) {
-            if (['-'].indexOf(this.content.orgXmlObj.getValue()[0].slice(-1)) > -1) {
-              wsA = false
-            }
-            // console.log(this.content.orgXmlObj.name, this.content.orgXmlObj.getValue()[0], this.content.orgXmlObj.getValue()[0].slice(-1))
-          } else {
-            let ix = indexFor(this.content.root.family, this.content)
-            let allAfter = this.content.root.family.slice(ix + 1)
-            allAfter = allAfter.filter(x => x && x.parents && indexFor(x.parents.indexOf, this.content) > -1)
-            if (wsA && allAfter.length > 0 && allAfter[0].parserObj.options.getOption('previewLayout.prevAutospace')) {
-              if (['-', '('].indexOf(this.content.orgXmlObj.getValue()[0].slice(-1)) > -1 || ['-', '('].indexOf(allAfter[0].orgXmlObj.getValue()[0][0]) > -1) {
+          let wsA = (!aThis.$options.cParserOptions.getOption('previewLayout.noSpaceAfter') && (aThis.$options.privateData.valueType === 'fix' || aThis.$options.privateData.valueType === 'editable')) || aThis.$options.cParserOptions.getOption('previewLayout.shoudSpace')
+          if (wsA) {
+            if (aThis.$options.cParserOptions.getOption('previewLayout.noSpaceAfterHyphen')) {
+              if (['-'].indexOf(aThis.content.orgXmlObj.getValue()[0].slice(-1)) > -1) {
                 wsA = false
               }
-              // console.log(allAfter[0], this.content.orgXmlObj.getValue()[0], allAfter[0].orgXmlObj.getValue()[0][0])
-            }
-            if (wsA && this.cParserOptions.getOption('previewLayout.autospace') && ix > -1) {
-              let firstTextAfter = getFirstLetterAfter(allAfter)
-              if (firstTextAfter.length > 0) {
-                if (['.', ',', ';', ':', '-', ')'].indexOf(firstTextAfter[0]) > -1) {
+            } else {
+              let ix = indexFor(aThis.content.root.family, aThis.content)
+              let allAfter = aThis.content.root.family.slice(ix + 1)
+              allAfter = allAfter.filter(x => x && x.parents && indexFor(x.parents, aThis.content) > -1)
+              if (wsA && allAfter.length > 0 && allAfter[0].parserObj.options.getOption('previewLayout.prevAutospace')) {
+                if (['-', '('].indexOf(aThis.content.orgXmlObj.getValue()[0].slice(-1)) > -1 || ['-', '('].indexOf(allAfter[0].orgXmlObj.getValue()[0][0]) > -1) {
                   wsA = false
                 }
-                // console.log('firstTextAfter', this.content.uId, '"' + this.content.orgXmlObj.getValue()[0] + '"', wsA, ['.', ',', ';', ':', '-', ')'].indexOf(firstTextAfter[0]), this.content, [firstTextAfter[0], firstTextAfter])
               }
-            }
-          }
-        }
-        return wsA
-      },
-      enumeratedChilds () {
-        let aEnumChilds = this.contentChildsShown.filter(aChild => aChild && aChild.parserObj && aChild.parserObj.options && aChild.parserObj.options.getOption('previewLayout.multiple.enumerateFX'))
-        return aEnumChilds
-      },
-      showAttributeBefore () {
-        return this.content.parserObj.options && this.content.parserObj.options.getOption('previewLayout.showAttributeBefore')
-      },
-      showAttributeAfter () {
-        return this.content.parserObj.options && this.content.parserObj.options.getOption('previewLayout.showAttributeAfter')
-      },
-      additionalAttributs () {
-        let addAttr = this.cParserOptions.getOption('previewLayout.addAttribute')
-        if (addAttr && addAttr.attribute) {
-          // console.log('additionalAttributs', addAttr)
-          let val = true
-          if (addAttr.sourceAttribute && this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes[addAttr.sourceAttribute]) {
-            val = this.content.orgXmlObj.attributes[addAttr.sourceAttribute]
-            if (addAttr.removePrefix) {
-              let rPrefix = this.cParserOptions.getOption('attributes.' + addAttr.sourceAttribute + '.prefix')
-              if (rPrefix) {
-                if (val.indexOf(rPrefix) === 0) {
-                  val = val.substr(rPrefix.length)
+              if (wsA && aThis.$options.cParserOptions.getOption('previewLayout.autospace') && ix > -1) {
+                let firstTextAfter = getFirstLetterAfter(allAfter)
+                if (firstTextAfter.length > 0) {
+                  if (['.', ',', ';', ':', '-', ')'].indexOf(firstTextAfter[0]) > -1) {
+                    wsA = false
+                  }
                 }
               }
-              // console.log('additionalAttributs', addAttr.sourceAttribute, rPrefix, val)
             }
           }
-          return {[addAttr.attribute]: val}
-        }
-        return null
-      },
-      hasComment () {
-        return this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0
-      },
-      fxC () {
-        return this.fx || {}
-      },
-      hideWithoutContentAll () {
-        return !this.cParserOptions.getOption('previewLayout.spaceTopBefore') && !this.cParserOptions.getOption('previewLayout.headerTopSize') && this.content.childs.length === 0 && this.cParserOptions.getOption('previewLayout.hideWithoutContent')
-      },
-      hideWithoutContentTop () {
-        return this.content.childs.length === 0 && this.cParserOptions.getOption('previewLayout.hideWithoutContent')
-      },
-      cParserObj () {
-        return this.content.parserObj
-      },
-      cParserOptions () {
-        return this.content.parserObj.options
-      },
-      hasTarget () {
-        let tg = this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.target
-        return tg
-      },
-      hasAnchor () {
-        let hA = (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id'])
-              || ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.subtype && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes.subtype) > -1)
-                && !(this.content.orgXmlObj && this.content.orgXmlObj.name === 'xr'))
-        return hA
-      },
-      valAnchor () {
-        if (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id']) {
-          return this.content.orgXmlObj.attributes['xml:id']
-        }
-        return ''
-      },
-      typAnchor () {
-        if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.type && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes.type) > -1)) {
-          return this.content.orgXmlObj.attributes.type
-        }
-        if (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id']) {
-          return 'lemma'
-        } else {
-          return 'variant'
-        }
-      },
-      subTypAnchor () {
-        if ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.subtype && this.pSubtypes.indexOf(this.content.orgXmlObj.attributes.subtype) > -1)) {
-          return this.content.orgXmlObj.attributes.subtype
-        }
-        return ''
-      },
-      valueType () {		// Ist der aktuelle Wert 'fix', 'editable' oder 'none'?
-        if (this.cParserObj && this.cParserOptions && this.cParserOptions.getOption('value')) {
-          if (!this.cParserOptions.getOption('value.edit.use')) {
-            return 'fix'
+          return wsA
+        }())
+      this.$options.privateData.hasComment = this.content.orgXmlObj && this.content.orgXmlObj.comments && this.content.orgXmlObj.comments.length > 0
+      this.$options.privateData.showAttributeBefore = this.content.parserObj.options && this.content.parserObj.options.getOption('previewLayout.showAttributeBefore')
+      this.$options.privateData.showAttributeAfter = this.content.parserObj.options && this.content.parserObj.options.getOption('previewLayout.showAttributeAfter')
+      this.$options.privateData.additionalAttributs = (function () {
+          let addAttr = aThis.$options.cParserOptions.getOption('previewLayout.addAttribute')
+          if (addAttr && addAttr.attribute) {
+            let val = true
+            if (addAttr.sourceAttribute && aThis.content.orgXmlObj && aThis.content.orgXmlObj.attributes && aThis.content.orgXmlObj.attributes[addAttr.sourceAttribute]) {
+              val = aThis.content.orgXmlObj.attributes[addAttr.sourceAttribute]
+              if (addAttr.removePrefix) {
+                let rPrefix = aThis.$options.cParserOptions.getOption('attributes.' + addAttr.sourceAttribute + '.prefix')
+                if (rPrefix) {
+                  if (val.indexOf(rPrefix) === 0) {
+                    val = val.substr(rPrefix.length)
+                  }
+                }
+              }
+            }
+            return {[addAttr.attribute]: val}
           }
-          return 'editable'
-        }
-        return 'none'
-      },
-      layoutBase () {		// Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
-        if (this.fx && this.fx.frame) { return this.fx.frame }
-        if (this.content.isRoot) { return 'justChilds' }
-        if (this.cParserObj && this.cParserOptions && this.cParserOptions.getOption('previewLayout.frame')) {
-          if (this.cParserOptions.getOption('previewLayout.frame') === 'panelClosed') {
-            this.isOpen = false
-            return 'box'
+          return null
+        }())
+      this.$options.privateData.hideWithoutContentTop = this.content.childs.length === 0 && this.$options.cParserOptions.getOption('previewLayout.hideWithoutContent')
+      this.$options.privateData.hasTarget = this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.target
+      this.$options.privateData.hasAnchor = (this.content.orgXmlObj && this.content.orgXmlObj.attributes && (
+          this.content.orgXmlObj.attributes['xml:id']
+          || ((this.content.orgXmlObj.attributes.subtype && this.$options.privateData.pSubtypes.indexOf(this.content.orgXmlObj.attributes.subtype) > -1)
+            && !(this.content.orgXmlObj && this.content.orgXmlObj.name === 'xr'))
+        ))
+      this.$options.privateData.valAnchor = (this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id']) ? this.content.orgXmlObj.attributes['xml:id'] : ''
+      this.$options.privateData.typAnchor = ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.type && this.$options.privateData.pSubtypes.indexOf(this.content.orgXmlObj.attributes.type) > -1))
+          ? this.content.orgXmlObj.attributes.type
+          : ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id']) ? 'lemma' : 'variant')
+      // console.log(this.$options.privateData.typAnchor, this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes['xml:id'], this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.type && this.$options.privateData.pSubtypes.indexOf(this.content.orgXmlObj.attributes.type) > -1)
+      this.$options.privateData.subTypAnchor = ((this.content.orgXmlObj && this.content.orgXmlObj.attributes && this.content.orgXmlObj.attributes.subtype && this.$options.privateData.pSubtypes.indexOf(this.content.orgXmlObj.attributes.subtype) > -1))
+          ? this.content.orgXmlObj.attributes.subtype : ''
+      this.$options.privateData.layoutBase = (function () { // Mögliche Rückgabewerte: 'panel'/'panelClosed', 'justChilds', 'box', 'line' und 'inline'
+          if (aThis.fx && aThis.fx.frame) { return aThis.fx.frame }
+          if (aThis.content.isRoot) { return 'justChilds' }
+          if (aThis.$options.cParserOptions && aThis.$options.cParserOptions.getOption('previewLayout.frame')) {
+            if (aThis.$options.cParserOptions.getOption('previewLayout.frame') === 'panelClosed') {
+              aThis.isOpen = false
+              return 'box'
+            }
+            return aThis.$options.cParserOptions.getOption('previewLayout.frame')
           }
-          return this.cParserOptions.getOption('previewLayout.frame')
-        }
-        return 'box'
-      },
-      title () {
-        if (this.cParserObj && this.cParserOptions) {
-          if (this.cParserOptions.getResult('title')) {
-            return this.cParserOptions.getResult('title')
-          } else if (this.cParserOptions.getOption('tagAsTitle')) {
-            return this.content.orgXmlObj.name
-          }
-        }
-        return null
-      },
-      shownTitle () {
-        if (this.cParserObj && this.cParserOptions && !this.cParserOptions.getOption('previewLayout.hideTitle')) {
-          return this.title
-        }
-        return null
-      },
-      enumerate () {
-        if (this.cParserObj && this.cParserOptions && this.content.isMultiple) {
-          if (this.cParserOptions.getOption('previewLayout.multiple.enumerateFX')) {
-            if (this.content.parserCopyDeep === 0) {
-              return this.num2rom(this.content.multipleNr + 1) + '. '
-            } else if (this.content.parserCopyDeep === 1) {
-              return ' ' + (this.content.multipleNr + 1) + '. '
-            } else if (this.content.parserCopyDeep === 2) {
-              return ' ' + this.num2abc(this.content.multipleNr + 1) + ') '
-            } else if (this.content.parserCopyDeep >= 3) {
-              return ' ' + this.num2abc(this.content.multipleNr + 1, 'α', 25) + ') '
+          return 'box'
+        }())
+      this.$options.privateData.title = (this.$options.cParserOptions)
+          ? (this.$options.cParserOptions.getResult('title')
+            ? this.$options.cParserOptions.getResult('title')
+            : ((this.$options.cParserOptions.getOption('tagAsTitle')) ? this.content.orgXmlObj.name : null))
+          : null
+      this.$options.privateData.shownTitle = (this.$options.cParserOptions && !this.$options.cParserOptions.getOption('previewLayout.hideTitle')) ? this.title : null
+      this.$options.contentChildsShown = this.content.childs.filter((aObj) => this.showObj(aObj))
+      this.$options.enumeratedChilds = this.$options.contentChildsShown.filter(aChild => aChild && aChild.parserObj && aChild.parserObj.options && aChild.parserObj.options.getOption('previewLayout.multiple.enumerateFX'))
+      this.$options.privateData.enumerate = (function () {
+          if (aThis.$options.cParserOptions && aThis.content.isMultiple) {
+            if (aThis.$options.cParserOptions.getOption('previewLayout.multiple.enumerateFX')) {
+              if (aThis.content.parserCopyDeep === 0) {
+                return aThis.num2rom(aThis.content.multipleNr + 1) + '. '
+              } else if (aThis.content.parserCopyDeep === 1) {
+                return ' ' + (aThis.content.multipleNr + 1) + '. '
+              } else if (aThis.content.parserCopyDeep === 2) {
+                return ' ' + aThis.num2abc(aThis.content.multipleNr + 1) + ') '
+              } else if (aThis.content.parserCopyDeep >= 3) {
+                return ' ' + aThis.num2abc(aThis.content.multipleNr + 1, 'α', 25) + ') '
+              }
+            }
+            if (aThis.$options.cParserOptions.getOption('previewLayout.multiple.enumerateRom')) {
+              return aThis.num2rom(aThis.content.multipleNr + 1) + '. '
+            }
+            if (aThis.$options.cParserOptions.getOption('previewLayout.multiple.enumerate')) {
+              return aThis.content.multipleNr + 1 + '. '
             }
           }
-          if (this.cParserOptions.getOption('previewLayout.multiple.enumerateRom')) {
-            return this.num2rom(this.content.multipleNr + 1) + '. '
-          }
-          if (this.cParserOptions.getOption('previewLayout.multiple.enumerate')) {
-            return this.content.multipleNr + 1 + '. '
-          }
-        }
-      },
-      contentChildsShown () {
-        let aOut = []
-        this.content.childs.forEach((aObj) => {
-          if (this.showObj(aObj)) {
-            aOut.push(aObj)
-          }
-        })
-        return aOut
-      }
+        }())
+      this.$options.privateData = JSON.parse(JSON.stringify(this.$options.privateData))
+    },
+    mounted () {
+      this.updateComments()
+    },
+    computed: {
     },
     watch: {
       'commentsListe.comments' (nVal) {
@@ -574,14 +531,14 @@
     methods: {
       renderingGeoPreview: renderingPreview.geoPreview,
       cParserOptionsGet (opt) {
-        return this.cParserOptions && this.cParserOptions.getOption(opt)
+        return this.$options.cParserOptions && this.$options.cParserOptions.getOption(opt)
       },
       updateComments () {
-        if (this.hasComment && this.commentsListe && this.commentsListe.comments && !this.commentsListe.comments[this.content.uId]) {
+        if (this.$options.privateData.hasComment && this.commentsListe && this.commentsListe.comments && !this.commentsListe.comments[this.content.uId]) {
           this.$set(this.commentsListe.comments, this.content.uId, {
             list: this.content.orgXmlObj.comments,
             title: this.title,
-            value: this.content.orgXmlObj.getValueByOption(this.cParserOptions.getOption('value'), false),
+            value: this.content.orgXmlObj.getValueByOption(this.$options.cParserOptions.getOption('value'), false),
             el: this.$el,
             top: 0
           })
@@ -613,9 +570,10 @@
       },
       showObj (obj) {		// Soll das Element angezeigt werden?
         if (obj && obj.orgXmlObj && obj.parents
-        && (obj.parserObj && obj.parserObj.ready && obj.parserObj.useable)
-        && (obj.orgXmlObj.type === 'TEXT' || obj.orgXmlObj.type === 'ELEMENT')
-        && !(obj.parserObj.options && obj.parserObj.options.getOption('previewLayout.hidden'))) {
+          && (obj.parserObj && obj.parserObj.ready && obj.parserObj.useable)
+          && (obj.orgXmlObj.type === 'TEXT' || obj.orgXmlObj.type === 'ELEMENT')
+          && !(obj.parserObj.options && obj.parserObj.options.getOption('previewLayout.hidden'))
+        ) {
           if (obj.parserObj.options && obj.parserObj.options.getOption('previewLayout.fx')) {
             let aFx = obj.parserObj.options.getOption('previewLayout.fx')
             if (aFx === 'hideIfParentNextSame' || aFx === 'hideIfParentPrevSame') {
@@ -634,8 +592,9 @@
         return false
       },
       setAnchor () {
-        if (this.selectableAnchors && this.hasAnchor) {
-          this.$emit('setAnchor', [this.content.orgXmlObj.getValue()[0], this.valAnchor, this.typAnchor, this.subTypAnchor])
+        if (this.selectableAnchors && this.$options.privateData.hasAnchor) {
+          console.log(this.content.orgXmlObj.getValue()[0], this.$options.privateData.valAnchor, this.$options.privateData.typAnchor, this.$options.privateData.subTypAnchor)
+          this.$emit('setAnchor', [this.content.orgXmlObj.getValue()[0], this.$options.privateData.valAnchor, this.$options.privateData.typAnchor, this.$options.privateData.subTypAnchor])
         }
       },
       setAnchorX (data) {
