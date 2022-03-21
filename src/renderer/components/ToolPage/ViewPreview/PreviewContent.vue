@@ -6,20 +6,10 @@
   >
     <template v-if="!$options.privateData.hideWithoutContentAll">
       <!-- Vor Inhalten -->
-      <div
-        v-if="
-          (this.content.count > 0 && cParserOptionsGet('previewLayout.newlineIfNotFirst'))
-          || cParserOptionsGet('previewLayout.spaceTopBefore')
-        "
-        :style="'height: ' + ($options.cParserOptions.getOption('previewLayout.spaceTopBefore') || 0) + 'px'"
-      />
-      <div
-        v-if="cParserOptionsGet('previewLayout.headerTop')"
-        v-text="$options.cParserOptions.getOption('previewLayout.headerTop')"
-        :class="'h' + ($options.cParserOptions.getOption('previewLayout.headerTopSize') || 4)"
-      />
+      <div v-if="$options.privateData.topLineSpacer === 0 || $options.privateData.topLineSpacer > 0" :style="'height: ' + $options.privateData.topLineSpacer + 'px'" />
+      <div v-if="$options.privateData.headerTop" v-text="$options.privateData.headerTop.text" :class="'h' + $options.privateData.headerTop.size"/>
       <template v-if="!$options.privateData.hideWithoutContentTop">
-        <template v-if="content.isMultiple && content.multipleNr === 0 && cParserOptionsGet('previewLayout.multiple.use')">
+        <template v-if="$options.privateData.isFirstMultiple && $options.privateData.isFirstMultipleContent">
           <div
             v-if="$options.cParserOptions.getOption('previewLayout.multiple.spaceBefore')"
             :style="'height: ' + $options.cParserOptions.getOption('previewLayout.multiple.spaceBefore') + 'px'"
@@ -32,13 +22,10 @@
           <span
             v-if="$options.privateData.multipleBefore"
             v-text="$options.privateData.multipleBefore"
-            class="$options.privateData.before"
+            class="before"
           />
         </template>
-        <div
-          v-if="cParserOptionsGet('previewLayout.spaceBefore')"
-          :style="'height: ' + $options.cParserOptions.getOption('previewLayout.spaceBefore') + 'px'"
-        />
+        <div v-if="$options.cParserOptions.spaceBefore" :style="'height: ' + $options.cParserOptions.spaceBefore + 'px'" />
         <div
           v-if="cParserOptionsGet('previewLayout.header')"
           :class="'h' + ($options.cParserOptions.getOption('previewLayout.headerSize') || 4)"
@@ -46,13 +33,13 @@
         />
         <span
           v-if="$options.privateData.before" 
-          class="$options.privateData.before"
+          class="before"
           v-text="$options.privateData.before"
         />
         <template v-if="$options.privateData.showAttributeBefore">
           <span :class="'inline-attr layout-' + (iaVal.class || 'attr')" v-for="(iaVal, iaKey) in $options.privateData.showAttributeBefore" :key="'ia' + iaKey">
             <template v-if="content.orgXmlObj && content.orgXmlObj.attributes && content.orgXmlObj.attributes[iaKey]">
-              <span class="$options.privateData.before" v-if="iaVal.before">{{ iaVal.before }}</span>
+              <span class="before" v-if="iaVal.before">{{ iaVal.before }}</span>
               <span class="title" v-if="!iaVal.hideTitle">{{ iaVal.title || attrKey }}</span>
               <template v-if="iaVal.fx === 'valWoHt'">
                 {{ content.orgXmlObj.attributes[iaKey].indexOf('#') === 0 ? content.orgXmlObj.attributes[iaKey].substring(1) : content.orgXmlObj.attributes[iaKey] }}
@@ -60,7 +47,7 @@
               <template v-else>
                 {{ content.orgXmlObj.attributes[iaKey] }}
               </template>
-              <span class="$options.privateData.before" v-if="iaVal.after">{{ iaVal.after }}</span>
+              <span class="before" v-if="iaVal.after">{{ iaVal.after }}</span>
             </template>
           </span>
         </template>
@@ -187,7 +174,7 @@
           v-text="($options.cParserOptions.getOption('previewLayout.multiple.lastjoin') && content.multipleNr === content.multipleMax - 1) ? $options.cParserOptions.getOption('previewLayout.multiple.lastjoin') : $options.cParserOptions.getOption('previewLayout.multiple.join')"
         />
         <span
-          class="$options.privateData.after"
+          class="after"
           v-if="$options.privateData.after"
           v-text="$options.privateData.after"
         />
@@ -200,21 +187,21 @@
           :style="'height: ' + $options.cParserOptions.getOption('previewLayout.spaceAfter') + 'px'"
           v-if="cParserOptionsGet('previewLayout.spaceAfter')"
         />
-        <template v-if="content.isMultiple && content.multipleLast && $options.cParserOptions.getOption('previewLayout.multiple.use')">
+        <template v-if="$options.privateData.isLastMultiple && $options.privateData.isLastMultipleContent">
           <span
-            class="$options.privateData.after"
             v-if="$options.privateData.multipleAfter"
             v-text="$options.privateData.multipleAfter"
+            class="after"
           />
           <br v-if="$options.cParserOptions.getOption('previewLayout.multiple.lastBR')" />
           <div
-            class="h4"
-            v-text="$options.cParserOptions.getOption('previewLayout.multiple.footer')"
             v-if="$options.cParserOptions.getOption('previewLayout.multiple.footer')"
+            v-text="$options.cParserOptions.getOption('previewLayout.multiple.footer')"
+            class="h4"
           />
           <div
-            :style="'height: ' + $options.cParserOptions.getOption('previewLayout.multiple.spaceAfter') + 'px'"
             v-if="$options.cParserOptions.getOption('previewLayout.multiple.spaceAfter')"
+            :style="'height: ' + $options.cParserOptions.getOption('previewLayout.multiple.spaceAfter') + 'px'"
           />
         </template>
         <span
@@ -516,6 +503,16 @@
             }
           }
         }())
+      this.$options.privateData.topLineSpacer = (this.content.count > 0 && this.$options.cParserOptions && this.$options.cParserOptions.getOption('previewLayout.newlineIfNotFirst'))
+          ? 0
+          : (this.$options.cParserOptions && this.$options.cParserOptions.getOption('previewLayout.spaceTopBefore')) || null
+      this.$options.privateData.spaceBefore = this.$options.cParserOptions && this.$options.cParserOptions.getOption('previewLayout.spaceBefore')
+      this.$options.privateData.headerTop = this.$options.cParserOptions && this.$options.cParserOptions.getOption('previewLayout.headerTop')
+          ? { text: this.$options.cParserOptions.getOption('previewLayout.headerTop'), size: (this.$options.cParserOptions.getOption('previewLayout.headerTopSize') || 4) } : null
+      this.$options.privateData.isFirstMultiple = this.content.isMultiple && this.content.multipleNr === 0 && this.$options.cParserOptions && this.$options.cParserOptions.getOption('previewLayout.multiple.use')
+      this.$options.privateData.isFirstMultipleContent = this.$options.privateData.multipleBefore || (this.$options.cParserOptions && (this.$options.cParserOptions.getOption('previewLayout.multiple.spaceBefore') || this.$options.cParserOptions.getOption('previewLayout.multiple.header')))
+      this.$options.privateData.isLastMultiple = this.content.isMultiple && this.content.multipleLast && this.$options.cParserOptions && this.$options.cParserOptions.getOption('previewLayout.multiple.use')
+      this.$options.privateData.isLastMultipleContent = this.$options.privateData.multipleAfter || (this.$options.cParserOptions && (this.$options.cParserOptions.getOption('previewLayout.multiple.lastBR') || this.$options.cParserOptions.getOption('previewLayout.multiple.footer') || this.$options.cParserOptions.getOption('previewLayout.multiple.spaceAfter')))
       this.$options.privateData = JSON.parse(JSON.stringify(this.$options.privateData))
     },
     mounted () {
