@@ -8,7 +8,7 @@
           <font-awesome-icon @click="togglePlaceUse(place)" :icon="((place.use && place.selectedPlace) ? 'check-square' : 'square')" :class="'float-right fa-icon'+((!place.use && place.selectedPlace) ? ' text-warning' : '')" v-else-if="place.option.possible"/>
           <font-awesome-icon icon="eye-slash" class="float-right fa-icon" v-else/>
         </span>
-        <b-dropdown variant="val-focus" size="sm" menu-class="mh30vh p-0" ref="dropdown" @shown="dropdownFocusActive(pKey)" @hidden="filter = ''" no-caret>
+        <b-dropdown variant="val-focus" size="sm" menu-class="p-0 gsdd" ref="dropdown" @shown="dropdownFocusActive(pKey)" @hidden="filter = ''" class="gsdd" no-caret>
           <template slot="button-content">
             <span :class="'select mw120px' + ((!place.use && place.selectedPlace) ? ' text-warning' : '') + (!isCorrectPlace(place) ? ' error' : '')">{{ ((placeBySigle(place.places, place.selectedPlace)) ? placeBySigle(place.places, place.selectedPlace).name : 'Auswählen' ) }}&nbsp;<font-awesome-icon icon="caret-down" class="fa-icon float-right"/></span>
           </template>
@@ -103,8 +103,9 @@
         let peRest = false
         let useFields = this.content.fxData.places.uFields
         if (this.content.parserObj.options.getOption('editor.fxFunction.fieldsAfterDef')) {
-          let aPrev = this.content.getSiblings('prev', true, false, true)[0]
-          if (aPrev && aPrev.orgXmlObj.name === 'def') {
+          let aPrev = this.content.getSiblings('prev', true, false, true)
+          aPrev = aPrev.filter(ap => !ap.fxFunction || ap.fxFunction !== 'GeoSelect')
+          if (aPrev && aPrev.length > 0 && aPrev[0] && aPrev[0].orgXmlObj.name === 'def') {
             useFields = this.content.parserObj.options.getOption('editor.fxFunction.fieldsAfterDef')
           }
         }
@@ -413,5 +414,9 @@
   .dropdown-filter {
     height: 25px;
     width: 100%;
+  }
+  .dropdown >>> .gsdd {
+    height: 30vh;
+    z-index: 10010;
   }
 </style>

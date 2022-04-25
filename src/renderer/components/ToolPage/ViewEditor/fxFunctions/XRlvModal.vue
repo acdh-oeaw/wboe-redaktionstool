@@ -1,7 +1,7 @@
 <template>
   <span :id="'xrlv' + content.uId" class="xrlvmodal">
     <button @click="edit = true" class="btn-none xrlvmodalbtn view">
-      <PreviewContent :content="content" :fx="{'frame': 'inline'}" v-if="content"/>
+      <PreviewContent :content="content" :fx="{'frame': 'inline'}" v-if="content && !previewUpdate" />
       <font-awesome-icon icon="external-link-alt"/>
     </button>
     <b-modal v-if="edit" ref="editmodal" :id="'xrlvmodal' + content.uId" title="Querverweis auf Artikel" @hidden="edit = false" @hide="chancelValue" size="lg" modal-class="modal-xl">
@@ -128,6 +128,7 @@
       return {
         edit: false,
         changed: false,
+        previewUpdate: false,
         refresh: false,
         filelist: [],
         cFile: '',
@@ -190,10 +191,12 @@
         aRef.orgXmlObj.attributes.target = this.selFile + ((this.valAnchor) ? '#' + this.valAnchor : '')
         aRef.orgXmlObj.setValue(this.txtAnchor)
         this.changed = false
+        this.previewUpdate = false
       },
       chancelValue (e) {
         if (!this.changed || confirm('Änderung verwerfen?')) {
           this.changed = false
+          this.previewUpdate = false
         } else {
           e.preventDefault()
         }
@@ -233,6 +236,7 @@
         this.selFileEditObj = ((this.selFile === '') ? this.content.root : null)
         this.$nextTick(() => {
           this.changed = false
+          this.previewUpdate = false
         })
       },
       updateFileList () {

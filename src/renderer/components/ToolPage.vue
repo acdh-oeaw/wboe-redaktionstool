@@ -63,7 +63,7 @@
         </b-tab>
 
         <b-tab title="Vorschau" :disabled="tabsLocked">
-          <div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update">
+          <div class="viewpreview scroll p20" v-if="aTabCach.indexOf(1) > -1 && !update && !updatePreview">
             <ViewPreview
               v-if="editorObject && editorObject.contentObj"
               :start="true"
@@ -196,6 +196,7 @@
     data () {
       return {
         aTab: ((process.env.NODE_ENV === 'development') ? 0 : 0),
+        updatePreview: true,
         aTabCach: [],
         showTabView: false,
         xmlObject: null,
@@ -277,11 +278,14 @@
           this.aTabCach.push(nVal)
         }
         if (nVal === 1) {
+          this.updatePreview = false
           this.$nextTick(() => {
             if (this.$refs.ViewPreview) {
               this.$refs.ViewPreview.commentsListeReset()
             }
           })
+        } else {
+          this.updatePreview = true
         }
       },
       'Options.show.showCommentsList' (nVal) {

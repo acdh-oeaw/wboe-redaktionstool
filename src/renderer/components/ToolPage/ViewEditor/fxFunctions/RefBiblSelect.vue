@@ -1,7 +1,7 @@
 <template>
   <span :id="'rbs' + content.uId" class="rbsmodal">
     <button @click="edit = true" class="btn-none rbsmodalbtn view">
-      <PreviewContent :content="content" :fx="{noBefore: true, noAfter: true}"/>
+      <PreviewContent :content="content" :fx="{noBefore: true, noAfter: true}" v-if="!previewUpdate" />
       <font-awesome-icon icon="external-link-alt"/>
     </button>
     <b-modal v-if="edit" ref="editmodal" :id="'rbsmodal' + content.uId" title="Verweis auf Literatur" @hidden="edit = false" @hide="chancelValue" size="lg" modal-class="modal-xl">
@@ -107,14 +107,15 @@
     },
     data () {
       return {
-        'edit': false,
-        'changed': false,
-        'search': '',
-        'searchDebounced': '',
-        'selBeleg': '',
-        'lbl': '',
-        'txt': '',
-        'citedRange': ''
+        edit: false,
+        changed: false,
+        previewUpdate: false,
+        search: '',
+        searchDebounced: '',
+        selBeleg: '',
+        lbl: '',
+        txt: '',
+        citedRange: ''
       }
     },
     mounted () {
@@ -149,6 +150,13 @@
       }
     },
     watch: {
+      'previewUpdate' (nVal) {
+        if (nVal) {
+          this.$nextTick(() => {
+            this.previewUpdate = false
+          })
+        }
+      },
       'edit' (nVal) {
         if (nVal) {
           this.getBaseData()
@@ -161,6 +169,7 @@
           this.txt = ''
           this.citedRange = ''
           this.changed = false
+          this.previewUpdate = true
         }
       },
       'search' () {
@@ -212,6 +221,7 @@
         }
         this.$nextTick(() => {
           this.changed = false
+          this.previewUpdate = true
         })
       },
       saveValue () {
@@ -235,10 +245,12 @@
           aLbl.orgXmlObj.setValue(this.lbl)
         }
         this.changed = false
+        this.previewUpdate = true
       },
       chancelValue (e) {
         if (!this.changed || confirm('Änderung verwerfen?')) {
           this.changed = false
+          this.previewUpdate = true
         } else {
           e.preventDefault()
         }

@@ -1,6 +1,8 @@
 <template>
   <div
     :id="'po' + content.uId"
+    :data-name="content.orgXmlObj && content.orgXmlObj.name ? content.orgXmlObj.name : '?'"
+    :data-pid="$options && $options.cParserOptions && $options.cParserOptions.options && $options.cParserOptions.options.id ? $options.cParserOptions.options.id : '?'"
     class="inline prel"
     :style="$options.privateData.fontSize ? 'font-size: ' + $options.privateData.fontSize + '%;' : null"
   >
@@ -408,16 +410,19 @@
             } else {
               let ix = indexFor(aThis.content.root.family, aThis.content)
               let allAfter = aThis.content.root.family.slice(ix + 1)
+              let fullAllAfter = allAfter.filter(x => x && (!x.parents || !(indexFor(x.parents, aThis.content) > -1)))
               allAfter = allAfter.filter(x => x && x.parents && indexFor(x.parents, aThis.content) > -1)
-              if (wsA && allAfter.length > 0 && allAfter[0].parserObj.options.getOption('previewLayout.prevAutospace')) {
+              if (allAfter.length > 0 && allAfter[0].parserObj.options.getOption('previewLayout.prevAutospace')) {
                 if (['-', '('].indexOf(aThis.content.orgXmlObj.getValue()[0].slice(-1)) > -1 || ['-', '('].indexOf(allAfter[0].orgXmlObj.getValue()[0][0]) > -1) {
                   wsA = false
                 }
               }
               if (wsA && aThis.$options.cParserOptions.getOption('previewLayout.autospace') && ix > -1) {
-                let firstTextAfter = getFirstLetterAfter(allAfter)
-                if (firstTextAfter.length > 0) {
-                  if (['.', ',', ';', ':', '-', ')'].indexOf(firstTextAfter[0]) > -1) {
+                // let firstTextAfter = getFirstLetterAfter(allAfter)
+                let fullFirstTextAfter = getFirstLetterAfter(fullAllAfter)
+                // console.log('firstTextAfter', (aThis.content.orgXmlObj && aThis.content.orgXmlObj.name ? aThis.content.orgXmlObj.name : '?'), aThis.$options.cParserOptions.options.id && aThis.content.orgXmlObj && aThis.content.orgXmlObj.name ? aThis.content.orgXmlObj.name : '?', fullFirstTextAfter, {fullAllAfter})
+                if (fullFirstTextAfter.length > 0) {
+                  if (['.', ',', ';', ':', '-', ')'].indexOf(fullFirstTextAfter[0]) > -1) {
                     wsA = false
                   }
                 }
@@ -514,6 +519,7 @@
       this.$options.privateData.isLastMultiple = this.content.isMultiple && this.content.multipleLast && this.$options.cParserOptions && this.$options.cParserOptions.getOption('previewLayout.multiple.use')
       this.$options.privateData.isLastMultipleContent = this.$options.privateData.multipleAfter || (this.$options.cParserOptions && (this.$options.cParserOptions.getOption('previewLayout.multiple.lastBR') || this.$options.cParserOptions.getOption('previewLayout.multiple.footer') || this.$options.cParserOptions.getOption('previewLayout.multiple.spaceAfter')))
       this.$options.privateData = JSON.parse(JSON.stringify(this.$options.privateData))
+      // console.log('this.$options', this.$options)
     },
     mounted () {
       this.updateComments()
