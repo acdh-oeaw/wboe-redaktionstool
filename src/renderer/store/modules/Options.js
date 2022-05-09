@@ -71,7 +71,14 @@ const actions = {
 		store.set('projectPath', state.projectPath)
 	},
 	GET_PARSER_PATH ({ commit, dispatch }) {		// Aktuellen Parserpfad aus den "store" laden
-		commit('SET_PARSER_PATH', { 'parserPath': store.get('parserPath', fPath.join(state.projectPath, 'Datenlisten')) })
+		console.log('store', store.path)
+		let aPP = store.get('parserPath', fPath.join(state.projectPath, 'Datenlisten'))
+		if (fs.existsSync(aPP)) {
+			commit('SET_PARSER_PATH', { 'parserPath': store.get('parserPath', fPath.join(state.projectPath, 'Datenlisten')) })
+		} else {
+			dispatch('DIALOG_PARSER_FILES_DIRECTORY')
+			dispatch('SET_PARSER_PATH')
+		}
 		dispatch('LOAD_PARSER_FILE')
 	},
 	SET_PARSER_PATH ({ commit, dispatch }) {		// Aktuellen Parserpfad neu setzen und in den "store" speichern

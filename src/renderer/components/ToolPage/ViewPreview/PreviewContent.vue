@@ -411,9 +411,9 @@
               let ix = indexFor(aThis.content.root.family, aThis.content)
               let allAfter = aThis.content.root.family.slice(ix + 1)
               let fullAllAfter = allAfter.filter(x => x && (!x.parents || !(indexFor(x.parents, aThis.content) > -1)))
-              allAfter = allAfter.filter(x => x && x.parents && indexFor(x.parents, aThis.content) > -1)
-              if (allAfter.length > 0 && allAfter[0].parserObj.options.getOption('previewLayout.prevAutospace')) {
-                if (['-', '('].indexOf(aThis.content.orgXmlObj.getValue()[0].slice(-1)) > -1 || ['-', '('].indexOf(allAfter[0].orgXmlObj.getValue()[0][0]) > -1) {
+              // allAfter = allAfter.filter(x => x && x.parents && indexFor(x.parents, aThis.content) > -1)
+              if (fullAllAfter.length > 0 && fullAllAfter[0].parserObj.options.getOption('previewLayout.prevAutospace')) {
+                if (['-', '(', '[', '{', '<', '}'].indexOf(aThis.content.orgXmlObj.getValue()[0].slice(-1)) > -1 || ['-', '(', '[', '{', '<'].indexOf(fullAllAfter[0].orgXmlObj.getValue()[0][0]) > -1) {
                   wsA = false
                 }
               }
@@ -422,7 +422,7 @@
                 let fullFirstTextAfter = getFirstLetterAfter(fullAllAfter)
                 // console.log('firstTextAfter', (aThis.content.orgXmlObj && aThis.content.orgXmlObj.name ? aThis.content.orgXmlObj.name : '?'), aThis.$options.cParserOptions.options.id && aThis.content.orgXmlObj && aThis.content.orgXmlObj.name ? aThis.content.orgXmlObj.name : '?', fullFirstTextAfter, {fullAllAfter})
                 if (fullFirstTextAfter.length > 0) {
-                  if (['.', ',', ';', ':', '-', ')'].indexOf(fullFirstTextAfter[0]) > -1) {
+                  if (['.', ',', ';', ':', '-', ')', ']', '}', '>'].indexOf(fullFirstTextAfter[0]) > -1) {
                     wsA = false
                   }
                 }

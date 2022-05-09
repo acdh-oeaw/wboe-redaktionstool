@@ -4,7 +4,7 @@
       <button @click="$emit('new', fileobject.path)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk"/><span>Neue Datei erstellen ...</span></button>
     </div>
     <template v-if="!fileobject.file">
-      <FileLine :fileobject="fObj" @loadfile="loadFileE" :filesystem="filesystem" @new="newFile" v-for="(fObj, fKey) in fileobject.children" :key="'fl' + fKey" />
+      <FileLine :fileobject="fObj" @loadfile="loadFileE" :filesystem="filesystem" :filterFile="filterFile" @new="newFile" v-for="(fObj, fKey) in fileobject.children" :key="'fl' + fKey" />
     </template>
     <template v-else>
       <div class="pathline" v-if="fileobject.isDir">
@@ -18,7 +18,7 @@
           <span class="foldercontent unknown" v-else><span class="info">? <font-awesome-icon icon="file"/></span><span class="info">? <font-awesome-icon icon="folder"/></span></span>
         </button>
         <div class="subdata" v-if="fileobject.isOpen && !fileobject.update">
-          <FileLine :fileobject="fObj" @loadfile="loadFileE" :filesystem="filesystem" @new="newFile" v-for="(fObj, fKey) in fileobject.children" :key="'fl' + fKey" />
+          <FileLine :fileobject="fObj" @loadfile="loadFileE" :filesystem="filesystem" :filterFile="filterFile" @new="newFile" v-for="(fObj, fKey) in fileobject.children" :key="'fl' + fKey" />
           <div v-if="fileobject.children.length === 0">
             <button @click="$emit('new', fileobject.fullFileName)" title="Neue Datei erstellen ..." class="fileline-btn new-file"><font-awesome-icon icon="asterisk"/><span>Neue Datei erstellen ...</span></button>
           </div>
@@ -27,7 +27,7 @@
           Lade Verzeichniss ...
         </div>
       </div>
-      <div class="fileline" v-else>
+      <div class="fileline" v-else-if="showFile">
         <button :id="'fl-' + _uid" @click="loadFile()" :title="fileobject.fullFileName" :class="(isActiveFile ? 'active' : '') + (isParser ? ' italic' : '')">
           <span class="file"><font-awesome-icon :icon="((isParser) ? 'project-diagram' : ((isActiveFile) ? 'book-open' : 'file'))" class="mir5"/>{{ fileobject.file }}</span>
           <span class="filesize">{{ fileobject.size | prettyBytes }}</span>
@@ -75,7 +75,8 @@
     name: 'FileLine',
     props: {
       fileobject: Object,
-      filesystem: Object
+      filesystem: Object,
+      filterFile: String
     },
     mounted () {
       // console.log(this.fileobject)
@@ -92,6 +93,12 @@
           return this.Files.file === this.fileobject.fullFileName
         }
       },
+      showFile () {
+        if (this.filterFile.trim().length > 0 && this.fileobject && this.fileobject.file) {
+          return this.fileobject.file.trim().toLowerCase().indexOf(this.filterFile.trim().toLowerCase()) > -1
+        }
+        return true
+      }
     },
     methods: {
       toggleMe () {		// Verzeichniss öffnen/schließen

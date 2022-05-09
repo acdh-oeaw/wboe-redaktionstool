@@ -73,8 +73,20 @@ function createWindow () {
       webSecurity: false
     }
   })
-
   mainWindow.loadURL(winURL)
+
+  mainWindow.on('close', function (e) {
+  var choice = require('electron').dialog.showMessageBox(this,
+      {
+        type: 'question',
+        buttons: ['Ja', 'Nein'],
+        title: 'Wirklich beenden?',
+        message: 'Sind sie sicher das sie das Programm beenden wollen?'
+      })
+      if (choice === 1) {
+        e.preventDefault()
+      }
+  })
 
   mainWindow.on('closed', () => {
     mainWindow = null

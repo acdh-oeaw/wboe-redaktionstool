@@ -28,7 +28,12 @@
           </span>
         </p>
         <div>
-          <FileLine :fileobject="filesystem.paths" :filesystem="filesystem" @loadfile="loadFile" @new="newFile" v-if="filesystem" />
+          <b-input-group size="sm" class="my-3">
+            <b-form-input type="text" placeholder="Filter ..." v-model="filterFile"></b-form-input>
+          </b-input-group>
+        </div>
+        <div>
+          <FileLine :fileobject="filesystem.paths" :filesystem="filesystem" @loadfile="loadFile" @new="newFile" :filterFile="filterFile" v-if="filesystem" />
         </div>
       </div>
       <b-alert show variant="danger" v-else>Projektpfad nicht vergeben!</b-alert>
@@ -62,6 +67,7 @@
         loading: false,
         newFilePath: '',
         newFileName: '',
+        filterFile: ''
       }
     },
     mounted () {

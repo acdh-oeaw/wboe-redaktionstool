@@ -136,17 +136,6 @@
 				this.$store.dispatch('GET_PARSER_PATH')
 			}
 			window.addEventListener('keyup', this.keyUp)
-			if (!this.devMode) {
-				window.onbeforeunload = (e) => {
-					if (this.Files.changed) {
-						var answer = confirm('Es gab Änderungen die noch nicht abgespeichert wurden!\nWeiter bearbeiten?')
-						if (answer) {
-							e.returnValue = true
-							e.preventDefault()
-						}
-					}
-				}
-			}
 		},
 		beforeDestroy () {
 			inPageSearch.closeSearchWindow()
