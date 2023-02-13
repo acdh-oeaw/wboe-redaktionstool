@@ -45,14 +45,15 @@
 	import 'bootstrap/dist/css/bootstrap.css'
 	import 'bootstrap-vue/dist/bootstrap-vue.css'
 
-	import searchInPage from 'electron-in-page-search'
+	// import searchInPage from 'electron-in-page-search'
+	import { FindInPage } from 'electron-find'
 	import { remote, webFrame } from 'electron'
 
 	import { mapState } from 'vuex'
 
   import Filesystem from '@/functions/filesystem/Filesystem'
 
-	const inPageSearch = searchInPage(remote.getCurrentWebContents())
+	const findInPage = new FindInPage(remote.getCurrentWebContents())
 
 	export default {
 		name: 'wboe-redaktionstool',
@@ -74,19 +75,18 @@
 			keyUp (e) {
 				if (!this.Misc.searchLock) {
 					if (e.ctrlKey && e.key === 'f') {
-						if (!inPageSearch.opened) {
-							inPageSearch.openSearchWindow()
-						}
+						findInPage.openFindWindow()
 					}
 					if (e.key === 'F3') {
-						if (!inPageSearch.opened) {
-							inPageSearch.openSearchWindow()
-						} else if (inPageSearch.isSearching()) {
+						// console.log(findInPage.isFinding(), findInPage)
+						if (findInPage.isFinding()) {
 							if (e.shiftKey) {
-								inPageSearch.findNext(false)
+								findInPage.findNext(false)
 							} else {
-								inPageSearch.findNext()
+								findInPage.findNext()
 							}
+						} else {
+							findInPage.openFindWindow()
 						}
 					}
 				}
@@ -120,7 +120,7 @@
 			},
 			'Misc.searchLock' (nVal) {
 				if (nVal) {
-					inPageSearch.closeSearchWindow()
+					findInPage.closeFindWindow()
 				}
 			}
 		},
@@ -138,7 +138,7 @@
 			window.addEventListener('keyup', this.keyUp)
 		},
 		beforeDestroy () {
-			inPageSearch.closeSearchWindow()
+			findInPage.closeFindWindow()
 			window.removeEventListener('keyup', this.keyUp)
 			window.onbeforeunload = null
 		}
