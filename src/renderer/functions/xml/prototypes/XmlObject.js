@@ -266,18 +266,19 @@ const localFunctions = {
       }
     }
     let aXML = ''
+    let aTxtValue = (this.value || '').replace('&', '&amp;')
     if (this.type === 'TEXT') {
       if (prvXmlObj && (['COMMENT', 'PROCESSING_INSTRUCTION', 'UNKNOWN'].indexOf(prvXmlObj.type) > -1)) {
-        aXML += '\n' + '  '.repeat(deep) + (this.value || '') + '\n' + '  '.repeat(deep - 1)
+        aXML += '\n' + '  '.repeat(deep) + aTxtValue + '\n' + '  '.repeat(deep - 1)
       } else {
-        aXML += this.value || ''
+        aXML += aTxtValue
       }
     } else if (this.type === 'COMMENT' && all) {
-      aXML += '\n' + '  '.repeat(deep) + '<!-- ' + (this.value || '') + ' -->'
+      aXML += '\n' + '  '.repeat(deep) + '<!-- ' + aTxtValue + ' -->'
     } else if (this.type === 'PROCESSING_INSTRUCTION' && all) {
-      aXML += '\n' + '  '.repeat(deep) + '<?' + (this.name || '') + ' ' + (this.value || '') + '?>'
+      aXML += '\n' + '  '.repeat(deep) + '<?' + (this.name || '') + ' ' + aTxtValue + '?>'
     } else if (this.type === 'UNKNOWN' && all) {
-      aXML += (this.value || '')
+      aXML += aTxtValue
     } else if (this.type === 'ELEMENT') {
       let aChildCont = ''
       let lChild = null
