@@ -8,6 +8,7 @@ const store = new Store()
 const state = {
 	projectPath: null,
 	parserPath: null,
+	parserSubVersion: null,
 	show: {},
 	options: {},
 	lastFile: null
@@ -19,6 +20,9 @@ const mutations = {
 	},
 	SET_PARSER_PATH: (state, { parserPath }) => {		// Aktuellen Projektpfad setzen
 		state.parserPath = parserPath
+	},
+	SET_PARSER_SUBVERSION: (state, { parserSubVersion }) => {
+		state.parserSubVersion = parserSubVersion
 	},
 	SET_SHOW: (state, { show }) => {
 		state.show = show
@@ -84,6 +88,13 @@ const actions = {
 	SET_PARSER_PATH ({ commit, dispatch }) {		// Aktuellen Parserpfad neu setzen und in den "store" speichern
 		store.set('parserPath', state.parserPath)
 		dispatch('LOAD_PARSER_FILE')
+	},
+	GET_PARSER_SUBVERSION ({ commit }) {
+		commit('SET_PARSER_SUBVERSION', { 'parserSubVersion': store.get('parserSubVersion', null) })
+	},
+	SET_PARSER_SUBVERSION ({ commit }, parserSubVersion) {
+		store.set('parserSubVersion', parserSubVersion)
+		commit('SET_PARSER_SUBVERSION', { 'parserSubVersion': parserSubVersion })
 	},
 	DIALOG_PROJECT_PATH ({ commit, dispatch }) {		// Dialog zur Auswahl einens neuen Projektpfads öffnen
 		var newFolder = dialog.showOpenDialog({

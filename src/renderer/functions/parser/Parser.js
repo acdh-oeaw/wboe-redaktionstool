@@ -6,9 +6,11 @@ import prototypeParserOptions from './prototypes/ParserOptions'
 import prototypeParserPreviewObject from './prototypes/ParserPreviewObject'
 
 const localFunctions = {
-  ParserBase: function (xmlString, aFile, getAdditionalFile) {
+  ParserBase: function (xmlString, aFile, getAdditionalFile, parserSubVersion, availableParserSubVersions) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
+    this.parserSubVersion = parserSubVersion || null // Verwendete Unterversion z.B. "long" oder "short"
+    this.availableParserSubVersions = availableParserSubVersions || [] // Verfügbare Unterversionen
     this.errors = {}							// Fehler. Property = "ParserObject.uId" oder "-1" für "ParserBase"
     this.warnings = {}						// Warnungen. Property = "ParserObject.uId" oder "-1" für "ParserBase"
     this.content = []							// Enthaltene "ParserObject" Kinder

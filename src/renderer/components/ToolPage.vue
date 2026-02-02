@@ -31,6 +31,7 @@
           </b-input-group-append>
         </b-input-group>
         <div class="mr-2 mil-auto p-1">
+          Parser Subversion: "{{ Options.parserSubVersion || '?' }}"
           <font-awesome-icon @click="scrollToTop" style="cursor:pointer;" v-if="aTab === 0" :class="dataStatus === 'ok' ? 'text-success' : dataStatus === 'error' ? 'text-danger' : 'text-warning'" :icon="dataStatus === 'ok' ? 'check' : 'exclamation-triangle'"/>
         </div>
         <b-button-group size="sm" class="mr-1">
@@ -390,6 +391,10 @@
       },
       xmlEditorSet () {
         let xmlObject = new XmlObject.XmlBase(this.xmlEditorNewContent, this.changeCall)		// XML Objekt erstellen
+        if ((xmlObject && xmlObject.parserSubVersion) !== (this.Parser && this.Parser.parser ? this.Parser.parser.parserSubVersion : null)) {
+          this.$store.dispatch('SET_PARSER_SUBVERSION', xmlObject.parserSubVersion || 0)
+          this.$store.dispatch('RELOAD_PARSER_FILE')
+        }
         let editorObject = new EditorObject.EditorBase(this.Parser.parser, xmlObject, this.changeCall)		// Editor Objekt erstellen
         console.log(xmlObject, editorObject)
         if (Object.keys(xmlObject.errors).length === 0) {
@@ -471,6 +476,11 @@
           this.xmlObject = null
         }
         if (this.Parser.parser && this.xmlObject) {
+          // console.log('xxx', {x: this.xmlObject.parserSubVersion}, this.Parser.parser.parserSubVersion)
+          if ((this.xmlObject && this.xmlObject.parserSubVersion) !== (this.Parser && this.Parser.parser ? this.Parser.parser.parserSubVersion : null)) {
+            this.$store.dispatch('SET_PARSER_SUBVERSION', this.xmlObject.parserSubVersion || 0)
+            this.$store.dispatch('RELOAD_PARSER_FILE')
+          }
           this.editorObject = new EditorObject.EditorBase(this.Parser.parser, this.xmlObject, this.changeCall)		// Editor Objekt erstellen
         } else {
           this.editorObject = null

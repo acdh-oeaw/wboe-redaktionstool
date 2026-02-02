@@ -42,6 +42,21 @@ const localFunctions = {
     if (Object.keys(this.errors).length > 0) {
       return false
     }
+    if (this.orgDOM && this.orgDOM.childNodes.length > 0) {
+      this.orgDOM.childNodes.forEach(function (topChild) {
+        if (topChild.nodeType === topChild.PROCESSING_INSTRUCTION_NODE && topChild.target === 'parser') {
+          let data = topChild.data || ''
+          let mVersion = data.match(/version="([^"]+)"/i)
+          let mSubVersion = data.match(/subversion="([^"]+)"/i)
+          if (mVersion && mVersion[1]) {
+            this.parserVersion = mVersion[1]
+          }
+          if (mSubVersion && mSubVersion[1]) {
+            this.parserSubVersion = mSubVersion[1]
+          }
+        }
+      }, this)
+    }
     this.useable = true
     return true
   },

@@ -36,8 +36,20 @@ const actions = {
 				alert('Konnte Parser Datei nicht laden!')
 			}
 		}
+    let aCurrentSub = rootState.Options.parserSubVersion || null
+    let aSubversions = []
 		if (fileContent) {
-			fileContent = local.loadImportFiles(fileContent, aPath)[1]
+			let m = fileContent.match(/<objParser[^>]*\ssubversions="([^"]+)"[^>]*>/i)
+			if (m && m[1]) {
+				aSubversions = m[1].split(',').map(function (v) { return (v || '').trim() }).filter(Boolean)
+			}
+			if (aSubversions.length) {
+				if (!aCurrentSub || aSubversions.indexOf(aCurrentSub) === -1) {
+					dispatch('SET_PARSER_SUBVERSION', aSubversions[0])
+					aCurrentSub = aSubversions[0]
+				}
+			}
+			fileContent = local.loadImportFiles(fileContent, aPath, [], aCurrentSub, [], aCurrentSub)[1]
 		}
 		if (fileContent) {
 			let getAdditionalFile = function (lFile) {
@@ -60,7 +72,7 @@ const actions = {
 				}
 				return fContent
 			}
-			aParser = new ParserObject.ParserBase(fileContent, aFile, getAdditionalFile)
+			aParser = new ParserObject.ParserBase(fileContent, aFile, getAdditionalFile, aCurrentSub, aSubversions)
 		}
 		console.log('LOAD_PARSER_FILE', aFile, (fileContent !== state.content))
 		commit('SET_PARSER_FILE', { file: aFile, content: fileContent, parser: aParser })
@@ -72,8 +84,16 @@ const actions = {
 }
 
 const local = {
-	loadImportFiles (fileContent, aPath, files = []) {
+	loadImportFiles (fileContent, aPath, files = [], subVersion = '') {
 		let imported = false
+    fileContent = fileContent.replace(
+      /<\?import\s+subversion="([^"]+)"\s+"([^"]+\.xml)"\s*\?>/gi,
+      function (imp, sv, file) {
+        if (!subVersion) return ''
+        if (sv !== subVersion) return ''
+        return '<?import "' + file + '" ?>'
+      }
+    )
 		fileContent = fileContent.replace(/<\?import ".+" \?>/gi, function (imp) {
 			let impFile = imp.match(/<\?import "(.+\.xml)" \?>/)[1]
 			let impFullFile = impFile
@@ -98,7 +118,7 @@ const local = {
 			return imp
 		})
 		if (imported) {
-			let sGIF = local.loadImportFiles(fileContent, aPath)
+			let sGIF = local.loadImportFiles(fileContent, aPath, [], subVersion)
 			fileContent = sGIF[1]
 			files = [...files, ...sGIF[2]]
 		}
