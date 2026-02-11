@@ -325,7 +325,6 @@
             let aOptBI = aThis.$options.cParserOptions.getOption('previewLayout.beforeIf')
             if (aOptBI && aOptBI.id) {
               let aPrev = aThis.content.getSiblings('prev', true, false, true)[0]
-              console.log('xxxx', aOptBI.id)
               if (aPrev && (typeof aOptBI.id === 'string' ? aPrev.parserObj.options.getOption('id') === aOptBI.id : aOptBI.id.indexOf(aPrev.parserObj.options.getOption('id')) > -1)) {
                 return aOptBI.value
               }

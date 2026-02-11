@@ -220,6 +220,8 @@ function updateFileInfos (file, pObj) {
           let m = node.body.match(/version\n*=\n*"([0-9.a-zA-Z]+)"/mi)
           let m2 = node.body.match(/type\n*=\n*"([0-9.a-zA-Z]+)"/mi)
           pObj.sInfo.parserVersion = (m2 && m2[1] ? m2[1] : '?') + '-' + (m && m[1] ? m[1] : '?')
+          let m3 = node.body.match(/subversion\n*=\n*"([0-9.a-zA-Z]+)"/mi)
+          pObj.sInfo.subVersion = (m3 && m3[1] ? m3[1] : null)
         } else if (node.name === 'comment') {
           if (node.body && node.body.trim().length > 0) {
             pObj.sInfo.comments.push(node.body.trim())

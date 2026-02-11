@@ -40,6 +40,14 @@
       <div id="loading" v-if="loading">Lade ...</div>
       <b-modal ref="modalNewFile" title="Neue Datei Erstellen:" @ok="newFileModalOk" cancel-title="Abbrechen" ok-title="Datei erstellen" centered>
         <p>Wie soll die Datei, die im Verzeichniss "{{ newFilePath }}" erstellt werden soll, heißen?</p>
+        <div v-if="Parser && Parser.parser && Parser.parser.availableParserSubVersions && Parser.parser.availableParserSubVersions.length">
+          <b-form-group label="Parser Subversion:">
+            <b-form-select
+              v-model="newFileSubVersion"
+              :options="Parser.parser.availableParserSubVersions">
+            </b-form-select>
+          </b-form-group>
+        </div>
         <form @submit.stop.prevent="">
           <b-form-input type="text" placeholder="Neuer Dateiname ..." v-model="newFileName"></b-form-input>
         </form>
@@ -67,6 +75,7 @@
         loading: false,
         newFilePath: '',
         newFileName: '',
+        newFileSubVersion: null,
         filterFile: ''
       }
     },
@@ -74,6 +83,7 @@
       this.loading = true
       this.updateFolder()
       this.loading = false
+      this.newFileSubVersion = this.Options.parserSubVersion
     },
     computed: {
       ...mapState(['Options']),
@@ -103,7 +113,6 @@
         this.loading = true
         this.$nextTick(() => {
           _.debounce(() => {
-            console.log('xxx')
             this.$store.dispatch('LOAD_FILE', d)		// Datei laden
             // Nur Tool öffnen wenn Datei lesbar!
             this.$router.push('/tool')		// Tool öffnen
@@ -135,6 +144,10 @@
         this.$refs.modalNewFile.show()
       },
       newFileModalOk (e) {
+        if (this.newFileSubVersion !== (this.Parser && this.Parser.parser ? this.Parser.parser.parserSubVersion : null)) {
+          this.$store.dispatch('SET_PARSER_SUBVERSION', this.newFileSubVersion || 0)
+          this.$store.dispatch('RELOAD_PARSER_FILE')
+        }
         if (this.newFileName.length === 0) {
           e.preventDefault()
           alert('Es muss ein Dateiname eingegeben werden!')
@@ -157,7 +170,10 @@
           this.updateFolder()
           this.loading = false
         }
-      }
+      },
+      'Options.parserSubVersion' () {
+        this.newFileSubVersion = this.Options.parserSubVersion
+      },
     },
     components: {
       FileLine

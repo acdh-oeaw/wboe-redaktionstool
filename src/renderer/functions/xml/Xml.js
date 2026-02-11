@@ -6,6 +6,8 @@ const localFunctions = {
   XmlBase: function (xmlString, cCall = null) {
     this.ready = false						// Ist das Objekt bereit?
     this.useable = false					// Kann das Objekt zum parsen verwendet werden? (Keine Fehler und Ready)
+    this.parserVersion = null // Version des Parsers
+    this.parserSubVersion = null // Subversion des Parsers
     this.errors = {}							// Fehler. Property = "XmlObject.uId" oder "-1" für "XmlBase"
     this.warnings = {}						// Warnungen. Property = "XmlObject.uId" oder "-1" für "XmlBase"
     this.content = []							// Enthaltene "XmlObject" Kinder

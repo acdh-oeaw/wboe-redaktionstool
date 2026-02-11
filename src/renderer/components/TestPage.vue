@@ -108,6 +108,10 @@
           this.timers.push({ name: 'xmlObject', duration: performance.now() - tXml, objCount: xmlObject.family.length })
           // Erstelle editorObject
           let tEditObj = performance.now()
+          if ((this.xmlObject && this.xmlObject.parserSubVersion) !== (this.Parser && this.Parser.parser ? this.Parser.parser.parserSubVersion : null)) {
+            this.$store.dispatch('SET_PARSER_SUBVERSION', 0)
+            this.$store.dispatch('RELOAD_PARSER_FILE')
+          }
           let editorObject = new EditorObject.EditorBase(this.Parser.parser, xmlObject, this.changeCall)
           if (this.sealed) {
             editorObject = Object.seal(editorObject)

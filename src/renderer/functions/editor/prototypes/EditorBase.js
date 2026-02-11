@@ -36,7 +36,7 @@ const localFunctions = {
   getXML () {
     return (this.parserObj.header || '')
          + '\n<?redaktionstool version="' + require('../../../../../package.json').version + '" ?>'
-         + '\n<?parser type="' + (this.parserObj ? this.parserObj.type : 'noParser') + '" version="' + (this.parserObj ? this.parserObj.version : 'noParser') + '" ?>'
+         + '\n<?parser type="' + (this.parserObj ? this.parserObj.type : 'noParser') + '" version="' + (this.parserObj ? this.parserObj.version : 'noParser') + '"' + (this.parserObj && this.parserObj.parserSubVersion ? ' subversion="' + this.parserObj.parserSubVersion + '"' : '') + ' ?>'
          + this.orgXmlObj.getXML(this)
   },
   moveTo (srcUId, destUId, dir = 'left') {
