@@ -45,7 +45,7 @@
             <span style="width:120px;"><b>{{ fileobject.sInfo.status }}</b></span>
             <span style="width:150px;"><b>{{ fileobject.sInfo.editor }}</b></span>
             <span style="width:50px;"><b>{{ fileobject.sInfo.version }}</b></span>
-            <span style="width:50px;"><b>{{ fileobject.sInfo.subVersion }}</b></span>
+            <span style="width:120px;"><b>{{ fileobject.sInfo.subVersion }}</b></span>
             <span style="width:70px;"><b>{{ fileobject.sInfo.parserVersion }}</b></span>
             <span :id="'fl-c-' + _uid" style="width:40px; text-align: right;"><b>{{ fileobject.sInfo.comments && fileobject.sInfo.comments.length }}</b></span>
           </span>
